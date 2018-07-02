@@ -1,0 +1,59 @@
+@import '~antd/lib/style/themes/default.less';
+@import '../../utils/utils.less';
+
+.detail {
+  // offset the padding-bottom of last row
+  :global {
+    .ant-row {
+      //margin-bottom: -16px;
+      overflow: hidden;
+    }
+  }
+
+  .itunes_btn {
+    display: inline-block;
+    font-size: 13px;
+    line-height: 16px;
+    padding: 7px 12px;
+    border: 1px solid #ccc;
+    color: #333;
+    background-color: #fff;
+    text-decoration: none;
+    outline: 0;
+    box-sizing: border-box;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 4px;
+  }
+
+  .title {
+    margin-top: 25px;
+    font-weight: 400;
+    font-size: 30px;
+    text-align: center;
+  }
+
+  .title_center {
+    text-align: center;
+  }
+
+  .publish span {
+    margin-left: 10px;
+  }
+
+  .content {
+    min-height: 750px;
+  }
+}
+
+.title {
+  text-align: center;
+}
+
+:global {
+  .model_img {
+    max-width: 100%;
+    margin: 0 auto;
+    display: block;
+  }
+}

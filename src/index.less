@@ -1,0 +1,96 @@
+@import '~antd/lib/style/color/colors.less';
+@import './utils/utils.less';
+
+html,
+body,
+:global(#root) {
+  height: 100%;
+  min-width: 1024px;
+}
+
+:global(.ant-layout) {
+  min-height: 100%;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+canvas {
+  display: block;
+}
+
+body {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.globalSpin {
+  width: 100%;
+  margin: 40px 0 !important;
+}
+
+// temp fix for https://github.com/ant-design/ant-design/commit/a1fafb5b727b62cb0be29ce6e9eca8f579d4f8b7
+:global {
+  .text-blue {
+    color: @blue-6;
+  }
+  .text-red {
+    color: @red-5;
+
+    &:hover {
+      color: @red-6;
+    }
+
+    &:active {
+      color: @red-7;
+    }
+  }
+
+  .text-green {
+    color: @green-6;
+
+    &:hover {
+      color: @green-6;
+    }
+
+    &:active {
+      color: @green-7;
+    }
+  }
+
+  .name {
+    vertical-align: middle;
+    margin-left: 8px;
+    max-width: 6em;
+    display: inline-block;
+    line-height: 24px;
+    height: 24px;
+    .textOverflow();
+  }
+  .ant-spin-container {
+    overflow: visible !important;
+  }
+  .ant-layout-content {
+    width: 100%;
+    padding: 0 24px;
+  }
+  .screen-lg {
+    .ant-layout-content {
+      max-width: 1024px;
+      margin: 24px auto;
+    }
+  }
+  .screen-xl {
+    .ant-layout-content {
+      max-width: 1400px;
+      margin: 24px auto;
+    }
+  }
+}
+
+li {
+  list-style: none;
+}

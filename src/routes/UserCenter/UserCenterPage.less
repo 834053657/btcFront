@@ -1,0 +1,172 @@
+@import '~antd/lib/style/themes/default.less';
+
+.user_center {
+  background: @body-background;
+  padding: 30px;
+}
+
+.hight,
+.middle,
+.low {
+  transition: color 0.3s;
+}
+
+.hight {
+  color: @success-color;
+}
+
+.middle {
+  color: @warning-color;
+}
+
+.low {
+  color: @error-color;
+}
+
+.left {
+  .left_wrapper {
+    width: 230px;
+    margin: 0 auto;
+  }
+  .user_info {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 26px;
+    align-items: center;
+
+    .info {
+      padding-left: 16px;
+      .name {
+        font-weight: 800;
+      }
+    }
+    :global(.ant-avatar) {
+      width: 52px;
+      height: 52px;
+    }
+  }
+}
+
+.box {
+  font-family: Monospaced Number, Chinese Quote, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+    PingFang SC, Hiragino Sans GB, Microsoft YaHei, Helvetica Neue, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(0, 0, 0, 0.65);
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: #fff;
+  border-radius: 2px;
+  position: relative;
+  transition: all 0.3s;
+  .box_head {
+    background: #fff;
+    border-bottom: 1px solid #e8e8e8;
+    padding: 0 24px;
+    border-radius: 2px 2px 0 0;
+    zoom: 1;
+    margin-bottom: -1px;
+    min-height: 48px;
+    transition: padding 0.3s;
+    .box_head_wrapper {
+      display: flex;
+      .box_head_title {
+        font-size: 16px;
+        padding: 16px 0;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        color: rgba(0, 0, 0, 0.85);
+        font-weight: 500;
+        display: inline-block;
+        flex: 1;
+      }
+
+      .box_head_extra {
+        padding: 13.5px 0;
+        float: right;
+        text-align: right;
+        margin-left: auto;
+      }
+    }
+    .box_head_subtitle {
+      padding-bottom: 16px;
+    }
+  }
+
+  .box_content {
+    padding: 24px;
+    zoom: 1;
+    transition: padding 0.3s;
+    box-sizing: border-box;
+  }
+
+  .box_footer {
+    text-align: right;
+  }
+
+  .box_item {
+    display: flex;
+    align-items: center;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e8e8e8;
+    * {
+      outline: none;
+    }
+    .box_item_meta {
+      display: flex;
+      align-self: flex-start;
+      i {
+        padding: 4px 0;
+      }
+      .box_item_meta_head {
+        width: 150px;
+        padding: 0 16px;
+      }
+    }
+    .box_item_content {
+      flex: 1 0;
+      outline: none;
+      align-self: flex-start;
+      .box_item_title {
+        color: rgba(0, 0, 0, 0.65);
+        margin-bottom: 4px;
+        font-size: 14px;
+        line-height: 22px;
+      }
+      .box_item_descript {
+        color: rgba(0, 0, 0, 0.45);
+        font-size: 14px;
+        line-height: 22px;
+      }
+    }
+
+    .box_item_action {
+      font-size: 0;
+      flex: 0 0 auto;
+      margin-left: 48px;
+      padding: 0;
+      list-style: none;
+      & > li {
+        &:first-child {
+          padding-left: 0;
+        }
+        display: inline-block;
+        color: rgba(0, 0, 0, 0.45);
+        cursor: pointer;
+        padding: 0 8px;
+        position: relative;
+        font-size: 14px;
+        line-height: 22px;
+        text-align: center;
+      }
+    }
+  }
+}
+
+.mb4 {
+  margin-bottom: 0.5em;
+}

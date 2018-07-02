@@ -1,0 +1,32 @@
+@import '~antd/lib/style/themes/default.less';
+
+.globalFooter {
+  padding: 0 16px;
+  margin: 48px 0 24px 0;
+  text-align: center;
+
+  .links {
+    margin-bottom: 8px;
+    color: #fff;
+
+    a {
+      color: @component-background;
+      transition: all 0.3s;
+
+      &:not(:last-child) {
+        margin-right: 40px;
+      }
+
+      &:hover {
+        /*color: @text-color;*/
+        color: @heading-color-dark;
+      }
+    }
+  }
+
+  .copyright {
+    /*color: @text-color-secondary-dark;*/
+    color: @component-background;
+    font-size: @font-size-base;
+  }
+}
