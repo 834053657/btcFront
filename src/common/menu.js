@@ -2,41 +2,12 @@ import { isUrl } from '../utils/utils';
 
 let menuData = [
   {
-    name: '首页',
-    path: 'home',
+    name: '交易大厅',
+    path: 'trade/index'
   },
   {
-    name: 'Itunes',
-    path: 'itunes',
-    // hide: true,
-    children: [
-      {
-        name: '交易大厅',
-        path: 'itunes-markets',
-      },
-      {
-        name: '账号管理',
-        path: 'account-manage',
-      },
-    ],
-  },
-  {
-    name: '礼品卡',
-    path: 'card',
-    children: [
-      {
-        name: '交易大厅',
-        path: 'market',
-      },
-      {
-        name: '发布购买广告',
-        path: 'buy-card',
-      },
-      {
-        name: '发布出售广告',
-        path: 'sell-card',
-      },
-    ],
+    name: '发布广告',
+    path: 'publishad',
   },
 ];
 

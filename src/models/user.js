@@ -1,9 +1,6 @@
 import { message } from 'antd';
-import dva from 'dva';
 import { routerRedux } from 'dva/router';
-import { dvaSocket } from '../utils/socket';
 import {
-  query as queryUsers,
   queryCurrent,
   forgetPassword,
   resetPassword,
@@ -36,39 +33,10 @@ export default {
   },
 
   effects: {
-    *fetch(_, { call, put }) {
-      const response = yield call(queryUsers);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-    },
     *fetchCurrent({ payload, callback }, { call, put }) {
       const response = yield call(queryCurrent);
       if (response.code === 0 && response.data) {
         const { data: { user } } = response;
-        /* const app = dva();
-        const options = {
-          'force new connection': true,
-          extraHeaders: {
-            'ITUNES-UID': 11211,
-            'TUNES-TOKEN': 'a44341adc15baf886ff21075fd1b41de',
-            'ITUNES-LANGUAGE': 'CN-zh',
-          },
-          transportOptions: {
-            polling: {
-              extraHeaders: {
-                'ITUNES-UID': 11211,
-                'TUNES-TOKEN': 'a44341adc15baf886ff21075fd1b41de',
-                'ITUNES-LANGUAGE': 'CN-zh',
-              },
-            },
-          },
-        }; */
-        // TODO 在这里带上拿到的TOKEN 重连socket 是不是比较好?
-        // TODO 或者从新注册一次插件？
-        // yield app.use(dvaSocket(CONFIG.socket_url, options));
-        // yield put({ type: 'push_system_message' });
         yield put({
           type: 'saveCurrentUser',
           payload: response.data,

@@ -78,9 +78,12 @@ export const getRouterData = app => {
     '/': {
       component: dynamicWrapper(app, ['user', 'login'], () => import('../layouts/BasicLayout')),
     },
-    '/home': {
-      component: dynamicWrapper(app, ['chart'], () => import('../routes/Dashboard/Home')),
+    '/trade/index': {
+      component: dynamicWrapper(app, ['trade'], () => import('../routes/Trade/List')),
     },
+    // '/home': {
+    //   component: dynamicWrapper(app, ['chart'], () => import('../routes/Dashboard/Home')),
+    // },
     '/user-center/index': {
       component: dynamicWrapper(app, ['user'], () => import('../routes/UserCenter/UserCenterPage')),
       authority: checkLogined,
@@ -122,29 +125,6 @@ export const getRouterData = app => {
     },
     '/message/list': {
       component: dynamicWrapper(app, ['message'], () => import('../routes/Message/List')),
-    },
-    '/card/sell-card': {
-      component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/SellCard')),
-      authority: checkLogined,
-    },
-    '/card/buy-card': {
-      component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/BuyCard')),
-      authority: checkLogined,
-    },
-    '/card/deal-detail/:id': {
-      component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/DealDetail')),
-    },
-    '/card/deal-line/:id': {
-      component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/DealLine')),
-    },
-    '/card/market': {
-      component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/List')),
-    },
-    '/card/appeal': {
-      component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/MarketBuy/Appeal')),
-    },
-    '/card/a_detail': {
-      component: dynamicWrapper(app, ['card'], () => import('../routes/GiftCard/Ad/PreviewAd')),
     },
     '/user': {
       component: dynamicWrapper(app, [], () => import('../layouts/UserLayout')),

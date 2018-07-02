@@ -2,106 +2,106 @@ import { stringify } from 'qs';
 import request from '../utils/request';
 
 export async function queryBanners() {
-  return request('/itunes/info/banners');
+  return request('/btc/info/banners');
 }
 
 export async function queryInfoList(params) {
-  return request(`/itunes/info/all?${stringify(params)}`);
+  return request(`/btc/info/all?${stringify(params)}`);
 }
 
 export async function queryInfoDtl(params) {
-  return request(`/itunes/info/detail?${stringify(params)}`);
+  return request(`/btc/info/detail?${stringify(params)}`);
 }
 
 export async function queryMessageList(params) {
-  return request(`/itunes/message/all?${stringify(params)}`);
+  return request(`/btc/message/all?${stringify(params)}`);
 }
 
 export async function queryMoreMessageList(params) {
-  return request(`/itunes/message/more?${stringify(params)}`);
+  return request(`/btc/message/more?${stringify(params)}`);
 }
 
 export async function readMessage(params) {
-  return request('/itunes/message/read', {
+  return request('/btc/message/read', {
     method: 'POST',
     body: params,
   });
 }
 
 export async function readOrderMessage(params) {
-  return request('/itunes/message/read_chat', {
+  return request('/btc/message/read_chat', {
     method: 'POST',
     body: params,
   });
 }
 
 export async function queryChatHistory(params) {
-  return request(`/itunes/message/get_chat_history?${stringify(params)}`);
+  return request(`/btc/message/get_chat_history?${stringify(params)}`);
 }
 
 export async function queryPayments(params) {
-  return request('/itunes/wallet/platform/payments');
+  return request('/btc/wallet/platform/payments');
 }
 
 export async function queryFee(params) {
-  return request('/itunes/wallet/fee', {
+  return request('/btc/wallet/fee', {
     method: 'POST',
     body: params,
   });
 }
 
 export async function userRecharge(params) {
-  return request('/itunes/wallet/recharge', {
+  return request('/btc/wallet/recharge', {
     method: 'POST',
     body: params,
   });
 }
 
 export async function userWithdraw(params) {
-  return request('/itunes/wallet/withdraw', {
+  return request('/btc/wallet/withdraw', {
     method: 'POST',
     body: params,
   });
 }
 
 export async function queryMyAdList(params) {
-  return request(`/itunes/user/ad/all?${stringify(params)}`);
+  return request(`/btc/user/ad/all?${stringify(params)}`);
 }
 
 export async function queryTermsList(params) {
-  return request(`/itunes/user/trans_term/all?${stringify(params)}`);
+  return request(`/btc/user/trans_term/all?${stringify(params)}`);
 }
 
 export async function fakeAd(params) {
-  return request('/itunes/user/ad/status', {
+  return request('/btc/user/ad/status', {
     method: 'POST',
     body: params,
   });
 }
 
 export async function removeAd(params) {
-  return request('/itunes/user/my_ad/delete', {
+  return request('/btc/user/my_ad/delete', {
     method: 'POST',
     body: params,
   });
 }
 
 export async function fakeTerms(params) {
-  return request('/itunes/user/trans_term/update', {
+  return request('/btc/user/trans_term/update', {
     method: 'POST',
     body: params,
   });
 }
 
 export async function removeTerms(params) {
-  return request('/itunes/user/trans_term/delete', {
+  return request('/btc/user/trans_term/delete', {
     method: 'POST',
     body: params,
   });
 }
 
 export async function queryStaticDtl(params) {
-  return request(`/itunes/config/footer?${stringify(params)}`);
+  return request(`/btc/config/footer?${stringify(params)}`);
 }
 
 export async function queryProjectNotice() {
@@ -164,7 +164,7 @@ export async function queryFakeList(params) {
 }
 
 export async function accountLogin(params) {
-  return request('/itunes/user/login', {
+  return request('/btc/user/login', {
     method: 'POST',
     body: params,
   });
@@ -173,14 +173,14 @@ export async function accountLogin(params) {
 // -------------- 注册 start --------------
 
 export async function fakeRegister(params) {
-  return request('/itunes/user/register', {
+  return request('/btc/user/register', {
     method: 'POST',
     body: params,
   });
 }
 
 export async function postVerify(params) {
-  return request('/itunes/user/send_code', {
+  return request('/btc/user/send_code', {
     method: 'POST',
     body: params,
   });
@@ -189,7 +189,7 @@ export async function postVerify(params) {
 // -------------- 注册 end --------------
 
 export async function postVerifyCaptcha(params) {
-  return request('/itunes/user/verify_code', {
+  return request('/btc/user/verify_code', {
     method: 'POST',
     body: params,
   });
@@ -200,27 +200,27 @@ export async function queryNotices() {
 }
 
 export async function queryStatistics() {
-  return request('/itunes/statistics/trade');
+  return request('/btc/statistics/trade');
 }
 
 export async function queryConfigs() {
-  return request('/itunes/defines');
+  return request('/btc/defines');
 }
 
 //礼品卡列表actions开始
 
 export async function getCardlist(params) {
-  return request(`/itunes/ad/card/all?${stringify(params)}`);
+  return request(`/btc/ad/card/all?${stringify(params)}`);
 }
 
 // //获取交易条款
 // export async function getTransTerms(params) {
-//   return request(`/itunes/user/trans_term/all?${stringify(params)}`);
+//   return request(`/btc/user/trans_term/all?${stringify(params)}`);
 // }
 
 // 出售创建订单
 export async function createSellOrder(params) {
-  return request('/itunes/order/sell/create', {
+  return request('/btc/order/sell/create', {
     method: 'POST',
     body: params,
   });
@@ -228,7 +228,7 @@ export async function createSellOrder(params) {
 
 // 购买创建订单
 export async function createBuyOrder(params) {
-  return request('/itunes/order/buy/create', {
+  return request('/btc/order/buy/create', {
     method: 'POST',
     body: params,
   });
@@ -241,12 +241,12 @@ export async function getOrderDetail(params) {
   }
   console.log('params');
   console.log(params);
-  return request(`/itunes/order/detail?${stringify(params)}`);
+  return request(`/btc/order/detail?${stringify(params)}`);
 }
 
 //getToken
 export async function getToken(params) {
-  return request('/itunes/user/upload_token', {
+  return request('/btc/user/upload_token', {
     method: 'POST',
     body: params,
   });
@@ -255,7 +255,7 @@ export async function getToken(params) {
 //创建出售
 export async function addSellAd(params) {
   console.log('post postSell in api');
-  return request('/itunes/ad/card/sell', {
+  return request('/btc/ad/card/sell', {
     method: 'POST',
     body: params,
   });
@@ -263,7 +263,7 @@ export async function addSellAd(params) {
 
 //创建购买广告
 export async function addBuyAd(params) {
-  return request('/itunes/ad/card/buy', {
+  return request('/btc/ad/card/buy', {
     method: 'POST',
     body: params,
   });
@@ -271,21 +271,21 @@ export async function addBuyAd(params) {
 
 //创建购买
 export async function getAdDetail(params) {
-  return request(`/itunes/ad/card/detail?${stringify(params)}`);
+  return request(`/btc/ad/card/detail?${stringify(params)}`);
 }
 
 //创建出售
 export async function getSellDetail(params) {
-  return request(`/itunes/ad/card/sell/detail?${stringify(params)}`);
+  return request(`/btc/ad/card/sell/detail?${stringify(params)}`);
 }
 
 //获取申诉详情
 export async function getAppealInfo(params) {
-  return request(`/itunes/message/get_chat_history?${stringify(params)}`);
+  return request(`/btc/message/get_chat_history?${stringify(params)}`);
 }
 
 export async function postCheck(params) {
-  return request('/itunes/order/check', {
+  return request('/btc/order/check', {
     method: 'POST',
     body: params,
   });
@@ -294,12 +294,12 @@ export async function postCheck(params) {
 //礼品卡列表actions结束
 
 export async function getCaptcha(params) {
-  return request(`/itunes/user/captcha?${stringify(params)}`);
+  return request(`/btc/user/captcha?${stringify(params)}`);
 }
 
 //发送CDK
 export async function sendCDK(params) {
-  return request('/itunes/order/ship', {
+  return request('/btc/order/ship', {
     method: 'POST',
     body: params,
   });
@@ -307,7 +307,7 @@ export async function sendCDK(params) {
 
 //取消订单
 export async function cacelOrder(params) {
-  return request('/itunes/order/cancel', {
+  return request('/btc/order/cancel', {
     method: 'POST',
     body: params,
   });
@@ -315,7 +315,7 @@ export async function cacelOrder(params) {
 
 //释放订单
 export async function releaseOrder(params) {
-  return request('/itunes/order/release', {
+  return request('/btc/order/release', {
     method: 'POST',
     body: params,
   });
@@ -323,7 +323,7 @@ export async function releaseOrder(params) {
 
 //申诉
 export async function appealOrder(params) {
-  return request('/itunes/order/appeal', {
+  return request('/btc/order/appeal', {
     method: 'POST',
     body: params,
   });
@@ -331,7 +331,7 @@ export async function appealOrder(params) {
 
 //评价订单
 export async function ratingOrder(params) {
-  return request('/itunes/order/rating', {
+  return request('/btc/order/rating', {
     method: 'POST',
     body: params,
   });
@@ -339,7 +339,7 @@ export async function ratingOrder(params) {
 
 //发送快捷短语
 export async function sendQuickMsg(params) {
-  return request('/itunes/socket/post_quick_message', {
+  return request('/btc/socket/post_quick_message', {
     method: 'POST',
     body: params,
   });
@@ -348,5 +348,5 @@ export async function sendQuickMsg(params) {
 //礼品卡列表actions结束
 
 export async function getTransfers(params) {
-  return request(`/itunes/wallet/tansaction?${stringify(params)}`);
+  return request(`/btc/wallet/tansaction?${stringify(params)}`);
 }

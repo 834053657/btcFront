@@ -137,8 +137,8 @@ const proxy = {
       path: '/base/category/list',
     });
   },
-  'GET /itunes/*': base_url,
-  'POST /itunes/*': base_url,
+  'GET /btc/*': base_url,
+  'POST /btc/*': base_url,
 };
 
 export default (noProxy ? {} : delay(proxy, 1000));

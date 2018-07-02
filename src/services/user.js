@@ -1,16 +1,13 @@
 import { stringify } from 'qs';
 import request from '../utils/request';
 
-export async function query() {
-  return request('/api/users');
-}
 
 export async function queryCurrent() {
-  return request('/itunes/user/info');
+  return request('/btc/user/info');
 }
 
 export async function forgetPassword(params) {
-  return request('/itunes/user/forget_password', {
+  return request('/btc/user/forget_password', {
     method: 'POST',
     body: params,
   });
@@ -23,7 +20,7 @@ export async function forgetPassword(params) {
  */
 export async function resetPassword(params) {
   const { code, new_password } = params || {};
-  return request('/itunes/user/reset_password', {
+  return request('/btc/user/reset_password', {
     method: 'POST',
     body: {
       code,
@@ -39,7 +36,7 @@ export async function resetPassword(params) {
  */
 export async function updatePassword(params) {
   const { old_password, password: new_password } = params || {};
-  return request('/itunes/user/update_password', {
+  return request('/btc/user/update_password', {
     method: 'POST',
     body: {
       old_password,
@@ -49,58 +46,58 @@ export async function updatePassword(params) {
 }
 
 export async function updateEmail(params) {
-  return request('/itunes/user/update_email', {
+  return request('/btc/user/update_email', {
     method: 'POST',
     body: params,
   });
 }
 
 export async function updateMobile(params) {
-  return request('/itunes/user/update_telephone', {
+  return request('/btc/user/update_telephone', {
     method: 'POST',
     body: params,
   });
 }
 
 export async function updateG2Validate(params) {
-  return request('/itunes/user/2fa_validate', {
+  return request('/btc/user/2fa_validate', {
     method: 'POST',
     body: params,
   });
 }
 
 export async function postAuth(params) {
-  return request('/itunes/user/auth', {
+  return request('/btc/user/auth', {
     method: 'POST',
     body: params,
   });
 }
 
 export async function postPayMethod(params) {
-  return request('/itunes/user/payment/update', {
+  return request('/btc/user/payment/update', {
     method: 'POST',
     body: params,
   });
 }
 
 export async function deletePayMethod(params) {
-  return request('/itunes/user/payment/delete', {
+  return request('/btc/user/payment/delete', {
     method: 'POST',
     body: params,
   });
 }
 
 export async function updateAvatar(params) {
-  return request('/itunes/user/avatar', {
+  return request('/btc/user/avatar', {
     method: 'POST',
     body: params,
   });
 }
 
 export async function getG2Secret(params) {
-  return request(`/itunes/user/2fa_secret?${stringify(params)}`);
+  return request(`/btc/user/2fa_secret?${stringify(params)}`);
 }
 
 export async function queryMyOrderList(params) {
-  return request(`/itunes/user/order/all?${stringify(params)}`);
+  return request(`/btc/user/order/all?${stringify(params)}`);
 }

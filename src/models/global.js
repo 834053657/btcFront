@@ -68,11 +68,11 @@ export default {
       });
     },
     *fetchStatistics(_, { call, put }) {
-      const res = yield call(queryStatistics);
-      yield put({
-        type: 'saveStatistics',
-        payload: res.data,
-      });
+      // const res = yield call(queryStatistics);
+      // yield put({
+      //   type: 'saveStatistics',
+      //   payload: res.data,
+      // });
     },
     *clearNotices_bak({ payload }, { put, select }) {
       yield put({
