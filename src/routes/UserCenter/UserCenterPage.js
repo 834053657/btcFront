@@ -18,13 +18,18 @@ import {
 } from 'antd';
 import { map } from 'lodash';
 import G2Validation from 'components/G2Validation';
+import DescriptionList from 'components/DescriptionList';
 import EmailModal from './modals/EmailModal';
 import MobileModal from './modals/MobileModal';
 import PayMethodModal from './modals/PayMethodModal';
 import PasswordForm from './forms/PasswordForm';
 import RealNameForm from './forms/RealNameForm';
 import VideoAuthForm from './forms/VideoAuthForm';
+
 import styles from './UserCenterPage.less';
+import numeral from 'numeral';
+
+const { Description } = DescriptionList;
 
 @connect(({ global, user, loading }) => ({
   currentUser: user.currentUser,
@@ -359,6 +364,21 @@ export default class UserCenterPage extends Component {
                   </Upload>
                 </div>
                 <Divider />
+                <DescriptionList col={1} className={styles.detailBox}>
+                  <Description term="好评率">
+                    100%
+                  </Description>
+                  <Description term="信任数">
+                    被{1}人信任
+                  </Description>
+                  <Description term="屏蔽数">
+                    被{1}人屏蔽
+                  </Description>
+                  <Description term="已完成交易量">
+                    {100}
+                  </Description>
+                </DescriptionList>
+                <Divider />
                 <p>
                   本帐号于{' '}
                   <span>
@@ -450,7 +470,7 @@ export default class UserCenterPage extends Component {
                       <Icon type="unlock" />
                       <div className={styles.box_item_meta_head}>
                         <h4 className={styles.box_item_title}>登录密码</h4>
-                        <div className={styles.box_item_descript}>已绑定</div>
+                        <div className={styles.box_item_descript} />
                       </div>
                     </div>
                     <div className={styles.box_item_content} />

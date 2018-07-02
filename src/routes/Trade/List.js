@@ -107,7 +107,8 @@ export default class List extends Component {
           <Alert message="系统公告：本网站内测期间，为答谢各位会员，所有转账免矿工手续费，答谢活动截止至3.15 12：00." type="info" showIcon />
         </div>
         <div className={styles.banners}>
-
+          <h1 className={styles.title}>交易比特币 快速 安全 私密</h1>
+          <h4 className={styles.sub_title}>在 15559 个城市 和 248 个国家/地区交易比特币</h4>
         </div>
         <div className={styles.list}>
           <div className={styles.type_box}>

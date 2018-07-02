@@ -56,17 +56,17 @@ export default {
         payload: res,
       });
     },
-    *fetchNotices_bak(_, { call, put }) {
-      const data = yield call(queryNotices);
-      yield put({
-        type: 'saveNotices',
-        payload: data,
-      });
-      yield put({
-        type: 'user/changeNotifyCount',
-        payload: data.length,
-      });
-    },
+    // *fetchNotices_bak(_, { call, put }) {
+    //   const data = yield call(queryNotices);
+    //   yield put({
+    //     type: 'saveNotices',
+    //     payload: data,
+    //   });
+    //   yield put({
+    //     type: 'user/changeNotifyCount',
+    //     payload: data.length,
+    //   });
+    // },
     *fetchStatistics(_, { call, put }) {
       // const res = yield call(queryStatistics);
       // yield put({

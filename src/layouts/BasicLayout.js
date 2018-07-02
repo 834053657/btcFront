@@ -119,10 +119,10 @@ class BasicLayout extends React.Component {
         type: 'user/fetchCurrent',
         callback: this.setSocketToken,
       });
-      this.props.dispatch({
-        type: 'global/fetchNotices',
-        payload: { status: 0, type: 1 },
-      });
+      // this.props.dispatch({
+      //   type: 'global/fetchNotices',
+      //   payload: { status: 0, type: 1 },
+      // });
     }
   }
   componentWillUnmount() {

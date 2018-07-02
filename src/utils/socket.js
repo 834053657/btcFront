@@ -51,10 +51,10 @@ export function dvaSocket(url, option) {
       on: {
         connect: (data, dispatch, getState, socket) => {
           console.log('connect success', data);
-          dispatch({
-            type: 'global/fetchNotices',
-            payload: { status: 0 },
-          });
+          // dispatch({
+          //   type: 'global/fetchNotices',
+          //   payload: { status: 0 },
+          // });
         },
         push_system_message: (data, dispatch, getState) => {
           const { data: msg } = JSON.parse(data);

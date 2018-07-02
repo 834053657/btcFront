@@ -15,7 +15,8 @@
 $ git clone 仓库地址
 $ cd btc-new-frontend
 $ npm install
-$ npm start         # visit http://localhost:8000
+$ npm start         # visit http://localhost:8000 mock数据
+$ npm run start:test         # visit http://localhost:8000 后台线上测试地址
 ```
 
 ## 常见问题
