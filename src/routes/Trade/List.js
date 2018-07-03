@@ -1,15 +1,29 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
 import { Link, routerRedux } from 'dva/router';
 import moment from 'moment';
-import { Table, Alert, Button, Icon, Radio, Modal } from 'antd';
+import { Table, Alert, Button, Icon, Radio, Avatar, Badge,Tag, Popover} from 'antd';
 import { map } from 'lodash';
+import { stringify } from 'qs';
 import BlankLayout from '../../layouts/BlankLayout';
-import { getMessageContent } from '../../utils/utils';
+import SearchForm from './forms/SearchForm'
+
 import styles from './List.less';
+import { getQueryString } from '../../utils/utils';
 
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
+
+const payMethod = {
+  'alipay': <Icon type="alipay-circle" />,
+  'bank': <Icon type="wallet" />,
+  'wechat': <Icon type="wechat" />
+}
+
+const typeMap = {
+  1: '购买',
+  2: '出售'
+}
 
 
 @connect(({ trade, loading }) => ({
@@ -18,51 +32,136 @@ const RadioGroup = Radio.Group;
 }))
 export default class List extends Component {
   constructor(props) {
+    const { search } = props.location;
+    const { type = '1' } = getQueryString(search);
     super(props);
     this.state = {
-      type: '1',
+      type,
+      searchVisible: false,
+      searchValues: {
+        countries: "CN",
+        currency: "CNY",
+        pay_methods: ""
+      }
     };
   }
 
   componentWillMount() {}
 
   componentDidMount() {
-    // const { dispatch } = this.props;
-    // dispatch({
-    //   type: 'message/fetchMessageList',
-    // });
+    this.fetch();
+  }
+
+  fetch = (params={}, callback) => {
+    const { searchValues, type } = this.state
+    const { dispatch, pagination } = this.props;
+
+    params.type = params.type || type;
+    params.pageSize = params.pageSize || pagination.pageSize;
+
+    dispatch({
+      type: 'trade/fetchList',
+      payload: {...searchValues, ...params},
+      callback
+    });
+  }
+
+  handleBuy = (row) => {
+    console.log(row)
   }
 
   columns = [
     {
       title: '用户',
-      dataIndex: '1',
+      dataIndex: 'user_',
+      render: (text, row) => {
+        const { online, avatar, nickname } = row.owner || {};
+
+        return (
+          <div>
+            <Badge status={online ? 'success' : 'default'} offset={[35, -5]} dot>
+              <Avatar size="large" src={avatar} />
+            </Badge>
+            <span className="name">{nickname}</span>
+          </div>
+        );
+      },
     },
     {
       title: '所在国家',
-      dataIndex: '2',
+      dataIndex: 'countrie',
+      render: v => <span>{v && CONFIG.countrysMap[v] ? CONFIG.countrysMap[v].name : '-'}</span>
     },
     {
-      title: '交易笔数',
-      dataIndex: '3',
+      title: '交易笔数/好评率',
+      dataIndex: 'volume_like',
+      render: (v, row) => {
+        const { month_volume, like_total } = row.owner || {};
+
+        return (
+          <span>{`${month_volume} / ${like_total}%`}</span>
+        );
+      }
     },
     {
-      title: '付款方式',
-      dataIndex: '4',
+      title: '支付方式',
+      dataIndex: 'pay_method',
+      render: (v, row) => {
+        return (
+          <div >
+            {
+              map(row.pay_method, item => {
+                return <span className={styles.pay_method} key={item}>{item && payMethod[item] ? payMethod[item] : '-'}</span>
+              })
+            }
+          </div>
+        )
+      }
     },
     {
       title: '价格',
-      dataIndex: '5',
+      dataIndex: 'price',
+      render: (v, row) => {
+        const { currency } = row || {};
+        return <span>{v} {currency} / BTC</span>
+      }
     },
     {
       title: '限额',
-      dataIndex: '6',
+      dataIndex: 'condition_',
+      render: (v, row) => {
+        const { max_money=0, min_money=0 } = row.condition || {};
+        return <span>{min_money} - {max_money} {row.currency}</span>
+      }
+    },
+    {
+      title: '操作',
+      render: r => {
+        const { type } = this.state;
+        return (
+          <Fragment>
+            <Link to=""><Button type="primary" onClick={this.handleBuy.bind(this, r)}>{type ? typeMap[type] : '-'}</Button></Link>
+          </Fragment>
+        )
+      },
     },
   ];
 
+  handleTypeChange = (e) => {
+    const type = e.target.value;
+    this.setState({
+      type
+    })
+    this.fetch({type});
+    this.props.dispatch(
+      routerRedux.replace({
+        search: stringify({ type }),
+      })
+    );
+  }
+
   handleTableChange = (pagination, filtersArg, sorter) => {
     const { dispatch, getValue } = this.props;
-    const { formValues } = this.state;
 
     const filters = Object.keys(filtersArg).reduce((obj, key) => {
       const newObj = { ...obj };
@@ -73,33 +172,44 @@ export default class List extends Component {
     const params = {
       page: pagination.current,
       page_size: pagination.pageSize,
-      ...formValues,
       // ...filters,
     };
     if (sorter.field) {
       params.sorter = `${sorter.field}_${sorter.order}`;
     }
 
-    dispatch({
-      type: 'message/fetchMessageList',
-      payload: params,
-    });
+    this.fetch(params);
   };
 
-  handleTypeChange = (e) => {
-    const type = e.target.value;
+  handleVisibleChange = (searchVisible) => {
+    this.setState({searchVisible});
+  }
+
+
+
+  handleSearch = (searchValues) => {
+    this.fetch(searchValues, ()=>this.handleVisibleChange(false));
     this.setState({
-      type
+      searchValues
     })
+  }
+
+  handleClearMoney = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const { searchValues } = this.state;
+    delete searchValues.money;
+
+    this.setState({
+      searchValues
+    })
+    this.fetch(searchValues)
   }
 
   render() {
     const { list=[], pagination={}, loading } = this.props;
-    const { type } = this.state;
-    const typeMap = {
-      1: '购买',
-      2: '出售'
-    }
+    const { type, searchVisible, searchValues={} } = this.state;
+    const { countries, currency, pay_methods, money} = searchValues || {}
 
     return (
       <BlankLayout>
@@ -110,15 +220,33 @@ export default class List extends Component {
           <h1 className={styles.title}>交易比特币 快速 安全 私密</h1>
           <h4 className={styles.sub_title}>在 15559 个城市 和 248 个国家/地区交易比特币</h4>
         </div>
-        <div className={styles.list}>
+        <div >
           <div className={styles.type_box}>
-            <Radio.Group size="large" value={type} onChange={this.handleTypeChange} style={{ marginBottom: 8 }}>
+            <RadioGroup size="large" value={type} onChange={this.handleTypeChange} style={{ marginBottom: 8 }}>
               {
-                map(typeMap, (text, value) => <Radio.Button key={value} value={value}>{text}</Radio.Button>)
+                map(typeMap, (text, value) => <RadioButton key={value} value={value}>{text}</RadioButton>)
               }
-            </Radio.Group>
+            </RadioGroup>
+          </div>
+          <div className={styles.table_tool}>
+            <Popover
+              // placement="bottom"
+              visible={searchVisible}
+              // trigger="click"
+              // onVisibleChange={this.handleVisibleChange}
+              content={<SearchForm initialValues={searchValues} onSearch={this.handleSearch} onCancel={this.handleVisibleChange.bind(this, false)} />}
+            >
+              <div className={styles.search_box} onClick={this.handleVisibleChange.bind(this, true)}>
+                <Tag>{countries && CONFIG.countrysMap[countries] ? CONFIG.countrysMap[countries].name : '全部国家'}</Tag>
+                {currency && CONFIG.currencyList[currency] ? <Tag>{CONFIG.currencyList[currency]}</Tag> : null}
+                <Tag>{pay_methods && CONFIG.payments[pay_methods] ? CONFIG.payments[pay_methods] : '全部支付方式'}</Tag>
+                {searchValues.money && <Tag closable onClose={this.handleClearMoney}>{searchValues.money}</Tag>}
+                <Icon type="search" />
+              </div>
+            </Popover>
           </div>
           <Table
+            className={styles.list}
             loading={loading}
             rowKey={record => record.id}
             dataSource={list}

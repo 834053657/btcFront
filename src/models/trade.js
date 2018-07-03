@@ -1,4 +1,4 @@
-import { queryInfoList, queryInfoDtl, queryMoreMessageList, readMessage } from '../services/api';
+import { getTradeList } from '../services/api';
 
 export default {
   namespace: 'trade',
@@ -6,17 +6,20 @@ export default {
   state: {
     tradeList: {
       list: [],
-      pagination: {},
+      pagination: {
+        pageSize: 10,
+      },
     }
   },
 
   effects: {
-    *fetchList({ payload }, { call, put }) {
-      const res = yield call(queryInfoList, payload);
+    *fetchList({ payload, callback }, { call, put }) {
+      const res = yield call(getTradeList, payload);
       yield put({
         type: 'saveList',
         payload: res,
       });
+      yield callback && callback();
     },
   },
 
@@ -25,9 +28,9 @@ export default {
       const { data: { items, paginator } } = payload || {};
       return {
         ...state,
-        infoData: {
+        tradeList: {
           list: items,
-          pagination: { ...paginator, current: paginator.page },
+          pagination: { ...paginator, current: paginator.page, pageSize: paginator.page_num },
         },
       };
     },
