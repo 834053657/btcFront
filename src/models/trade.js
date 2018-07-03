@@ -9,6 +9,8 @@ export default {
       pagination: {
         pageSize: 10,
       },
+    },
+    detail: {
     }
   },
 
@@ -17,6 +19,14 @@ export default {
       const res = yield call(getTradeList, payload);
       yield put({
         type: 'saveList',
+        payload: res,
+      });
+      yield callback && callback();
+    },
+    *fetchDetail({ payload, callback }, { call, put }) {
+      const res = yield call(getTradeList, payload);
+      yield put({
+        type: 'saveDetail',
         payload: res,
       });
       yield callback && callback();
@@ -31,6 +41,14 @@ export default {
         tradeList: {
           list: items,
           pagination: { ...paginator, current: paginator.page, pageSize: paginator.page_num },
+        },
+      };
+    },
+    saveDetail(state, { payload }) {
+      return {
+        ...state,
+        detail: {
+          ...payload
         },
       };
     },

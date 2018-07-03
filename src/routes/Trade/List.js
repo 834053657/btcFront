@@ -66,10 +66,6 @@ export default class List extends Component {
     });
   }
 
-  handleBuy = (row) => {
-    console.log(row)
-  }
-
   columns = [
     {
       title: '用户',
@@ -140,7 +136,7 @@ export default class List extends Component {
         const { type } = this.state;
         return (
           <Fragment>
-            <Link to=""><Button type="primary" onClick={this.handleBuy.bind(this, r)}>{type ? typeMap[type] : '-'}</Button></Link>
+            <Link to={`/trade/detail/${r.id}`}><Button type="primary" >{type ? typeMap[type] : '-'}</Button></Link>
           </Fragment>
         )
       },
