@@ -3,11 +3,21 @@ import { isUrl } from '../utils/utils';
 let menuData = [
   {
     name: '交易大厅',
-    path: 'trade/index'
+    path: 'trade/index',
   },
   {
     name: '发布广告',
     path: 'publishad',
+  },
+  {
+    name: '用户详情页',
+
+    path: 'personage',
+  },
+  {
+    name: '咨询列表',
+
+    path: 'counsel',
   },
 ];
 
@@ -54,6 +64,7 @@ if (__KG_API_ENV__ === 'dev') {
         },
       ],
     },
+
     {
       name: '列表页',
       icon: 'table',

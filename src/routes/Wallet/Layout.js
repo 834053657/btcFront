@@ -94,20 +94,20 @@ export default class Layout extends Component {
               <TabPane tab="充值" key="1">
                 {hadEnabledPayment
                   ? activeKey === '1' && (
-                      <RechargeForm
-                        {...this.props}
-                        onSubmit={this.handleTabsChange.bind(this, '3')}
-                      />
+                  <RechargeForm
+                    {...this.props}
+                    onSubmit={this.handleTabsChange.bind(this, '3')}
+                  />
                     )
                   : Warning}
               </TabPane>
               <TabPane tab="提现" key="2">
                 {hadEnabledPayment
                   ? activeKey === '2' && (
-                      <WithdrawForm
-                        {...this.props}
-                        onSubmit={this.handleTabsChange.bind(this, '3')}
-                      />
+                  <WithdrawForm
+                    {...this.props}
+                    onSubmit={this.handleTabsChange.bind(this, '3')}
+                  />
                     )
                   : Warning}
               </TabPane>
