@@ -12,6 +12,7 @@ module.exports = {
   rules: {
     camelcase: [0],
     radix: [0],
+    'react/jsx-no-target-blank': [0],
     'default-case': [0],
     'react/no-multi-comp': [0],
     'no-plusplus': [1],

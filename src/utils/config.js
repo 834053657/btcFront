@@ -55,14 +55,9 @@ export default {
     5: '已完成',
     6: '已取消',
   },
-  goods_type: {
-    1: 'itunes',
-    2: '礼品卡',
+  country: {
   },
-  trans_term_status: {
-    1: '未通过',
-    2: '审核中',
-    3: '已通过',
+  countrysMap: {
   },
   message_type_zh_CN: {
     1: '系统资讯',

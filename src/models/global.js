@@ -41,7 +41,6 @@ export default {
       if (response && response.code === 0) {
         CONFIG = { ...CONFIG, ...response.data };
         CONFIG.countrysMap = mapKeys(response.data.country, 'code');
-        CONFIG.cardTypeMap = mapKeys(response.data.card_type, 'type');
       }
     },
     *fetchNotices({ payload }, { call, put }) {

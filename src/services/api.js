@@ -350,3 +350,19 @@ export async function sendQuickMsg(params) {
 export async function getTransfers(params) {
   return request(`/btc/wallet/tansaction?${stringify(params)}`);
 }
+
+
+// -----------------
+
+//发送快捷短语
+// export async function sendQuickMsg(params) {
+//   return request('/btc/socket/post_quick_message', {
+//     method: 'POST',
+//     body: params,
+//   });
+// }
+
+
+export async function getTradeList(params) {
+  return request(`/btc/trade/list?${stringify(params)}`);
+}

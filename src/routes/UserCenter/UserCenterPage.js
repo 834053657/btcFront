@@ -27,7 +27,6 @@ import RealNameForm from './forms/RealNameForm';
 import VideoAuthForm from './forms/VideoAuthForm';
 
 import styles from './UserCenterPage.less';
-import numeral from 'numeral';
 
 const { Description } = DescriptionList;
 

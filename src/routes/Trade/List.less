@@ -1,7 +1,7 @@
 @import '~antd/lib/style/themes/default.less';
 
 .list {
-  /* min-height: 750px; */
+  background: @component-background;
 }
 
 .banners {
@@ -29,4 +29,28 @@
       padding: 0 35px;
     }
   }
+}
+
+.pay_method {
+  padding-right: 8px;
+
+}
+
+.table_tool {
+  text-align: right;
+  margin: 10px 0;
+
+  .search_box {
+    background: @component-background;
+    display: inline-block;
+    max-width: 450px;
+    border: 1px solid @border-color-base;
+    padding: 6px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    &:hover {
+      border-color:  @primary-color ;
+    }
+  }
+
 }
