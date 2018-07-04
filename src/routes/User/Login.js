@@ -5,6 +5,7 @@ import { Checkbox, Alert, Icon } from 'antd';
 import { stringify } from 'qs';
 import Login from 'components/Login';
 import G2Validation from 'components/G2Validation';
+import SecureValidation from 'components/SecureValidation';
 import { getCaptcha } from '../../services/api';
 import styles from './Login.less';
 
@@ -79,9 +80,45 @@ export default class LoginPage extends Component {
     });
   };
 
+  handleSubmitSecure = (err, values) => {
+    const { loginInfo } = this.props.login;
+
+    this.props.dispatch({
+      type: 'login/login',
+      payload: {
+        ...loginInfo,
+        secureVisible: values.code,
+      },
+    });
+  };
+
+  handleCancelSecure = () => {
+    this.props.dispatch({
+      type: 'login/changeLoginStatus',
+      payload: {
+        secureVisible: false,
+      },
+    });
+  };
+
   renderMessage = content => {
     return <Alert style={{ marginBottom: 24 }} message={content} type="error" showIcon />;
   };
+
+  handleSendCaptcha = (usage = 2, { email }, callback) => {
+    return this.props.dispatch({
+      type: 'global/sendVerify',
+      payload: {
+        data: {
+          mail: email,
+        },
+        type: 'mail',
+        usage,
+      },
+      callback,
+    });
+  };
+
 
   render() {
     const { login, submitting } = this.props;
@@ -114,6 +151,13 @@ export default class LoginPage extends Component {
           visible={login.g2Visible}
           onCancel={this.handleCancel}
           onSubmit={this.handleSubmitG2}
+        />
+        <SecureValidation
+          title="身份验证"
+          visible={login.secureVisible}
+          onGetCaptcha={this.handleSendCaptcha}
+          onCancel={this.handleCancelSecure}
+          onSubmit={this.handleSubmitSecure}
         />
       </div>
     );

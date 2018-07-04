@@ -25,6 +25,10 @@ export default {
     },
   ],
   web_sub_title: '比特币在线交易平台',
+  verify_type: {
+    sms: '手机验证',
+    mail: '邮箱验证'
+  },
   language: {
     zh_CN: '简体中文',
     en_GB: 'English',
