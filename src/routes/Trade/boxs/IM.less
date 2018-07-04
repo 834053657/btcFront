@@ -1,0 +1,60 @@
+@import '~antd/lib/style/themes/default.less';
+@import '../../../utils/utils.less';
+
+.chat_card {
+  .card_body, .right, .left {
+    height: 550px;
+    box-sizing: border-box;
+  }
+
+  .chat_history {
+    height: 390px;
+    border-radius: 4px;
+    overflow: auto;
+    padding: 8px 24px;
+    box-sizing: border-box;
+  }
+
+  .chat_message_box {
+    border-top: 1px solid @border-color-base;
+    height: 110px;
+    padding: 0 15px;
+    box-sizing: border-box;
+    .chat_tools {
+      padding: 8px 0;
+    }
+  }
+
+  .right {
+    background: @body-background;
+    border-left: 1px solid @border-color-base;
+    .tabs_content {
+      padding: 0 15px;
+    }
+  }
+
+  .messageContent {
+    img {
+      max-width: 60%;
+      display: block;
+      height: auto;
+      margin: 0 auto;
+    }
+  }
+
+  .myMessageBox {
+    flex-direction: row-reverse;
+    .sendtime {
+      //text-align: left;
+    }
+    :global {
+      .ant-list-item-meta-avatar {
+        margin-right: 0;
+        margin-left: 16px;
+      }
+      .ant-list-item-meta-content {
+        text-align: right;
+      }
+    }
+  }
+}

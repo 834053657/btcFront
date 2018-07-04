@@ -46,10 +46,12 @@ export default class List extends Component {
     };
   }
 
-  componentWillMount() {}
-
   componentDidMount() {
     this.fetch();
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
   fetch = (params={}, callback) => {
@@ -57,12 +59,17 @@ export default class List extends Component {
     const { dispatch, pagination } = this.props;
 
     params.type = params.type || type;
-    params.pageSize = params.pageSize || pagination.pageSize;
+    params.page_size = params.page_size || pagination.page_size;
 
     dispatch({
       type: 'trade/fetchList',
       payload: {...searchValues, ...params},
-      callback
+      callback: () => {
+        callback && callback()
+        if (!this.interval) {
+          this.interval = setInterval(this.fetch, 30 * 1000);
+        }
+      }
     });
   }
 
@@ -85,28 +92,28 @@ export default class List extends Component {
     },
     {
       title: '所在国家',
-      dataIndex: 'countrie',
+      dataIndex: 'country_code',
       render: v => <span>{v && CONFIG.countrysMap[v] ? CONFIG.countrysMap[v].name : '-'}</span>
     },
     {
       title: '交易笔数/好评率',
       dataIndex: 'volume_like',
       render: (v, row) => {
-        const { month_volume, like_total } = row.owner || {};
+        const { trade_times, good_ratio } = row.owner || {};
 
         return (
-          <span>{`${month_volume} / ${like_total}%`}</span>
+          <span>{`${trade_times} / ${good_ratio}%`}</span>
         );
       }
     },
     {
       title: '支付方式',
-      dataIndex: 'pay_method',
+      dataIndex: 'payment_methods',
       render: (v, row) => {
         return (
           <div >
             {
-              map(row.pay_method, item => {
+              map(row.payment_methods, item => {
                 return <span className={styles.pay_method} key={item}>{item && payMethod[item] ? payMethod[item] : '-'}</span>
               })
             }
@@ -116,18 +123,17 @@ export default class List extends Component {
     },
     {
       title: '价格',
-      dataIndex: 'price',
+      dataIndex: 'trading_price',
       render: (v, row) => {
-        const { currency } = row || {};
-        return <span>{v} {currency} / BTC</span>
+        return <span>{v} {v} / BTC</span>
       }
     },
     {
       title: '限额',
       dataIndex: 'condition_',
       render: (v, row) => {
-        const { max_money=0, min_money=0 } = row.condition || {};
-        return <span>{min_money} - {max_money} {row.currency}</span>
+        const { max_volume=0, min_volume=0 } = row.condition || {};
+        return <span>{min_volume} - {max_volume} {row.currency}</span>
       }
     },
     {
@@ -212,10 +218,12 @@ export default class List extends Component {
         <div className={styles.header}>
           <Alert message="系统公告：本网站内测期间，为答谢各位会员，所有转账免矿工手续费，答谢活动截止至3.15 12：00." type="info" showIcon />
         </div>
+
         <div className={styles.banners}>
           <h1 className={styles.title}>交易比特币 快速 安全 私密</h1>
           <h4 className={styles.sub_title}>在 15559 个城市 和 248 个国家/地区交易比特币</h4>
         </div>
+
         <div >
           <div className={styles.type_box}>
             <RadioGroup size="large" value={type} onChange={this.handleTypeChange} style={{ marginBottom: 8 }}>
@@ -241,6 +249,7 @@ export default class List extends Component {
               </div>
             </Popover>
           </div>
+
           <Table
             className={styles.list}
             loading={loading}

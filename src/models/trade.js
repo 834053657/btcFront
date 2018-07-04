@@ -7,7 +7,7 @@ export default {
     tradeList: {
       list: [],
       pagination: {
-        pageSize: 10,
+        page_size: 10,
       },
     },
     detail: {
@@ -40,7 +40,7 @@ export default {
         ...state,
         tradeList: {
           list: items,
-          pagination: { ...paginator, current: paginator.page, pageSize: paginator.page_num },
+          pagination: { ...paginator, current: paginator.page, page_size: paginator.page_num },
         },
       };
     },

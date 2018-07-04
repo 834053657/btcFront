@@ -84,6 +84,9 @@ export const getRouterData = app => {
     '/trade/detail/:id': {
       component: dynamicWrapper(app, ['trade'], () => import('../routes/Trade/TradeDetail')),
     },
+    '/trade/step/:id': {
+      component: dynamicWrapper(app, ['trade'], () => import('../routes/Trade/TradeStep')),
+    },
     // '/home': {
     //   component: dynamicWrapper(app, ['chart'], () => import('../routes/Dashboard/Home')),
     // },

@@ -6,7 +6,7 @@
   "scripts": {
     "precommit": "npm run lint-staged",
     "start": "cross-env PORT=8003 HARD_SOURCE=none KG_API_ENV=dev ESLINT=none roadhog dev",
-    "start:test": "cross-env PORT=8003 HARD_SOURCE=none KG_API_ENV=test ESLINT=none roadhog dev",
+    "start:test": "cross-env PORT=8003 HARD_SOURCE=none KG_API_ENV=test1 ESLINT=none roadhog dev",
     "start:no-proxy": "cross-env KG_API_ENV=dev NO_PROXY=true ESLINT=none roadhog dev",
     "build": "cross-env ESLINT=none KG_API_ENV=dev roadhog build",
     "site": "roadhog-api-doc static && gh-pages -d dist",
@@ -20,12 +20,12 @@
     "test:component": "roadhog test ./src/components",
     "test:all": "node ./tests/run-tests.js",
     "prettier": "prettier --write ./src/**/**/**/*",
-    "rsync:dev": "rsync -avz ./dist/  kgdev:/data/itunes-frontend",
-    "build:dev": "cross-env KG_API_ENV=dev ESLINT=none COMPRESS=none roadhog build",
-    "deploy:dev": "npm run build:dev && npm run rsync:dev",
-    "rsync:test": "rsync -avz ./dist/  kgdev:/data/itunes-frontend-test",
-    "build:test": "cross-env KG_API_ENV=test ESLINT=none roadhog build",
-    "deploy:test": "npm run build:test && npm run rsync:test"
+    "rsync:test2": "rsync -avz ./dist/  kgdev:/data/btc-frontend-test2",
+    "build:test2": "cross-env KG_API_ENV=test2 ESLINT=none COMPRESS=none roadhog build",
+    "deploy:test2": "npm run build:dev && npm run rsync:dev",
+    "rsync:test1": "rsync -avz ./dist/  kgdev:/data/btc-frontend-test1",
+    "build:test1": "cross-env KG_API_ENV=test1 ESLINT=none roadhog build",
+    "deploy:test1": "npm run build:test1 && npm run rsync:test1"
   },
   "dependencies": {
     "@antv/data-set": "^0.8.0",
