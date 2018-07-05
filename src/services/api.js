@@ -18,7 +18,7 @@ export async function queryMessageList(params) {
 }
 
 export async function queryMoreMessageList(params) {
-  return request(`/btc/message/more?${stringify(params)}`);
+  return request(`/btc/info/all${stringify(params)}`);
 }
 
 export async function readMessage(params) {
@@ -351,7 +351,6 @@ export async function getTransfers(params) {
   return request(`/btc/wallet/tansaction?${stringify(params)}`);
 }
 
-
 // -----------------
 
 //发送快捷短语
@@ -362,7 +361,20 @@ export async function getTransfers(params) {
 //   });
 // }
 
-
 export async function getTradeList(params) {
   return request(`/btc/trade/list?${stringify(params)}`);
+}
+
+//个人详情页
+
+export async function queryDetails(params) {
+  return request(`/btc/user/profile?${stringify(params)}`);
+}
+//信任用户
+
+export async function updateTrust(params) {
+  return request('/btc/user/trust', {
+    method: 'POST',
+    body: params,
+  });
 }

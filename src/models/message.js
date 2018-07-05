@@ -60,6 +60,8 @@ export default {
       };
     },
     setInfoDetail(state, { payload }) {
+      console.log('123---------');
+      console.log(payload.data);
       return {
         ...state,
         infoDetail: payload.data,

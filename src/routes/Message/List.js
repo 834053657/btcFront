@@ -35,7 +35,14 @@ export default class List extends Component {
       dataIndex: 'title',
       width: '70%',
       render: (val, row) => {
-        if (row.msg_type === -1)
+        if (row.id === -1)
+          return (
+            <a onClick={() => this.readMsg(row)} className={row.status === 1 ? styles.read : ''}>
+              {row.msg_type === 1 ? <Icon type="file-text" /> : <Icon type="bell" />}{' '}
+              {row.msg_type === 1 ? val : getMessageContent(row)}
+            </a>
+          );
+        else
           return (
             <Link to={`/message/info-detail/${row.id}`}>
               <span className={row.status === 1 ? styles.read : ''}>
@@ -43,18 +50,11 @@ export default class List extends Component {
               </span>
             </Link>
           );
-        else
-          return (
-            <a onClick={() => this.readMsg(row)} className={row.status === 1 ? styles.read : ''}>
-              {row.msg_type === 1 ? <Icon type="file-text" /> : <Icon type="bell" />}{' '}
-              {row.msg_type === 1 ? val : getMessageContent(row)}
-            </a>
-          );
       },
     },
     {
       title: '发布时间',
-      dataIndex: 'created_at',
+      dataIndex: 'publish_at',
       width: '30%',
       align: 'right',
       render: val => (
@@ -137,7 +137,10 @@ export default class List extends Component {
       newObj[key] = getValue(filtersArg[key]);
       return newObj;
     }, {});
-
+    // const type = e.target.value;
+    // this.setState({
+    //   type,
+    // });
     const params = {
       page: pagination.current,
       page_size: pagination.pageSize,

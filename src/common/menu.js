@@ -7,7 +7,7 @@ let menuData = [
   },
   {
     name: '发布广告',
-    path: 'publishad',
+    path: 'publish_ad',
   },
   {
     name: '用户详情页',
