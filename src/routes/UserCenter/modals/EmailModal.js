@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Steps, Divider } from 'antd';
 import { delay } from 'lodash';
+import G2Validation from 'components/G2Validation';
 import CheckEmailForm from '../forms/EmailForm';
 import styles from './EmailModal.less';
 
@@ -22,6 +23,7 @@ export default class EmailModal extends Component {
   state = {
     current: 0,
     updateKey: null,
+    checkKey: null,
   };
 
   handleCheckSubmit = (err, { email, captcha }) => {
@@ -35,6 +37,7 @@ export default class EmailModal extends Component {
           type: 'mail',
           code: captcha,
           usage: 2,
+          verify_token: this.state.checkKey,
         },
         callback: (data = {}) => {
           this.setState({
@@ -59,7 +62,25 @@ export default class EmailModal extends Component {
           this.setState({
             current: this.state.current + 1,
           });
-          delay(this.props.onCancel, 1000);
+          // delay(this.props.onCancel, 1000);
+        },
+      });
+    }
+  };
+
+  handleSubmitG2 = (err, values) => {
+    if (!err) {
+      this.props.dispatch({
+        type: 'user/submit2Validate',
+        payload: {
+          usage: 1,
+          code: values.code,
+        },
+        callback: (data = {}) => {
+          this.setState({
+            current: this.state.current + 1,
+            checkKey: data.verify_token,
+          });
         },
       });
     }
@@ -84,6 +105,17 @@ export default class EmailModal extends Component {
     const { user = {} } = currentUser || {};
     const { current } = this.state;
     let steps = [
+      {
+        title: '谷歌验证',
+        hide: !user.g2fa_on,
+        component: (
+          <G2Validation
+            modal={false}
+            onCancel={onCancel}
+            onSubmit={this.handleSubmitG2}
+          />
+        ),
+      },
       {
         title: '验证旧邮箱',
         hide: !user.email,

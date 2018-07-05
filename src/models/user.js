@@ -14,6 +14,7 @@ import {
   deletePayMethod,
   updateAvatar,
   queryMyOrderList,
+  checkG2Validate
 } from '../services/user';
 import { setAuthority } from '../utils/authority';
 
@@ -115,6 +116,14 @@ export default {
         });
         message.success('操作成功！');
         callback && callback();
+      } else {
+        message.error(response.msg);
+      }
+    },
+    *submit2Validate({ payload, callback }, { call, put }) {
+      const response = yield call(checkG2Validate, payload);
+      if (response.code === 0) {
+        callback && callback(response.data);
       } else {
         message.error(response.msg);
       }

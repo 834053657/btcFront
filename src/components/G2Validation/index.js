@@ -32,31 +32,50 @@ class G2Validation extends Component {
     });
   };
   render() {
-    const { className, form, submitting, visible, title } = this.props;
+    const { className, form, submitting, visible, title, modal=true } = this.props;
     const { getFieldDecorator } = form;
 
-    return (
-      <Modal
-        width={360}
-        title={title}
-        visible={visible}
-        maskClosable={false}
-        onCancel={this.handleCancel}
-        footer={[
-          <Button key="back" onClick={this.handleCancel}>
-            取消
-          </Button>,
-          <Button
-            key="submit"
-            type="primary"
-            loading={submitting}
-            htmlType="submit"
-            onClick={this.handleSubmit}
-          >
-            确定
-          </Button>,
-        ]}
-      >
+    if(modal) {
+      return (
+        <Modal
+          width={360}
+          title={title}
+          visible={visible}
+          maskClosable={false}
+          onCancel={this.handleCancel}
+          footer={[
+            <Button key="back" onClick={this.handleCancel}>
+              取消
+            </Button>,
+            <Button
+              key="submit"
+              type="primary"
+              loading={submitting}
+              htmlType="submit"
+              onClick={this.handleSubmit}
+            >
+              确定
+            </Button>,
+          ]}
+        >
+          <div className={classNames(className, styles.login)}>
+            <Form onSubmit={this.handleSubmit}>
+              <FormItem>
+                {getFieldDecorator('code', {
+                  rules: [
+                    {
+                      required: true,
+                      message: '请输入谷歌验证码！',
+                    },
+                  ],
+                })(<Input size="large" placeholder="谷歌验证码" />)}
+              </FormItem>
+            </Form>
+          </div>
+        </Modal>
+      );
+    }else {
+      return (
         <div className={classNames(className, styles.login)}>
           <Form onSubmit={this.handleSubmit}>
             <FormItem>
@@ -69,10 +88,27 @@ class G2Validation extends Component {
                 ],
               })(<Input size="large" placeholder="谷歌验证码" />)}
             </FormItem>
+
+            <FormItem className={styles.buttonBox}>
+              <Button className={styles.cancel} onClick={this.handleCancel}>
+                取消
+              </Button>
+              <Button
+                key="submit"
+                type="primary"
+                loading={submitting}
+                htmlType="submit"
+                onClick={this.handleSubmit}
+              >
+                确定
+              </Button>
+            </FormItem>
           </Form>
         </div>
-      </Modal>
-    );
+      )
+    }
+
+
   }
 }
 
