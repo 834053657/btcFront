@@ -1,22 +1,23 @@
 import React, { Component, Fragment } from 'react';
-import { connect } from 'dva';
-import { Link, routerRedux } from 'dva/router';
 import moment from 'moment';
 import { Table, Tabs, Button, Icon, Card, Modal, Badge, Tooltip } from 'antd';
 import numeral from 'numeral';
-
+import { map } from 'lodash';
 import DescriptionList from 'components/DescriptionList';
 import styles from './TransferList.less';
 
 const { Description } = DescriptionList;
 
-const statusMap = ['default', 'processing', 'error', 'success'];
+const statusMap = ['default', 'warning', 'processing', 'error', 'success'];
+
+const TabPane = Tabs.TabPane;
 
 export default class TransferList extends Component {
   constructor(props) {
     super();
     this.state = {
       modalInfo: null,
+      status: ''
     };
   }
 
@@ -38,35 +39,14 @@ export default class TransferList extends Component {
 
   columns = [
     {
-      title: '交易时间',
+      title: '日期',
       dataIndex: 'created_at',
       render: (v, row) => {
         return <span>{v ? moment(v * 1000).format('YYYY-MM-DD HH:mm:ss') : '-'}</span>;
       },
     },
     {
-      title: '产品类型',
-      dataIndex: 'goods_type',
-      render: (v, row) => {
-        return <span>{v ? CONFIG.goods_type[v] : '无'}</span>;
-      },
-    },
-    {
-      title: '支付方式',
-      dataIndex: 'paid_type',
-      render: (v, row) => {
-        return <span>{v ? CONFIG.payments[v] : '无'}</span>;
-      },
-    },
-    {
-      title: '交易类型',
-      dataIndex: 'trade_type',
-      render: (v, row) => {
-        return <span>{v ? CONFIG.tradeType[v] : '无'}</span>;
-      },
-    },
-    {
-      title: '金额',
+      title: '交易金额(BTC)',
       dataIndex: 'amount',
       render: (v, row) => {
         return (
@@ -87,31 +67,28 @@ export default class TransferList extends Component {
       title: '状态',
       dataIndex: 'status',
       render: (val, row) => {
-        if (val === 3) {
-          return (
-            <span>
-              <Badge status={statusMap[2]} text={CONFIG.transaction_status[val]} />
-              <Tooltip title={row.reason}>
-                <a> 原因 </a>
-              </Tooltip>
-            </span>
-          );
-        } else {
-          return (
-            <Badge status={statusMap[val - 1]} text={val ? CONFIG.transaction_status[val] : '-'} />
-          );
-        }
+        return <Badge status={statusMap[val - 1]} text={val ? CONFIG.transaction_status[val] : '-'} />
       },
     },
     {
-      title: '操作',
-      dataIndex: 'opt_',
+      title: '确认次数',
+      dataIndex: 'confirm_count',
       render: (v, row) => {
-        return (
-          <Fragment>
-            <a onClick={this.showModal.bind(this, row)}>详情</a>
-          </Fragment>
-        );
+        return <span>{v}</span>;
+      },
+    },
+    {
+      title: '地址',
+      dataIndex: 'address',
+      render: (v, row) => {
+        return <span>{v}</span>;
+      },
+    },
+    {
+      title: '说明',
+      dataIndex: 'remark',
+      render: (v, row) => {
+        return <span>{v}</span>;
       },
     },
   ];
@@ -119,14 +96,26 @@ export default class TransferList extends Component {
   handleTableChange = (pagination = {}, filtersArg, sorter) => {
     const params = {
       page: pagination.current,
-      page_size: pagination.pageSize,
+      page_size: pagination.page_size,
+      status: this.state.status
     };
+
+    this.fetch(params)
+  };
+
+  fetch = (params={}) => {
+    const { pagination = {} } = this.props.transfer || {};
+    console.log(pagination);
+
+    params.status = params.status || this.state.status;
+    params.page = params.page || pagination.page;
+    params.page_size = params.page_size || pagination.page_size;
 
     this.props.dispatch({
       type: 'wallet/fetchTransfer',
       payload: params,
     });
-  };
+  }
 
   getMethodContent = item => {
     const { paid_type, payment = {} } = item || {};
@@ -151,6 +140,13 @@ export default class TransferList extends Component {
     }
     return content;
   };
+
+  handleTabsChange = (status) => {
+    this.setState({
+      status
+    })
+    this.fetch({status})
+  }
 
   renderDetail = modalInfo => {
     const { created_at, amount, fee, goods_type, trade_type, payment, type } = modalInfo || {};
@@ -177,18 +173,24 @@ export default class TransferList extends Component {
   };
 
   render() {
-    const { modalInfo } = this.state;
+    const { modalInfo, status } = this.state;
     const { transfer = {}, transferLoading } = this.props;
     const { list = [], pagination = {} } = transfer || {};
 
     return (
       <Card bordered={false} className={styles.message_list}>
+        <Tabs activeKey={status} onChange={this.handleTabsChange}>
+          <TabPane tab="全部" key="" />
+          {
+            map(CONFIG.transaction_status, (text, value) =>  <TabPane tab={text} key={value} />)
+          }
+        </Tabs>
         <Table
           loading={transferLoading}
           rowKey={record => record.id}
           dataSource={list}
           columns={this.columns}
-          pagination={pagination}
+          pagination={{...pagination, pageSize: pagination.page_size, current: pagination.page }}
           onChange={this.handleTableChange}
         />
         <Modal

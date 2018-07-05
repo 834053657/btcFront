@@ -351,6 +351,11 @@ export async function getTransfers(params) {
   return request(`/btc/wallet/tansaction?${stringify(params)}`);
 }
 
+export async function getHistoryAddress(params) {
+  return request(`/btc/wallet/history_address?${stringify(params)}`);
+}
+
+
 // -----------------
 
 //发送快捷短语

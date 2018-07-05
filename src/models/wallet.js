@@ -1,9 +1,6 @@
 import { message } from 'antd';
 import { mapKeys } from 'lodash';
-import { routerRedux } from 'dva/router';
-import { getTransfers, queryPayments, userRecharge, userWithdraw, queryFee } from '../services/api';
-import { setAuthority } from '../utils/authority';
-import { reloadAuthorized } from '../utils/Authorized';
+import { getTransfers, queryPayments, userRecharge, userWithdraw, queryFee, getHistoryAddress } from '../services/api';
 
 export default {
   namespace: 'wallet',
@@ -13,7 +10,13 @@ export default {
     transfer: {
       list: [],
       pagination: {
-        pageSize: 10,
+        page_size: 10,
+      },
+    },
+    historyAddress: {
+      list: [],
+      pagination: {
+        page_size: 10,
       },
     },
   },
@@ -24,6 +27,17 @@ export default {
       if (response.code === 0 && response.data) {
         yield put({
           type: 'saveList',
+          payload: response.data,
+        });
+      } else {
+        message.error(response.msg);
+      }
+    },
+    *fetchHistoryAddress({ payload }, { call, put }) {
+      const response = yield call(getHistoryAddress, payload);
+      if (response.code === 0 && response.data) {
+        yield put({
+          type: 'saveHistoryList',
           payload: response.data,
         });
       } else {
@@ -71,6 +85,20 @@ export default {
       return {
         ...state,
         transfer: {
+          list: payload.items,
+          pagination,
+        },
+      };
+    },
+    saveHistoryList(state, { payload }) {
+      const pagination = {
+        ...state.historyAddress.pagination,
+        page: payload.paginator.page,
+        total: payload.paginator.total,
+      };
+      return {
+        ...state,
+        historyAddress: {
           list: payload.items,
           pagination,
         },
