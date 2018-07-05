@@ -90,7 +90,7 @@ export default {
         yield put({
           type: 'fetchCurrent',
         });
-        message.success('操作成功');
+        // message.success('操作成功');
         yield callback && callback();
       } else {
         message.error(response.msg);

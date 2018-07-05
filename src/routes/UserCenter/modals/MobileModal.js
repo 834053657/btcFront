@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Steps, Divider } from 'antd';
 import { delay } from 'lodash';
+import G2Validation from 'components/G2Validation';
 import MobileForm from '../forms/MobileForm';
 import styles from './EmailModal.less';
 
@@ -22,6 +23,7 @@ export default class MobileModal extends Component {
   state = {
     current: 0,
     verify_token: null,
+    checkKey: null
   };
 
   handleCheckSubmit = ({ code, nation_code, phone }) => {
@@ -35,6 +37,7 @@ export default class MobileModal extends Component {
         type: 'sms',
         code,
         usage: 4,
+        verify_token: this.state.checkKey,
       },
       callback: data => {
         this.setState({
@@ -57,13 +60,31 @@ export default class MobileModal extends Component {
         verify_token: this.state.verify_token,
       },
       callback: () => {
-        // this.setState({
-        //   current: this.state.current + 1,
-        // });
-        this.props.onCancel();
+        this.setState({
+          current: this.state.current + 1,
+        });
+        // this.props.onCancel();
         // delay(this.props.onCancel, 1000);
       },
     });
+  };
+
+  handleSubmitG2 = (err, values) => {
+    if (!err) {
+      this.props.dispatch({
+        type: 'user/submit2Validate',
+        payload: {
+          usage: 2,
+          code: values.code,
+        },
+        callback: (data = {}) => {
+          this.setState({
+            current: this.state.current + 1,
+            checkKey: data.verify_token,
+          });
+        },
+      });
+    }
   };
 
   handleSendCaptcha = (usage, { nation_code, telephone: phone }, callback) => {
@@ -86,6 +107,17 @@ export default class MobileModal extends Component {
     const { user = {} } = currentUser || {};
     const { current } = this.state;
     let steps = [
+      {
+        title: '谷歌验证',
+        hide: !user.g2fa_on,
+        component: (
+          <G2Validation
+            modal={false}
+            onCancel={onCancel}
+            onSubmit={this.handleSubmitG2}
+          />
+        ),
+      },
       {
         title: '验证旧手机',
         hide: !user.telephone,

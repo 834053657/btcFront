@@ -99,7 +99,7 @@ class MobileForm extends Component {
               <Select disabled={disabled}>
                 {CONFIG.country.map(item => (
                   <Option key={item.code} value={item.nation_code}>
-                    {item.name_cn}
+                    {item.name}
                   </Option>
                 ))}
               </Select>
