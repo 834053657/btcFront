@@ -362,7 +362,7 @@ export async function getTransfers(params) {
 // }
 
 export async function getTradeList(params) {
-  return request(`/btc/trade/list?${stringify(params)}`);
+  return request(`/btc/ad/list?${stringify(params)}`);
 }
 
 //个人详情页

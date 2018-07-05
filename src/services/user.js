@@ -66,6 +66,13 @@ export async function updateG2Validate(params) {
   });
 }
 
+export async function checkG2Validate(params) {
+  return request('/btc/user/verify_g2fa_code', {
+    method: 'POST',
+    body: params,
+  });
+}
+
 export async function postAuth(params) {
   return request('/btc/user/auth', {
     method: 'POST',

@@ -14,6 +14,7 @@ import {
   deletePayMethod,
   updateAvatar,
   queryMyOrderList,
+  checkG2Validate
 } from '../services/user';
 import { setAuthority } from '../utils/authority';
 
@@ -48,8 +49,8 @@ export default {
     },
     *submitForgetPassword({ payload, callback }, { call, put }) {
       const response = yield call(forgetPassword, payload);
-      if (response.code === 0) {
-        yield put(routerRedux.push('/user/forget-password-result'));
+      if (response.code === 0 && response.data) {
+        yield put(routerRedux.push(`/user/change-password/${response.data.code}`));
       } else {
         yield callback && callback();
         message.error(response.msg);
@@ -115,6 +116,14 @@ export default {
         });
         message.success('操作成功！');
         callback && callback();
+      } else {
+        message.error(response.msg);
+      }
+    },
+    *submit2Validate({ payload, callback }, { call, put }) {
+      const response = yield call(checkG2Validate, payload);
+      if (response.code === 0) {
+        callback && callback(response.data);
       } else {
         message.error(response.msg);
       }

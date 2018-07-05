@@ -90,6 +90,12 @@ class BasicLayout extends React.Component {
     location: PropTypes.object,
     breadcrumbNameMap: PropTypes.object,
   };
+  constructor(props) {
+    super(props);
+    this.props.dispatch({
+      type: 'global/fetchConfigs',
+    });
+  }
   state = {
     isMobile,
   };
@@ -108,9 +114,7 @@ class BasicLayout extends React.Component {
       });
     });
 
-    this.props.dispatch({
-      type: 'global/fetchConfigs',
-    });
+
     if (token && user.id) {
       // this.props.dispatch({
       //   type: 'SOCKET/OPEN',
