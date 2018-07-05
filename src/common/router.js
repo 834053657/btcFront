@@ -102,13 +102,13 @@ export const getRouterData = app => {
     },
     //个人详情页
     '/personage/': {
-      component: dynamicWrapper(app, ['personage'], () =>
+      component: dynamicWrapper(app, ['userDetails'], () =>
         import('../routes/UserDetails/UserDetails')
       ),
     },
     // 发布广告
-    '/publishad/': {
-      component: dynamicWrapper(app, ['publishad'], () => import('../routes/AdManage/AdPublish')),
+    '/publish_ad/': {
+      component: dynamicWrapper(app, ['publish'], () => import('../routes/AdManage/AdPublish')),
     },
 
     // 我的广告

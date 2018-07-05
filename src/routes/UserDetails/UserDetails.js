@@ -1,38 +1,45 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Icon, Table, Button, Modal, Radio } from 'antd';
+import moment from 'moment';
+
+import { Icon, Table, Button, Modal, Radio, List, Avatar } from 'antd';
 import { map } from 'lodash';
 
 import DescriptionList from 'components/DescriptionList';
 import BlankLayout from '../../layouts/BlankLayout';
 import styles from './UserDetails.less';
+import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import ReportForm from './Form/ReportForm';
 
 const { Description } = DescriptionList;
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
+const typeMap = {
+  '1': '购买',
+  '2': '出售',
+};
 
-// @connect(({ trade, loading }) => ({
-//   ...trade.tradeList,
-//   loading: loading.models.message,
-// }))
-
+@connect(({ userDetails, loading }) => ({
+  ...userDetails,
+  loading: loading.models.message,
+}))
 export default class UserDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
       visible: false,
+      type: '',
     };
   }
 
   componentWillMount() {}
 
   componentDidMount() {
-    // const { dispatch } = this.props;
-    // dispatch({
-    //   type: '',
-    // });
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'userDetails/fetchDetails',
+    });
   }
 
   handleLogin = () => {
@@ -42,42 +49,45 @@ export default class UserDetails extends Component {
     return <a>注册</a>;
   };
   handleUserName = () => {
-    return <a>罗鹏</a>;
+    const { userMessage } = this.props;
+    return <a>{userMessage.nickname}</a>;
   };
   handleTrust = () => {
-    console.log('123');
+    console.log('以下是id');
+    const { id } = this.props.userMessage;
+    console.log(id);
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'userDetails/submitTrustUser',
+      payload: {
+        id,
+      },
+    });
   };
 
   UserMessage = () => {
+    const { userMessage = {}, trader = {} } = this.props;
+    // const { loading } = this.props
     return (
       <div className={styles.UserMassage}>
         <div className={styles.UserName}>
           <span style={{ margin: '30px' }}>
             <img
               style={{ width: '100px', borderRadius: '50%' }}
-              src="https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=2970597459,3762914954&fm=58&bpow=705&bpoh=675"
+              src={userMessage.avatar}
+              // src="http://images.91jianke.com/default_avatar_11.png"
               alt=""
             />
           </span>
           <span>
-            <span style={{ fontSize: '30px', margin: '10px' }}>罗鹏</span>
-            <span>
-              <span style={{}}>
-                {1 > 2 ? (
-                  <img
-                    style={{ width: '12px', height: '12px', borderRadius: '50%' }}
-                    src="https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=2458720419,3434473651&fm=58&bpow=2592&bpoh=1944"
-                    alt=""
-                  />
-                ) : (
-                  <img
-                    style={{ width: '12px', height: '12px', borderRadius: '50%' }}
-                    src="https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=3341195850,2802222578&fm=58&bpow=831&bpoh=623"
-                    alt=""
-                  />
-                )}
-              </span>
-            </span>
+            <span style={{ fontSize: '30px', margin: '10px' }}>{userMessage.nickname}</span>
+            <a>
+              {userMessage.online === true ? (
+                <a className={styles.tipGreen}>{}</a>
+              ) : (
+                <a className={styles.tipRed}>{}</a>
+              )}
+            </a>
             <a className={styles.report} onClick={this.handleShowReport}>
               <Icon type="flag" />举报
             </a>
@@ -86,11 +96,11 @@ export default class UserDetails extends Component {
 
         <div>
           {1 > 0 ? (
-            <div className={styles.trust} onClick={this.handleTrust}>
+            <div className={styles.trust} onClick={this.handleTrust.bind(this)}>
               <Icon type="heart" style={{ color: '#fff', marginRight: '5px' }} />信任
             </div>
           ) : (
-            <div className={styles.UNtrust}>
+            <div className={styles.UNtrust} onClick={this.handleTrust.bind(this)}>
               <Icon type="heart" style={{ color: '#fff', marginRight: '5px' }} />信任
             </div>
           )}
@@ -103,8 +113,8 @@ export default class UserDetails extends Component {
             ''
           )}
         </div>
-        <DescriptionList col={1} style={{ margin: '30px' }}>
-          <Description term="国家" className={styles.countrys}>
+        <DescriptionList style={{ margin: '30px' }}>
+          <Description term="国家" className={styles.UserStyle}>
             <img
               style={{ width: '30px', height: '20px' }}
               src="https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/w%3D268%3Bg%3D0/sign=f7623b467e8b4710ce2ffacafbf5a4c0/1b4c510fd9f9d72a2d9ad37ad82a2834359bbbdf.jpg"
@@ -112,64 +122,84 @@ export default class UserDetails extends Component {
             />
           </Description>
           <Description term="交易量" className={styles.UserStyle}>
-            中文
+            {trader.trade_volume ? trader.trade_volume : '-'}
           </Description>
           <Description term="已确认的交易次数" className={styles.UserStyle}>
-            中文
+            {trader.trade_times ? trader.trade_times : '-'}
           </Description>
           <Description term="评价得分" className={styles.UserStyle}>
-            中文
+            {trader.rating_ratio ? trader.rating_ratio : '-'}
           </Description>
           <Description term="第一次购买" className={styles.UserStyle}>
-            中文
+            {trader.first_trade_at
+              ? moment(trader.first_trade_at * 1000).format('YYYY-MM-DD HH:mm')
+              : '-'}
           </Description>
           <Description term="账户已创建" className={styles.UserStyle}>
-            中文
+            哈萨克斯坦
           </Description>
           <Description term="最后一次上线" className={styles.UserStyle}>
-            中文
+            {userMessage.last_login_at
+              ? moment(userMessage.last_login_at * 1000).format('YYYY-MM-DD HH:mm')
+              : '-'}
           </Description>
           <Description term="语言" className={styles.UserStyle}>
-            中文
+            哈萨克斯坦
           </Description>
           <Description term="信任" className={styles.UserStyle}>
-            中文
+            哈萨克斯坦
           </Description>
         </DescriptionList>
       </div>
     );
   };
 
+  payWay = text => {
+    return map(text, (item, index) => {
+      if (item === 'weixin') {
+        return <Icon type="wechat" style={{ margin: '0 5px' }} />;
+      } else if (item === 'bank') {
+        return <Icon type="alipay-circle" style={{ margin: '0 5px' }} />;
+      }
+    });
+  };
+  handleBuy = () => {
+    console.log('买入');
+  };
+  handleSell = () => {
+    console.log('卖出');
+  };
+
   columns = [
     {
       title: '付款方式',
-      dataIndex: '1',
-      width: '45%',
+      dataIndex: 'payment_methods',
+      width: '40%',
       render: text => {
-        return <div>text</div>;
+        return <span>{this.payWay(text)}</span>;
       },
     },
     {
       title: '价格',
-      dataIndex: '2',
-      width: '30%',
+      dataIndex: 'trading_price',
+      // width: '15%',
       render: text => {
-        return <div>text</div>;
+        return <div>{text}</div>;
       },
     },
     {
       title: '',
       dataIndex: '3',
-      width: '25%',
+      width: '20%',
       render: () => {
         return (
           <div>
-            {1 > 0 ? (
-              <Button type="primary" className={styles.btnstyle}>
+            {this.state.type === '1' ? (
+              <Button type="primary" className={styles.btnstyle} onClick={this.handleBuy}>
                 买入
               </Button>
             ) : (
-              <Button type="primary" className={styles.btnstyle}>
+              <Button type="primary" className={styles.btnstyle} onClick={this.handleSell}>
                 卖出
               </Button>
             )}
@@ -186,26 +216,41 @@ export default class UserDetails extends Component {
     });
   };
 
+  hadleShowAll = () => {};
   UserComment = () => {
-    const typeMap = {
-      1: '购买',
-      2: '出售',
-      3: '',
-      4: '111111',
-    };
+    const { comment } = this.props;
 
     return (
-      <div className={styles.comment}>
+      <div>
         <DescriptionList col={1} style={{ margin: '30px' }}>
-          {/*获取接口评论数据遍历*/}
-          {map(typeMap, (text, value) => (
-            <Description term="👍" className={styles.UserStyle} key={value}>
-              <li>{text}</li>
-              <li>thanks nice trade with you,thanks nice trade with you</li>
-            </Description>
-          ))}
+          {map(comment, (item, index) => {
+            return (
+              <div style={{ width: '40%', borderBottom: '1px solid #ccc' }}>
+                <List.Item>
+                  <List.Item.Meta
+                    avatar={
+                      <Icon
+                        style={{ fontSize: 39 }}
+                        type={item.rating_type === 1 ? 'like' : 'dislike'}
+                      />
+                    }
+                    title={
+                      <a href="https://ant.design">
+                        {item.created_at
+                          ? moment(item.created_at * 1000).format('YYYY-MM-DD HH:mm:ss')
+                          : '-'}
+                      </a>
+                    }
+                    description={item.content}
+                  />
+                </List.Item>
+              </div>
+            );
+          })}
         </DescriptionList>
-        <a className={styles.All}>显示所有用户评论</a>
+        <a className={styles.All} onClick={this.hadleShowAll}>
+          显示所有用户评论
+        </a>
       </div>
     );
   };
@@ -227,6 +272,9 @@ export default class UserDetails extends Component {
     //     ...value
     //   }
     // })
+    this.setState({
+      visible: false,
+    });
   };
 
   showModal = () => {
@@ -254,15 +302,13 @@ export default class UserDetails extends Component {
   };
 
   render() {
-    const { list = [{ id: 'a', 1: 'a', 2: '3', 3: 'ff' }], pagination = {}, loading } = this.props;
+    const { list = [] } = this.props;
+
+    const { pagination = {}, loading } = this.props;
     const { type } = this.state;
-    const typeMap = {
-      1: '购买',
-      2: '出售',
-    };
     const { visible } = this.state;
     return (
-      <BlankLayout>
+      <PageHeaderLayout title="用户详情页">
         <div className={styles.background}>
           <div style={{ margin: '30px 0' }}>
             <h2>用户信息</h2>
@@ -272,46 +318,55 @@ export default class UserDetails extends Component {
             <div style={{ margin: '30px 0' }}>
               <h2>用户的其它交易广告</h2>
             </div>
-            <div>
+            <div style={{ width: '90%', paddingLeft: '10%' }}>
               <div className={styles.type_box}>
-                <Radio.Group
+                <RadioGroup
                   size="large"
                   value={type}
                   onChange={this.handleTypeChange}
                   style={{ marginBottom: 8 }}
                 >
                   {map(typeMap, (text, value) => (
-                    <Radio.Button
-                      key={value}
-                      value={value}
-                      onClick={this.handleChange.bind(this, value)}
-                    >
+                    <RadioButton key={value} value={value}>
                       {text}
-                    </Radio.Button>
+                    </RadioButton>
                   ))}
-                </Radio.Group>
+                </RadioGroup>
               </div>
-              <Table
-                loading={loading}
-                rowKey={record => record.id}
-                dataSource={list}
-                columns={this.columns}
-                pagination={false}
-                onChange={this.handleTableChange}
-                footer={null}
-              />
+              <div>
+                {type === '1' ? (
+                  <Table
+                    loading={loading}
+                    rowKey={record => record.id}
+                    dataSource={list.buy}
+                    columns={this.columns}
+                    pagination={false}
+                    onChange={this.handleTableChange}
+                    footer={null}
+                  />
+                ) : (
+                  <Table
+                    loading={loading}
+                    rowKey={record => record.id}
+                    dataSource={list.sell}
+                    columns={this.columns}
+                    pagination={false}
+                    onChange={this.handleTableChange}
+                    footer={null}
+                  />
+                )}
+              </div>
             </div>
           </div>
-
           <div>
-            <div style={{ margin: '80px 0 30px' }}>
+            <div style={{ margin: '80px 0 30px' }} className={styles.comment}>
               <h2>评论</h2>
             </div>
           </div>
           <div>{this.UserComment()}</div>
         </div>
         {visible && this.showModal(visible)}
-      </BlankLayout>
+      </PageHeaderLayout>
     );
   }
 }
