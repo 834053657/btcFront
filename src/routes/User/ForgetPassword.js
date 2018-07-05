@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
-import { Form, Input, Button, Select, Row, Col, Popover, Progress } from 'antd';
+import { Form, Input, Button, Modal, Alert, Select, Row, Col } from 'antd';
+import { map } from 'lodash';
 import styles from './ForgetPassword.less';
 import { getCaptcha } from '../../services/api';
 
@@ -15,84 +16,172 @@ const InputGroup = Input.Group;
 @Form.create()
 export default class Register extends Component {
   state = {
-    image: '',
+    count: 0,
   };
 
   componentDidMount() {
-    this.loadCaptcha();
   }
 
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields({ force: true }, (err, values) => {
+      console.log(values);
       if (!err) {
         this.props.dispatch({
           type: 'user/submitForgetPassword',
           payload: {
             ...values,
           },
-          callback: this.loadCaptcha,
         });
       }
     });
   };
 
-  loadCaptcha = async () => {
-    const params = {
-      r: Math.random(),
-      usage: 'login',
-    };
-    const res = await getCaptcha(params);
-    if (res.data) {
-      this.setState({
-        image: res.data.img,
-      });
-    }
+  onGetCaptcha = ( values, callback) => {
+    return this.props.dispatch({
+      type: 'global/sendVerify',
+      payload: {
+        data: {
+          ...values
+        },
+        type: values.type,
+        usage: 7,
+      },
+      callback,
+    });
+  };
+
+  handleSendCaptcha = () => {
+    const { validateFields, getFieldValue } = this.props.form;
+    let type = getFieldValue('type')
+    let fieldsName =  type === 'mail' ? ['mail','type'] : ['nation_code', 'phone','type']
+
+    validateFields(fieldsName, { force: true }, (err, values) => {
+      if (!err) {
+        this.onGetCaptcha(values, () => {
+          let count = 59;
+          this.setState({ count });
+          this.interval = setInterval(() => {
+            count -= 1;
+            this.setState({ count });
+            if (count === 0) {
+              clearInterval(this.interval);
+            }
+          }, 1000);
+        });
+      }
+    });
   };
 
   render() {
     const { form, submitting } = this.props;
-    const { getFieldDecorator } = form;
-    const { image } = this.state;
+    const { getFieldDecorator, getFieldValue } = form;
+    const { count } = this.state;
     return (
       <div className={styles.main}>
         <h3>忘记密码</h3>
-        <Form onSubmit={this.handleSubmit}>
-          <FormItem>
-            {getFieldDecorator('email', {
-              rules: [
-                {
-                  required: true,
-                  message: '请输入邮箱地址！',
-                },
-                {
-                  type: 'email',
-                  message: '邮箱地址格式错误！',
-                },
-              ],
-            })(<Input size="large" placeholder="邮箱" />)}
+        <Form onSubmit={this.handleSubmit} hideRequiredMark>
+          <FormItem >
+            {getFieldDecorator('type',{
+                initialValue: 'mail'
+              }
+            )(
+              <Select  size="large">
+                {map(CONFIG.verify_type, (text, val) => (
+                  <Option key={val} value={val}>
+                    {text}
+                  </Option>
+                ))}
+              </Select>
+            )}
           </FormItem>
-          <FormItem>
-            <Row gutter={8}>
-              <Col span={16}>
-                {getFieldDecorator('captcha', {
+          {
+            getFieldValue('type') === 'sms' && (
+              <FormItem >
+                {getFieldDecorator('nation_code', {
                   rules: [
                     {
                       required: true,
-                      message: '请输入验证码！',
+                      message: '请选择国家！',
                     },
                   ],
-                })(<Input size="large" placeholder="验证码" />)}
+                })(
+                  <Select  size="large" placeholder="请选择国家" >
+                    {CONFIG.country.map(item => (
+                      <Option key={item.code} value={item.nation_code}>
+                        {item.name}
+                      </Option>
+                    ))}
+                  </Select>
+                )}
+              </FormItem>
+            )
+          }
+          <FormItem >
+            <Row gutter={24}>
+              <Col span={14}>
+                {
+                  getFieldValue('type') === 'mail' ?
+                    getFieldDecorator('mail', {
+                      rules: [
+                        {
+                          required: true,
+                          message: '请输入邮箱！',
+                        },
+                        {
+                          type: 'email',
+                          message: '邮箱地址格式错误！',
+                        },
+                      ],
+                    })(<Input size="large" placeholder="请输入邮箱" />)
+                    :
+                    getFieldDecorator('phone', {
+                      rules: [
+                        {
+                          required: true,
+                          message: '请输入手机号码！',
+                        },
+                        {
+                          pattern: /^[1-9]\d*$/,
+                          message: '请输入正确的手机号码',
+                        },
+                      ],
+                    })(
+                      <Input
+                        placeholder="请输入手机号码"
+                        size="large"
+                        className={styles.mobile_input}
+                        addonBefore={
+                          form.getFieldValue('nation_code') ? (
+                            <span>+{form.getFieldValue('nation_code')}</span>
+                          ) : null
+                        }
+                        style={{ width: '100%' }}
+                      />
+                    )
+                }
               </Col>
-              <Col span={8}>
-                <img
-                  alt="captcha"
-                  src={image}
-                  onClick={this.loadCaptcha}
-                  className={styles.captcha}
-                />
+              <Col span={10}>
+                <Button
+                  disabled={count}
+                  className={styles.getCaptcha}
+                  size="large"
+                  onClick={this.handleSendCaptcha}
+                >
+                  {count ? `${count} s` : '获取验证码'}
+                </Button>
               </Col>
             </Row>
+          </FormItem>
+          <FormItem >
+            {getFieldDecorator('code', {
+              rules: [
+                {
+                  required: true,
+                  message: '请输入验证码！',
+                },
+              ],
+            })(<Input size="large" placeholder="验证码" />)}
           </FormItem>
 
           <FormItem>
@@ -103,7 +192,7 @@ export default class Register extends Component {
               type="primary"
               htmlType="submit"
             >
-              发送
+              下一步
             </Button>
             <Link className={styles.login} to="/user/login">
               使用已有账户登录

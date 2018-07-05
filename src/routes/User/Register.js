@@ -438,7 +438,7 @@ export default class Register extends Component {
                   {passwordStatusMap[this.getPasswordStatus()]}
                   {this.renderPasswordProgress()}
                   <div style={{ marginTop: 10 }}>
-                    请输入6 ~ 16 位字母，数字组合。
+                    请输入6 ~ 16 个字母，数字组合字符。请不要使用容易被猜到的密码。
                   </div>
                 </div>
               }
@@ -461,7 +461,7 @@ export default class Register extends Component {
                   size="large"
                   type="password"
                   maxLength={16}
-                  placeholder="6~16位密码，字母，数字组合并区分大小写"
+                  placeholder="6~16位字母数字组合,并区分大小写"
                 />
               )}
             </Popover>
@@ -530,7 +530,6 @@ export default class Register extends Component {
               visible={true}
               onOk={this.hideModal}
               onCancel={this.hideModal}
-              cancelText={''}
             >
               <div className={styles.info_content} dangerouslySetInnerHTML={{__html: infoVisible.content}} />
             </Modal>

@@ -10,12 +10,14 @@ const passwordStatusMap = {
   ok: <div className={styles.success}>强度：强</div>,
   pass: <div className={styles.warning}>强度：中</div>,
   poor: <div className={styles.error}>强度：太短</div>,
+  noPass: <div className={styles.error}>强度：不安全</div>,
 };
 
 const passwordProgressMap = {
   ok: 'success',
   pass: 'normal',
   poor: 'exception',
+  noPass: 'exception',
 };
 
 @connect(({ user, loading }) => ({
@@ -41,6 +43,10 @@ export default class PasswordForm extends Component {
   getPasswordStatus = () => {
     const { form } = this.props;
     const value = form.getFieldValue('password');
+    const regex = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/;
+    if(!regex.test(value)) {
+      return 'noPass';
+    }
     if (value && value.length > 9) {
       return 'ok';
     }
@@ -65,6 +71,7 @@ export default class PasswordForm extends Component {
   };
 
   checkPassword = (rule, value, callback) => {
+    const regex = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/;
     if (!value) {
       this.setState({
         help: '请输入密码！',
@@ -80,7 +87,7 @@ export default class PasswordForm extends Component {
           visible: !!value,
         });
       }
-      if (value.length < 6) {
+      if (value.length < 6 || !regex.test(value)) {
         callback('error');
       } else {
         const { form } = this.props;
@@ -145,7 +152,7 @@ export default class PasswordForm extends Component {
                   {passwordStatusMap[this.getPasswordStatus()]}
                   {this.renderPasswordProgress()}
                   <div style={{ marginTop: 10 }}>
-                    请输入6 ~ 16 个字符。请不要使用容易被猜到的密码。
+                    请输入6 ~ 16 个字母，数字组合字符。请不要使用容易被猜到的密码。
                   </div>
                 </div>
               }
@@ -161,7 +168,7 @@ export default class PasswordForm extends Component {
                   },
                   {
                     min: 6,
-                    message: '请输入至少6位字符！',
+                    message: '请输入6 ~ 16 位字母，数字组合。！',
                   },
                   {
                     validator: this.checkPassword,
@@ -172,7 +179,7 @@ export default class PasswordForm extends Component {
                   size="large"
                   type="password"
                   maxLength={16}
-                  placeholder="至少6位密码，区分大小写"
+                  placeholder="6~16位字母数字组合,并区分大小写"
                 />
               )}
             </Popover>

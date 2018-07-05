@@ -48,8 +48,8 @@ export default {
     },
     *submitForgetPassword({ payload, callback }, { call, put }) {
       const response = yield call(forgetPassword, payload);
-      if (response.code === 0) {
-        yield put(routerRedux.push('/user/forget-password-result'));
+      if (response.code === 0 && response.data) {
+        yield put(routerRedux.push(`/user/change-password/${response.data.code}`));
       } else {
         yield callback && callback();
         message.error(response.msg);

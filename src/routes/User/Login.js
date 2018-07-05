@@ -105,15 +105,15 @@ export default class LoginPage extends Component {
     return <Alert style={{ marginBottom: 24 }} message={content} type="error" showIcon />;
   };
 
-  handleSendCaptcha = (usage = 2, { email }, callback) => {
+  handleSendCaptcha = ( values, callback) => {
     return this.props.dispatch({
       type: 'global/sendVerify',
       payload: {
         data: {
-          mail: email,
+          ...values
         },
-        type: 'mail',
-        usage,
+        type: values.type,
+        usage: 6,
       },
       callback,
     });

@@ -33,7 +33,7 @@ class SecureValidation extends Component {
   handleSendCaptcha = () => {
     const { validateFields, getFieldValue } = this.props.form;
     let type = getFieldValue('type')
-    let fieldsName =  type === 'mail' ? ['mail'] : ['nation_code', 'phone']
+    let fieldsName =  type === 'mail' ? ['mail','type'] : ['nation_code', 'phone','type']
 
     validateFields(fieldsName, { force: true }, (err, values) => {
       if (!err) {
@@ -172,8 +172,8 @@ class SecureValidation extends Component {
                           size="large"
                           className={styles.mobile_input}
                           addonBefore={
-                            form.getFieldValue('telephone_code') ? (
-                              <span>+{form.getFieldValue('telephone_code')}</span>
+                            form.getFieldValue('nation_code') ? (
+                              <span>+{form.getFieldValue('nation_code')}</span>
                             ) : null
                           }
                           style={{ width: '100%' }}
