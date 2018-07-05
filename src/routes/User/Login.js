@@ -87,7 +87,7 @@ export default class LoginPage extends Component {
       type: 'login/login',
       payload: {
         ...loginInfo,
-        secureVisible: values.code,
+        secure_code: values.code,
       },
     });
   };

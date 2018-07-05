@@ -7,7 +7,8 @@ import styles from './index.less';
 
 const FormItem = Form.Item;
 const { Option } = Select;
-class G2Validation extends Component {
+
+class SecureValidation extends Component {
   static defaultProps = {
     className: '',
     onGetCaptcha: () => {},
@@ -30,7 +31,11 @@ class G2Validation extends Component {
   }
 
   handleSendCaptcha = () => {
-    this.props.form.validateFields(['email'], { force: true }, (err, values) => {
+    const { validateFields, getFieldValue } = this.props.form;
+    let type = getFieldValue('type')
+    let fieldsName =  type === 'mail' ? ['mail'] : ['nation_code', 'phone']
+
+    validateFields(fieldsName, { force: true }, (err, values) => {
       if (!err) {
         this.props.onGetCaptcha(values, () => {
           let count = 59;
@@ -96,13 +101,13 @@ class G2Validation extends Component {
       >
         <Alert showIcon className={styles.alert} message="为保障您的账户安全，请进行身份验证。" type="info" />
         <div className={classNames(className, styles.login)}>
-          <Form onSubmit={this.handleSubmit}>
-            <FormItem label="支付方式" {...formItemLayout}>
+          <Form onSubmit={this.handleSubmit} hideRequiredMark>
+            <FormItem label="验证方式" {...formItemLayout}>
               {getFieldDecorator('type',{
                 initialValue: 'mail'
                 }
               )(
-                <Select>
+                <Select  size="large">
                   {map(CONFIG.verify_type, (text, val) => (
                     <Option key={val} value={val}>
                       {text}
@@ -122,10 +127,10 @@ class G2Validation extends Component {
                       },
                     ],
                   })(
-                    <Select >
+                    <Select  size="large" >
                       {CONFIG.country.map(item => (
                         <Option key={item.code} value={item.nation_code}>
-                          {item.name_cn}
+                          {item.name}
                         </Option>
                       ))}
                     </Select>
@@ -133,7 +138,7 @@ class G2Validation extends Component {
                 </FormItem>
               )
             }
-            <FormItem {...formItemLayout} label="邮箱">
+            <FormItem {...formItemLayout} label={getFieldValue('type') === 'mail' ? '邮箱' : '手机'}>
               <Row gutter={24}>
                 <Col span={14}>
                   {
@@ -164,6 +169,7 @@ class G2Validation extends Component {
                         ],
                       })(
                         <Input
+                          size="large"
                           className={styles.mobile_input}
                           addonBefore={
                             form.getFieldValue('telephone_code') ? (
@@ -188,7 +194,7 @@ class G2Validation extends Component {
               </Row>
             </FormItem>
             <FormItem label="验证码" {...formItemLayout}>
-              {getFieldDecorator('验证码', {
+              {getFieldDecorator('code', {
                 rules: [
                   {
                     required: true,
@@ -204,4 +210,4 @@ class G2Validation extends Component {
   }
 }
 
-export default Form.create()(G2Validation);
+export default Form.create()(SecureValidation);

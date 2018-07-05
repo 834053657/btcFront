@@ -10,7 +10,7 @@ export default {
   state: {
     error: undefined,
     g2Visible: undefined,
-    secureVisible: true,
+    secureVisible: undefined,
     loginInfo: undefined,
   },
 

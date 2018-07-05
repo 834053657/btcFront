@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { Link, Redirect, Switch, Route } from 'dva/router';
 import DocumentTitle from 'react-document-title';
 import { Icon, Layout } from 'antd';
+import { connect } from 'dva';
 import GlobalFooter from '../components/GlobalFooter';
 import styles from './UserLayout.less';
 import logo from '../assets/logo.svg';
@@ -10,6 +11,13 @@ import { getRoutes } from '../utils/utils';
 const { Footer } = Layout;
 
 class UserLayout extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.props.dispatch({
+      type: 'global/fetchConfigs',
+    });
+  }
+
   getPageTitle() {
     const { routerData, location } = this.props;
     const { pathname } = location;
@@ -81,4 +89,6 @@ class UserLayout extends React.PureComponent {
   }
 }
 
-export default UserLayout;
+export default connect(({ global, loading }) => ({
+}))(UserLayout);
+
