@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Menu, Icon, Spin, Tag, Dropdown, Avatar, Divider, Tooltip } from 'antd';
 import moment from 'moment';
-import groupBy from 'lodash/groupBy';
+import { map, groupBy } from 'lodash';
 import Debounce from 'lodash-decorators/debounce';
 import { Link } from 'dva/router';
 import numeral from 'numeral';
@@ -9,6 +9,7 @@ import NoticeIcon from '../CustomNoticeIcon';
 // import HeaderSearch from '../HeaderSearch';
 import TopMenu from '../TopMenu';
 import styles from './index.less';
+import { getLocale, setLocale } from '../../utils/authority'
 
 const { SubMenu } = Menu;
 const MenuItemGroup = Menu.ItemGroup;
@@ -48,11 +49,13 @@ export default class GlobalHeader extends PureComponent {
     });
     return groupBy(newNotices, 'type');
   }
+
   toggle = () => {
     const { collapsed, onCollapse } = this.props;
     onCollapse(!collapsed);
     this.triggerResizeEvent();
   };
+
   /* eslint-disable*/
   @Debounce(600)
   triggerResizeEvent() {
@@ -60,6 +63,7 @@ export default class GlobalHeader extends PureComponent {
     event.initEvent('resize', true, false);
     window.dispatchEvent(event);
   }
+
   render() {
     const {
       currentUser = {},
@@ -72,9 +76,11 @@ export default class GlobalHeader extends PureComponent {
       onNoticeClear,
       onNoticeView,
       onNoticeClick,
+      onLanguageChange,
       notices,
       noticesCount,
-    } = this.props;
+      local
+  } = this.props;
     const { wallet } = currentUser || {};
     const menu = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
@@ -94,9 +100,10 @@ export default class GlobalHeader extends PureComponent {
       </Menu>
     );
     const language = (
-      <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
-        <Menu.Item key="zh">中文</Menu.Item>
-        <Menu.Item key="en">English</Menu.Item>
+      <Menu className={styles.menu} selectedKeys={[local]} onClick={onLanguageChange}>
+        {
+          map(CONFIG.language, (text, value) => <Menu.Item key={value}>{text}</Menu.Item>)
+        }
       </Menu>
     );
     // const noticeData = this.getNoticeData();
@@ -118,9 +125,11 @@ export default class GlobalHeader extends PureComponent {
         )}
 
         <div className={styles.right}>
-          {/*  <Dropdown overlay={language}>
-            <span className={`${styles.action}`}>EN/CN</span>
-          </Dropdown>*/}
+          <Dropdown overlay={language}>
+            <b className={styles.action}>{
+              local === 'zh_CN' ? CONFIG.language['zh_CN'] : CONFIG.language['en_GB']
+            }</b>
+          </Dropdown>
           {currentUser.token && currentUser.user ? (
             <span>
               <Link to="/wallet">

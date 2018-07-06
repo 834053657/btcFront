@@ -16,7 +16,7 @@ import { getRoutes, getMessageContent } from '../utils/utils';
 import Authorized from '../utils/Authorized';
 import { getMenuData } from '../common/menu';
 import logo from '../assets/logo.svg';
-import { getAuthority } from '../utils/authority';
+import { getAuthority, setLocale } from '../utils/authority';
 
 const { Content, Header, Footer } = Layout;
 const { AuthorizedRoute, check } = Authorized;
@@ -123,10 +123,10 @@ class BasicLayout extends React.Component {
         type: 'user/fetchCurrent',
         callback: this.setSocketToken,
       });
-      // this.props.dispatch({
-      //   type: 'global/fetchNotices',
-      //   payload: { status: 0, type: 1 },
-      // });
+      this.props.dispatch({
+        type: 'global/fetchNotices',
+        payload: { status: 0, type: 1 },
+      });
     }
   }
   componentWillUnmount() {
@@ -286,6 +286,16 @@ class BasicLayout extends React.Component {
       // });
     }
   };
+
+
+  handleSetLocale = ({key}) => {
+    if (key) {
+      this.props.dispatch({
+        type: 'global/setLanguage',
+        payload: key
+      });
+    }
+  }
   render() {
     const {
       currentUser,
@@ -296,6 +306,7 @@ class BasicLayout extends React.Component {
       routerData,
       match,
       location,
+      local
     } = this.props;
     const bashRedirect = this.getBashRedirect();
     const layout = (
@@ -318,6 +329,7 @@ class BasicLayout extends React.Component {
           <Header style={{ padding: 0 }}>
             <GlobalHeader
               logo={logo}
+              local={local}
               menuData={getMenuData()}
               Authorized={Authorized}
               location={location}
@@ -333,6 +345,7 @@ class BasicLayout extends React.Component {
               onCollapse={this.handleMenuCollapse}
               onMenuClick={this.handleMenuClick}
               onNoticeVisibleChange={this.handleNoticeVisibleChange}
+              onLanguageChange={this.handleSetLocale}
             />
           </Header>
           <Content style={{ height: '100%' }}>
@@ -400,6 +413,7 @@ class BasicLayout extends React.Component {
 export default connect(({ user, global, loading }) => ({
   currentUser: user.currentUser,
   collapsed: global.collapsed,
+  local: global.local,
   fetchingNotices: loading.effects['global/fetchNotices'],
   notices: global.notices,
   noticesCount: global.noticesCount,
