@@ -71,7 +71,7 @@ export default class Step1 extends PureComponent {
             <Description term="汇率">20000 CNY</Description>
             <Description term="交易限额"> 1 BTC (1 CNY ~ 555 CNY)</Description>
             <Description term="付款倒计时">30 分钟</Description>
-            <Description term="付款方式">{payMethod['alipay']}{payMethod['wechat']}</Description>
+            <Description term="付款方式">{payMethod.alipay}{payMethod.wechat}</Description>
           </DescriptionList>
           <div className={styles.buttonBox}>
             <Button

@@ -23,6 +23,7 @@ const { TabPane } = Tabs;
   transferLoading: loading.effects['wallet/fetchTransfer'],
   historyAddressLoading: loading.effects['wallet/fetchHistoryAddress'],
   rechargSubmitting: loading.effects['wallet/sendRecharge'],
+  feeLoading: loading.effects['wallet/fetchFee'],
 }))
 export default class Layout extends Component {
   state = {};
@@ -52,14 +53,14 @@ export default class Layout extends Component {
     const { activeKey } = this.state;
     const { wallet = {}, payments = [] } = this.props.currentUser || {};
     const copy = (
-      <CopyToClipboard text={wallet.address} onCopy={() => message.success('复制成功')}>
+      <CopyToClipboard text={wallet.btc_address} onCopy={() => message.success('复制成功')}>
         <a>
           <Icon style={{fontSize: 18}} type="copy" />
         </a>
       </CopyToClipboard>
     );
     const qrcode = (
-      <Popover content={<img className={styles.qrcode} src={jrQrcode.getQrBase64(wallet.address)} alt="比特币地址"/>} placement="bottom" trigger="hover">
+      <Popover content={<img className={styles.qrcode} src={jrQrcode.getQrBase64(wallet.btc_address)} alt="比特币地址" />} placement="bottom" trigger="hover">
         <a><Icon className="text-blue" style={{fontSize: 18}} type="qrcode" /></a>
       </Popover>
     )
@@ -91,22 +92,20 @@ export default class Layout extends Component {
                 总资产折合：<span
                   className="text-blue"
                   dangerouslySetInnerHTML={{
-                    __html: `${numeral(wallet.amount || 0).format('0,0.00')}￥`,
+                    __html: `${numeral(wallet.amount || 0).format('0,0.00')} BTC`,
                   }}
-                />{' '}
-                CNY | 冻结：<span
+                />{' '}| 冻结：<span
                   className="text-blue"
                   dangerouslySetInnerHTML={{
-                    __html: `${numeral(wallet.frozen || 0).format('0,0.00')}￥`,
+                    __html: `${numeral(wallet.frozen || 0).format('0,0.00')} BTC`,
                   }}
                 />{' '}
-                CNY
               </p>
               <p>
                 我的比特币地址: {qrcode}
               </p>
               <p>
-                <span>{wallet.address}</span> {copy}
+                <span>{wallet.btc_address}</span> {copy}
               </p>
 
             </Col>
@@ -119,7 +118,7 @@ export default class Layout extends Component {
                   activeKey === '1' && (
                     <RechargeForm
                       {...this.props}
-                      onSubmit={this.handleTabsChange.bind(this, '3')}
+                      onSubmit={this.handleTabsChange.bind(this, '2')}
                     />
                   )
                 }

@@ -79,13 +79,13 @@ export default class TradeIM extends PureComponent {
     if (event.file.status !== 'done' || !event.file.response) {
       return false;
     }
-    let fileType = event.file.type ? event.file.type.toLowerCase() : '';
+    const fileType = event.file.type ? event.file.type.toLowerCase() : '';
     let content = null;
     if (~fileType.indexOf('image/')) {
-      let url = event.file.response.data.url;
+      const url = event.file.response.data.url;
       content = `<img class="btc-chat-img" src=${url} alt=${event.file.name}/>`;
     } else {
-      let url = event.file.response.Data.url;
+      const url = event.file.response.Data.url;
       content = `<a href=${url} download=${event.file.name}>${event.file.name}</a>`;
     }
     this.props.dispatch({

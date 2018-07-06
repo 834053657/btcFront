@@ -82,7 +82,7 @@ export default class TradeDetail extends PureComponent {
                   <Description term="交易限额"> 1 BTC (1 CNY ~ 555 CNY)</Description>
                   <Description term="交易笔数 / 好评率"> 100 / 99%</Description>
                   <Description term="付款期限">30 分钟</Description>
-                  <Description term="付款方式">{payMethod['alipay']}{payMethod['wechat']}</Description>
+                  <Description term="付款方式">{payMethod.alipay}{payMethod.wechat}</Description>
                 </DescriptionList>
                 <Form hideRequiredMark style={{marginTop: 15}} onSubmit={this.handleSubmit}>
                   <FormItem

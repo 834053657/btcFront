@@ -32,8 +32,8 @@ class SecureValidation extends Component {
 
   handleSendCaptcha = () => {
     const { validateFields, getFieldValue } = this.props.form;
-    let type = getFieldValue('type')
-    let fieldsName =  type === 'mail' ? ['mail','type'] : ['nation_code', 'phone','type']
+    const type = getFieldValue('type')
+    const fieldsName =  type === 'mail' ? ['mail','type'] : ['nation_code', 'phone','type']
 
     validateFields(fieldsName, { force: true }, (err, values) => {
       if (!err) {

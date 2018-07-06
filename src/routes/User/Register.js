@@ -527,7 +527,7 @@ export default class Register extends Component {
           !!infoVisible && (
             <Modal
               title={infoVisible.title}
-              visible={true}
+              visible
               onOk={this.hideModal}
               onCancel={this.hideModal}
             >

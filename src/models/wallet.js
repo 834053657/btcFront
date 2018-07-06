@@ -1,12 +1,12 @@
 import { message } from 'antd';
 import { mapKeys } from 'lodash';
-import { getTransfers, queryPayments, userRecharge, userWithdraw, queryFee, getHistoryAddress } from '../services/api';
+import { getTransfers, queryBlockConfirmFee, userSendBtc, userWithdraw, queryFee, getHistoryAddress } from '../services/api';
 
 export default {
   namespace: 'wallet',
 
   state: {
-    sysPayments: {},
+    blockConfirmFee: {},
     transfer: {
       list: [],
       pagination: {
@@ -44,12 +44,12 @@ export default {
         message.error(response.msg);
       }
     },
-    *fetchSysPayments(_, { call, put }) {
-      const response = yield call(queryPayments) || {};
+    *fetchBlockConfirmFee(_, { call, put }) {
+      const response = yield call(queryBlockConfirmFee) || {};
       if (response && response.code === 0) {
         yield put({
-          type: 'savePayments',
-          payload: mapKeys(response.data, 'id'),
+          type: 'saveBlockConfirmFee',
+          payload: response.data,
         });
       }
     },
@@ -61,8 +61,8 @@ export default {
         message.error(response.msg);
       }
     },
-    *sendRecharge({ payload, callback }, { call }) {
-      const response = yield call(userRecharge, payload);
+    *sendSendBtc({ payload, callback }, { call }) {
+      const response = yield call(userSendBtc, payload);
       if (callback) {
         yield call(callback, response);
       }
@@ -104,10 +104,10 @@ export default {
         },
       };
     },
-    savePayments(state, { payload }) {
+    saveBlockConfirmFee(state, { payload }) {
       return {
         ...state,
-        sysPayments: payload,
+        blockConfirmFee: payload.list,
       };
     },
   },
