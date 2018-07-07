@@ -378,3 +378,20 @@ export async function updateTrust(params) {
     body: params,
   });
 }
+
+//编辑广告
+export async function submitPublish(params) {
+  return request('/btc/ad/post', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+//市场参考价格
+
+export async function queryPrice(params) {
+  return request('/btc/ad/price', {
+    method: 'POST',
+    body: params,
+  });
+}

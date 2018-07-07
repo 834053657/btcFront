@@ -1,27 +1,52 @@
-import { queryTags } from '../services/api';
+import { message } from 'antd';
+import { submitPublish, queryPrice } from '../services/api';
 
 export default {
-  namespace: 'monitor',
+  namespace: 'publish',
 
   state: {
-    tags: [],
+    price: null,
+    prices: null,
   },
 
   effects: {
-    *fetchTags(_, { call, put }) {
-      const response = yield call(queryTags);
+    *PostPublish({ payload, callback }, { call, put }) {
+      console.log('子任务呢');
+      const response = yield call(submitPublish, payload);
       yield put({
-        type: 'saveTags',
-        payload: response.list,
+        type: 'price',
+        payload: response,
       });
+      if (response.code === 0) {
+        message.success('发布成功');
+        callback && callback(response);
+      } else {
+        message.error(response.msg);
+      }
+    },
+    *fetchNewPrice({ payload }, { call, put }) {
+      const response = yield call(queryPrice, payload);
+      if (response.code === 0) {
+        yield put({
+          type: 'setPrice',
+          payload: response.data,
+        });
+      }
     },
   },
 
   reducers: {
-    saveTags(state, action) {
+    price(state, { payload }) {
       return {
         ...state,
-        tags: action.payload,
+        prices: payload,
+      };
+    },
+
+    setPrice(state, { payload }) {
+      return {
+        ...state,
+        price: payload.at_price,
       };
     },
   },

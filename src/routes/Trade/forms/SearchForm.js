@@ -14,7 +14,7 @@ export default class SearchForm extends Component {
   //   super(props);
   // }
 
-  submit = (e) => {
+  submit = e => {
     e.preventDefault();
     const { form } = this.props;
 
@@ -23,16 +23,16 @@ export default class SearchForm extends Component {
         this.props.onSearch && this.props.onSearch(values);
       }
     });
-  }
+  };
 
   handleFormReset = () => {
     const { form } = this.props;
     form.resetFields();
-    this.props.onCancel && this.props.onCancel()
-  }
+    this.props.onCancel && this.props.onCancel();
+  };
 
   render() {
-    const { onSearch, initialValues ={}, form: { getFieldDecorator } } = this.props;
+    const { onSearch, initialValues = {}, form: { getFieldDecorator } } = this.props;
 
     return (
       <Form onSubmit={this.submit} layout="horizontal" className={styles.tableListForm}>
@@ -44,9 +44,7 @@ export default class SearchForm extends Component {
               // mode="multiple"
               placeholder="选择所在国家"
             >
-              <Option value="">
-                全部国家
-              </Option>
+              <Option value="">全部国家</Option>
               {map(CONFIG.country, item => (
                 <Option key={item.code} value={item.code}>
                   {item.name}
@@ -70,9 +68,8 @@ export default class SearchForm extends Component {
         </FormItem>
         <FormItem label="支付方式">
           {getFieldDecorator('pay_methods', {
-              initialValue: initialValues.pay_methods,
-            }
-          )(
+            initialValue: initialValues.pay_methods,
+          })(
             <Select>
               <Option value="">全部支付方式</Option>
               {map(CONFIG.payments, (text, val) => (
@@ -86,16 +83,17 @@ export default class SearchForm extends Component {
         <FormItem label="交易金额">
           {getFieldDecorator('money', {
             initialValue: initialValues.money,
-          })(
-            <InputNumber step={1} style={{width: '100%'}} />
-          )}
+          })(<InputNumber step={1} style={{ width: '100%' }} />)}
         </FormItem>
         <div style={{ overflow: 'hidden' }}>
-          <Button type="primary" htmlType="submit">查询</Button>
-          <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>取消</Button>
+          <Button type="primary" htmlType="submit">
+            查询
+          </Button>
+          <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
+            取消
+          </Button>
         </div>
       </Form>
     );
   }
 }
-

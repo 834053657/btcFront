@@ -14,35 +14,32 @@ const { Description } = DescriptionList;
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 const typeMap = {
-  1: '购买',
-  2: '出售',
+  '1': '在线买入',
+  '2': '在线卖出',
 };
 
-// @connect(({ trade, loading }) => ({
-//   ...trade.tradeList,
-//   loading: loading.models.message,
-// }))
-
+@connect(({ publish, user, loading }) => ({
+  ...publish,
+  currentUser: user.currentUser,
+  loading: loading.models.message,
+}))
 export default class AdPublish extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      type: '1',
+    };
   }
 
   componentWillMount() {}
 
-  componentDidMount() {
-    // const { dispatch } = this.props;
-    // dispatch({
-    //   type: '',
-    // });
-  }
+  componentDidMount() {}
 
   handleTypeChange = e => {
-    // const type = e.target.value;
-    // this.setState({
-    //   type
-    // });
+    const type = e.target.value;
+    this.setState({
+      type,
+    });
   };
 
   UserChoose = () => {
@@ -50,24 +47,25 @@ export default class AdPublish extends Component {
 
     return (
       <div className={styles.type_box}>
-        <div style={{ float: 'left' }}>
+        <div style={{ float: 'left', width: '350px' }}>
           <RadioGroup size="large" value={type} onChange={this.handleTypeChange}>
             {map(typeMap, (text, value) => (
               <RadioButton
-                style={{ borderRadius: '4px', width: '200px', marginRight: '25px' }}
+                style={{ borderRadius: '4px', width: '150px', marginRight: '15px' }}
                 key={value}
                 value={value}
               >
-                在线卖出
+                {text}
               </RadioButton>
             ))}
           </RadioGroup>
         </div>
         <Alert
-          style={{ float: 'left', marginLeft: '20px' }}
+          style={{ float: 'left', width: '61%' }}
           message={
-            <span>
-              <Icon type="exclamation-circle" /> 您还可以创建 4 条交易广告，查看:<a>发布条数说明</a>
+            <span style={{ width: 'auto' }}>
+              <Icon type="exclamation-circle" />{' '}
+              您最多可以创建4条交易广告，在您创建广告时，请您创建适合您需求的广告条数。
             </span>
           }
         />
@@ -75,19 +73,30 @@ export default class AdPublish extends Component {
     );
   };
 
-  handleSubmit = e => {
-    console.log(e);
+  handleSubmit = value => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'publish/PostPublish',
+      payload: {
+        ...value,
+        trusted_user: +!!value.trusted_user,
+        ad_type: this.state.type,
+      },
+      callback: () => {
+        this.props.forms.resetFields();
+      },
+    });
   };
 
   render() {
     const { type } = this.state;
-
+    const { price } = this.props;
     return (
       <PageHeaderLayout title="发布广告">
         <div className={styles.background}>
           <div>{this.UserChoose()}</div>
 
-          <Card style={{ margin: 15, width: 600 }} title="广告规则">
+          <Card style={{ margin: 15, width: 810 }} title="广告规则">
             <li>
               要想显示您的交易广告，您的【utomarket】钱包中需要有比特币。使用在线付款的交易广告至少需要
               0.05 BTC。
@@ -104,7 +113,7 @@ export default class AdPublish extends Component {
             </li>
           </Card>
           <div>
-            <AdPublishForm formType={type} onSubmit={this.handleSubmit} />
+            <AdPublishForm formType={type} onSubmit={this.handleSubmit} {...this.props} />
           </div>
         </div>
       </PageHeaderLayout>

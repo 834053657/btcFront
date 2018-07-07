@@ -53,20 +53,22 @@ export default class UserDetails extends Component {
     return <a>{userMessage.nickname}</a>;
   };
   handleTrust = () => {
-    console.log('以下是id');
+    const { is_trust } = this.props.userMessage;
+    console.log(is_trust);
     const { id } = this.props.userMessage;
-    console.log(id);
     const { dispatch } = this.props;
     dispatch({
       type: 'userDetails/submitTrustUser',
       payload: {
         id,
+        is_trust,
       },
     });
   };
 
   UserMessage = () => {
     const { userMessage = {}, trader = {} } = this.props;
+
     // const { loading } = this.props
     return (
       <div className={styles.UserMassage}>
@@ -95,7 +97,7 @@ export default class UserDetails extends Component {
         </div>
 
         <div>
-          {1 > 0 ? (
+          {userMessage.is_trust === true ? (
             <div className={styles.trust} onClick={this.handleTrust.bind(this)}>
               <Icon type="heart" style={{ color: '#fff', marginRight: '5px' }} />信任
             </div>
@@ -104,13 +106,13 @@ export default class UserDetails extends Component {
               <Icon type="heart" style={{ color: '#fff', marginRight: '5px' }} />信任
             </div>
           )}
-          {1 > 0 ? (
+          {userMessage.online === true ? (
+            ''
+          ) : (
             <div style={{ margin: '30px' }}>
               请 {this.handleLogin()} 或 {this.handleSign()} ， 将 {this.handleUserName()}{' '}
               设置为值得信任。30秒注册~
             </div>
-          ) : (
-            ''
           )}
         </div>
         <DescriptionList style={{ margin: '30px' }}>

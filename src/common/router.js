@@ -108,7 +108,9 @@ export const getRouterData = app => {
     },
     // 发布广告
     '/publish_ad/': {
-      component: dynamicWrapper(app, ['publish'], () => import('../routes/AdManage/AdPublish')),
+      component: dynamicWrapper(app, ['publish', 'user'], () =>
+        import('../routes/AdManage/AdPublish')
+      ),
     },
 
     // 我的广告
