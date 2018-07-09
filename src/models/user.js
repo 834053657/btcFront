@@ -14,7 +14,7 @@ import {
   deletePayMethod,
   updateAvatar,
   queryMyOrderList,
-  checkG2Validate
+  checkG2Validate,
 } from '../services/user';
 import { setAuthority } from '../utils/authority';
 
@@ -90,7 +90,7 @@ export default {
         yield put({
           type: 'fetchCurrent',
         });
-        message.success('操作成功');
+        // message.success('操作成功');
         yield callback && callback();
       } else {
         message.error(response.msg);

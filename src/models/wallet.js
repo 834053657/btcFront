@@ -1,19 +1,29 @@
 import { message } from 'antd';
 import { mapKeys } from 'lodash';
-import { routerRedux } from 'dva/router';
-import { getTransfers, queryPayments, userRecharge, userWithdraw, queryFee } from '../services/api';
-import { setAuthority } from '../utils/authority';
-import { reloadAuthorized } from '../utils/Authorized';
+import {
+  getTransfers,
+  queryBlockConfirmFee,
+  userSendBtc,
+  userWithdraw,
+  queryFee,
+  getHistoryAddress,
+} from '../services/api';
 
 export default {
   namespace: 'wallet',
 
   state: {
-    sysPayments: {},
+    blockConfirmFee: {},
     transfer: {
       list: [],
       pagination: {
-        pageSize: 10,
+        page_size: 10,
+      },
+    },
+    historyAddress: {
+      list: [],
+      pagination: {
+        page_size: 10,
       },
     },
   },
@@ -30,12 +40,23 @@ export default {
         message.error(response.msg);
       }
     },
-    *fetchSysPayments(_, { call, put }) {
-      const response = yield call(queryPayments) || {};
+    *fetchHistoryAddress({ payload }, { call, put }) {
+      const response = yield call(getHistoryAddress, payload);
+      if (response.code === 0 && response.data) {
+        yield put({
+          type: 'saveHistoryList',
+          payload: response.data,
+        });
+      } else {
+        message.error(response.msg);
+      }
+    },
+    *fetchBlockConfirmFee(_, { call, put }) {
+      const response = yield call(queryBlockConfirmFee) || {};
       if (response && response.code === 0) {
         yield put({
-          type: 'savePayments',
-          payload: mapKeys(response.data, 'id'),
+          type: 'saveBlockConfirmFee',
+          payload: response.data,
         });
       }
     },
@@ -47,8 +68,8 @@ export default {
         message.error(response.msg);
       }
     },
-    *sendRecharge({ payload, callback }, { call }) {
-      const response = yield call(userRecharge, payload);
+    *sendSendBtc({ payload, callback }, { call }) {
+      const response = yield call(userSendBtc, payload);
       if (callback) {
         yield call(callback, response);
       }
@@ -76,10 +97,24 @@ export default {
         },
       };
     },
-    savePayments(state, { payload }) {
+    saveHistoryList(state, { payload }) {
+      const pagination = {
+        ...state.historyAddress.pagination,
+        page: payload.paginator.page,
+        total: payload.paginator.total,
+      };
       return {
         ...state,
-        sysPayments: payload,
+        historyAddress: {
+          list: payload.items,
+          pagination,
+        },
+      };
+    },
+    saveBlockConfirmFee(state, { payload }) {
+      return {
+        ...state,
+        blockConfirmFee: payload.list,
       };
     },
   },

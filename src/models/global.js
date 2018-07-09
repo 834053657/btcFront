@@ -1,5 +1,7 @@
 import { message } from 'antd';
 import { mapKeys, groupBy, orderBy, map } from 'lodash';
+import { getLocale, setLocale } from '../utils/authority';
+
 import {
   queryNotices,
   queryStatistics,
@@ -22,6 +24,7 @@ export default {
     noticesCount: null,
     statistics: {},
     banners: [],
+    local: getLocale(),
   },
 
   effects: {
@@ -132,6 +135,13 @@ export default {
       return {
         ...state,
         banners: payload,
+      };
+    },
+    setLanguage(state, { payload }) {
+      setLocale(payload);
+      return {
+        ...state,
+        local: payload,
       };
     },
     changeLayoutCollapsed(state, { payload }) {

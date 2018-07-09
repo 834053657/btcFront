@@ -364,17 +364,12 @@ export default class UserCenterPage extends Component {
                 </div>
                 <Divider />
                 <DescriptionList col={1} className={styles.detailBox}>
-                  <Description term="好评率">
-                    100%
-                  </Description>
-                  <Description term="信任数">
-                    被{1}人信任
-                  </Description>
-                  <Description term="屏蔽数">
-                    被{1}人屏蔽
-                  </Description>
-                  <Description term="已完成交易量">
-                    {100}
+                  <Description term="好评率">{trade.good_ratio || 0}%</Description>
+                  <Description term="信任数">被{user.trust_count || 0}人信任</Description>
+                  <Description term="屏蔽数">被{user.block_count || 0}人屏蔽</Description>
+                  <Description term="已完成交易量">{trade.trade_volume || 0} BTC</Description>
+                  <Description term="最后上线时间">
+                    {moment(user.last_login_at * 1000).format('YYYY-MM-DD HH:mm:ss')}
                   </Description>
                 </DescriptionList>
                 <Divider />
@@ -385,7 +380,9 @@ export default class UserCenterPage extends Component {
                       ? moment(user.created_at * 1000).format('YYYY-MM-DD HH:mm:ss')
                       : '-'}
                   </span>{' '}
-                  注册 <br />
+                  注册
+                </p>
+                <p>
                   {first_trade_at
                     ? `首次交易于 ${moment(first_trade_at * 1000).format('YYYY-MM-DD HH:mm:ss')}`
                     : null}
@@ -531,7 +528,7 @@ export default class UserCenterPage extends Component {
                     <div className={styles.box_item_meta}>
                       <Icon type="video-camera" />
                       <div className={styles.box_item_meta_head}>
-                        <h4 className={styles.box_item_title}>视频认证</h4>
+                        <h4 className={styles.box_item_title}>高级认证</h4>
                         <div className={styles.box_item_descript}>
                           {CONFIG.auth_status[video_status]}
                           {video_status === 3 ? (
@@ -565,6 +562,7 @@ export default class UserCenterPage extends Component {
                   <div className={styles.box_head_wrapper}>
                     <div className={styles.box_head_title}>支付方式</div>
                   </div>
+                  <div className={styles.box_head_subtitle}>请务必使用您本人的实名账号</div>
                 </div>
                 <div className={styles.box_content}>
                   {map(payments, item => {
@@ -590,7 +588,7 @@ export default class UserCenterPage extends Component {
                                 ? CONFIG.payments[item.payment_method]
                                 : '-'}
                             </h4>
-                            <div className={styles.box_item_descript}>
+                            {/*<div className={styles.box_item_descript}>
                               {item.status && CONFIG.auth_status[item.status]
                                 ? CONFIG.auth_status[item.status]
                                 : '-'}
@@ -604,25 +602,23 @@ export default class UserCenterPage extends Component {
                                   <a> 原因 </a>
                                 </Popover>
                               ) : null}
-                            </div>
+                            </div>*/}
                           </div>
                         </div>
                         {this.getMethodContent(item)}
-                        {~[1, 3].indexOf(item.status) ? (
-                          <ul className={styles.box_item_action}>
-                            <li>
-                              <a onClick={this.showPayMethodModal.bind(this, item)}>设置</a>
-                            </li>
-                            <li>
-                              <Popconfirm
-                                title="确定要删除吗?"
-                                onConfirm={this.handleDeletePayMethod.bind(this, item.id)}
-                              >
-                                <a className="text-red">删除</a>
-                              </Popconfirm>
-                            </li>
-                          </ul>
-                        ) : null}
+                        <ul className={styles.box_item_action}>
+                          <li>
+                            <a onClick={this.showPayMethodModal.bind(this, item)}>设置</a>
+                          </li>
+                          <li>
+                            <Popconfirm
+                              title="确定要删除吗?"
+                              onConfirm={this.handleDeletePayMethod.bind(this, item.id)}
+                            >
+                              <a className="text-red">删除</a>
+                            </Popconfirm>
+                          </li>
+                        </ul>
                       </div>
                     );
                   })}

@@ -1,16 +1,19 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
-import { Row, Col, Icon, Tabs, Alert } from 'antd';
+import { Row, Col, Icon, Tabs, message, Popover } from 'antd';
 import { routerRedux, Link } from 'dva/router';
 import numeral from 'numeral';
 import { stringify } from 'qs';
 import { findIndex } from 'lodash';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { getQueryString } from '../../utils/utils';
 import RechargeForm from './forms/RechargeForm';
 import WithdrawForm from './forms/WithdrawForm';
-
 import styles from './Layout.less';
 import TransferList from './tabels/TransferList';
+import HistoryAddress from './tabels/HistoryAddress';
+
+const jrQrcode = require('jr-qrcode');
 
 const { TabPane } = Tabs;
 
@@ -18,7 +21,9 @@ const { TabPane } = Tabs;
   ...wallet,
   currentUser: user.currentUser,
   transferLoading: loading.effects['wallet/fetchTransfer'],
+  historyAddressLoading: loading.effects['wallet/fetchHistoryAddress'],
   rechargSubmitting: loading.effects['wallet/sendRecharge'],
+  feeLoading: loading.effects['wallet/fetchFee'],
 }))
 export default class Layout extends Component {
   state = {};
@@ -47,20 +52,44 @@ export default class Layout extends Component {
   render() {
     const { activeKey } = this.state;
     const { wallet = {}, payments = [] } = this.props.currentUser || {};
-    const hadEnabledPayment = ~findIndex(payments, i => i.status === 4);
-    const Warning = (
-      <Alert
-        message="请注意!"
-        description={
-          <span>
-            您当前没有已认证支付账号，请前往 <Link to="/user-center/index">个人中心</Link>{' '}
-            填写支付方式信息并提交审核
-          </span>
-        }
-        type="warning"
-        showIcon
-      />
+    const copy = (
+      <CopyToClipboard text={wallet.btc_address} onCopy={() => message.success('复制成功')}>
+        <a>
+          <Icon style={{ fontSize: 18 }} type="copy" />
+        </a>
+      </CopyToClipboard>
     );
+    const qrcode = (
+      <Popover
+        content={
+          <img
+            className={styles.qrcode}
+            src={jrQrcode.getQrBase64(wallet.btc_address)}
+            alt="比特币地址"
+          />
+        }
+        placement="bottom"
+        trigger="hover"
+      >
+        <a>
+          <Icon className="text-blue" style={{ fontSize: 18 }} type="qrcode" />
+        </a>
+      </Popover>
+    );
+    // const hadEnabledPayment = ~findIndex(payments, i => i.status === 4);
+    // const Warning = (
+    //   <Alert
+    //     message="请注意!"
+    //     description={
+    //       <span>
+    //         您当前没有已认证支付账号，请前往 <Link to="/user-center/index">个人中心</Link>{' '}
+    //         填写支付方式信息并提交审核
+    //       </span>
+    //     }
+    //     type="warning"
+    //     showIcon
+    //   />
+    // );
 
     return (
       <Fragment>
@@ -71,48 +100,39 @@ export default class Layout extends Component {
             </Col>
             <Col span={12} className={styles.more}>
               <h1>我的钱包</h1>
-              <div>
+              <p>
                 总资产折合：<span
                   className="text-blue"
                   dangerouslySetInnerHTML={{
-                    __html: `${numeral(wallet.amount || 0).format('0,0.00')}￥`,
+                    __html: `${numeral(wallet.amount || 0).format('0,0.00')} BTC`,
                   }}
                 />{' '}
-                CNY | 冻结：<span
+                | 冻结：<span
                   className="text-blue"
                   dangerouslySetInnerHTML={{
-                    __html: `${numeral(wallet.frozen || 0).format('0,0.00')}￥`,
+                    __html: `${numeral(wallet.frozen || 0).format('0,0.00')} BTC`,
                   }}
                 />{' '}
-                CNY
-              </div>
+              </p>
+              <p>我的比特币地址: {qrcode}</p>
+              <p>
+                <span>{wallet.btc_address}</span> {copy}
+              </p>
             </Col>
           </Row>
 
           <div className={styles.content}>
             <Tabs onChange={this.handleTabsChange} type="card" activeKey={activeKey}>
-              <TabPane tab="充值" key="1">
-                {hadEnabledPayment
-                  ? activeKey === '1' && (
-                  <RechargeForm
-                    {...this.props}
-                    onSubmit={this.handleTabsChange.bind(this, '3')}
-                  />
-                    )
-                  : Warning}
+              <TabPane tab="发送比特币" key="1">
+                {activeKey === '1' && (
+                  <RechargeForm {...this.props} onSubmit={this.handleTabsChange.bind(this, '2')} />
+                )}
               </TabPane>
-              <TabPane tab="提现" key="2">
-                {hadEnabledPayment
-                  ? activeKey === '2' && (
-                  <WithdrawForm
-                    {...this.props}
-                    onSubmit={this.handleTabsChange.bind(this, '3')}
-                  />
-                    )
-                  : Warning}
+              <TabPane tab="交易记录" key="2">
+                {activeKey === '2' && <TransferList {...this.props} />}
               </TabPane>
-              <TabPane tab="交易记录" key="3">
-                {activeKey === '3' && <TransferList {...this.props} />}
+              <TabPane tab="历史比特币地址" key="3">
+                {activeKey === '3' && <HistoryAddress {...this.props} />}
               </TabPane>
             </Tabs>
           </div>

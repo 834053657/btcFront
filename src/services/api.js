@@ -39,19 +39,19 @@ export async function queryChatHistory(params) {
   return request(`/btc/message/get_chat_history?${stringify(params)}`);
 }
 
-export async function queryPayments(params) {
-  return request('/btc/wallet/platform/payments');
+export async function queryBlockConfirmFee() {
+  return request('/btc//wallet/block_confirm_fee');
 }
 
 export async function queryFee(params) {
-  return request('/btc/wallet/fee', {
+  return request('/btc/wallet/btc_fees', {
     method: 'POST',
     body: params,
   });
 }
 
-export async function userRecharge(params) {
-  return request('/btc/wallet/recharge', {
+export async function userSendBtc(params) {
+  return request('/btc/wallet/send_btc', {
     method: 'POST',
     body: params,
   });
@@ -349,6 +349,10 @@ export async function sendQuickMsg(params) {
 
 export async function getTransfers(params) {
   return request(`/btc/wallet/tansaction?${stringify(params)}`);
+}
+
+export async function getHistoryAddress(params) {
+  return request(`/btc/wallet/history_address?${stringify(params)}`);
 }
 
 // -----------------
