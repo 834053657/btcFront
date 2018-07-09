@@ -1,4 +1,6 @@
-import { getTradeList } from '../services/api';
+import { routerRedux } from 'dva/router';
+import { message } from 'antd';
+import { submitCreateOrder, getTradeList, queryAdDetails, submitReportAd } from '../services/api';
 
 export default {
   namespace: 'trade',
@@ -24,12 +26,31 @@ export default {
       yield callback && callback();
     },
     *fetchDetail({ payload, callback }, { call, put }) {
-      const res = yield call(getTradeList, payload);
-      yield put({
-        type: 'saveDetail',
-        payload: res,
-      });
-      yield callback && callback();
+      const res = yield call(queryAdDetails, payload);
+      if(res.code === 0) {
+        yield put({
+          type: 'saveDetail',
+          payload: res.data,
+        });
+        yield callback && callback();
+      }
+    },
+    *createOrder({ payload }, { call, put }) {
+      const res = yield call(submitCreateOrder, payload);
+      if(res.code === 0) {
+        message.success('下单成功');
+        yield put(routerRedux.push(`/trade/step/${payload.id}`));
+      }else {
+        message.error(res.msg);
+      }
+    },
+    *reportAd({ payload }, { call}) {
+      const res = yield call(submitReportAd, payload);
+      if(res.code === 0) {
+        message.success('举报成功');
+      }else {
+        message.error(res.msg);
+      }
     },
   },
 

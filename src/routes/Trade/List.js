@@ -9,16 +9,10 @@ import BlankLayout from '../../layouts/BlankLayout';
 import SearchForm from './forms/SearchForm'
 
 import styles from './List.less';
-import { getQueryString } from '../../utils/utils';
+import { getQueryString, getPayIcon } from '../../utils/utils';
 
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
-
-const payMethod = {
-  'alipay': <Icon type="alipay-circle" />,
-  'bank': <Icon type="wallet" />,
-  'wechat': <Icon type="wechat" />
-}
 
 const typeMap = {
   1: '购买',
@@ -113,9 +107,7 @@ export default class List extends Component {
         return (
           <div >
             {
-              map(row.payment_methods, item => {
-                return <span className={styles.pay_method} key={item}>{item && payMethod[item] ? payMethod[item] : '-'}</span>
-              })
+              map(row.payment_methods, item => <Icon  className={styles.pay_method} key={item} type={getPayIcon(item)} />)
             }
           </div>
         )
@@ -132,7 +124,7 @@ export default class List extends Component {
       title: '限额',
       dataIndex: 'condition_',
       render: (v, row) => {
-        const { max_volume=0, min_volume=0 } = row.condition || {};
+        const { max_volume=0, min_volume=0 } = row || {};
         return <span>{min_volume} - {max_volume} {row.currency}</span>
       }
     },

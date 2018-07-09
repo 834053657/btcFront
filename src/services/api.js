@@ -392,10 +392,30 @@ export async function submitPublish(params) {
 }
 
 //市场参考价格
-
 export async function queryPrice(params) {
   return request('/btc/ad/price', {
     method: 'POST',
     body: params,
   });
 }
+
+//个人详情页
+export async function queryAdDetails(params) {
+  return request(`/btc/ad/detail?${stringify(params)}`);
+}
+
+
+export async function submitCreateOrder(params) {
+  return request('/btc/order/create', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function submitReportAd(params) {
+  return request('/btc/ad/report', {
+    method: 'POST',
+    body: params,
+  });
+}
+
