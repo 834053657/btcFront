@@ -19,8 +19,7 @@ export default class Register extends Component {
     count: 0,
   };
 
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
   handleSubmit = e => {
     e.preventDefault();
@@ -37,12 +36,12 @@ export default class Register extends Component {
     });
   };
 
-  onGetCaptcha = ( values, callback) => {
+  onGetCaptcha = (values, callback) => {
     return this.props.dispatch({
       type: 'global/sendVerify',
       payload: {
         data: {
-          ...values
+          ...values,
         },
         type: values.type,
         usage: 7,
@@ -53,8 +52,8 @@ export default class Register extends Component {
 
   handleSendCaptcha = () => {
     const { validateFields, getFieldValue } = this.props.form;
-    let type = getFieldValue('type')
-    let fieldsName =  type === 'mail' ? ['mail','type'] : ['nation_code', 'phone','type']
+    const type = getFieldValue('type');
+    const fieldsName = type === 'mail' ? ['mail', 'type'] : ['nation_code', 'phone', 'type'];
 
     validateFields(fieldsName, { force: true }, (err, values) => {
       if (!err) {
@@ -81,12 +80,11 @@ export default class Register extends Component {
       <div className={styles.main}>
         <h3>忘记密码</h3>
         <Form onSubmit={this.handleSubmit} hideRequiredMark>
-          <FormItem >
-            {getFieldDecorator('type',{
-                initialValue: 'mail'
-              }
-            )(
-              <Select  size="large">
+          <FormItem>
+            {getFieldDecorator('type', {
+              initialValue: 'mail',
+            })(
+              <Select size="large">
                 {map(CONFIG.verify_type, (text, val) => (
                   <Option key={val} value={val}>
                     {text}
@@ -95,34 +93,31 @@ export default class Register extends Component {
               </Select>
             )}
           </FormItem>
-          {
-            getFieldValue('type') === 'sms' && (
-              <FormItem >
-                {getFieldDecorator('nation_code', {
-                  rules: [
-                    {
-                      required: true,
-                      message: '请选择国家！',
-                    },
-                  ],
-                })(
-                  <Select  size="large" placeholder="请选择国家" >
-                    {CONFIG.country.map(item => (
-                      <Option key={item.code} value={item.nation_code}>
-                        {item.name}
-                      </Option>
-                    ))}
-                  </Select>
-                )}
-              </FormItem>
-            )
-          }
-          <FormItem >
+          {getFieldValue('type') === 'sms' && (
+            <FormItem>
+              {getFieldDecorator('nation_code', {
+                rules: [
+                  {
+                    required: true,
+                    message: '请选择国家！',
+                  },
+                ],
+              })(
+                <Select size="large" placeholder="请选择国家">
+                  {CONFIG.country.map(item => (
+                    <Option key={item.code} value={item.nation_code}>
+                      {item.name}
+                    </Option>
+                  ))}
+                </Select>
+              )}
+            </FormItem>
+          )}
+          <FormItem>
             <Row gutter={24}>
               <Col span={14}>
-                {
-                  getFieldValue('type') === 'mail' ?
-                    getFieldDecorator('mail', {
+                {getFieldValue('type') === 'mail'
+                  ? getFieldDecorator('mail', {
                       rules: [
                         {
                           required: true,
@@ -134,8 +129,7 @@ export default class Register extends Component {
                         },
                       ],
                     })(<Input size="large" placeholder="请输入邮箱" />)
-                    :
-                    getFieldDecorator('phone', {
+                  : getFieldDecorator('phone', {
                       rules: [
                         {
                           required: true,
@@ -158,8 +152,7 @@ export default class Register extends Component {
                         }
                         style={{ width: '100%' }}
                       />
-                    )
-                }
+                    )}
               </Col>
               <Col span={10}>
                 <Button
@@ -173,7 +166,7 @@ export default class Register extends Component {
               </Col>
             </Row>
           </FormItem>
-          <FormItem >
+          <FormItem>
             {getFieldDecorator('code', {
               rules: [
                 {

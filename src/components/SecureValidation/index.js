@@ -32,8 +32,8 @@ class SecureValidation extends Component {
 
   handleSendCaptcha = () => {
     const { validateFields, getFieldValue } = this.props.form;
-    let type = getFieldValue('type')
-    let fieldsName =  type === 'mail' ? ['mail','type'] : ['nation_code', 'phone','type']
+    const type = getFieldValue('type');
+    const fieldsName = type === 'mail' ? ['mail', 'type'] : ['nation_code', 'phone', 'type'];
 
     validateFields(fieldsName, { force: true }, (err, values) => {
       if (!err) {
@@ -99,15 +99,19 @@ class SecureValidation extends Component {
           </Button>,
         ]}
       >
-        <Alert showIcon className={styles.alert} message="为保障您的账户安全，请进行身份验证。" type="info" />
+        <Alert
+          showIcon
+          className={styles.alert}
+          message="为保障您的账户安全，请进行身份验证。"
+          type="info"
+        />
         <div className={classNames(className, styles.login)}>
           <Form onSubmit={this.handleSubmit} hideRequiredMark>
             <FormItem label="验证方式" {...formItemLayout}>
-              {getFieldDecorator('type',{
-                initialValue: 'mail'
-                }
-              )(
-                <Select  size="large">
+              {getFieldDecorator('type', {
+                initialValue: 'mail',
+              })(
+                <Select size="large">
                   {map(CONFIG.verify_type, (text, val) => (
                     <Option key={val} value={val}>
                       {text}
@@ -116,34 +120,34 @@ class SecureValidation extends Component {
                 </Select>
               )}
             </FormItem>
-            {
-              getFieldValue('type') === 'sms' && (
-                <FormItem {...formItemLayout} label="国家">
-                  {getFieldDecorator('nation_code', {
-                    rules: [
-                      {
-                        required: true,
-                        message: '请选择国家！',
-                      },
-                    ],
-                  })(
-                    <Select  size="large" >
-                      {CONFIG.country.map(item => (
-                        <Option key={item.code} value={item.nation_code}>
-                          {item.name}
-                        </Option>
-                      ))}
-                    </Select>
-                  )}
-                </FormItem>
-              )
-            }
-            <FormItem {...formItemLayout} label={getFieldValue('type') === 'mail' ? '邮箱' : '手机'}>
+            {getFieldValue('type') === 'sms' && (
+              <FormItem {...formItemLayout} label="国家">
+                {getFieldDecorator('nation_code', {
+                  rules: [
+                    {
+                      required: true,
+                      message: '请选择国家！',
+                    },
+                  ],
+                })(
+                  <Select size="large">
+                    {CONFIG.country.map(item => (
+                      <Option key={item.code} value={item.nation_code}>
+                        {item.name}
+                      </Option>
+                    ))}
+                  </Select>
+                )}
+              </FormItem>
+            )}
+            <FormItem
+              {...formItemLayout}
+              label={getFieldValue('type') === 'mail' ? '邮箱' : '手机'}
+            >
               <Row gutter={24}>
                 <Col span={14}>
-                  {
-                    getFieldValue('type') === 'mail' ?
-                      getFieldDecorator('mail', {
+                  {getFieldValue('type') === 'mail'
+                    ? getFieldDecorator('mail', {
                         rules: [
                           {
                             required: true,
@@ -155,8 +159,7 @@ class SecureValidation extends Component {
                           },
                         ],
                       })(<Input size="large" placeholder="邮箱" />)
-                      :
-                      getFieldDecorator('phone', {
+                    : getFieldDecorator('phone', {
                         rules: [
                           {
                             required: true,
@@ -178,8 +181,7 @@ class SecureValidation extends Component {
                           }
                           style={{ width: '100%' }}
                         />
-                      )
-                  }
+                      )}
                 </Col>
                 <Col span={10}>
                   <Button

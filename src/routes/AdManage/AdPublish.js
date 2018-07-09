@@ -74,6 +74,9 @@ export default class AdPublish extends Component {
   };
 
   handleSubmit = value => {
+    console.log('下面是value');
+
+    console.log(value);
     const { dispatch } = this.props;
     dispatch({
       type: 'publish/PostPublish',
@@ -82,9 +85,9 @@ export default class AdPublish extends Component {
         trusted_user: +!!value.trusted_user,
         ad_type: this.state.type,
       },
-      callback: () => {
-        this.props.forms.resetFields();
-      },
+      // callback: () => {
+      //   this.props.forms.resetFields();
+      // },
     });
   };
 
@@ -95,7 +98,6 @@ export default class AdPublish extends Component {
       <PageHeaderLayout title="发布广告">
         <div className={styles.background}>
           <div>{this.UserChoose()}</div>
-
           <Card style={{ margin: 15, width: 810 }} title="广告规则">
             <li>
               要想显示您的交易广告，您的【utomarket】钱包中需要有比特币。使用在线付款的交易广告至少需要

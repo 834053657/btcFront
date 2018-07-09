@@ -106,6 +106,12 @@ export const getRouterData = app => {
         import('../routes/UserDetails/UserDetails')
       ),
     },
+    //个人资产
+    '/property/': {
+      component: dynamicWrapper(app, ['property'], () =>
+        import('../routes/UserDetails/UserProperty')
+      ),
+    },
     // 发布广告
     '/publish_ad/': {
       component: dynamicWrapper(app, ['publish', 'user'], () =>

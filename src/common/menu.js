@@ -19,6 +19,11 @@ let menuData = [
 
     path: 'counsel',
   },
+  {
+    name: '个人资产',
+
+    path: 'property',
+  },
 ];
 
 if (__KG_API_ENV__ === 'dev') {

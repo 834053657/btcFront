@@ -23,10 +23,10 @@ const formItemLayout = {
   },
 };
 const payMethod = {
-  'alipay': <Icon style={{fontSize: 18, marginRight: 8}} type="alipay-circle" />,
-  'bank': <Icon style={{fontSize: 18, marginRight: 8}} type="wallet" />,
-  'wechat': <Icon style={{fontSize: 18, marginRight: 8}} type="wechat" />
-}
+  alipay: <Icon style={{ fontSize: 18, marginRight: 8 }} type="alipay-circle" />,
+  bank: <Icon style={{ fontSize: 18, marginRight: 8 }} type="wallet" />,
+  wechat: <Icon style={{ fontSize: 18, marginRight: 8 }} type="wechat" />,
+};
 @connect(({ trade, loading }) => ({
   ...trade.detail,
   submitting: loading.effects['trade/fetchDetail'],
@@ -46,7 +46,7 @@ export default class TradeDetail extends PureComponent {
   }
 
   handleReport = () => {
-    console.log('举报')
+    console.log('举报');
     // const { dispatch } = this.props;
     //
     // dispatch({
@@ -58,37 +58,38 @@ export default class TradeDetail extends PureComponent {
   render() {
     const { submitting } = this.props;
     const { getFieldDecorator } = this.props.form;
-    const breadcrumbList = [
-      { title: '首页', href: '/' },
-      { title: '购买'},
-    ];
+    const breadcrumbList = [{ title: '首页', href: '/' }, { title: '购买' }];
 
     return (
       <PageHeaderLayout className="ant-layout-content" breadcrumbList={breadcrumbList}>
         <div className={styles.page}>
           <Row gutter={24}>
             <Col span={14} className={styles.left}>
-              <Card bordered={false}  className={styles.info}>
+              <Card bordered={false} className={styles.info}>
                 <Meta
                   avatar={
                     <Badge status={true ? 'success' : 'default'} offset={[35, -5]} dot>
-                      <Avatar size="large" src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-                    </Badge>}
+                      <Avatar
+                        size="large"
+                        src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                      />
+                    </Badge>
+                  }
                   title="罗鹏"
                   description="中国"
                 />
-                <DescriptionList style={{marginTop: 15}} size="large" col="2">
+                <DescriptionList style={{ marginTop: 15 }} size="large" col="2">
                   <Description term="交易价格">20000 CNY</Description>
                   <Description term="交易限额"> 1 BTC (1 CNY ~ 555 CNY)</Description>
                   <Description term="交易笔数 / 好评率"> 100 / 99%</Description>
                   <Description term="付款期限">30 分钟</Description>
-                  <Description term="付款方式">{payMethod['alipay']}{payMethod['wechat']}</Description>
+                  <Description term="付款方式">
+                    {payMethod.alipay}
+                    {payMethod.wechat}
+                  </Description>
                 </DescriptionList>
-                <Form hideRequiredMark style={{marginTop: 15}} onSubmit={this.handleSubmit}>
-                  <FormItem
-                    label="我要买"
-                    {...formItemLayout}
-                  >
+                <Form hideRequiredMark style={{ marginTop: 15 }} onSubmit={this.handleSubmit}>
+                  <FormItem label="我要买" {...formItemLayout}>
                     <Col span={11}>
                       <FormItem>
                         {getFieldDecorator('reb', {
@@ -109,10 +110,7 @@ export default class TradeDetail extends PureComponent {
                       </FormItem>
                     </Col>
                   </FormItem>
-                  <FormItem
-                    label="交易备注"
-                    {...formItemLayout}
-                  >
+                  <FormItem label="交易备注" {...formItemLayout}>
                     {getFieldDecorator('reb', {
                       rules: [{ required: true, message: '请输入标题(1-20字符)' }],
                     })(<TextArea rows={4} />)}
@@ -124,7 +122,7 @@ export default class TradeDetail extends PureComponent {
                     </Button>
                     <Button
                       loading={submitting}
-                      style={{ marginLeft: 15}}
+                      style={{ marginLeft: 15 }}
                       type="primary"
                       htmlType="submit"
                     >
@@ -138,18 +136,16 @@ export default class TradeDetail extends PureComponent {
               <Card
                 className={styles.term_box}
                 title="用户罗鹏的交易条款"
-                actions={[(
-                  <a className={styles.report} onClick={this.handleReport}><Icon type="flag" /> 举报这则交易信息</a>
-                )]}
+                actions={[
+                  <a className={styles.report} onClick={this.handleReport}>
+                    <Icon type="flag" /> 举报这则交易信息
+                  </a>,
+                ]}
               >
                 <p>
                   支付宝15966286489 胡海燕
-
                   刷销量，刷完做卡，各位大神高抬贵手，如有不妥还请见谅，谢谢、
-
-                  我们支持支付宝、中国工商银行、微信支付。
-
-                  打款后，请注意留言写清何种方式支付的。
+                  我们支持支付宝、中国工商银行、微信支付。 打款后，请注意留言写清何种方式支付的。
                 </p>
               </Card>
             </Col>

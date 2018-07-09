@@ -61,7 +61,8 @@ export default class AdPublishForm extends Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         const { id } = this.props.initialValues || {};
-        this.props.onSubmit && this.props.onSubmit({ ...values });
+        console.log(id);
+        this.props.onSubmit && this.props.onSubmit({ ...values, id });
       }
     });
   };
@@ -89,10 +90,10 @@ export default class AdPublishForm extends Component {
 
   checkMaxPrice = (ruler, value, callback) => {
     const { form } = this.props;
-    if (value && value <= form.getFieldValue('min_volume')) {
+    if (value && value < form.getFieldValue('min_volume')) {
       callback('不能小于于最小可交易额');
     } else {
-      return value;
+      callback();
     }
   };
 
@@ -250,7 +251,7 @@ export default class AdPublishForm extends Component {
                   },
                 ],
               })(
-                <div style={{ position: 'relative' }} onChange={this.handleInputsChange}>
+                <div style={{ position: 'relative' }}>
                   <InputNumber
                     min={0}
                     step={0.1}
@@ -466,7 +467,7 @@ export default class AdPublishForm extends Component {
 
         <FormItem>
           <div className={styles.btnBox}>
-            <Button type="primary" onClick={this.handleSubmit} className={styles.btn}>
+            <Button type="primary" onClick={this.handleSubmit}>
               确认发布
             </Button>
           </div>

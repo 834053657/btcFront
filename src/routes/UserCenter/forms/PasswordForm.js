@@ -44,7 +44,7 @@ export default class PasswordForm extends Component {
     const { form } = this.props;
     const value = form.getFieldValue('password');
     const regex = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/;
-    if(!regex.test(value)) {
+    if (!regex.test(value)) {
       return 'noPass';
     }
     if (value && value.length > 9) {

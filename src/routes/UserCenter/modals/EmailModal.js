@@ -109,11 +109,7 @@ export default class EmailModal extends Component {
         title: '谷歌验证',
         hide: !user.g2fa_on,
         component: (
-          <G2Validation
-            modal={false}
-            onCancel={onCancel}
-            onSubmit={this.handleSubmitG2}
-          />
+          <G2Validation modal={false} onCancel={onCancel} onSubmit={this.handleSubmitG2} />
         ),
       },
       {
