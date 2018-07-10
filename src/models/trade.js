@@ -1,6 +1,12 @@
 import { routerRedux } from 'dva/router';
 import { message } from 'antd';
-import { submitCreateOrder, getTradeList, queryAdDetails, submitReportAd } from '../services/api';
+import {
+  submitCreateOrder,
+  getTradeList,
+  queryAdDetails,
+  submitReportAd,
+  queryOrderDetails,
+} from '../services/api';
 
 export default {
   namespace: 'trade',
@@ -12,8 +18,8 @@ export default {
         page_size: 10,
       },
     },
-    detail: {
-    }
+    detail: {},
+    orderDetail: {},
   },
 
   effects: {
@@ -27,7 +33,7 @@ export default {
     },
     *fetchDetail({ payload, callback }, { call, put }) {
       const res = yield call(queryAdDetails, payload);
-      if(res.code === 0) {
+      if (res.code === 0) {
         yield put({
           type: 'saveDetail',
           payload: res.data,
@@ -35,20 +41,30 @@ export default {
         yield callback && callback();
       }
     },
+    *fetchOrderDetail({ payload, callback }, { call, put }) {
+      const res = yield call(queryOrderDetails, payload);
+      if (res.code === 0) {
+        yield put({
+          type: 'saveOrderDetail',
+          payload: res.data,
+        });
+        yield callback && callback();
+      }
+    },
     *createOrder({ payload }, { call, put }) {
       const res = yield call(submitCreateOrder, payload);
-      if(res.code === 0) {
+      if (res.code === 0) {
         message.success('下单成功');
-        yield put(routerRedux.push(`/trade/step/${payload.id}`));
-      }else {
+        yield put(routerRedux.push(`/trade/step/${payload.ad_id}`));
+      } else {
         message.error(res.msg);
       }
     },
-    *reportAd({ payload }, { call}) {
+    *reportAd({ payload }, { call }) {
       const res = yield call(submitReportAd, payload);
-      if(res.code === 0) {
+      if (res.code === 0) {
         message.success('举报成功');
-      }else {
+      } else {
         message.error(res.msg);
       }
     },
@@ -69,7 +85,15 @@ export default {
       return {
         ...state,
         detail: {
-          ...payload
+          ...payload,
+        },
+      };
+    },
+    saveOrderDetail(state, { payload }) {
+      return {
+        ...state,
+        orderDetail: {
+          ...payload,
         },
       };
     },

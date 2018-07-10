@@ -52,50 +52,51 @@ export default class TradeDetail extends PureComponent {
     });
   };
 
-  handleChangeVolume = (v) => {
-    if(!isNumber(v)) {
-      return
+  handleChangeVolume = v => {
+    if (!isNumber(v)) {
+      return;
     }
-    const { detail={}, form } = this.props;
+    const { detail = {}, form } = this.props;
     const trading_count = v / detail.trading_price;
 
-    form.setFieldsValue({trading_count})
-  }
+    form.setFieldsValue({ trading_count });
+  };
 
-  handleChangeCount = (v) => {
-    if(!isNumber(v)) {
-      return
+  handleChangeCount = v => {
+    if (!isNumber(v)) {
+      return;
     }
-    const { detail={}, form } = this.props;
+    const { detail = {}, form } = this.props;
     const trading_volume = v * detail.trading_price;
 
-    form.setFieldsValue({trading_volume})
-  }
+    form.setFieldsValue({ trading_volume });
+  };
 
   handleSubmit = e => {
     e.preventDefault();
 
-    const { detail={}, match:{params} } = this.props;
+    const { detail = {}, match: { params } } = this.props;
+    const { order_type } = detail.ad || {};
+
     this.props.form.validateFieldsAndScroll((err, values) => {
-      console.log(err, values)
+      console.log(err, values);
       if (!err) {
         this.props.dispatch({
           type: 'trade/createOrder',
           payload: {
             ad_id: params.id,
-            order_type: detail.ad.order_type,
-            ...values
+            order_type,
+            ...values,
           },
         });
       }
     });
   };
 
-
   render() {
-    const { submitting, detail={} } = this.props;
+    const { submitting, detail = {} } = this.props;
     const { getFieldDecorator } = this.props.form;
-    const { owner={} } = detail || {}
+    const { owner = {} } = detail || {};
     const breadcrumbList = [{ title: '首页', href: '/' }, { title: '购买' }];
     // const currencyDes =  detail.currency ? CONFIG.currencyList[detail.currency]: '-';
 
@@ -115,17 +116,30 @@ export default class TradeDetail extends PureComponent {
                     </Badge>
                   }
                   title={owner.nickname}
-                  description={owner.country_code && CONFIG.countrysMap[owner.country_code] ? CONFIG.countrysMap[owner.country_code].name: '-'}
+                  description={
+                    owner.country_code && CONFIG.countrysMap[owner.country_code]
+                      ? CONFIG.countrysMap[owner.country_code].name
+                      : '-'
+                  }
                 />
                 <DescriptionList style={{ marginTop: 15 }} size="large" col="2">
-                  <Description term="交易价格">{detail.trading_price} {detail.currency} / BTC</Description>
-                  <Description term="交易限额"> 1 BTC ({detail.min_volume} {detail.currency } ~ {detail.max_volume} {detail.currency })</Description>
-                  <Description term="交易笔数 / 好评率"> {owner.trade_times} / {owner.good_ratio}%</Description>
+                  <Description term="交易价格">
+                    {detail.trading_price} {detail.currency} / BTC
+                  </Description>
+                  <Description term="交易限额">
+                    {' '}
+                    1 BTC ({detail.min_volume} {detail.currency} ~ {detail.max_volume}{' '}
+                    {detail.currency})
+                  </Description>
+                  <Description term="交易笔数 / 好评率">
+                    {' '}
+                    {owner.trade_times} / {owner.good_ratio}%
+                  </Description>
                   <Description term="付款期限">{detail.payment_limit} 分钟</Description>
                   <Description term="付款方式">
-                    {
-                      map(detail.payment_methods, item => <Icon  className={styles.pay_method} key={item} type={getPayIcon(item)} />)
-                    }
+                    {map(detail.payment_methods, item => (
+                      <Icon className={styles.pay_method} key={item} type={getPayIcon(item)} />
+                    ))}
                   </Description>
                 </DescriptionList>
                 <Form hideRequiredMark style={{ marginTop: 15 }} onSubmit={this.handleSubmit}>
@@ -134,9 +148,7 @@ export default class TradeDetail extends PureComponent {
                       <FormItem>
                         {getFieldDecorator('trading_volume', {
                           onChange: this.handleChangeVolume,
-                          rules: [
-                            { required: true, message: '请输入' },
-                          ],
+                          rules: [{ required: true, message: '请输入' }],
                         })(<InputNumber size="large" addonAfter={detail.currency} />)}
                       </FormItem>
                     </Col>
@@ -186,9 +198,7 @@ export default class TradeDetail extends PureComponent {
                   </a>,
                 ]}
               >
-                <p>
-                  {detail.trading_term}
-                </p>
+                <p>{detail.trading_term}</p>
               </Card>
             </Col>
           </Row>
