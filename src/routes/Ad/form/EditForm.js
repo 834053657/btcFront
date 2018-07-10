@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { connect } from 'dva';
-import { Select, Button, Form, Input, Radio, Checkbox, InputNumber, Col } from 'antd';
+import { Select, Button, Form, Input, Radio, Checkbox, InputNumber, Col, Card } from 'antd';
 import { map } from 'lodash';
 
-import styles from './AdPublishForm.less';
+import styles from './EditForm.less';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
+const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 const { TextArea } = Input;
 
@@ -21,18 +21,12 @@ const formItemLayout = {
   },
 };
 
-@Form.create({
-  // onFieldsChange: (props, {trading_price_ratio}) => {
-  //   console.log(props);
-  //   if(trading_price_ratio ) {
-  //     const ratio = trading_price_ratio.value || 100;
-  //     const { price, form } = props;
-  //     const tradind_price = (ratio/100) * price;
-  //     console.log(ratio , price, tradind_price)
-  //     form.setFields({tradind_price})
-  //   }
-  // }
-})
+const typeMap = {
+  '1': '在线买入',
+  '2': '在线卖出',
+};
+
+@Form.create()
 export default class AdPublishForm extends Component {
   constructor(props) {
     super(props);
@@ -45,14 +39,14 @@ export default class AdPublishForm extends Component {
 
   fetchPrice = () => {
     this.props.dispatch({
-      type: 'publish/fetchNewPrice',
+      type: 'adEdit/fetchEdit',
     });
   };
 
   fetchRefresh = () => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'publish/fetchNewPrice',
+    // const { dispatch } = this.props;
+    this.props.dispatch({
+      type: 'adEdit/fetchEdit',
     });
   };
 
@@ -146,6 +140,41 @@ export default class AdPublishForm extends Component {
 
     return (
       <Form className={styles.form} hideRequiredMark onSubmit={this.handleSubmit}>
+        <FormItem>
+          {getFieldDecorator('type', {
+            rules: [
+              {
+                required: true,
+                message: '请选择',
+              },
+            ],
+          })(
+            <RadioGroup size="large">
+              {map(typeMap, (text, value) => (
+                <RadioButton key={value} value={value}>
+                  {text}
+                </RadioButton>
+              ))}
+            </RadioGroup>
+          )}
+        </FormItem>
+        <Card style={{ margin: 15, width: 810 }} title="广告规则">
+          <li>
+            要想显示您的交易广告，您的【utomarket】钱包中需要有比特币。使用在线付款的交易广告至少需要
+            0.05 BTC。
+          </li>
+          <li>特定付款方式要求您验证身份，然后您的交易广告才会显示。</li>
+          <li>每笔完成的交易均会消耗广告主 1% 的总交易金额。查看我们费用页面上的所有费用。</li>
+          <li>发起交易后，价格就会确定，除非定价中有明显的错误。</li>
+          <li>您不能代表其他人（由经纪人处理）购买或出售比特币。</li>
+          <li>您仅可以使用以自己名字注册的付款帐户（非第三方付款！）。</li>
+          <li>您必须在交易广告或交易聊天中提供您的付款详细信息。</li>
+          <li>所有交流必须在utomarket.com 上进行。</li>
+          <li>
+            标记为高风险的付款方式具有很大的欺诈风险。在使用高风险付款方式时，请务必小心且始终要求您的交易对方验证身份。
+          </li>
+        </Card>
+
         <FormItem {...formItemLayout} label="所在地">
           {getFieldDecorator('country_code', {
             rules: [
@@ -463,12 +492,12 @@ export default class AdPublishForm extends Component {
               )}
             </FormItem>
 
-            <FormItem {...formItemLayout} label="新买家限额">
+            <FormItem {...formItemLayout} label="新卖家限额">
               {getFieldDecorator('new_buyer_limit', {})(
                 <InputNumber
                   min={0}
                   step={0.0001}
-                  placeholder="新买家限额"
+                  placeholder="新卖家限额"
                   style={{ width: 170 }}
                 />
               )}

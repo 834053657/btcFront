@@ -32,6 +32,13 @@ export default {
         payload: res,
       });
     },
+    *fetchAdDetail({ payload }, { call, put }) {
+      const res = yield call(queryTermsList, payload);
+      yield put({
+        type: 'setTermsList',
+        payload: res,
+      });
+    },
     *fetchTermsList({ payload }, { call, put }) {
       const res = yield call(queryTermsList, payload);
       yield put({

@@ -65,7 +65,7 @@ export async function userWithdraw(params) {
 }
 
 export async function queryMyAdList(params) {
-  return request(`/btc/user/ad/all?${stringify(params)}`);
+  return request(`/btc//ad/mine?${stringify(params)}`);
 }
 
 export async function queryTermsList(params) {
@@ -377,7 +377,7 @@ export async function queryDetails(params) {
 //信任用户
 
 export async function updateTrust(params) {
-  return request('/btc/user/trust', {
+  return request('/btc/user/rating', {
     method: 'POST',
     body: params,
   });
@@ -393,10 +393,7 @@ export async function submitPublish(params) {
 
 //市场参考价格
 export async function queryPrice(params) {
-  return request('/btc/ad/price', {
-    method: 'POST',
-    body: params,
-  });
+  return request(`/btc/ad/price?${stringify(params)}`);
 }
 
 //广告详情

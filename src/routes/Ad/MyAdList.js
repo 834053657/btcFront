@@ -94,12 +94,6 @@ export default class List extends Component {
       className: styles.ad_no,
     },
     {
-      title: '产品类型',
-      dataIndex: 'goods_type',
-      width: '15%',
-      render: (val, row) => CONFIG.goods_type[val],
-    },
-    {
       title: '交易类型',
       dataIndex: 'ad_type',
       width: '15%',
@@ -132,42 +126,46 @@ export default class List extends Component {
     {
       title: '操作',
       width: '25%',
-      render: r => (
-        <Fragment>
-          <a onClick={() => this.viewAd(r, '_OPEN')}>查看</a>
-          {r.status === 1 && (
-            <span>
-              <Divider type="vertical" />
-              <a onClick={() => this.updateAd(r, 2)}>暂停</a>
-            </span>
-          )}
-          {r.status === 2 && (
-            <span>
-              <Divider type="vertical" />
-              <a onClick={() => this.updateAd(r, 1)}>恢复</a>
-            </span>
-          )}
-          {[1, 2].indexOf(r.status) > -1 && (
-            <span>
-              <Divider type="vertical" />
-              <a onClick={() => this.viewAd(r, '_EDIT')}>编辑</a>
-            </span>
-          )}
-          {[1, 2, 4].indexOf(r.status) > -1 && (
-            <span>
-              <Divider type="vertical" />
-              <Popconfirm
-                title="您确认要删除此广告?"
-                onConfirm={() => this.updateAd(r, 5)}
-                okText="确认"
-                cancelText="取消"
-              >
-                <a>删除</a>
-              </Popconfirm>
-            </span>
-          )}
-        </Fragment>
-      ),
+      render: (_, r) => {
+        const type = r.ad_type;
+        console.log('以下为type');
+        return (
+          <Fragment>
+            <a onClick={() => this.viewAd(r, '_OPEN')}>查看</a>
+            {r.status === 1 && (
+              <span>
+                <Divider type="vertical" />
+                <a onClick={() => this.updateAd(r, 2)}>暂停</a>
+              </span>
+            )}
+            {r.status === 2 && (
+              <span>
+                <Divider type="vertical" />
+                <a onClick={() => this.updateAd(r, 1)}>恢复</a>
+              </span>
+            )}
+            {[1, 2].indexOf(r.status) > -1 && (
+              <span>
+                <Divider type="vertical" />
+                <Link to={`/ad/edit/${r.id}`}>编辑</Link>
+              </span>
+            )}
+            {[1, 2, 4].indexOf(r.status) > -1 && (
+              <span>
+                <Divider type="vertical" />
+                <Popconfirm
+                  title="您确认要删除此广告?"
+                  onConfirm={() => this.updateAd(r, 5)}
+                  okText="确认"
+                  cancelText="取消"
+                >
+                  <a>删除</a>
+                </Popconfirm>
+              </span>
+            )}
+          </Fragment>
+        );
+      },
     },
   ];
 
