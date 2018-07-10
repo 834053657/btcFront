@@ -27,7 +27,7 @@ export default {
   web_sub_title: '比特币在线交易平台',
   verify_type: {
     sms: '手机验证',
-    mail: '邮箱验证'
+    mail: '邮箱验证',
   },
   language: {
     zh_CN: '简体中文',
@@ -59,10 +59,8 @@ export default {
     5: '已完成',
     6: '已取消',
   },
-  country: {
-  },
-  countrysMap: {
-  },
+  country: {},
+  countrysMap: {},
   message_type_zh_CN: {
     1: '系统资讯',
     11: '您的{auth_type}已通过',

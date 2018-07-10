@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
 
-import { Icon, Table, Button, Modal, Radio, List, Avatar } from 'antd';
+import { Icon, Table, Button, Modal, Radio, List, Badge } from 'antd';
 import { map } from 'lodash';
+import { Link, routerRedux } from 'dva/router';
 
 import DescriptionList from 'components/DescriptionList';
 import BlankLayout from '../../layouts/BlankLayout';
@@ -20,6 +21,12 @@ const typeMap = {
   '2': '出售',
 };
 
+const payMethod = {
+  alipay: <Icon type="alipay-circle" />,
+  bank: <Icon type="wallet" />,
+  wechat: <Icon type="wechat" />,
+};
+
 @connect(({ userDetails, loading }) => ({
   ...userDetails,
   loading: loading.models.message,
@@ -29,7 +36,7 @@ export default class UserDetails extends Component {
     super(props);
     this.state = {
       visible: false,
-      type: '',
+      type: '1',
     };
   }
 
@@ -52,20 +59,39 @@ export default class UserDetails extends Component {
     const { userMessage } = this.props;
     return <a>{userMessage.nickname}</a>;
   };
-  handleTrust = () => {
+  handleNotTrust = () => {
     const { is_trust } = this.props.userMessage;
-    console.log(is_trust);
+    console.log(+is_trust);
+    const type = +is_trust;
+    console.log(type);
     const { id } = this.props.userMessage;
+    console.log(id);
     const { dispatch } = this.props;
+
     dispatch({
       type: 'userDetails/submitTrustUser',
       payload: {
         id,
-        is_trust,
+        type,
       },
     });
   };
+  handleToTrust = () => {
+    const { is_trust } = this.props.userMessage;
+    console.log(+is_trust);
+    const type = +is_trust + 1;
+    console.log(type);
+    const { target_uid } = this.props.userMessage;
+    const { dispatch } = this.props;
 
+    dispatch({
+      type: 'userDetails/submitTrustUser',
+      payload: {
+        target_uid,
+        type,
+      },
+    });
+  };
   UserMessage = () => {
     const { userMessage = {}, trader = {} } = this.props;
 
@@ -82,14 +108,14 @@ export default class UserDetails extends Component {
             />
           </span>
           <span>
-            <span style={{ fontSize: '30px', margin: '10px' }}>{userMessage.nickname}</span>
-            <a>
-              {userMessage.online === true ? (
-                <a className={styles.tipGreen}>{}</a>
-              ) : (
-                <a className={styles.tipRed}>{}</a>
-              )}
-            </a>
+            <Badge
+              offset={[13, 0]}
+              style={{ width: 8, height: 8 }}
+              dot
+              status={userMessage.online ? 'success' : 'default'}
+            >
+              <b style={{ fontSize: '30px', margin: '10px' }}>{userMessage.nickname}</b>
+            </Badge>
             <a className={styles.report} onClick={this.handleShowReport}>
               <Icon type="flag" />举报
             </a>
@@ -98,13 +124,13 @@ export default class UserDetails extends Component {
 
         <div>
           {userMessage.is_trust === true ? (
-            <div className={styles.trust} onClick={this.handleTrust.bind(this)}>
-              <Icon type="heart" style={{ color: '#fff', marginRight: '5px' }} />信任
-            </div>
+            <Button className={styles.trust} onClick={this.handleNotTrust.bind(this)} type="1">
+              <Icon type="heart" style={{ color: '#CFCFCF', marginRight: '5px' }} />信任
+            </Button>
           ) : (
-            <div className={styles.UNtrust} onClick={this.handleTrust.bind(this)}>
+            <Button className={styles.UNtrust} onClick={this.handleToTrust.bind(this)}>
               <Icon type="heart" style={{ color: '#fff', marginRight: '5px' }} />信任
-            </div>
+            </Button>
           )}
           {userMessage.online === true ? (
             ''
@@ -130,15 +156,17 @@ export default class UserDetails extends Component {
             {trader.trade_times ? trader.trade_times : '-'}
           </Description>
           <Description term="评价得分" className={styles.UserStyle}>
-            {trader.rating_ratio ? trader.rating_ratio : '-'}
+            {trader.good_ratio ? trader.good_ratio : '-'}
           </Description>
           <Description term="第一次购买" className={styles.UserStyle}>
             {trader.first_trade_at
               ? moment(trader.first_trade_at * 1000).format('YYYY-MM-DD HH:mm')
               : '-'}
           </Description>
-          <Description term="账户已创建" className={styles.UserStyle}>
-            哈萨克斯坦
+          <Description term="账户创建时间" className={styles.UserStyle}>
+            {userMessage.last_login_at
+              ? moment(userMessage.created_at * 1000).format('YYYY-MM-DD HH:mm')
+              : '-'}
           </Description>
           <Description term="最后一次上线" className={styles.UserStyle}>
             {userMessage.last_login_at
@@ -146,10 +174,12 @@ export default class UserDetails extends Component {
               : '-'}
           </Description>
           <Description term="语言" className={styles.UserStyle}>
-            哈萨克斯坦
+            {userMessage.country_code}
           </Description>
           <Description term="信任" className={styles.UserStyle}>
-            哈萨克斯坦
+            {userMessage.is_trust && CONFIG.is_true[userMessage.is_trust]
+              ? CONFIG.is_true[userMessage.is_trust]
+              : '-'}
           </Description>
         </DescriptionList>
       </div>
@@ -176,9 +206,18 @@ export default class UserDetails extends Component {
     {
       title: '付款方式',
       dataIndex: 'payment_methods',
-      width: '40%',
-      render: text => {
-        return <span>{this.payWay(text)}</span>;
+      render: (_, row) => {
+        return (
+          <div>
+            {map(row.payment_methods, item => {
+              return (
+                <span className={styles.pay_method} key={item}>
+                  {item && payMethod[item] ? payMethod[item] : '-'}
+                </span>
+              );
+            })}
+          </div>
+        );
       },
     },
     {
@@ -190,22 +229,27 @@ export default class UserDetails extends Component {
       },
     },
     {
-      title: '',
-      dataIndex: '3',
-      width: '20%',
-      render: () => {
+      title: '限额',
+      dataIndex: 'condition_',
+      render: (v, row) => {
+        const { max_volume = 0, min_volume = 0 } = row || {};
         return (
-          <div>
-            {this.state.type === '1' ? (
-              <Button type="primary" className={styles.btnstyle} onClick={this.handleBuy}>
-                买入
-              </Button>
-            ) : (
-              <Button type="primary" className={styles.btnstyle} onClick={this.handleSell}>
-                卖出
-              </Button>
-            )}
-          </div>
+          <span>
+            {min_volume} - {max_volume} {row.currency}
+          </span>
+        );
+      },
+    },
+    {
+      title: '操作',
+      render: row => {
+        const { type } = this.state;
+        return (
+          <Fragment>
+            <Link to={type === '1' ? `/trade/detail/${row.ad_id}` : ''}>
+              <Button type="primary">{type ? typeMap[type] : '-'}</Button>
+            </Link>
+          </Fragment>
         );
       },
     },
@@ -219,6 +263,7 @@ export default class UserDetails extends Component {
   };
 
   hadleShowAll = () => {};
+
   UserComment = () => {
     const { comment } = this.props;
 
@@ -227,26 +272,24 @@ export default class UserDetails extends Component {
         <DescriptionList col={1} style={{ margin: '30px' }}>
           {map(comment, (item, index) => {
             return (
-              <div style={{ width: '40%', borderBottom: '1px solid #ccc' }}>
-                <List.Item>
-                  <List.Item.Meta
-                    avatar={
-                      <Icon
-                        style={{ fontSize: 39 }}
-                        type={item.rating_type === 1 ? 'like' : 'dislike'}
-                      />
-                    }
-                    title={
-                      <a href="https://ant.design">
-                        {item.created_at
-                          ? moment(item.created_at * 1000).format('YYYY-MM-DD HH:mm:ss')
-                          : '-'}
-                      </a>
-                    }
-                    description={item.content}
-                  />
-                </List.Item>
-              </div>
+              <List.Item key={index} style={{ width: '40%', borderBottom: '1px solid #ccc' }}>
+                <List.Item.Meta
+                  avatar={
+                    <Icon
+                      style={{ fontSize: 39 }}
+                      type={item.rating_type === 1 ? 'like' : 'dislike'}
+                    />
+                  }
+                  title={
+                    <a>
+                      {item.created_at
+                        ? moment(item.created_at * 1000).format('YYYY-MM-DD HH:mm:ss')
+                        : '-'}
+                    </a>
+                  }
+                  description={item.content}
+                />
+              </List.Item>
             );
           })}
         </DescriptionList>
@@ -339,7 +382,7 @@ export default class UserDetails extends Component {
                 {type === '1' ? (
                   <Table
                     loading={loading}
-                    rowKey={record => record.id}
+                    rowKey={record => record.ad_id}
                     dataSource={list.buy}
                     columns={this.columns}
                     pagination={false}
@@ -349,7 +392,7 @@ export default class UserDetails extends Component {
                 ) : (
                   <Table
                     loading={loading}
-                    rowKey={record => record.id}
+                    rowKey={record => record.ad_id}
                     dataSource={list.sell}
                     columns={this.columns}
                     pagination={false}
@@ -358,6 +401,10 @@ export default class UserDetails extends Component {
                   />
                 )}
               </div>
+              <Link to="/trade/index">
+                {' '}
+                <div className={styles.showAllAd}>显示所有用户网上购买比特币的广告</div>
+              </Link>
             </div>
           </div>
           <div>

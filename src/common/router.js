@@ -107,11 +107,7 @@ export const getRouterData = app => {
       ),
     },
     //个人资产
-    '/property/': {
-      component: dynamicWrapper(app, ['property'], () =>
-        import('../routes/UserDetails/UserProperty')
-      ),
-    },
+
     // 发布广告
     '/publish_ad/': {
       component: dynamicWrapper(app, ['publish', 'user'], () =>
@@ -126,9 +122,13 @@ export const getRouterData = app => {
     '/ad/terms': {
       component: dynamicWrapper(app, ['ad'], () => import('../routes/Ad/MyTermsList')),
     },
+    '/ad/edit/:type': {
+      component: dynamicWrapper(app, ['adEdit'], () => import('../routes/Ad/AdEdit')),
+    },
     '/order/my': {
       component: dynamicWrapper(app, ['user'], () => import('../routes/UserCenter/MyOrderList')),
     },
+
     // 帮助，隐私，条款路由控制
     '/information/help': {
       component: dynamicWrapper(app, ['information'], () => import('../routes/Information/Help')),
