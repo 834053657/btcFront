@@ -399,9 +399,13 @@ export async function queryPrice(params) {
   });
 }
 
-//个人详情页
+//广告详情
 export async function queryAdDetails(params) {
   return request(`/btc/ad/detail?${stringify(params)}`);
+}
+
+export async function queryOrderDetails(params) {
+  return request(`/btc/order/detail?${stringify(params)}`);
 }
 
 

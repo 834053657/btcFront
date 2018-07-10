@@ -76,6 +76,8 @@ export default class TradeDetail extends PureComponent {
     e.preventDefault();
 
     const { detail={}, match:{params} } = this.props;
+    const { order_type } = detail.ad || {};
+
     this.props.form.validateFieldsAndScroll((err, values) => {
       console.log(err, values)
       if (!err) {
@@ -83,7 +85,7 @@ export default class TradeDetail extends PureComponent {
           type: 'trade/createOrder',
           payload: {
             ad_id: params.id,
-            order_type: detail.ad.order_type,
+            order_type,
             ...values
           },
         });
