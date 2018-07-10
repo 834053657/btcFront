@@ -72,13 +72,6 @@ export async function queryTermsList(params) {
   return request(`/btc/user/trans_term/all?${stringify(params)}`);
 }
 
-export async function fakeAd(params) {
-  return request('/btc/user/ad/status', {
-    method: 'POST',
-    body: params,
-  });
-}
-
 export async function removeAd(params) {
   return request('/btc/user/my_ad/delete', {
     method: 'POST',
@@ -401,7 +394,6 @@ export async function queryAdDetails(params) {
   return request(`/btc/ad/detail?${stringify(params)}`);
 }
 
-
 export async function submitCreateOrder(params) {
   return request('/btc/order/create', {
     method: 'POST',
@@ -415,4 +407,3 @@ export async function submitReportAd(params) {
     body: params,
   });
 }
-

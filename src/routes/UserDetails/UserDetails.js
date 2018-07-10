@@ -43,9 +43,13 @@ export default class UserDetails extends Component {
   componentWillMount() {}
 
   componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch({
+    const { params: { userid } } = this.props.match || {};
+
+    this.props.dispatch({
       type: 'userDetails/fetchDetails',
+      payload: {
+        userid,
+      },
     });
   }
 
@@ -59,41 +63,20 @@ export default class UserDetails extends Component {
     const { userMessage } = this.props;
     return <a>{userMessage.nickname}</a>;
   };
-  handleNotTrust = () => {
-    const { is_trust } = this.props.userMessage;
-    console.log(+is_trust);
-    const type = +is_trust;
-    console.log(type);
-    const { id } = this.props.userMessage;
-    console.log(id);
-    const { dispatch } = this.props;
+  handleToTrust = type => {
+    const { params: { userid } } = this.props.match || {};
 
-    dispatch({
+    this.props.dispatch({
       type: 'userDetails/submitTrustUser',
       payload: {
-        id,
-        type,
-      },
-    });
-  };
-  handleToTrust = () => {
-    const { is_trust } = this.props.userMessage;
-    console.log(+is_trust);
-    const type = +is_trust + 1;
-    console.log(type);
-    const { target_uid } = this.props.userMessage;
-    const { dispatch } = this.props;
-
-    dispatch({
-      type: 'userDetails/submitTrustUser',
-      payload: {
-        target_uid,
+        target_uid: userid,
         type,
       },
     });
   };
   UserMessage = () => {
     const { userMessage = {}, trader = {} } = this.props;
+    console.log(userMessage);
 
     // const { loading } = this.props
     return (
@@ -124,11 +107,11 @@ export default class UserDetails extends Component {
 
         <div>
           {userMessage.is_trust === true ? (
-            <Button className={styles.trust} onClick={this.handleNotTrust.bind(this)} type="1">
-              <Icon type="heart" style={{ color: '#CFCFCF', marginRight: '5px' }} />信任
+            <Button className={styles.trust} onClick={this.handleToTrust.bind(this, 2)} type="1">
+              <Icon type="heart" style={{ color: '#CFCFCF', marginRight: '5px' }} />取消信任
             </Button>
           ) : (
-            <Button className={styles.UNtrust} onClick={this.handleToTrust.bind(this)}>
+            <Button className={styles.UNtrust} onClick={this.handleToTrust.bind(this, 1)}>
               <Icon type="heart" style={{ color: '#fff', marginRight: '5px' }} />信任
             </Button>
           )}

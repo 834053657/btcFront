@@ -1,4 +1,4 @@
-import { routerRedux } from 'dva/router';
+import { message } from 'antd';
 import { queryDetails, updateTrust } from '../services/api';
 import { forgetPassword } from '../services/user';
 
@@ -13,7 +13,7 @@ export default {
   },
 
   effects: {
-    *fetchDetails(payload, { call, put }) {
+    *fetchDetails({ payload }, { call, put }) {
       const response = yield call(queryDetails, payload);
       console.log('response');
       console.log(response);
@@ -24,10 +24,15 @@ export default {
     },
     *submitTrustUser({ payload, callback }, { call, put }) {
       const response = yield call(updateTrust, payload);
-      yield put({
-        type: 'saveTrust',
-        payload: response,
-      });
+      if (response.code === 0) {
+        message.success('操作成功');
+        yield put({
+          type: 'fetchDetails',
+          payload: payload.target_uid,
+        });
+      } else {
+        message.error(response.msg);
+      }
     },
   },
 

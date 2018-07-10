@@ -101,7 +101,7 @@ export const getRouterData = app => {
       redirectPath: '/user/login',
     },
     //个人详情页
-    '/personage/': {
+    '/personage/:userid': {
       component: dynamicWrapper(app, ['userDetails'], () =>
         import('../routes/UserDetails/UserDetails')
       ),
@@ -110,20 +110,15 @@ export const getRouterData = app => {
 
     // 发布广告
     '/publish_ad/': {
-      component: dynamicWrapper(app, ['publish', 'user'], () =>
-        import('../routes/AdManage/AdPublish')
-      ),
+      component: dynamicWrapper(app, ['ad', 'user'], () => import('../routes/Ad/AdPublish')),
     },
 
     // 我的广告
     '/ad/my': {
       component: dynamicWrapper(app, ['ad'], () => import('../routes/Ad/MyAdList')),
     },
-    '/ad/terms': {
-      component: dynamicWrapper(app, ['ad'], () => import('../routes/Ad/MyTermsList')),
-    },
-    '/ad/edit/:type': {
-      component: dynamicWrapper(app, ['adEdit'], () => import('../routes/Ad/AdEdit')),
+    '/ad/edit/:id': {
+      component: dynamicWrapper(app, ['ad'], () => import('../routes/Ad/AdEdit')),
     },
     '/order/my': {
       component: dynamicWrapper(app, ['user'], () => import('../routes/UserCenter/MyOrderList')),

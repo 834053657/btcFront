@@ -1,11 +1,10 @@
 import { message } from 'antd';
 import {
   queryMyAdList,
-  queryTermsList,
-  fakeTerms,
-  removeTerms,
-  fakeAd,
   removeAd,
+  queryPrice,
+  submitPublish,
+  queryAdDetails,
 } from '../services/api';
 
 export default {
@@ -16,12 +15,8 @@ export default {
       list: [],
       pagination: {},
     },
-    termsData: {
-      list: [],
-      pagination: {},
-    },
-    termsDetail: {},
     adDetail: {},
+    price: null,
   },
 
   effects: {
@@ -32,31 +27,14 @@ export default {
         payload: res,
       });
     },
-    *fetchAdDetail({ payload }, { call, put }) {
-      const res = yield call(queryTermsList, payload);
-      yield put({
-        type: 'setTermsList',
-        payload: res,
-      });
-    },
-    *fetchTermsList({ payload }, { call, put }) {
-      const res = yield call(queryTermsList, payload);
-      yield put({
-        type: 'setTermsList',
-        payload: res,
-      });
-    },
-    *updateAd({ payload, callback }, { call, put }) {
-      const response = yield call(fakeAd, payload);
-      if (response.code === 0) {
+    *fetchAdDetail({ payload, callback }, { call, put }) {
+      const res = yield call(queryAdDetails, payload);
+      if (res.code === 0) {
         yield put({
           type: 'fakeAd',
-          payload: response,
+          payload: res.data,
         });
-        message.success('操作成功');
-        if (callback) callback();
-      } else {
-        message.error(response.msg);
+        yield callback && callback(res.data);
       }
     },
     *deleteAd({ payload, callback }, { call, put }) {
@@ -72,31 +50,30 @@ export default {
       });
       if (callback) callback();
     },
-    *saveTerms({ payload, callback }, { call, put }) {
-      const response = yield call(fakeTerms, payload);
+    /**
+     * 发布或者编辑广告
+     * @param payload
+     * @param callback
+     * @param call
+     * @returns {IterableIterator<*>}
+     */
+    *postPublish({ payload, callback }, { call }) {
+      const response = yield call(submitPublish, payload);
       if (response.code === 0) {
         message.success('操作成功');
+        callback && callback(response);
       } else {
         message.error(response.msg);
       }
-      yield put({
-        type: 'fakeTerms',
-        payload: response,
-      });
-      if (callback) callback();
     },
-    *deleteTerms({ payload, callback }, { call, put }) {
-      const response = yield call(removeTerms, payload);
+    *fetchNewPrice({ payload }, { call, put }) {
+      const response = yield call(queryPrice, payload);
       if (response.code === 0) {
-        message.success('操作成功');
-      } else {
-        message.error(response.msg);
+        yield put({
+          type: 'setPrice',
+          payload: response.data,
+        });
       }
-      yield put({
-        type: 'removeTerms',
-        payload: response,
-      });
-      if (callback) callback();
     },
   },
 
@@ -111,27 +88,6 @@ export default {
         },
       };
     },
-    setTermsList(state, { payload }) {
-      const { data: { items = [], paginator } } = payload || {};
-      return {
-        ...state,
-        termsData: {
-          list: items,
-          pagination: { ...paginator, current: paginator.page },
-        },
-      };
-    },
-    fakeTerms(state, action) {
-      return {
-        ...state,
-        termsDetail: action.payload,
-      };
-    },
-    removeTerms(state, action) {
-      return {
-        ...state,
-      };
-    },
     fakeAd(state, action) {
       return {
         ...state,
@@ -141,6 +97,12 @@ export default {
     removeAd(state, action) {
       return {
         ...state,
+      };
+    },
+    setPrice(state, { payload }) {
+      return {
+        ...state,
+        price: payload.at_price,
       };
     },
   },
