@@ -11,7 +11,6 @@ const Option = Select.Option;
 const Dragger = Upload.Dragger;
 const { TextArea } = Input;
 
-
 @connect(({ user, loading }) => ({
   result: user.changePassword.result,
   submitting: loading.effects['register/submit'],
@@ -75,7 +74,7 @@ export default class PayMethodForm extends Component {
           },
           'payment_detail.ercodeUrl': {
             lablel: '收款码',
-            component: ()=>this.renderDragger('payment_detail.ercodeUrl'),
+            component: () => this.renderDragger('payment_detail.ercodeUrl'),
             options: {
               initialValue: payment_detail.ercodeUrl
                 ? [{ url: payment_detail.ercodeUrl, status: 'done' }]
@@ -124,7 +123,7 @@ export default class PayMethodForm extends Component {
           },
           'payment_detail.ercodeUrl': {
             lablel: '收款码',
-            component: ()=>this.renderDragger('payment_detail.ercodeUrl'),
+            component: () => this.renderDragger('payment_detail.ercodeUrl'),
             options: {
               initialValue: payment_detail.ercodeUrl
                 ? [{ url: payment_detail.ercodeUrl, status: 'done' }]
@@ -211,7 +210,7 @@ export default class PayMethodForm extends Component {
                 },
               ],
             },
-          }
+          },
         },
         paytm: {
           'payment_detail.name': {
@@ -246,7 +245,7 @@ export default class PayMethodForm extends Component {
           },
           'payment_detail.ercodeUrl': {
             lablel: '收款码',
-            component: ()=>this.renderDragger('payment_detail.ercodeUrl'),
+            component: () => this.renderDragger('payment_detail.ercodeUrl'),
             options: {
               initialValue: payment_detail.ercodeUrl
                 ? [{ url: payment_detail.ercodeUrl, status: 'done' }]
@@ -357,10 +356,10 @@ export default class PayMethodForm extends Component {
       [...keys(fields), 'payment_method'],
       { force: true },
       (err, values) => {
-        if(values.payment_detail && values.payment_detail.ercodeUrl) {
-          values.payment_detail.ercodeUrl = this.getImgUrl(values.payment_detail.ercodeUrl[0])
+        if (values.payment_detail && values.payment_detail.ercodeUrl) {
+          values.payment_detail.ercodeUrl = this.getImgUrl(values.payment_detail.ercodeUrl[0]);
         }
-        this.props.onSubmit(err, values)
+        this.props.onSubmit(err, values);
       }
     );
   };
@@ -376,11 +375,10 @@ export default class PayMethodForm extends Component {
     const payment_method = getFieldValue('payment_method');
     const fields = payment_method && fieldList[payment_method] ? fieldList[payment_method] : null;
 
-
     const content = (
       <div>
         {map(fields, (item, key) => {
-          const comp = (typeof item.component === 'function') ? item.component() : item.component;
+          const comp = typeof item.component === 'function' ? item.component() : item.component;
 
           return (
             <FormItem {...formItemLayout} label={item.lablel} key={key}>
@@ -403,7 +401,7 @@ export default class PayMethodForm extends Component {
 
     return (
       <div className={styles.main}>
-        <Form onSubmit={this.handleSubmit} hideRequiredMark >
+        <Form onSubmit={this.handleSubmit} hideRequiredMark>
           <Form.Item {...formItemLayout} label="支付方式">
             {getFieldDecorator('payment_method', {
               initialValue: initialValues.payment_method || 'alipay',
