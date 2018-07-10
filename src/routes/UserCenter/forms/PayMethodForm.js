@@ -9,6 +9,8 @@ import styles from './PayMethodForm.less';
 const FormItem = Form.Item;
 const Option = Select.Option;
 const Dragger = Upload.Dragger;
+const { TextArea } = Input;
+
 
 @connect(({ user, loading }) => ({
   result: user.changePassword.result,
@@ -73,7 +75,7 @@ export default class PayMethodForm extends Component {
           },
           'payment_detail.ercodeUrl': {
             lablel: '收款码',
-            component: this.renderDragger('payment_detail.ercodeUrl'),
+            component: ()=>this.renderDragger('payment_detail.ercodeUrl'),
             options: {
               initialValue: payment_detail.ercodeUrl
                 ? [{ url: payment_detail.ercodeUrl, status: 'done' }]
@@ -122,7 +124,7 @@ export default class PayMethodForm extends Component {
           },
           'payment_detail.ercodeUrl': {
             lablel: '收款码',
-            component: this.renderDragger('payment_detail.ercodeUrl'),
+            component: ()=>this.renderDragger('payment_detail.ercodeUrl'),
             options: {
               initialValue: payment_detail.ercodeUrl
                 ? [{ url: payment_detail.ercodeUrl, status: 'done' }]
@@ -178,6 +180,83 @@ export default class PayMethodForm extends Component {
                 {
                   pattern: /^[0-9]{4,30}$/,
                   message: '请输入4~30位的数字',
+                },
+              ],
+            },
+          },
+        },
+        westernunion: {
+          'payment_detail.name': {
+            lablel: '姓名',
+            component: <Input size="large" maxLength={20} placeholder="姓名" />,
+            options: {
+              initialValue: payment_detail.name,
+              rules: [
+                {
+                  required: true,
+                  message: '请输入姓名！',
+                },
+              ],
+            },
+          },
+          'payment_detail.account': {
+            lablel: '汇款信息',
+            component: <TextArea rows={4} style={{ width: 390 }} />,
+            options: {
+              initialValue: payment_detail.account,
+              rules: [
+                {
+                  required: true,
+                  message: '请输入西联汇款信息！',
+                },
+              ],
+            },
+          }
+        },
+        paytm: {
+          'payment_detail.name': {
+            lablel: '姓名',
+            component: <Input size="large" maxLength={20} placeholder="姓名" />,
+            options: {
+              initialValue: payment_detail.name,
+              rules: [
+                {
+                  required: true,
+                  message: '请输入姓名！',
+                },
+              ],
+            },
+          },
+          'payment_detail.account': {
+            lablel: '账号',
+            component: <Input size="large" maxLength={30} placeholder="账号" />,
+            options: {
+              initialValue: payment_detail.account,
+              rules: [
+                {
+                  required: true,
+                  message: '请输入账号！',
+                },
+                {
+                  pattern: /^[0-9]{4,30}$/,
+                  message: '请输入4~30位的数字',
+                },
+              ],
+            },
+          },
+          'payment_detail.ercodeUrl': {
+            lablel: '收款码',
+            component: ()=>this.renderDragger('payment_detail.ercodeUrl'),
+            options: {
+              initialValue: payment_detail.ercodeUrl
+                ? [{ url: payment_detail.ercodeUrl, status: 'done' }]
+                : [],
+              valuePropName: 'fileList',
+              getValueFromEvent: this.normFile,
+              rules: [
+                {
+                  required: true,
+                  message: '请上传paytm收款码！',
                 },
               ],
             },
@@ -277,7 +356,12 @@ export default class PayMethodForm extends Component {
     this.props.form.validateFields(
       [...keys(fields), 'payment_method'],
       { force: true },
-      this.props.onSubmit
+      (err, values) => {
+        if(values.payment_detail && values.payment_detail.ercodeUrl) {
+          values.payment_detail.ercodeUrl = this.getImgUrl(values.payment_detail.ercodeUrl[0])
+        }
+        this.props.onSubmit(err, values)
+      }
     );
   };
 
@@ -291,12 +375,16 @@ export default class PayMethodForm extends Component {
     const { getFieldDecorator, getFieldValue } = this.props.form;
     const payment_method = getFieldValue('payment_method');
     const fields = payment_method && fieldList[payment_method] ? fieldList[payment_method] : null;
+
+
     const content = (
       <div>
         {map(fields, (item, key) => {
+          const comp = (typeof item.component === 'function') ? item.component() : item.component;
+
           return (
             <FormItem {...formItemLayout} label={item.lablel} key={key}>
-              {getFieldDecorator(key, item.options)(item.component)}
+              {getFieldDecorator(key, item.options)(comp)}
             </FormItem>
           );
         })}
@@ -315,7 +403,7 @@ export default class PayMethodForm extends Component {
 
     return (
       <div className={styles.main}>
-        <Form onSubmit={this.handleSubmit}>
+        <Form onSubmit={this.handleSubmit} hideRequiredMark >
           <Form.Item {...formItemLayout} label="支付方式">
             {getFieldDecorator('payment_method', {
               initialValue: initialValues.payment_method || 'alipay',

@@ -246,6 +246,24 @@ export function playAudio() {
   audio.play();
 }
 
+export function getPayIcon(type) {
+  let iconType = '';
+  switch (type) {
+    case 'wechat':
+      iconType = 'wechat';
+      break;
+    case 'alipay':
+      iconType = 'alipay-circle';
+      break;
+    case 'bank':
+      iconType = 'credit-card';
+      break;
+    default:
+      iconType = 'credit-card';
+  }
+  return iconType;
+}
+
 /**
  * 获取queryString
  * @param queryString字符串

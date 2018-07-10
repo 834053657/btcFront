@@ -19,6 +19,7 @@ import {
 import { map } from 'lodash';
 import G2Validation from 'components/G2Validation';
 import DescriptionList from 'components/DescriptionList';
+import { getPayIcon } from '../../utils/utils';
 import EmailModal from './modals/EmailModal';
 import MobileModal from './modals/MobileModal';
 import PayMethodModal from './modals/PayMethodModal';
@@ -256,6 +257,7 @@ export default class UserCenterPage extends Component {
     switch (payment_method) {
       case 'wechat':
       case 'alipay':
+      case 'paytm':
         content = (
           <div className={styles.box_item_content}>
             <div className={styles.mb4}>{payment_detail.name}</div>
@@ -269,6 +271,14 @@ export default class UserCenterPage extends Component {
             <div className={styles.mb4}>{payment_detail.name}</div>
             {/*<div>{payment_detail.bank_name}</div>*/}
             <div>{payment_detail.bank_account}</div>
+          </div>
+        );
+        break;
+      case 'westernunion':
+        content = (
+          <div className={styles.box_item_content}>
+            <div className={styles.mb4}>{payment_detail.name}</div>
+            <div>{payment_detail.account}</div>
           </div>
         );
         break;
@@ -566,22 +576,10 @@ export default class UserCenterPage extends Component {
                 </div>
                 <div className={styles.box_content}>
                   {map(payments, item => {
-                    let iconType = '';
-                    switch (item.payment_method) {
-                      case 'wechat':
-                        iconType = 'wechat';
-                        break;
-                      case 'alipay':
-                        iconType = 'alipay-circle';
-                        break;
-                      case 'bank':
-                        iconType = 'credit-card';
-                        break;
-                    }
                     return (
                       <div key={item.id} className={styles.box_item}>
                         <div className={styles.box_item_meta}>
-                          <Icon type={iconType} />
+                          <Icon type={getPayIcon(item.payment_method)} />
                           <div className={styles.box_item_meta_head}>
                             <h4 className={styles.box_item_title}>
                               {item.payment_method && CONFIG.payments[item.payment_method]
