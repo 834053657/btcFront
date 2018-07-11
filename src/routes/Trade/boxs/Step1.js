@@ -16,15 +16,6 @@ export default class Step1 extends PureComponent {
 
   componentDidMount() {}
 
-  handleReport = () => {
-    const { dispatch, match: { params = {} } } = this.props;
-
-    dispatch({
-      type: 'trade/reportAd',
-      payload: { id: params.id },
-    });
-  };
-
   handleModeChange = e => {
     const payType = e.target.value;
     this.setState({
@@ -79,10 +70,11 @@ export default class Step1 extends PureComponent {
   };
 
   render() {
-    const { submitting, orderDetail } = this.props;
+    const { submitting, orderDetail, renderButtons, handleReport } = this.props;
     const { ad = {}, order = {} } = orderDetail || {};
     const { trading_price, owner = {}, currency, trading_term, payment_methods = [] } = ad || {};
-    const { pay_limit_at, trading_count, trading_volume } = order || {};
+    const { status, pay_limit_at, trading_count, trading_volume } = order || {};
+    const order_status = CONFIG.orderEngStatus[status];
 
     return (
       <div className={styles.page}>
@@ -96,7 +88,9 @@ export default class Step1 extends PureComponent {
               {trading_price} {currency}
             </Description>
             {/*<Description term="交易限额"> {trading_price_ratio} BTC ({min_volume} {currency} ~ {max_volume} {currency})</Description>*/}
-            <Description term="付款倒计时">{pay_limit_at} 分钟</Description>
+            {order_status === 'wait_pay' && (
+              <Description term="付款倒计时">{pay_limit_at} 分钟</Description>
+            )}
             <Description term="付款方式">
               <Radio.Group onChange={this.handleModeChange} value={this.state.payType}>
                 {map(payment_methods, (item, index) => (
@@ -107,18 +101,14 @@ export default class Step1 extends PureComponent {
               </Radio.Group>
             </Description>
           </DescriptionList>
-          {this.renderPaymentMethodInfo(payment_methods[this.state.payType])}
-          <div className={styles.buttonBox}>
-            <Button onClick={this.props.onCancel}>取消订单</Button>
-            <Button style={{ marginLeft: 25 }} loading={submitting} type="primary">
-              确认支付
-            </Button>
-          </div>
+          {order_status !== 'cancel' &&
+            this.renderPaymentMethodInfo(payment_methods[this.state.payType])}
+          <div className={styles.buttonBox}>{renderButtons && renderButtons(orderDetail)}</div>
           <Card
             className={styles.term_box}
             title={`用户 ${owner.nickname} 的交易条款`}
             actions={[
-              <a className={styles.report} onClick={this.handleReport}>
+              <a className={styles.report} onClick={handleReport}>
                 <Icon type="flag" /> 举报这则交易信息
               </a>,
             ]}

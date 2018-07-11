@@ -138,4 +138,13 @@ export default {
     2: '未付款',
   },
   card_type: [],
+
+  orderEngStatus: {
+    1: 'wait_pay',
+    2: 'wait_release',
+    3: 'done',
+    4: 'cancel',
+    5: 'appeal',
+  },
+  card_type: [],
 };

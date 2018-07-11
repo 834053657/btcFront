@@ -6,6 +6,10 @@ import {
   queryAdDetails,
   submitReportAd,
   queryOrderDetails,
+  submitOrderConfirm,
+  submitOrderRelease,
+  submitOrderCancel,
+  submitOrderAppeal,
 } from '../services/api';
 
 export default {
@@ -60,10 +64,65 @@ export default {
         message.error(res.msg);
       }
     },
-    *reportAd({ payload }, { call }) {
+    *reportAd({ payload, callback }, { call }) {
       const res = yield call(submitReportAd, payload);
       if (res.code === 0) {
         message.success('举报成功');
+        callback && callback();
+      } else {
+        message.error(res.msg);
+      }
+    },
+    *orderConfirm({ payload }, { call, put }) {
+      const res = yield call(submitOrderConfirm, payload);
+      if (res.code === 0) {
+        yield put({
+          type: 'fetchDetail',
+          payload: {
+            id: payload.order_id,
+          },
+        });
+      } else {
+        message.error(res.msg);
+      }
+    },
+    *orderRelease({ payload }, { call, put }) {
+      const res = yield call(submitOrderRelease, payload);
+      if (res.code === 0) {
+        yield put({
+          type: 'fetchDetail',
+          payload: {
+            id: payload.order_id,
+          },
+        });
+      } else {
+        message.error(res.msg);
+      }
+    },
+    *orderCancel({ payload, callback }, { call, put }) {
+      const res = yield call(submitOrderCancel, payload);
+      if (res.code === 0) {
+        yield put({
+          type: 'fetchDetail',
+          payload: {
+            id: payload.order_id,
+          },
+        });
+        callback && callback();
+      } else {
+        message.error(res.msg);
+      }
+    },
+    *orderAppeal({ payload, callback }, { call, put }) {
+      const res = yield call(submitOrderAppeal, payload);
+      if (res.code === 0) {
+        yield put({
+          type: 'fetchDetail',
+          payload: {
+            id: payload.order_id,
+          },
+        });
+        callback && callback();
       } else {
         message.error(res.msg);
       }
