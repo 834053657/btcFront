@@ -64,10 +64,11 @@ export default {
         message.error(res.msg);
       }
     },
-    *reportAd({ payload }, { call }) {
+    *reportAd({ payload, callback }, { call }) {
       const res = yield call(submitReportAd, payload);
       if (res.code === 0) {
         message.success('举报成功');
+        callback && callback();
       } else {
         message.error(res.msg);
       }

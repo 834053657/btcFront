@@ -58,7 +58,8 @@ const { Step } = Steps;
 export default class TradeStep extends PureComponent {
   state = {
     cancelModal: false,
-    appealModal: false
+    appealModal: false,
+    reportAdModal: false
   };
 
   componentDidMount() {
@@ -265,6 +266,29 @@ export default class TradeStep extends PureComponent {
     }
   }
 
+  handleShowReportModal = () => {
+    this.setState({
+      reportAdModal: true
+    })
+  }
+
+  handleHideReportModal = () => {
+    this.setState({
+      reportAdModal: false
+    })
+  }
+
+  handleSubmitReport = (err, values) => {
+    if(!err) {
+      const { dispatch, match: { params = {} } } = this.props;
+      dispatch({
+        type: 'trade/reportAd',
+        payload: { ...values, id: params.id },
+        callback: this.handleHideReportModal
+      })
+    }
+  };
+
   // 判断当前登录用户是否是买家
   checkIsBuyer = () => {
     const { ad = {}, trader={}, order={}} = this.props.orderDetail || {};
@@ -309,7 +333,7 @@ export default class TradeStep extends PureComponent {
               <Col span={10} className={styles.left}>
                 {/*<p>{`${CONFIG.ad_type[ad_type]}广告 当前登录人是 ${id === owner.id ? '广告主': '交易人'}`}</p>*/}
                 {/*<p>{((id === owner.id && ad_type === 1) || (id !== owner.id && ad_type === 2))? '买家': '卖家'}</p>*/}
-                <Step1 {...this.props} renderButtons={currentObj.renderButtons} />
+                <Step1 {...this.props} renderButtons={currentObj.renderButtons} handleReport={this.handleShowReportModal} />
               </Col>
               <Col span={14} className={styles.right}>
                 <IM />
@@ -320,6 +344,7 @@ export default class TradeStep extends PureComponent {
 
         <ConfirmModal visible={this.state.cancelModal} title="取消订单" onSubmit={this.handleSubmitCancel} onCancel={this.handleHideCancelModal} />
         <ConfirmModal visible={this.state.appealModal} title="我要申述" onSubmit={this.handleSubmitAppeal} onCancel={this.handleHideAppealModal} />
+        <ConfirmModal visible={this.state.reportAdModal} title="举报" onSubmit={this.handleSubmitReport} onCancel={this.handleHideReportModal} />
 
       </PageHeaderLayout>
     );

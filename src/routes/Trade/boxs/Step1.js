@@ -16,15 +16,6 @@ export default class Step1 extends PureComponent {
 
   componentDidMount() {}
 
-  handleReport = () => {
-    const { dispatch, match: { params = {} } } = this.props;
-
-    dispatch({
-      type: 'trade/reportAd',
-      payload: { id: params.id },
-    });
-  };
-
   handleModeChange = e => {
     const payType = e.target.value;
     this.setState({
@@ -79,7 +70,7 @@ export default class Step1 extends PureComponent {
   };
 
   render() {
-    const { submitting, orderDetail, renderButtons } = this.props;
+    const { submitting, orderDetail, renderButtons, handleReport } = this.props;
     const { ad = {}, order = {} } = orderDetail || {};
     const { trading_price, owner = {}, currency, trading_term, payment_methods = [] } = ad || {};
     const { status, pay_limit_at, trading_count, trading_volume } = order || {};
@@ -120,7 +111,7 @@ export default class Step1 extends PureComponent {
             className={styles.term_box}
             title={`用户 ${owner.nickname} 的交易条款`}
             actions={[
-              <a className={styles.report} onClick={this.handleReport}>
+              <a className={styles.report} onClick={handleReport}>
                 <Icon type="flag" /> 举报这则交易信息
               </a>,
             ]}
