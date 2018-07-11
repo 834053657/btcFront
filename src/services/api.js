@@ -404,6 +404,34 @@ export async function submitCreateOrder(params) {
     body: params,
   });
 }
+// 确认支付
+export async function submitOrderConfirm(params) {
+  return request('/btc/order/confirm', {
+    method: 'POST',
+    body: params,
+  });
+}
+// 确认释放订单
+export async function submitOrderRelease(params) {
+  return request('/btc/order/release', {
+    method: 'POST',
+    body: params,
+  });
+}
+// 确认取消订单
+export async function submitOrderCancel(params) {
+  return request('/btc/order/cancel', {
+    method: 'POST',
+    body: params,
+  });
+}
+// 确认申述订单
+export async function submitOrderAppeal(params) {
+  return request('/btc/order/appeal', {
+    method: 'POST',
+    body: params,
+  });
+}
 
 export async function submitReportAd(params) {
   return request('/btc/ad/report', {

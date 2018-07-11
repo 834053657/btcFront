@@ -134,5 +134,13 @@ export default {
     2: '充值',
     3: '提现',
   },
-  card_type: [],
+
+  orderEngStatus: {
+    1: "wait_pay",
+    2: "wait_release",
+    3: "done",
+    4: "cancel",
+    5: "appeal"
+  },
+  card_type: []
 };

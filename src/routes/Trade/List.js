@@ -15,8 +15,8 @@ const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 
 const typeMap = {
-  1: '购买',
-  2: '出售'
+  2: '购买',
+  1: '出售'
 }
 
 
