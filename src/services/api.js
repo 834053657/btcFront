@@ -411,3 +411,17 @@ export async function submitReportAd(params) {
     body: params,
   });
 }
+
+export async function updateAd(params) {
+  return request('/btc/ad/pause', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function deleteMyAd(params) {
+  return request('/btc/ad/delete', {
+    method: 'POST',
+    body: params,
+  });
+}

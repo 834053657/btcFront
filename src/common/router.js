@@ -101,7 +101,7 @@ export const getRouterData = app => {
       redirectPath: '/user/login',
     },
     //个人详情页
-    '/personage/:userid': {
+    '/personage/:ad_no': {
       component: dynamicWrapper(app, ['userDetails'], () =>
         import('../routes/UserDetails/UserDetails')
       ),

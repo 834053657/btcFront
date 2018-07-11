@@ -10,11 +10,6 @@ let menuData = [
     path: 'publish_ad',
   },
   {
-    name: '用户详情页',
-
-    path: 'personage',
-  },
-  {
     name: '咨询列表',
 
     path: 'counsel',

@@ -43,12 +43,11 @@ export default class UserDetails extends Component {
   componentWillMount() {}
 
   componentDidMount() {
-    const { params: { userid } } = this.props.match || {};
-
+    const { params: { ad_no } } = this.props.match || {};
     this.props.dispatch({
       type: 'userDetails/fetchDetails',
       payload: {
-        userid,
+        userid: ad_no,
       },
     });
   }
@@ -63,22 +62,25 @@ export default class UserDetails extends Component {
     const { userMessage } = this.props;
     return <a>{userMessage.nickname}</a>;
   };
-  handleToTrust = type => {
+
+  handleToTrust = e => {
+    console.log(e);
     const { params: { userid } } = this.props.match || {};
 
     this.props.dispatch({
       type: 'userDetails/submitTrustUser',
       payload: {
         target_uid: userid,
-        type,
+        type: e,
+        content: e,
       },
+    });
+    this.setState({
+      visible: false,
     });
   };
   UserMessage = () => {
     const { userMessage = {}, trader = {} } = this.props;
-    console.log(userMessage);
-
-    // const { loading } = this.props
     return (
       <div className={styles.UserMassage}>
         <div className={styles.UserName}>
@@ -126,11 +128,12 @@ export default class UserDetails extends Component {
         </div>
         <DescriptionList style={{ margin: '30px' }}>
           <Description term="国家" className={styles.UserStyle}>
-            <img
-              style={{ width: '30px', height: '20px' }}
-              src="https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/w%3D268%3Bg%3D0/sign=f7623b467e8b4710ce2ffacafbf5a4c0/1b4c510fd9f9d72a2d9ad37ad82a2834359bbbdf.jpg"
-              alt=""
-            />
+            {/*<img*/}
+            {/*style={{ width: '30px', height: '20px' }}*/}
+            {/*src=""*/}
+            {/*alt=""*/}
+            {/*/>*/}
+            {userMessage.country_code}
           </Description>
           <Description term="交易量" className={styles.UserStyle}>
             {trader.trade_volume ? trader.trade_volume : '-'}
@@ -160,30 +163,32 @@ export default class UserDetails extends Component {
             {userMessage.country_code}
           </Description>
           <Description term="信任" className={styles.UserStyle}>
-            {userMessage.is_trust && CONFIG.is_true[userMessage.is_trust]
-              ? CONFIG.is_true[userMessage.is_trust]
-              : '-'}
+            {userMessage.is_trust ? (
+              <span>{userMessage.is_trust === true ? '是' : '否'}</span>
+            ) : (
+              '-'
+            )}
           </Description>
         </DescriptionList>
       </div>
     );
   };
 
-  payWay = text => {
-    return map(text, (item, index) => {
-      if (item === 'weixin') {
-        return <Icon type="wechat" style={{ margin: '0 5px' }} />;
-      } else if (item === 'bank') {
-        return <Icon type="alipay-circle" style={{ margin: '0 5px' }} />;
-      }
-    });
-  };
-  handleBuy = () => {
-    console.log('买入');
-  };
-  handleSell = () => {
-    console.log('卖出');
-  };
+  // payWay = text => {
+  //   return map(text, (item, index) => {
+  //     if (item === 'weixin') {
+  //       return <Icon type="wechat" style={{ margin: '0 5px' }} />;
+  //     } else if (item === 'bank') {
+  //       return <Icon type="alipay-circle" style={{ margin: '0 5px' }} />;
+  //     }
+  //   });
+  // };
+  // handleBuy = () => {
+  //   console.log('买入');
+  // };
+  // handleSell = () => {
+  //   console.log('卖出');
+  // };
 
   columns = [
     {
@@ -248,6 +253,7 @@ export default class UserDetails extends Component {
   hadleShowAll = () => {};
 
   UserComment = () => {
+    // console.log(this.props)
     const { comment } = this.props;
 
     return (
@@ -293,17 +299,17 @@ export default class UserDetails extends Component {
       visible: false,
     });
   };
-  handleSubmit = e => {
-    // this.props.dispatch({
-    //   type:'',
-    //   payload:{
-    //     ...value
-    //   }
-    // })
-    this.setState({
-      visible: false,
-    });
-  };
+  // handleSubmit = e => {
+  //   this.props.dispatch({
+  //     type:'',
+  //     payload:{
+  //
+  //     }
+  //   })
+  //   this.setState({
+  //     visible: false,
+  //   });
+  // };
 
   showModal = () => {
     return (
@@ -314,7 +320,7 @@ export default class UserDetails extends Component {
           onCancel={this.handleCancel}
           footer={false}
         >
-          <ReportForm onSubmit={this.handleSubmit} onCancel={this.handleCancel} />
+          <ReportForm onSubmit={this.handleToTrust.bind(this.value)} onCancel={this.handleCancel} />
         </Modal>
       </div>
     );
@@ -331,7 +337,6 @@ export default class UserDetails extends Component {
 
   render() {
     const { list = [] } = this.props;
-
     const { pagination = {}, loading } = this.props;
     const { type } = this.state;
     const { visible } = this.state;

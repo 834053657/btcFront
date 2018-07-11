@@ -17,7 +17,7 @@ const RadioGroup = Radio.Group;
   price: ad.price,
   loading: loading.effects['ad/fetchAdDetail'],
 }))
-export default class List extends Component {
+export default class AdEdit extends Component {
   componentWillMount() {}
 
   componentDidMount() {
@@ -48,8 +48,8 @@ export default class List extends Component {
   };
 
   handleSubmit = value => {
-    console.log('下面是value');
-    console.log(value);
+    // console.log('下面是value');
+    // console.log(value);
     const { dispatch } = this.props;
     dispatch({
       type: 'ad/postPublish',
@@ -66,7 +66,7 @@ export default class List extends Component {
   render() {
     // const { adDetail } = this.props
     // console.log(adDetail.ad_type)
-    console.log(this.props.initialValues);
+    // console.log(this.props.initialValues);
 
     return (
       <PageHeaderLayout title="编辑广告">

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { map } from 'lodash';
+import { Alert } from 'antd';
 import { routerRedux } from 'dva/router';
 import styles from './AdPublish.less';
 import EditForm from './form/EditForm';
@@ -16,17 +17,17 @@ export default class AdPublish extends Component {
   componentWillMount() {}
 
   componentDidMount() {
-    // this.fetchPrice()
+    this.fetchPrice();
   }
-  //
-  // fetchPrice = (obj={}) => {
-  //   this.props.dispatch({
-  //     type: 'ad/fetchNewPrice',
-  //     payload: {
-  //       currency: obj.currency || 'CNY'
-  //     }
-  //   });
-  // }
+
+  fetchPrice = (obj = {}) => {
+    this.props.dispatch({
+      type: 'ad/fetchNewPrice',
+      payload: {
+        currency: obj.currency || 'CNY',
+      },
+    });
+  };
 
   handleSubmit = value => {
     const { dispatch } = this.props;
@@ -46,6 +47,13 @@ export default class AdPublish extends Component {
     return (
       <PageHeaderLayout title="发布广告">
         <div className={styles.background}>
+          <div style={{ paddingLeft: '20px', width: '640px', marginBottom: '30px' }}>
+            <Alert
+              message="您最多可以创建 4 条交易广告，在您创建广告的时候，请您创建适合您需求的广告条数."
+              type="info"
+              showIcon
+            />
+          </div>
           <EditForm {...this.props} onSubmit={this.handleSubmit} initialValues={{}} />
         </div>
       </PageHeaderLayout>

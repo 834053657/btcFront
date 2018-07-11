@@ -78,7 +78,7 @@ export default class EditForm extends Component {
     const { form } = this.props;
 
     if (value < form.getFieldValue('min_volume')) {
-      callback('不能小于于最小可交易额');
+      callback('不能小于最小可交易额');
     } else {
       callback();
     }
@@ -95,56 +95,61 @@ export default class EditForm extends Component {
     const { form, price } = this.props;
     const trading_price = ratio * price / 100;
 
+    const numBTC = form.getFieldValue('max_count');
+    const max_volume = numBTC * trading_price;
+    console.log('以下是');
+    console.log(max_volume);
+
     const re = /^[+-]?\d*\.?\d*$/;
     if (re.test(ratio)) {
       form.setFieldsValue({ trading_price });
-      return ratio;
-    } else {
-      console.log('请输入数字');
+      if (numBTC !== null) {
+        if (!isNaN(max_volume)) {
+          form.setFieldsValue({ max_volume });
+        }
+      }
     }
   };
+
+  // 计算最大发布交易额
   handleChangeBtc = v => {
     const { form } = this.props;
     const nums = form.getFieldValue('trading_price');
-    const numBTC = v || 100;
+    const numBTC = v;
 
     const max_volume = numBTC * nums;
 
-    const re = /^[+-]?\d*\.?\d*$/;
+    const re = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
     if (re.test(numBTC)) {
       form.setFieldsValue({ max_volume });
-      return v;
-    } else {
-      console.log('请输入数字');
     }
   };
 
+  // 计算交易比特币限额
   handleChangeMax = e => {
     const { form } = this.props;
     const num = form.getFieldValue('trading_price');
     const numMax = e;
     const max_count = numMax * (1 / num);
-    const re = /^[+-]?\d*\.?\d*$/;
+    const re = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
 
     if (re.test(numMax)) {
       form.setFieldsValue({ max_count });
-      return e;
-    } else {
-      return '请输入数字';
     }
   };
+  // 计算交易价格
   handleChangeRat = e => {
     const { form, price } = this.props;
-
+    const numBTC = form.getFieldValue('max_count');
     const numMax = e;
-    const trading_price_ratio = numMax / price;
+    const trading_price_ratio = numMax / price * 100;
+
     const re = /^[+-]?\d*\.?\d*$/;
 
     if (re.test(numMax)) {
-      form.setFieldsValue({ trading_price_ratio });
-      return e;
-    } else {
-      return '请输入数字';
+      form.setFieldsValue({ trading_price_ratio }, () => {
+        this.handleChangeBtc(numBTC);
+      });
     }
   };
 
@@ -190,21 +195,7 @@ export default class EditForm extends Component {
             )}
           </div>
         </FormItem>
-        <div style={{ paddingLeft: '20px' }}>
-          <Alert
-            style={{ margin: '16px 0', width: '84%' }}
-            message={
-              <span>
-                <span style={{ marginRight: '10px' }}>
-                  <Icon type="exclamation-circle" />
-                </span>
-                <span>
-                  您最多可以创建 4 条交易广告，在您创建广告的时候，请您创建适合您需求的广告条数
-                </span>
-              </span>
-            }
-          />
-        </div>
+
         <Card style={{ margin: 15, width: 810 }} title="广告规则">
           <li>
             要想显示您的交易广告，您的【utomarket】钱包中需要有比特币。使用在线付款的交易广告至少需要
@@ -346,7 +337,7 @@ export default class EditForm extends Component {
           <Col span={8}>
             <FormItem>
               {getFieldDecorator('min_volume', {
-                initialValue: initialValues.min_volume || 0,
+                initialValue: initialValues.min_volume || 100,
                 rules: [
                   {
                     required: true,
@@ -359,7 +350,7 @@ export default class EditForm extends Component {
               })(
                 <InputNumber
                   disabled={!getFieldValue('trading_price')}
-                  min={0}
+                  min={100}
                   step={0.001}
                   style={{ width: 170, position: 'absolute', marginTop: '5px' }}
                   placeholder="最小交易额"

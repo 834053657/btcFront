@@ -51,11 +51,18 @@ export default class List extends Component {
     const { dispatch } = this.props;
     dispatch({
       type: 'ad/updateAd',
-      payload: { id: r.id, status },
+      payload: { ad_id: r.id },
       callback: this.refreshGrid,
     });
   };
-
+  DeleteAd = r => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'ad/daleteAd',
+      payload: { ad_id: r.id },
+      callback: this.refreshGrid,
+    });
+  };
   viewAd = (r, action) => {
     message.warning('跳转页面开发中');
     return null;
@@ -100,9 +107,16 @@ export default class List extends Component {
       render: (val, row) => CONFIG.ad_type[val],
     },
     {
-      title: '单价',
-      dataIndex: 'unit_price',
+      title: '出售单价',
+      dataIndex: 'trading_price',
       width: '15%',
+      render(val, row) {
+        return (
+          <span>
+            {val} {row.currency}/BTC
+          </span>
+        );
+      },
     },
     {
       title: '状态',
@@ -131,10 +145,10 @@ export default class List extends Component {
         console.log('以下为type');
         return (
           <Fragment>
-            <a onClick={() => this.viewAd(r, '_OPEN')}>查看</a>
+            {/*<a onClick={() => this.viewAd(r, '_OPEN')}>查看</a>*/}
             {r.status === 1 && (
               <span>
-                <Divider type="vertical" />
+                {/*<Divider type="vertical" />*/}
                 <a onClick={() => this.updateAd(r, 2)}>暂停</a>
               </span>
             )}
@@ -155,7 +169,7 @@ export default class List extends Component {
                 <Divider type="vertical" />
                 <Popconfirm
                   title="您确认要删除此广告?"
-                  onConfirm={() => this.updateAd(r, 5)}
+                  onConfirm={() => this.DeleteAd(r, 5)}
                   okText="确认"
                   cancelText="取消"
                 >

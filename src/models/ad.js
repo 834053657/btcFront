@@ -5,6 +5,8 @@ import {
   queryPrice,
   submitPublish,
   queryAdDetails,
+  updateAd,
+  deleteMyAd,
 } from '../services/api';
 
 export default {
@@ -48,6 +50,24 @@ export default {
         type: 'removeAd',
         payload: response,
       });
+      if (callback) callback();
+    },
+    *updateAd({ payload, callback }, { call }) {
+      const response = yield call(updateAd, payload);
+      if (response.code === 0) {
+        message.success('操作成功');
+      } else {
+        message.error(response.msg);
+      }
+      if (callback) callback();
+    },
+    *daleteAd({ payload, callback }, { call }) {
+      const response = yield call(deleteMyAd, payload);
+      if (response.code === 0) {
+        message.success('操作成功');
+      } else {
+        message.error(response.msg);
+      }
       if (callback) callback();
     },
     /**

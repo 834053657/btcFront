@@ -1,7 +1,6 @@
 import { stringify } from 'qs';
 import request from '../utils/request';
 
-
 export async function queryCurrent() {
   return request('/btc/user/info');
 }
@@ -106,5 +105,5 @@ export async function getG2Secret(params) {
 }
 
 export async function queryMyOrderList(params) {
-  return request(`/btc/user/order/all?${stringify(params)}`);
+  return request(`/btc/order/mine?${stringify(params)}`);
 }

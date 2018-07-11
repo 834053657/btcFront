@@ -15,8 +15,6 @@ export default {
   effects: {
     *fetchDetails({ payload }, { call, put }) {
       const response = yield call(queryDetails, payload);
-      console.log('response');
-      console.log(response);
       yield put({
         type: 'fetchMessage',
         payload: response,
@@ -39,8 +37,6 @@ export default {
   reducers: {
     fetchMessage(state, { payload }) {
       const { data: { user, trade, ads, comments } } = payload;
-      console.log('trade');
-      console.log(trade);
       return {
         ...state,
         userMessage: user,

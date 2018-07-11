@@ -33,7 +33,7 @@ export default class List extends Component {
   constructor(props) {
     super();
     this.state = {
-      type: '1',
+      type: '',
     };
   }
 
@@ -57,18 +57,11 @@ export default class List extends Component {
         <span>{val ? moment(new Date(val * 1000)).format('YYYY-MM-DD HH:mm:ss') : '-'}</span>
       ),
     },
-    {
-      title: '交易产品',
-      dataIndex: 'goods_type',
-      render: (val, row) => (val && CONFIG.goods_type[val] ? CONFIG.goods_type[val] : '-'),
-    },
-    {
-      title: '交易对象',
-      dataIndex: 'trader',
-      render: (_, row) => (
-        <span className="text-blue">{row.trader ? row.trader.nickname : '-'}</span>
-      ),
-    },
+    // {
+    //   title: '交易产品',
+    //   dataIndex: 'goods_type',
+    //   render: (val, row) => (val && CONFIG.goods_type[val] ? CONFIG.goods_type[val] : '-'),
+    // },
     {
       title: '交易类型',
       dataIndex: 'order_type',
@@ -80,17 +73,72 @@ export default class List extends Component {
       ),
     },
     {
-      title: '金额',
+      title: '交易对象',
+      dataIndex: 'trader',
+      render: (val, row) => (
+        <Link to={`/personage/${row.trader.id}`}>
+          <span className="text-blue">{row.trader ? row.trader.nickname : '-'}</span>
+        </Link>
+      ),
+    },
+    {
+      title: '交易状态',
+      dataIndex: 'status',
+      render: (val, row) => (
+        <span>{val && CONFIG.paymentStatus[val] ? CONFIG.paymentStatus[val] : '-'}</span>
+      ),
+    },
+    {
+      title: '法币',
+      dataIndex: 'currency',
+      render: (_, row) => (
+        <span className="text-blue">
+          <span>{row.trading_volume ? row.trading_volume : '-'}</span>
+          {row.currency ? row.currency : '-'}
+        </span>
+      ),
+    },
+    {
+      title: '交易金额',
       dataIndex: 'amount',
+      render: (v, row) => {
+        return (
+          <span className="text-blue">
+            <span>{row.trading_count ? row.trading_count : '-'}</span>BTC
+          </span>
+        );
+      },
+    },
+    {
+      title: '交易费',
+      dataIndex: 'fee',
       render: (v, row) => {
         return <span dangerouslySetInnerHTML={{ __html: `¥ ${numeral(v).format('0,0.00')}` }} />;
       },
     },
     {
-      title: '手续费',
-      dataIndex: 'fee',
+      title: '总BTC',
+      dataIndex: 'trading_count',
       render: (v, row) => {
-        return <span dangerouslySetInnerHTML={{ __html: `¥ ${numeral(v).format('0,0.00')}` }} />;
+        return (
+          <span className="text-blue">
+            <span>{row.trading_count ? row.trading_count : '-'}</span>BTC
+          </span>
+        );
+        // return <span dangerouslySetInnerHTML={{ __html: `¥ ${numeral(v).format('0,0.00')}` }} />;
+      },
+    },
+    {
+      title: '汇率',
+      dataIndex: 'trading_price',
+      render: (v, row) => {
+        // return <span dangerouslySetInnerHTML={{ __html: `¥ ${numeral(v).format('0,0.00')}` }} />;
+        return (
+          <span className="text-blue">
+            {row.trading_price ? row.trading_price : '-'}{' '}
+            <span>{row.currency ? row.currency : '-'}</span>
+          </span>
+        );
       },
     },
     {
@@ -144,13 +192,17 @@ export default class List extends Component {
   render() {
     const { type } = this.state;
     const { data: { list, pagination }, loading } = this.props;
+    console.log(list.length);
 
     return (
       <PageHeaderLayout title="我的订单">
         <div>
           <Card bordered={false} className={styles.message_list}>
             <Tabs activeKey={type} onChange={this.handleChangeType}>
-              {map(CONFIG.order_status, (text, value) => <TabPane tab={text} key={value} />)}
+              <TabPane tab="全部" key="" />
+              {map(CONFIG.order_status, (text, value) => (
+                <TabPane tab={text + '(' + list.length + ')'} key={value} />
+              ))}
             </Tabs>
             <Table
               loading={loading}
