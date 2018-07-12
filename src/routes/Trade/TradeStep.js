@@ -52,6 +52,7 @@ const { Step } = Steps;
 
 @connect(({ trade, user, loading }) => ({
   orderDetail: trade.orderDetail,
+  tradeIm: trade.tradeIm,
   currentUser: user.currentUser,
   submitting: loading.effects['trade/fetchOrderDetail'],
 }))
@@ -338,14 +339,11 @@ export default class TradeStep extends PureComponent {
 
   render() {
     const { orderDetail, match: { params = {} } } = this.props;
-    const { user = {} } = this.props.currentUser || {};
-    const { ad = {}, order = {} } = orderDetail || {};
-    const breadcrumbList = [{ title: '首页', href: '/' }, { title: '订单号: ' + params.id }];
-    const { ad_type, owner = {} } = ad || {};
-    const { id } = user || {};
+    const { order = {} } = orderDetail || {};
     const order_status = CONFIG.orderEngStatus[order.status];
     const currentObj = order_status ? this.orderSteps[order_status] : {};
     const current = findIndex(currentObj.steps, item => item.key === order_status);
+    const breadcrumbList = [{ title: '首页', href: '/' }, { title: '订单号: ' + params.id }];
 
     return (
       <PageHeaderLayout className="ant-layout-content" breadcrumbList={breadcrumbList}>
@@ -358,8 +356,6 @@ export default class TradeStep extends PureComponent {
           <div className={styles.page}>
             <Row gutter={24}>
               <Col span={10} className={styles.left}>
-                {/*<p>{`${CONFIG.ad_type[ad_type]}广告 当前登录人是 ${id === owner.id ? '广告主': '交易人'}`}</p>*/}
-                {/*<p>{((id === owner.id && ad_type === 1) || (id !== owner.id && ad_type === 2))? '买家': '卖家'}</p>*/}
                 <Step1
                   {...this.props}
                   renderButtons={currentObj.renderButtons}
@@ -367,7 +363,7 @@ export default class TradeStep extends PureComponent {
                 />
               </Col>
               <Col span={14} className={styles.right}>
-                <IM />
+                <IM {...this.props} orderId={params.id} />
               </Col>
             </Row>
           </div>

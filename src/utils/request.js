@@ -55,9 +55,9 @@ export default function request(postUrl, options, base_url) {
   const defaultOptions = {
     // credentials: 'include',
     headers: {
-      'ITUNES-UID': id,
-      'ITUNES-TOKEN': token,
-      'ITUNES-LANGUAGE': language,
+      'BTC-UID': id,
+      'BTC-TOKEN': token,
+      'BTC-LANGUAGE': language,
     },
   };
   const newOptions = { ...defaultOptions, ...options };

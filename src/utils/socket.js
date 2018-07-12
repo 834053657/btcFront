@@ -2,6 +2,7 @@ import { message } from 'antd';
 import { routerRedux } from 'dva/router';
 import { Server, SocketIO } from 'mock-socket';
 import createSocket from 'dva-socket.io';
+import { get } from 'lodash';
 import {
   push_system_message,
   enter_chat_room,
@@ -12,8 +13,8 @@ import { playAudio } from './utils';
 
 export function dvaSocket(url, option) {
   // 如需调试线上socket 请吧isDev 设置成false
-  const isDev = false;
-  // const isDev = process.env.NODE_ENV === 'development';
+  // const isDev = false;
+  const isDev = process.env.NODE_ENV === 'development';
   console.log('socket-url', url);
   if (isDev) {
     const mockServer = new Server(url);
@@ -25,23 +26,23 @@ export function dvaSocket(url, option) {
 
     mockServer.on('pull_system_message', async server => {
       const res = await push_system_message();
-      mockServer.emit('push_system_message', res);
+      mockServer.emit('push_system_message', JSON.stringify(res));
     });
 
     mockServer.on('enter_chat_room', async server => {
       const res = await enter_chat_room();
-      mockServer.emit('enter_room', res);
+      mockServer.emit('enter_room', JSON.stringify(res));
     });
 
     mockServer.on('leave_chat_room', async server => {
       const res = await leave_chat_room();
-      mockServer.emit('leave_room', res);
+      mockServer.emit('leave_room', JSON.stringify(res));
     });
 
     mockServer.on('send_message', async server => {
       console.log('mockServer send_message...');
       const res = await receive_message();
-      mockServer.emit('receive_message', res);
+      mockServer.emit('receive_message', JSON.stringify(res));
     });
   }
   return createSocket(
@@ -105,45 +106,23 @@ export function dvaSocket(url, option) {
         leave_room: (data, dispatch, getState) => {
           console.log(data);
         },
-        receive_message: (data, dispatch, getState) => {
-          // console.log('receive_message', data);
-          const { data: msg } = JSON.parse(data); // order msg type 快捷短语/申述聊天
-          // const { data: msg } = data;
-          const { currentUser: { user = {} } } = getState().user;
-          console.log(getState().user);
-          console.log(user);
+        receive_message: (response, dispatch, getState) => {
+          const res = JSON.parse(response) || {};
+          if(res.code === 0 && res.data) {
+            const uid = get(getState(), 'user.currentUser.user.id');
+            const historyList = get(getState(), 'trade.tradeIm.historyList') || [];
+            const senderId = get(res, 'data.sender.id');
 
-          // console.log(data);
-          console.log(msg);
-          if (msg && msg.order_msg_type === 1) {
-            // 快捷短语
-            const { quickMsgList } = getState().card;
-
-            quickMsgList.unshift(msg);
+            historyList.push(res.data);
             dispatch({
-              type: 'card/setQuickMsgList',
-              payload: { data: quickMsgList },
+              type: 'trade/saveImHistory',
+              payload: { items: historyList },
             });
-            // playAudio();
-          } else if (msg && msg.order_msg_type === 2) {
-            // 申述聊天
-            const { chatMsgList } = getState().card;
+            uid !== senderId ? playAudio() : null;
 
-            chatMsgList.unshift(msg);
-            dispatch({
-              type: 'card/setChatMsgList',
-              payload: { data: chatMsgList },
-            });
-            // playAudio();
-          } else {
-            /* console.log({ id: msg.content && msg.content.order_id });
-            dispatch({
-              type: 'card/fetchOrderDetail',
-              payload: { id: msg.content && msg.content.order_id },
-            }); */
+          }else {
+            message.error(res.msg);
           }
-
-          user && user.id !== msg.sender.id ? playAudio() : null;
         },
       },
       emit: {
@@ -189,7 +168,7 @@ export function dvaSocket(url, option) {
           },
         },
         send_message: {
-          evaluate: (action, dispatch, getState) => action.type === 'send_message',
+          evaluate: (action, dispatch, getState) => action.type === 'socket/send_message',
           data: ({ payload }) => {
             console.log('send_message', payload);
             return JSON.stringify(payload);
@@ -204,6 +183,7 @@ export function dvaSocket(url, option) {
         {
           evaluate: (action, dispatch, getState) => action.type === 'SOCKET/OPEN',
           request: (action, dispatch, getState, socket) => {
+            if(isDev) {return}
             console.log('SOCKET/OPEN', socket);
             // socket.on('connect', (data)=> {
             //   console.log('connectxxx');
@@ -213,9 +193,9 @@ export function dvaSocket(url, option) {
             socket.io.opts.transportOptions = {
               polling: {
                 extraHeaders: {
-                  'ITUNES-UID': id,
-                  'ITUNES-TOKEN': token,
-                  'ITUNES-LANGUAGE': language,
+                  'BTC-UID': id,
+                  'BTC-TOKEN': token,
+                  'BTC-LANGUAGE': language,
                 },
               },
             };

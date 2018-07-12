@@ -10,6 +10,7 @@ import {
   submitOrderRelease,
   submitOrderCancel,
   submitOrderAppeal,
+  getTradeHistory
 } from '../services/api';
 
 export default {
@@ -24,6 +25,9 @@ export default {
     },
     detail: {},
     orderDetail: {},
+    tradeIm: {
+      historyList: [],
+    }
   },
 
   effects: {
@@ -34,6 +38,16 @@ export default {
         payload: res,
       });
       yield callback && callback();
+    },
+    *fetchImHistory({ payload, callback }, { call, put }) {
+      const res = yield call(getTradeHistory, payload);
+      if(res.code === 0) {
+       yield put({
+         type: 'saveImHistory',
+         payload: res.data,
+       });
+       yield callback && callback();
+     }
     },
     *fetchDetail({ payload, callback }, { call, put }) {
       const res = yield call(queryAdDetails, payload);
@@ -137,6 +151,16 @@ export default {
         tradeList: {
           list: items,
           pagination: { ...paginator, current: paginator.page, page_size: paginator.page_num },
+        },
+      };
+    },
+    saveImHistory(state, { payload }) {
+      const { items=[] } = payload || {};
+      console.log(items);
+      return {
+        ...state,
+        tradeIm: {
+          historyList: items,
         },
       };
     },
