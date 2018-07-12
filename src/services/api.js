@@ -362,6 +362,11 @@ export async function getTradeList(params) {
   return request(`/btc/ad/list?${stringify(params)}`);
 }
 
+// 获取订单聊天记录
+export async function getTradeHistory(params) {
+  return request(`/btc/message/get_chat_history?${stringify(params)}`);
+}
+
 //个人详情页
 
 export async function queryDetails(params) {
