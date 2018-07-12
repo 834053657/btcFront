@@ -1,27 +1,29 @@
 import React, { PureComponent } from 'react';
 import { findDOMNode } from 'react-dom';
-import { connect } from 'dva';
+import {List, InfiniteLoader, AutoSizer} from 'react-virtualized';
 import moment from 'moment';
-import { map, delay } from 'lodash';
-import {
+import { map, delay,get } from 'lodash';
+import antd from 'antd';
+import styles from './IM.less';
+
+const {
   Button,
   Card,
   Row,
   Col,
   Modal,
   Input,
-  Tabs,
+  List:AList,
   Icon,
-  List,
   Avatar,
   Badge,
   Spin,
   Upload,
-} from 'antd';
-import { getAuthority } from '../../../utils/authority';
-import styles from './IM.less';
-
+} = antd;
 const { TextArea } = Input;
+
+const ListItem = AList;
+const ItemMate = ListItem.Meta;
 
 export default class TradeIM extends PureComponent {
   state = {
@@ -119,18 +121,21 @@ export default class TradeIM extends PureComponent {
     )
   }
 
-  renderMessage = (item = {}) => {
-    const { message={}, msg_type, created_at, sender={} } = item || {}
+  renderMessage = ({index, key,style}) => {
+    const uid =get(this.props, 'currentUser.user.id') || {};
+    const historyList = get(this.props, 'tradeIm.historyList') || [];
+    const item =  historyList[index]|| {};
+    const { message={}, msg_type, created_at, sender={} } = item;
 
     return (
-      <List.Item>
+      <AList.Item key={key} style={style}>
         {msg_type !== 1 ? (
           <div style={{ textAlign: 'center', flex: 1, color: '#1890ff' }}>
             {message.content}
           </div>
         ) : (
-          <List.Item.Meta
-            className={item.sender === name ? styles.myMessageBox : null}
+          <AList.Item.Meta
+            className={sender.id === uid ? styles.myMessageBox : null}
             avatar={
               <Avatar
                 src={sender.avatar}
@@ -158,9 +163,8 @@ export default class TradeIM extends PureComponent {
             }
           />
         )}
-      </List.Item>
+      </AList.Item>
     )
-
   }
 
   render() {
@@ -190,15 +194,36 @@ export default class TradeIM extends PureComponent {
           <div className={styles.card_body}>
             <div ref={el => (this.messagesBox = el)} className={styles.chat_history}>
               {historyList.length > 0 ? (
-                <List
+                <AList
                   size="large"
-                  rowKey="messageid"
                   loading={loading}
-                  dataSource={historyList}
-                  renderItem={this.renderMessage}
-                />
+                  // dataSource={historyList}
+                  // renderItem={this.renderMessage}
+                >
+                  <InfiniteLoader
+                    isRowLoaded={(index)=> !!historyList[index]}
+                    rowCount={historyList.length}
+                    loadMoreRows={function () { }}
+                  >
+                    {({ onRowsRendered, registerChild }) => (
+                      <AutoSizer disableHeight>
+                        {({ width }) => (
+                          <List
+                            rowHeight={73}
+                            height={390}
+                            width={width}
+                            rowRenderer={this.renderMessage}
+                            rowCount={historyList.length}
+                          />
+                        )}
+                      </AutoSizer>
+                    )}
+                  </InfiniteLoader>
+
+                </AList>
               ) : null}
             </div>
+
             <div className={styles.chat_message_box}>
               <div className={styles.chat_tools}>
                 {/* <Icon type="smile-o" style={{ fontSize: 18, marginRight: 15 }} /> */}
