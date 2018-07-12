@@ -365,34 +365,8 @@ class BasicLayout extends React.Component {
               <Route render={NotFound} />
             </Switch>
           </Content>
-          <Footer style={{ padding: 0, backgroundColor: '#092136' }}>
-            <GlobalFooter
-              links={[
-                {
-                  key: '1',
-                  title: '帮助',
-                  href: '/#/information/help',
-                  blankTarget: true,
-                },
-                {
-                  key: '2',
-                  title: '隐私',
-                  href: '/#/information/privacy',
-                  blankTarget: true,
-                },
-                {
-                  key: '3',
-                  title: '条款',
-                  href: '/#/information/terms',
-                  blankTarget: true,
-                },
-              ]}
-              copyright={
-                <Fragment>
-                  Copyright <Icon type="copyright" /> 深圳凯歌科技有限公司
-                </Fragment>
-              }
-            />
+          <Footer style={{ padding: 0, backgroundColor: '#092136', textAlign: 'center' }}>
+            <GlobalFooter />
           </Footer>
         </Layout>
       </Layout>

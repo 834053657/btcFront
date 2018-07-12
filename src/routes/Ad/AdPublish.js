@@ -8,6 +8,7 @@ import EditForm from './form/EditForm';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 @connect(({ ad, user, loading }) => ({
+  num: ad.remains,
   price: ad.price,
   currentUser: user.currentUser,
   loading: loading.effects['ad/fetchNewPrice'],
@@ -18,6 +19,7 @@ export default class AdPublish extends Component {
 
   componentDidMount() {
     this.fetchPrice();
+    this.fetchRemain();
   }
 
   fetchPrice = (obj = {}) => {
@@ -26,6 +28,13 @@ export default class AdPublish extends Component {
       payload: {
         currency: obj.currency || 'CNY',
       },
+    });
+  };
+
+  fetchRemain = () => {
+    this.props.dispatch({
+      type: 'ad/fetchUserRemain',
+      payload: {},
     });
   };
 

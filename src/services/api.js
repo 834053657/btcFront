@@ -367,8 +367,7 @@ export async function getTradeList(params) {
 export async function queryDetails(params) {
   return request(`/btc/user/profile?${stringify(params)}`);
 }
-//信任用户
-
+//信任/举报用户
 export async function updateTrust(params) {
   return request('/btc/user/rating', {
     method: 'POST',
@@ -452,4 +451,9 @@ export async function deleteMyAd(params) {
     method: 'POST',
     body: params,
   });
+}
+
+//剩余广告
+export async function queryMyRemain(params) {
+  return request(`/btc/ad/remain?${stringify(params)}`);
 }

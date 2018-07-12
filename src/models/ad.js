@@ -7,6 +7,7 @@ import {
   queryAdDetails,
   updateAd,
   deleteMyAd,
+  queryMyRemain,
 } from '../services/api';
 
 export default {
@@ -19,6 +20,7 @@ export default {
     },
     adDetail: {},
     price: null,
+    remains: null,
   },
 
   effects: {
@@ -86,6 +88,14 @@ export default {
         message.error(response.msg);
       }
     },
+    *fetchUserRemain({ payload }, { call, put }) {
+      const response = yield call(queryMyRemain, payload);
+      yield put({
+        type: 'setRemain',
+        payload: response.data,
+      });
+    },
+
     *fetchNewPrice({ payload }, { call, put }) {
       const response = yield call(queryPrice, payload);
       if (response.code === 0) {
@@ -123,6 +133,12 @@ export default {
       return {
         ...state,
         price: payload.at_price,
+      };
+    },
+    setRemain(state, { payload }) {
+      return {
+        ...state,
+        remains: payload.remain,
       };
     },
   },

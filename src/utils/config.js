@@ -137,7 +137,7 @@ export default {
     1: '已付款',
     2: '未付款',
   },
-  card_type: [],
+  // card_type: [],
 
   orderEngStatus: {
     1: 'wait_pay',

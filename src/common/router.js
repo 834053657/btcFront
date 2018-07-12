@@ -101,12 +101,15 @@ export const getRouterData = app => {
       redirectPath: '/user/login',
     },
     //个人详情页
-    '/personage/:ad_no': {
+    '/personage/:uid': {
       component: dynamicWrapper(app, ['userDetails'], () =>
         import('../routes/UserDetails/UserDetails')
       ),
     },
-    //个人资产
+    //团队介绍
+    '/article/:id': {
+      component: dynamicWrapper(app, ['message'], () => import('../routes/Message/Articles')),
+    },
 
     // 发布广告
     '/publish_ad/': {

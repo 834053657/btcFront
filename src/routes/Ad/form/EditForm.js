@@ -97,8 +97,6 @@ export default class EditForm extends Component {
 
     const numBTC = form.getFieldValue('max_count');
     const max_volume = numBTC * trading_price;
-    console.log('以下是');
-    console.log(max_volume);
 
     const re = /^[+-]?\d*\.?\d*$/;
     if (re.test(ratio)) {
@@ -167,6 +165,8 @@ export default class EditForm extends Component {
     const { getFieldDecorator, getFieldValue } = this.props.form;
     const { price, initialValues = {}, submitting } = this.props;
     const { form } = this.props;
+    const { num } = this.props;
+    console.log(num);
     return (
       <Form className={styles.form} hideRequiredMark onSubmit={this.handleSubmit}>
         <FormItem>
@@ -351,7 +351,7 @@ export default class EditForm extends Component {
                 <InputNumber
                   disabled={!getFieldValue('trading_price')}
                   min={100}
-                  step={0.001}
+                  step={0.1}
                   style={{ width: 170, position: 'absolute', marginTop: '5px' }}
                   placeholder="最小交易额"
                   addonAfter={getFieldValue('currency')}
@@ -380,7 +380,7 @@ export default class EditForm extends Component {
                 <InputNumber
                   disabled={!getFieldValue('trading_price')}
                   min={0}
-                  step={0.001}
+                  step={0.1}
                   style={{ width: 170, position: 'absolute', marginTop: '5px' }}
                   placeholder="最大交易额"
                   addonAfter={getFieldValue('currency')}
@@ -530,7 +530,7 @@ export default class EditForm extends Component {
                   min={0}
                   max={100}
                   style={{ width: 170, position: 'absolute', marginTop: '5px' }}
-                  placeholder="最大交易额"
+                  placeholder="最低评价得分"
                   addonAfter="%"
                 />
               )}
@@ -556,9 +556,15 @@ export default class EditForm extends Component {
 
         <FormItem>
           <div className={styles.btnBox}>
-            <Button type="primary" htmlType="submit" loading={submitting}>
-              {initialValues.id ? '确认修改' : '确认发布'}
-            </Button>
+            {initialValues.id ? (
+              <Button type="primary" htmlType="submit" loading={submitting}>
+                确认修改
+              </Button>
+            ) : num && num > 0 ? (
+              <Button type="primary" htmlType="submit" loading={submitting}>
+                确认发布
+              </Button>
+            ) : null}
           </div>
         </FormItem>
       </Form>

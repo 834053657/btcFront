@@ -20,7 +20,7 @@ export default {
         payload: response,
       });
     },
-    *submitTrustUser({ payload, callback }, { call, put }) {
+    *submitRating({ payload, callback }, { call, put }) {
       const response = yield call(updateTrust, payload);
       if (response.code === 0) {
         message.success('操作成功');
@@ -28,6 +28,7 @@ export default {
           type: 'fetchDetails',
           payload: payload.target_uid,
         });
+        callback && callback();
       } else {
         message.error(response.msg);
       }

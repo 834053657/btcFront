@@ -5,13 +5,14 @@ import moment from 'moment';
 import { Icon, Table, Button, Modal, Radio, List, Badge } from 'antd';
 import { map } from 'lodash';
 import { Link, routerRedux } from 'dva/router';
-
 import DescriptionList from 'components/DescriptionList';
+import ConfirmModal from '../../components/ConfirmModal';
 import BlankLayout from '../../layouts/BlankLayout';
 import styles from './UserDetails.less';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import ReportForm from './Form/ReportForm';
+import { getPayIcon } from '../../utils/utils';
 
 const { Description } = DescriptionList;
 const RadioButton = Radio.Button;
@@ -19,12 +20,6 @@ const RadioGroup = Radio.Group;
 const typeMap = {
   '1': '购买',
   '2': '出售',
-};
-
-const payMethod = {
-  alipay: <Icon type="alipay-circle" />,
-  bank: <Icon type="wallet" />,
-  wechat: <Icon type="wechat" />,
 };
 
 @connect(({ userDetails, loading }) => ({
@@ -37,6 +32,7 @@ export default class UserDetails extends Component {
     this.state = {
       visible: false,
       type: '1',
+      disabled: false,
     };
   }
 
@@ -52,35 +48,42 @@ export default class UserDetails extends Component {
     });
   }
 
-  handleLogin = () => {
-    return <a>登录</a>;
-  };
-  handleSign = () => {
-    return <a>注册</a>;
-  };
   handleUserName = () => {
     const { userMessage } = this.props;
     return <a>{userMessage.nickname}</a>;
   };
 
-  handleToTrust = e => {
-    console.log(e);
-    const { params: { userid } } = this.props.match || {};
-
+  handleToTrust = type => {
+    const { loading } = this.state;
+    const { params: { uid } } = this.props.match || {};
     this.props.dispatch({
-      type: 'userDetails/submitTrustUser',
+      type: 'userDetails/submitRating',
       payload: {
-        target_uid: userid,
-        type: e,
-        content: e,
+        target_uid: uid,
+        type,
       },
     });
-    this.setState({
-      visible: false,
-    });
+
+    this.setState({ loading: true });
+    setTimeout(() => {
+      this.setState({ loading: false });
+    }, 1000);
   };
+
+  handleSubmitReport = (err, values) => {
+    if (!err) {
+      const { dispatch, match: { params = {} } } = this.props;
+      dispatch({
+        type: 'userDetails/submitRating',
+        payload: { ...values, target_uid: params.uid, type: 3 },
+        callback: this.handleHideReport,
+      });
+    }
+  };
+
   UserMessage = () => {
     const { userMessage = {}, trader = {} } = this.props;
+    const { disabled } = this.state;
     return (
       <div className={styles.UserMassage}>
         <div className={styles.UserName}>
@@ -109,31 +112,39 @@ export default class UserDetails extends Component {
 
         <div>
           {userMessage.is_trust === true ? (
-            <Button className={styles.trust} onClick={this.handleToTrust.bind(this, 2)} type="1">
-              <Icon type="heart" style={{ color: '#CFCFCF', marginRight: '5px' }} />取消信任
+            <Button
+              className={styles.trust}
+              onClick={this.handleToTrust.bind(this, 2)}
+              type="1"
+              loading={this.state.loading}
+            >
+              <Icon type="heart-o" style={{ color: '#ccc', marginRight: '5px' }} />取消信任
             </Button>
           ) : (
-            <Button className={styles.UNtrust} onClick={this.handleToTrust.bind(this, 1)}>
-              <Icon type="heart" style={{ color: '#fff', marginRight: '5px' }} />信任
+            <Button
+              className={styles.UNtrust}
+              onClick={this.handleToTrust.bind(this, 1)}
+              loading={this.state.loading}
+            >
+              <Icon type="heart-o" style={{ color: '#ccc', marginRight: '5px' }} />信任
             </Button>
           )}
           {userMessage.online === true ? (
             ''
           ) : (
             <div style={{ margin: '30px' }}>
-              请 {this.handleLogin()} 或 {this.handleSign()} ， 将 {this.handleUserName()}{' '}
-              设置为值得信任。30秒注册~
+              请 <Link to="/user/login">登录</Link> 或 <Link to="/user/register">注册</Link> ， 将{' '}
+              {this.handleUserName()} 设置为值得信任。30秒注册~
             </div>
           )}
         </div>
         <DescriptionList style={{ margin: '30px' }}>
           <Description term="国家" className={styles.UserStyle}>
-            {/*<img*/}
-            {/*style={{ width: '30px', height: '20px' }}*/}
-            {/*src=""*/}
-            {/*alt=""*/}
-            {/*/>*/}
-            {userMessage.country_code}
+            {userMessage.country_code && CONFIG.countrysMap[userMessage.country_code]
+              ? CONFIG.countrysMap[userMessage.country_code].name
+              : '-'}
+            {/*{CONFIG.countrysMap[userMessage.country_code].name ? CONFIG.countrysMap[userMessage.country_code].name : '-'}*/}
+            {}
           </Description>
           <Description term="交易量" className={styles.UserStyle}>
             {trader.trade_volume ? trader.trade_volume : '-'}
@@ -174,22 +185,6 @@ export default class UserDetails extends Component {
     );
   };
 
-  // payWay = text => {
-  //   return map(text, (item, index) => {
-  //     if (item === 'weixin') {
-  //       return <Icon type="wechat" style={{ margin: '0 5px' }} />;
-  //     } else if (item === 'bank') {
-  //       return <Icon type="alipay-circle" style={{ margin: '0 5px' }} />;
-  //     }
-  //   });
-  // };
-  // handleBuy = () => {
-  //   console.log('买入');
-  // };
-  // handleSell = () => {
-  //   console.log('卖出');
-  // };
-
   columns = [
     {
       title: '付款方式',
@@ -200,7 +195,7 @@ export default class UserDetails extends Component {
             {map(row.payment_methods, item => {
               return (
                 <span className={styles.pay_method} key={item}>
-                  {item && payMethod[item] ? payMethod[item] : '-'}
+                  <Icon key={item} type={getPayIcon(item)} />
                 </span>
               );
             })}
@@ -294,45 +289,10 @@ export default class UserDetails extends Component {
       visible: true,
     });
   };
-  handleCancel = () => {
+  handleHideReport = () => {
     this.setState({
       visible: false,
     });
-  };
-  // handleSubmit = e => {
-  //   this.props.dispatch({
-  //     type:'',
-  //     payload:{
-  //
-  //     }
-  //   })
-  //   this.setState({
-  //     visible: false,
-  //   });
-  // };
-
-  showModal = () => {
-    return (
-      <div>
-        <Modal
-          title="举报用户"
-          visible={this.state.visible}
-          onCancel={this.handleCancel}
-          footer={false}
-        >
-          <ReportForm onSubmit={this.handleToTrust.bind(this.value)} onCancel={this.handleCancel} />
-        </Modal>
-      </div>
-    );
-  };
-  handleChange = id => {
-    console.log(id);
-    // this.props.dispatch({
-    //   type:'',
-    //   payload:{
-    //     id
-    //   }
-    // })
   };
 
   render() {
@@ -402,7 +362,13 @@ export default class UserDetails extends Component {
           </div>
           <div>{this.UserComment()}</div>
         </div>
-        {visible && this.showModal(visible)}
+
+        <ConfirmModal
+          visible={this.state.visible}
+          title="举报"
+          onSubmit={this.handleSubmitReport}
+          onCancel={this.handleHideReport}
+        />
       </PageHeaderLayout>
     );
   }

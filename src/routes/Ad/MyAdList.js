@@ -141,8 +141,6 @@ export default class List extends Component {
       title: '操作',
       width: '25%',
       render: (_, r) => {
-        const type = r.ad_type;
-        console.log('以下为type');
         return (
           <Fragment>
             {/*<a onClick={() => this.viewAd(r, '_OPEN')}>查看</a>*/}
