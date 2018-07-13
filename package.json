@@ -25,7 +25,9 @@
     "deploy:test2": "npm run build:dev && npm run rsync:dev",
     "rsync:test1": "rsync -avz ./dist/  kgdev:/data/btc-frontend-test1",
     "build:test1": "cross-env KG_API_ENV=test1 ESLINT=none roadhog build",
-    "deploy:test1": "npm run build:test1 && npm run rsync:test1"
+    "deploy:test1": "npm run build:test1 && npm run rsync:test1",
+    "build:mock": "cross-env KG_API_ENV=dev ESLINT=none roadhog build",
+    "deploy:mock": "npm run build:mock && npm run rsync:test1"
   },
   "dependencies": {
     "@antv/data-set": "^0.8.0",

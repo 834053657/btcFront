@@ -83,7 +83,7 @@ export default function request(postUrl, options, base_url) {
   return fetch(url, newOptions)
     .then(checkStatus)
     .then(response => {
-      if (newOptions.method === 'DELETE' || response.status === 204) {
+    if (newOptions.Accept === 'text/html' ) {
         return response.text();
       }
       return response.json();

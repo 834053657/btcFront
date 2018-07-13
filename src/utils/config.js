@@ -30,20 +30,26 @@ export default {
     mail: '邮箱验证',
   },
   language: {
-    zh_CN: '简体中文',
-    en_GB: 'English',
+    en_GB: "English",
+    zh_CN: "简体中文"
   },
   payments: {
-    wechat: '微信支付',
-    alipay: '支付宝',
-    bank: '银行卡',
-    site: '站内转账',
+    alipay: "支付宝",
+    bank: "银行卡",
+    wechat: "微信",
+    westernunion: "西联汇款",
+    paytm: "PayTm", // 印度支付宝
   },
   ad_type: {
     1: '买入',
     2: '出售',
   },
-  auth_status: {},
+  auth_status: {
+    1: "未认证",
+    2: "认证中",
+    3: "未通过",
+    4: "已通过"
+  },
   ad_status: {
     1: '已发布',
     2: '已暂停',
@@ -58,7 +64,22 @@ export default {
     4: '已完成',
     5: '已取消',
   },
-  country: {},
+  currencyList: {
+    CNY: "人民币",
+    USD: "美元"
+  },
+  country: [
+    {
+      code: "CN",
+      name: "中国",
+      nation_code: 86
+    },
+    {
+      code: "HK",
+      name: "香港",
+      nation_code: 852
+    }
+  ],
   countrysMap: {},
   message_type_zh_CN: {
     1: '系统资讯',
@@ -120,14 +141,6 @@ export default {
     132: '您的余额不足，广告已自动暂停',
     133: '同时处理订单数达到最大，广告已自动暂停',
   },
-  cardPwdType: {
-    // 1: '密码',
-    // 2: '图片',
-    // 3: '密码和图片',
-    1: '有卡密',
-    2: '有卡图',
-    3: '有图有卡密',
-  },
   tradeType: {
     1: '交易',
     2: '充值',
@@ -137,8 +150,6 @@ export default {
     1: '已付款',
     2: '未付款',
   },
-  // card_type: [],
-
   orderEngStatus: {
     1: 'wait_pay',
     2: 'wait_release',
@@ -146,5 +157,16 @@ export default {
     4: 'cancel',
     5: 'appeal',
   },
-  card_type: [],
+  articleList: {
+    agreement: "服务条款",
+    duty: "免责申明",
+    about: "团队介绍",
+    privacy: "隐私保护",
+    fee: "费率说明",
+    course: "新手教程",
+    problem: "常见问题",
+    operate: "操作指南",
+    safe: "安全指南",
+
+  }
 };

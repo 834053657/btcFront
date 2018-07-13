@@ -1,4 +1,5 @@
 import { stringify } from 'qs';
+import fetch from 'dva/fetch';
 import request from '../utils/request';
 
 export async function queryBanners() {
@@ -197,7 +198,7 @@ export async function queryStatistics() {
 }
 
 export async function queryConfigs() {
-  return request('/btc/defines');
+  return request('/btc/config/defines');
 }
 
 //礼品卡列表actions开始
@@ -461,4 +462,12 @@ export async function deleteMyAd(params) {
 //剩余广告
 export async function queryMyRemain(params) {
   return request(`/btc/ad/remain?${stringify(params)}`);
+}
+
+export async function getFile({type, local}) {
+  return request(`../../public/article/${type}_${local}.html?r=${Math.random()}`, {
+      Accept: 'text/html',
+      'Content-Type': 'text/html;  charset=utf-8',
+    });
+
 }

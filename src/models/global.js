@@ -12,6 +12,7 @@ import {
   queryMessageList,
   readMessage,
   readOrderMessage,
+  getFile,
 } from '../services/api';
 
 export default {
@@ -40,11 +41,12 @@ export default {
     },
     *fetchConfigs(_, { call, put }) {
       // 获取服务器字典
-      const response = yield call(queryConfigs) || {};
-      if (response && response.code === 0) {
-        CONFIG = { ...CONFIG, ...response.data };
-        CONFIG.countrysMap = mapKeys(response.data.country, 'code');
-      }
+      // const response = yield call(queryConfigs) || {};
+      // if (response && response.code === 0) {
+      //   CONFIG = { ...CONFIG, ...response.data };
+      //   CONFIG.countrysMap = mapKeys(response.data.country, 'code');
+      // }
+      CONFIG.countrysMap = mapKeys(CONFIG.country, 'code');
     },
     *fetchNotices({ payload }, { call, put }) {
       const res = yield call(queryMessageList, payload);
@@ -127,6 +129,10 @@ export default {
       } else {
         message.error(res.msg);
       }
+    },
+    *getArticle({ payload, callback }, { call }) {
+      const res = yield call(getFile, {...payload});
+      callback && callback(res);
     },
   },
 

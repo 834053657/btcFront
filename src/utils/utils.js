@@ -240,6 +240,15 @@ export function getMessageContent(msgObj) {
   }
 }
 
+export function getDefaultLocal() {
+  let lang = (navigator.browserLanguage?navigator.browserLanguage:navigator.language);
+  if(lang === 'en') {
+    return 'en_GB';
+  }else {
+    return 'zh_CN';
+  }
+}
+
 export function playAudio() {
   const audio = document.createElement('audio');
   audio.src = require('../../public/audio/msg.mp3');

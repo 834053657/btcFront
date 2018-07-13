@@ -106,8 +106,8 @@ export const getRouterData = app => {
         import('../routes/UserDetails/UserDetails')
       ),
     },
-    //团队介绍
-    '/article/:id': {
+    //静态页面
+    '/article/:type': {
       component: dynamicWrapper(app, ['message'], () => import('../routes/Message/Articles')),
     },
 
