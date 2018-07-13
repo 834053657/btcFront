@@ -179,7 +179,7 @@ export function getSystemUrl(env) {
     web_name += '(TEST1)';
     // socket_url = 'http://localhost:3000/socket/push';
     socket_url = 'http://47.106.111.213:9000/socket.io';
-  }else if (env === 'test2') {
+  } else if (env === 'test2') {
     base_url = 'http://dev.paean.net:8002';
     web_name += '(TEST2)';
     // socket_url = 'http://localhost:3000/socket/push';
@@ -241,10 +241,10 @@ export function getMessageContent(msgObj) {
 }
 
 export function getDefaultLocal() {
-  let lang = (navigator.browserLanguage?navigator.browserLanguage:navigator.language);
-  if(lang === 'en') {
+  let lang = navigator.browserLanguage ? navigator.browserLanguage : navigator.language;
+  if (lang === 'en') {
     return 'en_GB';
-  }else {
+  } else {
     return 'zh_CN';
   }
 }

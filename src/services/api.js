@@ -464,10 +464,9 @@ export async function queryMyRemain(params) {
   return request(`/btc/ad/remain?${stringify(params)}`);
 }
 
-export async function getFile({type, local}) {
+export async function getFile({ type, local }) {
   return request(`../../public/article/${type}_${local}.html?r=${Math.random()}`, {
-      Accept: 'text/html',
-      'Content-Type': 'text/html;  charset=utf-8',
-    });
-
+    Accept: 'text/html',
+    'Content-Type': 'text/html;  charset=utf-8',
+  });
 }

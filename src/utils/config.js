@@ -30,25 +30,25 @@ export default {
     mail: '邮箱验证',
   },
   language: {
-    en_GB: "English",
-    zh_CN: "简体中文"
+    en_GB: 'English',
+    zh_CN: '简体中文',
   },
   payments: {
-    alipay: "支付宝",
-    bank: "银行卡",
-    wechat: "微信",
-    westernunion: "西联汇款",
-    paytm: "PayTm", // 印度支付宝
+    alipay: '支付宝',
+    bank: '银行卡',
+    wechat: '微信',
+    westernunion: '西联汇款',
+    paytm: 'PayTm', // 印度支付宝
   },
   ad_type: {
     1: '买入',
     2: '出售',
   },
   auth_status: {
-    1: "未认证",
-    2: "认证中",
-    3: "未通过",
-    4: "已通过"
+    1: '未认证',
+    2: '认证中',
+    3: '未通过',
+    4: '已通过',
   },
   ad_status: {
     1: '已发布',
@@ -65,20 +65,20 @@ export default {
     5: '已取消',
   },
   currencyList: {
-    CNY: "人民币",
-    USD: "美元"
+    CNY: '人民币',
+    USD: '美元',
   },
   country: [
     {
-      code: "CN",
-      name: "中国",
-      nation_code: 86
+      code: 'CN',
+      name: '中国',
+      nation_code: 86,
     },
     {
-      code: "HK",
-      name: "香港",
-      nation_code: 852
-    }
+      code: 'HK',
+      name: '香港',
+      nation_code: 852,
+    },
   ],
   countrysMap: {},
   message_type_zh_CN: {
@@ -158,15 +158,29 @@ export default {
     5: 'appeal',
   },
   articleList: {
-    agreement: "服务条款",
-    duty: "免责申明",
-    about: "团队介绍",
-    privacy: "隐私保护",
-    fee: "费率说明",
-    course: "新手教程",
-    problem: "常见问题",
-    operate: "操作指南",
-    safe: "安全指南",
+    agreement: '服务条款',
+    duty: '免责申明',
+    about: '团队介绍',
+    privacy: '隐私保护',
+    fee: '费率说明',
+    course: '新手教程',
+    problem: '常见问题',
+    operate: '操作指南',
+    safe: '安全指南',
+  },
+  //社交账号
+  QQ: {
+    1: '客服： 乌小笨',
+    2: '客服： 乌小乌',
+    3: '客服： 乌小黑',
+    4: '客服： 乌小蒙',
+  },
 
-  }
+  //从字典中复制过来的
+  order_type: {
+    '1': '买入',
+    '2': '出售',
+  },
+
+  card_type: [],
 };

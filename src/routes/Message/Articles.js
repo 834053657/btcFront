@@ -56,49 +56,16 @@ export default class InfoDetail extends PureComponent {
       type: 'global/getArticle',
       payload: {
         type,
-        local
+        local,
       },
-      callback: (content) => {
+      callback: content => {
         this.setState({
           title: CONFIG.articleList[type],
-          content
+          content,
         });
-      }
-    })
-  }
-
-  readMsg = id => {
-    const { dispatch } = this.props;
-
-    dispatch({
-      type: 'message/readMessage',
-      payload: { all: false, id },
+      },
     });
-  };
-
-  handleChooseTitle = () => {
-    const { id } = this.props.match.params || {};
-    return CONFIG.articleList[id];
-    // if (id === 'about') {
-    //   return '团队介绍';
-    // } else if (id === 'agreement') {
-    //   return '服务条款';
-    // } else if (id === 'duty') {
-    //   return '免责声明';
-    // } else if (id === 'privacy') {
-    //   return '隐私保护';
-    // } else if (id === 'fee') {
-    //   return '费率说明';
-    // } else if (id === 'course') {
-    //   return '新手教程';
-    // } else if (id === 'problem') {
-    //   return '常见问题';
-    // } else if (id === 'operate') {
-    //   return '操作指南';
-    // } else if (id === 'safe') {
-    //   return '安全指南';
-    // }
-  };
+  }
 
   render() {
     // const { loading } = this.props;

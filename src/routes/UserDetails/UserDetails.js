@@ -126,7 +126,7 @@ export default class UserDetails extends Component {
               onClick={this.handleToTrust.bind(this, 1)}
               loading={this.state.loading}
             >
-              <Icon type="heart-o" style={{ color: '#ccc', marginRight: '5px' }} />信任
+              <Icon type="heart-o" style={{ color: '#EAEAEA', marginRight: '5px' }} />信任
             </Button>
           )}
           {userMessage.online === true ? (

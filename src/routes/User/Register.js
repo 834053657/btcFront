@@ -223,21 +223,21 @@ export default class Register extends Component {
       type: 'global/getArticle',
       payload: {
         type,
-        local: this.props.local
+        local: this.props.local,
       },
-      callback: (content) => {
+      callback: content => {
         this.setState({
           infoVisible: {
             title: CONFIG.articleList[type],
-            content
+            content,
           },
         });
-      }
-    })
+      },
+    });
   };
 
   render() {
-    const { form, submitting, local='zh_CN' } = this.props;
+    const { form, submitting, local = 'zh_CN' } = this.props;
     const { getFieldDecorator } = form;
     const { count, agree, imageValidationVisible, infoVisible } = this.state;
     return (
@@ -397,7 +397,15 @@ export default class Register extends Component {
         />
 
         {!!infoVisible && (
-          <Modal destroyOnClose-={true} visible zIndex={1032} maskClosable={false} title={infoVisible.title} onOk={this.hideModal} onCancel={this.hideModal}>
+          <Modal
+            destroyOnClose-={true}
+            visible
+            zIndex={1032}
+            maskClosable={false}
+            title={infoVisible.title}
+            onOk={this.hideModal}
+            onCancel={this.hideModal}
+          >
             <div
               className={styles.info_content}
               dangerouslySetInnerHTML={{ __html: infoVisible.content }}

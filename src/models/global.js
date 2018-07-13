@@ -131,7 +131,7 @@ export default {
       }
     },
     *getArticle({ payload, callback }, { call }) {
-      const res = yield call(getFile, {...payload});
+      const res = yield call(getFile, { ...payload });
       callback && callback(res);
     },
   },

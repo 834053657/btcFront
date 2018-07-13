@@ -216,11 +216,11 @@ export default class List extends Component {
         <Col span={12} className={styles.title}>
           我的广告
         </Col>
-        <Col span={12} className={styles.more}>
-          <a className={styles.itunes_btn} href="/#/ad/terms">
-            交易条款管理
-          </a>
-        </Col>
+        {/*<Col span={12} className={styles.more}>*/}
+        {/*<a className={styles.itunes_btn} href="/#/ad/terms">*/}
+        {/*交易条款管理*/}
+        {/*</a>*/}
+        {/*</Col>*/}
       </Row>
     );
 

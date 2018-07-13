@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import { findDOMNode } from 'react-dom';
-import {List, InfiniteLoader, AutoSizer} from 'react-virtualized';
+import { List, InfiniteLoader, AutoSizer } from 'react-virtualized';
 import moment from 'moment';
-import { map, delay,get } from 'lodash';
+import { map, delay, get } from 'lodash';
 import antd from 'antd';
 import styles from './IM.less';
 
@@ -13,7 +13,7 @@ const {
   Col,
   Modal,
   Input,
-  List:AList,
+  List: AList,
   Icon,
   Avatar,
   Badge,
@@ -36,8 +36,8 @@ export default class TradeIM extends PureComponent {
       type: 'trade/fetchImHistory',
       payload: {
         order_id: orderId,
-      }
-    })
+      },
+    });
   }
 
   componentWillUnmount() {}
@@ -66,7 +66,7 @@ export default class TradeIM extends PureComponent {
     const { orderId, dispatch } = this.props;
 
     if (message) {
-     dispatch({
+      dispatch({
         type: 'socket/send_message',
         payload: { message, order_id: orderId },
         callback: () => this.setState({ message: '' }),
@@ -111,28 +111,26 @@ export default class TradeIM extends PureComponent {
   getChatUser = () => {
     const { orderDetail, currentUser } = this.props;
     const { user = {} } = currentUser || {};
-    const { ad = {}, trader={} } = orderDetail || {};
-    const { owner={} } = ad || {};
+    const { ad = {}, trader = {} } = orderDetail || {};
+    const { owner = {} } = ad || {};
     const traderUser = trader.id === user.id ? owner : trader;
     return (
       <div>
-        <Badge status={traderUser.online ? 'success': 'default'} text={traderUser.nickname} />
+        <Badge status={traderUser.online ? 'success' : 'default'} text={traderUser.nickname} />
       </div>
-    )
-  }
+    );
+  };
 
-  renderMessage = ({index, key,style}) => {
-    const uid =get(this.props, 'currentUser.user.id') || {};
+  renderMessage = ({ index, key, style }) => {
+    const uid = get(this.props, 'currentUser.user.id') || {};
     const historyList = get(this.props, 'tradeIm.historyList') || [];
-    const item =  historyList[index]|| {};
-    const { message={}, msg_type, created_at, sender={} } = item;
+    const item = historyList[index] || {};
+    const { message = {}, msg_type, created_at, sender = {} } = item;
 
     return (
       <AList.Item key={key} style={style}>
         {msg_type !== 1 ? (
-          <div style={{ textAlign: 'center', flex: 1, color: '#1890ff' }}>
-            {message.content}
-          </div>
+          <div style={{ textAlign: 'center', flex: 1, color: '#1890ff' }}>{message.content}</div>
         ) : (
           <AList.Item.Meta
             className={sender.id === uid ? styles.myMessageBox : null}
@@ -157,19 +155,19 @@ export default class TradeIM extends PureComponent {
                   dangerouslySetInnerHTML={{ __html: message.content }}
                 />
                 <div className={styles.sendtime}>
-                  {created_at ? moment(created_at* 1000).format('YYYY-MM-DD HH:mm:ss') : '-'}
+                  {created_at ? moment(created_at * 1000).format('YYYY-MM-DD HH:mm:ss') : '-'}
                 </div>
               </div>
             }
           />
         )}
       </AList.Item>
-    )
-  }
+    );
+  };
 
   render() {
     const { maxImg, message } = this.state;
-    const {  tradeIm, loading } = this.props;
+    const { tradeIm, loading } = this.props;
     const { historyList = [] } = tradeIm || {};
     const props = {
       name: 'uploadfile',
@@ -186,11 +184,7 @@ export default class TradeIM extends PureComponent {
 
     return (
       <Spin spinning={false}>
-        <Card
-          bodyStyle={{ padding: 0 }}
-          className={styles.chat_card}
-          title={this.getChatUser()}
-        >
+        <Card bodyStyle={{ padding: 0 }} className={styles.chat_card} title={this.getChatUser()}>
           <div className={styles.card_body}>
             <div ref={el => (this.messagesBox = el)} className={styles.chat_history}>
               {historyList.length > 0 ? (
@@ -201,9 +195,9 @@ export default class TradeIM extends PureComponent {
                   // renderItem={this.renderMessage}
                 >
                   <InfiniteLoader
-                    isRowLoaded={(index)=> !!historyList[index]}
+                    isRowLoaded={index => !!historyList[index]}
                     rowCount={historyList.length}
-                    loadMoreRows={function () { }}
+                    loadMoreRows={function() {}}
                   >
                     {({ onRowsRendered, registerChild }) => (
                       <AutoSizer disableHeight>
@@ -219,7 +213,6 @@ export default class TradeIM extends PureComponent {
                       </AutoSizer>
                     )}
                   </InfiniteLoader>
-
                 </AList>
               ) : null}
             </div>

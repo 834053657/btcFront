@@ -10,13 +10,13 @@ import createLoading from 'dva-loading';
 import 'moment/locale/zh-cn';
 import './rollbar';
 import { getDefaultLocal } from './utils/utils';
-import { getLocale, setLocale } from './utils/authority'
+import { getLocale, setLocale } from './utils/authority';
 import './index.less';
 import CONFIG from './utils/config';
 import { dvaSocket } from './utils/socket';
 
-if(!getLocale()) {
-  setLocale(getDefaultLocal())
+if (!getLocale()) {
+  setLocale(getDefaultLocal());
 }
 
 message.config({
@@ -31,7 +31,6 @@ notification.config({
 });
 
 global.CONFIG = CONFIG;
-
 
 // 1. Initialize
 const app = dva({
