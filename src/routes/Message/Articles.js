@@ -35,12 +35,22 @@ export default class InfoDetail extends PureComponent {
   };
 
   componentDidMount() {
-   this.fetchDetail();
+    const { type } = this.props.match.params || {};
+    const { local } = this.props;
+    this.fetchDetail(type, local);
   }
 
-  fetchDetail = ()=> {
+  componentWillUpdate(nextProps, nextState) {
     const { type } = this.props.match.params || {};
-    const { dispatch, local } = this.props;
+    const { type:nextType } = nextProps.match.params || {};
+
+    if (this.props.local !== nextProps.local || type !== nextType) {
+      this.fetchDetail(nextType, nextProps.local)
+    }
+  }
+
+  fetchDetail = (type, local)=> {
+    const { dispatch } = this.props;
 
     dispatch({
       type: 'global/getArticle',
