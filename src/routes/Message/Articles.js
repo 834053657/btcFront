@@ -20,8 +20,8 @@ const clsString = classNames(
   }
 );
 
-@connect(({ message, loading }) => ({
-  data: message.infoDetail,
+@connect(({ global, loading }) => ({
+  local: global.local,
   loading: loading.models.message,
 }))
 /* @connect((userDetail, loading) => {
@@ -29,18 +29,33 @@ const clsString = classNames(
 }) */
 @Form.create()
 export default class InfoDetail extends PureComponent {
-  state = {};
+  state = {
+    title: '',
+    content: '',
+  };
 
   componentDidMount() {
-    const { id } = this.props.match.params || {};
-    const { dispatch } = this.props;
-    console.log(id);
-    dispatch({
-      type: 'message/fetchInfoDetail',
-      payload: { id: this.props.match.params.id },
-      // callback: () => this.readMsg(this.props.match.params.id),
-    });
+    this.fetchDetail();
   }
+
+  fetchDetail = () => {
+    const { type } = this.props.match.params || {};
+    const { dispatch, local } = this.props;
+
+    dispatch({
+      type: 'global/getArticle',
+      payload: {
+        type,
+        local,
+      },
+      callback: content => {
+        this.setState({
+          title: CONFIG.articleList[type],
+          content,
+        });
+      },
+    });
+  };
 
   readMsg = id => {
     const { dispatch } = this.props;
@@ -53,48 +68,39 @@ export default class InfoDetail extends PureComponent {
 
   handleChooseTitle = () => {
     const { id } = this.props.match.params || {};
-    if (id === 'about') {
-      return '团队介绍';
-    } else if (id === 'agreement') {
-      return '服务条款';
-    } else if (id === 'duty') {
-      return '免责声明';
-    } else if (id === 'privacy') {
-      return '隐私保护';
-    } else if (id === 'fee') {
-      return '费率说明';
-    } else if (id === 'course') {
-      return '新手教程';
-    } else if (id === 'problem') {
-      return '常见问题';
-    } else if (id === 'operate') {
-      return '操作指南';
-    } else if (id === 'safe') {
-      return '安全指南';
-    }
+    return CONFIG.articleList[id];
+    // if (id === 'about') {
+    //   return '团队介绍';
+    // } else if (id === 'agreement') {
+    //   return '服务条款';
+    // } else if (id === 'duty') {
+    //   return '免责声明';
+    // } else if (id === 'privacy') {
+    //   return '隐私保护';
+    // } else if (id === 'fee') {
+    //   return '费率说明';
+    // } else if (id === 'course') {
+    //   return '新手教程';
+    // } else if (id === 'problem') {
+    //   return '常见问题';
+    // } else if (id === 'operate') {
+    //   return '操作指南';
+    // } else if (id === 'safe') {
+    //   return '安全指南';
+    // }
   };
 
   render() {
-    const { loading, data } = this.props;
+    // const { loading } = this.props;
+    const { title, content } = this.state;
 
     return (
-      <PageHeaderLayout title={this.handleChooseTitle()}>
+      <PageHeaderLayout title={title}>
         <div className={clsString}>
-          <Card bordered={false}>
-            <div className={styles.title}>{data.title}</div>
-            <div className={styles.publish}>
-              <Icon type="clock-circle-o" />
-              <span>
-                {data.publish_at
-                  ? moment(new Date(data.publish_at * 1000)).format('YYYY-MM-DD HH:mm:ss')
-                  : '-'}
-              </span>
-            </div>
-          </Card>
           <Card className={styles.content}>
             <div
               dangerouslySetInnerHTML={{
-                __html: data.content,
+                __html: content,
               }}
             />
           </Card>

@@ -45,6 +45,7 @@ class ImageValidation extends Component {
       usage: 'login',
     };
     const res = await getCaptcha(params);
+    console.log(res);
     if (res.data) {
       this.setState({
         image: res.data.img,

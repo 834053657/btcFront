@@ -85,7 +85,7 @@ export const getRouterData = app => {
       component: dynamicWrapper(app, ['trade'], () => import('../routes/Trade/TradeDetail')),
     },
     '/trade/step/:id': {
-      component: dynamicWrapper(app, ['trade','user'], () => import('../routes/Trade/TradeStep')),
+      component: dynamicWrapper(app, ['trade', 'user'], () => import('../routes/Trade/TradeStep')),
     },
     // '/home': {
     //   component: dynamicWrapper(app, ['chart'], () => import('../routes/Dashboard/Home')),
@@ -106,8 +106,8 @@ export const getRouterData = app => {
         import('../routes/UserDetails/UserDetails')
       ),
     },
-    //团队介绍
-    '/article/:id': {
+    //静态页面
+    '/article/:type': {
       component: dynamicWrapper(app, ['message'], () => import('../routes/Message/Articles')),
     },
 
