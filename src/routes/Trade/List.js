@@ -26,10 +26,10 @@ const typeMap = {
 export default class List extends Component {
   constructor(props) {
     const { search } = props.location;
-    const { type = '1' } = getQueryString(search);
+    const { ad_type = '1' } = getQueryString(search);
     super(props);
     this.state = {
-      type,
+      ad_type,
       searchVisible: false,
       searchValues: {
         countries: 'CN',
@@ -48,10 +48,10 @@ export default class List extends Component {
   }
 
   fetch = (params = {}, callback) => {
-    const { searchValues, type } = this.state;
+    const { searchValues, ad_type } = this.state;
     const { dispatch, pagination } = this.props;
 
-    params.type = params.type || type;
+    params.ad_type = params.ad_type || ad_type;
     params.page_size = params.page_size || pagination.page_size;
 
     dispatch({
@@ -136,11 +136,11 @@ export default class List extends Component {
     {
       title: '操作',
       render: r => {
-        const { type } = this.state;
+        const { ad_type } = this.state;
         return (
           <Fragment>
             <Link to={`/trade/detail/${r.id}`}>
-              <Button type="primary">{type ? typeMap[type] : '-'}</Button>
+              <Button type="primary">{ad_type ? typeMap[ad_type] : '-'}</Button>
             </Link>
           </Fragment>
         );
@@ -207,7 +207,7 @@ export default class List extends Component {
 
   render() {
     const { list = [], pagination = {}, loading } = this.props;
-    const { type, searchVisible, searchValues = {} } = this.state;
+    const { ad_type, searchVisible, searchValues = {} } = this.state;
     const { countries, currency, pay_methods, money } = searchValues || {};
 
     return (
@@ -229,7 +229,7 @@ export default class List extends Component {
           <div className={styles.type_box}>
             <RadioGroup
               size="large"
-              value={type}
+              value={ad_type}
               onChange={this.handleTypeChange}
               style={{ marginBottom: 8 }}
             >

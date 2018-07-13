@@ -360,6 +360,7 @@ export async function getHistoryAddress(params) {
 // }
 
 export async function getTradeList(params) {
+
   return request(`/btc/ad/list?${stringify(params)}`);
 }
 
