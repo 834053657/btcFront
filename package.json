@@ -22,7 +22,7 @@
     "prettier": "prettier --write ./src/**/**/**/*",
     "rsync:test2": "rsync -avz ./dist/  kgdev:/data/btc-frontend-test2",
     "build:test2": "cross-env KG_API_ENV=test2 ESLINT=none COMPRESS=none roadhog build",
-    "deploy:test2": "npm run build:dev && npm run rsync:dev",
+    "deploy:test2": "npm run build:test2 && npm run rsync:test2",
     "rsync:test1": "rsync -avz ./dist/  kgdev:/data/btc-frontend-test1",
     "build:test1": "cross-env KG_API_ENV=test1 ESLINT=none roadhog build",
     "deploy:test1": "npm run build:test1 && npm run rsync:test1",
