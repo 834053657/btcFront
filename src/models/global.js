@@ -41,12 +41,12 @@ export default {
     },
     *fetchConfigs(_, { call, put }) {
       // 获取服务器字典
-      // const response = yield call(queryConfigs) || {};
-      // if (response && response.code === 0) {
-      //   CONFIG = { ...CONFIG, ...response.data };
-      //   CONFIG.countrysMap = mapKeys(response.data.country, 'code');
-      // }
-      CONFIG.countrysMap = mapKeys(CONFIG.country, 'code');
+      const response = yield call(queryConfigs) || {};
+      if (response && response.code === 0) {
+        CONFIG = { ...CONFIG, ...response.data };
+        CONFIG.countrysMap = mapKeys(response.data.country, 'code');
+      }
+      // CONFIG.countrysMap = mapKeys(CONFIG.country, 'code');
     },
     *fetchNotices({ payload }, { call, put }) {
       const res = yield call(queryMessageList, payload);

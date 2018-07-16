@@ -166,7 +166,7 @@ export default class EditForm extends Component {
     const { price, initialValues = {}, submitting } = this.props;
     const { form } = this.props;
     const { num } = this.props;
-    console.log(num);
+    // console.log(num);
     return (
       <Form className={styles.form} hideRequiredMark onSubmit={this.handleSubmit}>
         <FormItem>
