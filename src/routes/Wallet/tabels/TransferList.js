@@ -1,12 +1,13 @@
 import React, { Component, Fragment } from 'react';
 import moment from 'moment';
 import { Table, Tabs, Button, Icon, Card, Modal, Badge, Tooltip } from 'antd';
-import numeral from 'numeral';
+// import numeral from 'numeral';
 import { map } from 'lodash';
-import DescriptionList from 'components/DescriptionList';
+// import DescriptionList from 'components/DescriptionList';
+import { formatBTC } from '../../../utils/utils'
 import styles from './TransferList.less';
 
-const { Description } = DescriptionList;
+// const { Description } = DescriptionList;
 
 const statusMap = ['default', 'warning', 'processing', 'error', 'success'];
 
@@ -25,7 +26,7 @@ export default class TransferList extends Component {
     this.handleTableChange();
   }
 
-  showModal = row => {
+/*  showModal = row => {
     this.setState({
       modalInfo: row,
     });
@@ -35,7 +36,7 @@ export default class TransferList extends Component {
     this.setState({
       modalInfo: null,
     });
-  };
+  };*/
 
   columns = [
     {
@@ -51,16 +52,16 @@ export default class TransferList extends Component {
       render: (v, row) => {
         return (
           <span className={row.type === 1 ? 'text-green' : 'text-red'}>
-            <b>{row.type === 1 ? '+' : '-'}</b> {numeral(v).format('0,0.00000000')}
+            <b>{row.type === 1 ? '+' : '-'}</b> {formatBTC(v)}
           </span>
         );
       },
     },
     {
-      title: '手续费',
+      title: '手续费(BTC)',
       dataIndex: 'fee',
       render: (v, row) => {
-        return <span>{`￥${numeral(v).format('0,0.00000000')}`}</span>;
+        return <span>{`${formatBTC(v)}`}</span>;
       },
     },
     {
@@ -119,7 +120,7 @@ export default class TransferList extends Component {
     });
   };
 
-  getMethodContent = item => {
+/*  getMethodContent = item => {
     const { paid_type, payment = {} } = item || {};
     let content = '';
 
@@ -141,7 +142,7 @@ export default class TransferList extends Component {
         break;
     }
     return content;
-  };
+  };*/
 
   handleTabsChange = status => {
     this.setState({
@@ -150,7 +151,7 @@ export default class TransferList extends Component {
     this.fetch({ status });
   };
 
-  renderDetail = modalInfo => {
+/*  renderDetail = modalInfo => {
     const { created_at, amount, fee, goods_type, trade_type, payment, type } = modalInfo || {};
     return (
       <DescriptionList col={1} className={styles.detailBox}>
@@ -172,7 +173,7 @@ export default class TransferList extends Component {
         </Description>
       </DescriptionList>
     );
-  };
+  };*/
 
   render() {
     const { modalInfo, status } = this.state;
@@ -193,14 +194,14 @@ export default class TransferList extends Component {
           pagination={{ ...pagination, pageSize: pagination.page_size, current: pagination.page }}
           onChange={this.handleTableChange}
         />
-        <Modal
+      {/*  <Modal
           title="交易详情"
           visible={!!modalInfo}
           onOk={this.hideModal}
           onCancel={this.hideModal}
         >
           {this.renderDetail(modalInfo)}
-        </Modal>
+        </Modal>*/}
       </Card>
     );
   }
