@@ -59,10 +59,11 @@ export default class EmailModal extends Component {
           verify_token: this.state.updateKey,
         },
         callback: () => {
-          this.setState({
-            current: this.state.current + 1,
-          });
+          // this.setState({
+          //   current: this.state.current + 1,
+          // });
           // delay(this.props.onCancel, 1000);
+          this.props.onCancel()
         },
       });
     }

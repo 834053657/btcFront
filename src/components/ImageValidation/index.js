@@ -62,6 +62,7 @@ class ImageValidation extends Component {
       <Modal
         width={360}
         title={title}
+        destroyOnClose
         visible={visible}
         onCancel={this.handleCancel}
         footer={[

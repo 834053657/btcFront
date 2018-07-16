@@ -26,7 +26,7 @@ class EmailForm extends Component {
     current: 0,
   };
 
-  componentDidMount() {
+  componentWillUnmount() {
     clearInterval(this.interval);
   }
 

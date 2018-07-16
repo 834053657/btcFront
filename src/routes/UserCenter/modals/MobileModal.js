@@ -41,11 +41,11 @@ export default class MobileModal extends Component {
       },
       callback: data => {
         this.setState({
-          current: this.state.current + 1,
           verify_token: data.verify_token,
+          current: this.state.current + 1,
         });
       },
-    });
+    })
   };
 
   handleBindSubmit = values => {
@@ -60,10 +60,10 @@ export default class MobileModal extends Component {
         verify_token: this.state.verify_token,
       },
       callback: () => {
-        this.setState({
-          current: this.state.current + 1,
-        });
-        // this.props.onCancel();
+        // this.setState({
+        //   current: this.state.current + 1,
+        // });
+        this.props.onCancel();
         // delay(this.props.onCancel, 1000);
       },
     });

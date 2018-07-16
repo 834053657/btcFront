@@ -184,7 +184,7 @@ class RechargeForm extends Component {
                 />
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label="区块确认次数">
+            <FormItem {...formItemLayout} label="选择手续费">
               {getFieldDecorator('count', {
                 initialValue: 12,
                 rules: [

@@ -25,7 +25,7 @@ class MobileForm extends Component {
     count: 0,
   };
 
-  componentDidMount() {
+  componentWillUnmount() {
     clearInterval(this.interval);
   }
 

@@ -55,10 +55,10 @@ export default class EmailModal extends Component {
           verify_token: this.state.updateKey,
         },
         callback: () => {
-          this.setState({
-            current: this.state.current + 1,
-          });
-          // delay(this.props.onCancel, 1000);
+          // this.setState({
+          //   current: this.state.current + 1,
+          // });
+          this.props.onCancel()
         },
       });
     }
@@ -85,11 +85,8 @@ export default class EmailModal extends Component {
     return this.props.dispatch({
       type: 'global/sendVerify',
       payload: {
-        data: {
-          ...values
-        },
-        type: values.type,
-        usage: 6,
+        ...values,
+        usage: 8, //  8：用户主动修改登录密码
       },
       callback,
     });
