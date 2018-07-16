@@ -60,16 +60,16 @@ class SecureValidationForm extends Component {
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields({ force: true }, (err, values) => {
-      console.log(err, values)
+      console.log(err, values);
       const params = {
         ...values,
-        data: this.props.verify_data[values.type].data
-      }
+        data: this.props.verify_data[values.type].data,
+      };
       this.props.onSubmit(err, params);
     });
   };
   render() {
-    const { className, form, submitting, verify_data, } = this.props;
+    const { className, form, submitting, verify_data } = this.props;
     const { getFieldDecorator, getFieldValue } = form;
     const { count, current } = this.state;
 
