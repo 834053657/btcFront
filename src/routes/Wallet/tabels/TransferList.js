@@ -194,7 +194,7 @@ export default class TransferList extends Component {
           pagination={{ ...pagination, pageSize: pagination.page_size, current: pagination.page }}
           onChange={this.handleTableChange}
         />
-      {/*  <Modal
+        {/*  <Modal
           title="交易详情"
           visible={!!modalInfo}
           onOk={this.hideModal}
