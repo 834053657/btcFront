@@ -1,5 +1,6 @@
 // 请勿在此引用静态文件 因为会影响到mock 执行
 import moment from 'moment';
+import numeral from 'numeral';
 import { parse } from 'qs';
 // import audioMsg from '../../public/audio/msg.mp3'
 
@@ -271,6 +272,14 @@ export function getPayIcon(type) {
       iconType = 'credit-card';
   }
   return iconType;
+}
+
+export function formatBTC(btc = 0) {
+  return numeral(btc || 0).format('0,0.00000000');
+}
+
+export function formatMoney(rmb) {
+  return numeral(rmb || 0).format('0,0.00');
 }
 
 /**

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import numeral from 'numeral';
 import {
   Form,
   Input,
@@ -19,6 +18,8 @@ import {
 } from 'antd';
 import { map, filter } from 'lodash';
 import classNames from 'classnames';
+import { formatBTC } from '../../../utils/utils';
+
 import styles from './RechargeForm.less';
 
 const Panel = Collapse.Panel;
@@ -143,7 +144,7 @@ class RechargeForm extends Component {
                 <span
                   className="text-blue"
                   dangerouslySetInnerHTML={{
-                    __html: `${numeral(wallet.amount || 0).format('0,0.00000000')} BTC`,
+                    __html: `${formatBTC(wallet.amount)} BTC`,
                   }}
                 />
               </span>
@@ -203,7 +204,7 @@ class RechargeForm extends Component {
                 </Select>*/}
 
             <FormItem {...formItemLayout} label="手续费">
-              <span className="text-red">{`${this.state.fee}`}</span>
+              <span className="text-red">{`${formatBTC(this.state.fee)} `}</span> BTC
               <Button
                 type="primary"
                 loading={feeLoading}

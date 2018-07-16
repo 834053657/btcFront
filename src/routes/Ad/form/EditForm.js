@@ -453,38 +453,42 @@ export default class EditForm extends Component {
           </div>
         ) : null}
 
-        <FormItem {...formItemLayout} required label="安全选项">
+        <FormItem {...formItemLayout} label="安全选项">
           <div>
-            <div>
-              {getFieldDecorator('trusted_user', {})(
-                <Checkbox onChange={this.handleChangeTrust}>仅限受信任的交易者</Checkbox>
-              )}
-            </div>
-            {form.getFieldValue('trusted_user') ? (
-              ''
-            ) : (
+            <FormItem>
               <div>
-                <span className="bt-trade-level-auth">交易者的认证等级</span>
-                <span style={{ marginLeft: 20 }}>
-                  {getFieldDecorator('way', {
-                    initialValue: '0',
-                    rules: [
-                      {
-                        required: true,
-                        message: '请选择',
-                      },
-                    ],
-                  })(
-                    <RadioGroup>
-                      <Radio value="1">C1</Radio>
-                      <Radio value="2">C2</Radio>
-                      <Radio value="3">C3</Radio>
-                      <Radio value="0">不限</Radio>
-                    </RadioGroup>
-                  )}
-                </span>
+                {getFieldDecorator('trusted_user', {})(
+                  <Checkbox onChange={this.handleChangeTrust}>仅限受信任的交易者</Checkbox>
+                )}
               </div>
-            )}
+            </FormItem>
+            <FormItem>
+              {form.getFieldValue('trusted_user') ? (
+                ''
+              ) : (
+                <div>
+                  <span className="bt-trade-level-auth">交易者的认证等级</span>
+                  <span style={{ marginLeft: 20 }}>
+                    {getFieldDecorator('way', {
+                      initialValue: '0',
+                      rules: [
+                        {
+                          required: true,
+                          message: '请选择',
+                        },
+                      ],
+                    })(
+                      <RadioGroup>
+                        <Radio value="1">C1</Radio>
+                        <Radio value="2">C2</Radio>
+                        <Radio value="3">C3</Radio>
+                        <Radio value="0">不限</Radio>
+                      </RadioGroup>
+                    )}
+                  </span>
+                </div>
+              )}
+            </FormItem>
           </div>
         </FormItem>
 

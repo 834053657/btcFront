@@ -3,7 +3,7 @@ import { map } from 'lodash';
 import { Button, Card, Row, Col, Badge, Radio, Input, Steps, Icon } from 'antd';
 import DescriptionList from 'components/DescriptionList';
 import { getPayIcon } from '../../../utils/utils';
-
+import EvaluateForm from '../forms/EvaluateForm';
 import styles from './Step1.less';
 
 const { Description } = DescriptionList;
@@ -114,6 +114,13 @@ export default class Step1 extends PureComponent {
             ]}
           >
             <p>{trading_term}</p>
+          </Card>
+          <Card
+            style={{ marginTop: '20px' }}
+            className={styles.term_box}
+            title={`对用户${owner.nickname}留下评价`}
+          >
+            <EvaluateForm {...this.props} />
           </Card>
         </Card>
       </div>
