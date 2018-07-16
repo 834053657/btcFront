@@ -19,20 +19,17 @@ const RadioGroup = Radio.Group;
 }))
 export default class AdEdit extends Component {
   componentWillMount() {}
-
   componentDidMount() {
     const { params: { id } } = this.props.match || {};
     this.fetchDetail(id, this.fetchPrice);
   }
 
   fetchDetail = (id, callback) => {
-    // console.log(id)
-
     const { dispatch } = this.props;
     dispatch({
       type: 'ad/fetchAdDetail',
       payload: {
-        id,
+        ad_id: id,
       },
       callback,
     });

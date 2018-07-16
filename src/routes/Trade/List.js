@@ -149,14 +149,14 @@ export default class List extends Component {
   ];
 
   handleTypeChange = e => {
-    const type = e.target.value;
+    const ad_type = e.target.value;
     this.setState({
-      type,
+      ad_type,
     });
-    this.fetch({ type });
+    this.fetch({ ad_type });
     this.props.dispatch(
       routerRedux.replace({
-        search: stringify({ type }),
+        search: stringify({ ad_type }),
       })
     );
   };

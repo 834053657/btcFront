@@ -326,7 +326,7 @@ export default class EditForm extends Component {
                 <InputNumber
                   disabled={!getFieldValue('trading_price')}
                   min={0}
-                  step={0.1}
+                  step={0.00000001}
                   style={{ width: 170, position: 'absolute', marginTop: '5px' }}
                   placeholder="交易限额"
                   addonAfter="BTC"
@@ -351,7 +351,7 @@ export default class EditForm extends Component {
                 <InputNumber
                   disabled={!getFieldValue('trading_price')}
                   min={100}
-                  step={0.1}
+                  step={0.01}
                   style={{ width: 170, position: 'absolute', marginTop: '5px' }}
                   placeholder="最小交易额"
                   addonAfter={getFieldValue('currency')}
@@ -380,7 +380,7 @@ export default class EditForm extends Component {
                 <InputNumber
                   disabled={!getFieldValue('trading_price')}
                   min={0}
-                  step={0.1}
+                  step={0.01}
                   style={{ width: 170, position: 'absolute', marginTop: '5px' }}
                   placeholder="最大交易额"
                   addonAfter={getFieldValue('currency')}

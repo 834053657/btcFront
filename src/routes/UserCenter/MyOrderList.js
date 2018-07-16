@@ -48,7 +48,7 @@ export default class List extends Component {
     {
       title: '交易单号',
       dataIndex: 'order_no',
-      render: (v, row) => <Link to={`/card/deal-line/${row.id}`}>{v}</Link>,
+      render: (v, row) => <Link to={`/trade/step/${row.id}`}>{v}</Link>,
     },
     {
       title: '创建时间',
@@ -113,7 +113,9 @@ export default class List extends Component {
       title: '交易费',
       dataIndex: 'fee',
       render: (v, row) => {
-        return <span dangerouslySetInnerHTML={{ __html: `¥ ${numeral(v).format('0,0.0000000000')}` }} />;
+        return (
+          <span dangerouslySetInnerHTML={{ __html: `¥ ${numeral(v).format('0,0.0000000000')}` }} />
+        );
       },
     },
     {
