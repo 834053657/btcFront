@@ -2,13 +2,11 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
 import { Row, Col, Icon, Tabs, message, Popover } from 'antd';
 import { routerRedux, Link } from 'dva/router';
-import numeral from 'numeral';
 import { stringify } from 'qs';
 import { findIndex } from 'lodash';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { getQueryString } from '../../utils/utils';
+import { getQueryString, formatBTC } from '../../utils/utils';
 import RechargeForm from './forms/RechargeForm';
-import WithdrawForm from './forms/WithdrawForm';
 import styles from './Layout.less';
 import TransferList from './tabels/TransferList';
 import HistoryAddress from './tabels/HistoryAddress';
@@ -104,13 +102,13 @@ export default class Layout extends Component {
                 总资产折合：<span
                   className="text-blue"
                   dangerouslySetInnerHTML={{
-                    __html: `${numeral(wallet.amount || 0).format('0,0.00000000')} BTC`,
+                    __html: `${formatBTC(wallet.amount || 0)} BTC`,
                   }}
                 />{' '}
                 | 冻结：<span
                   className="text-blue"
                   dangerouslySetInnerHTML={{
-                    __html: `${numeral(wallet.frozen || 0).format('0,0.00000000')} BTC`,
+                    __html: `${formatBTC(wallet.frozen || 0)} BTC`,
                   }}
                 />{' '}
               </p>

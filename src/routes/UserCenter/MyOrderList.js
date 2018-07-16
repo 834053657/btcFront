@@ -19,7 +19,7 @@ import {
   Popconfirm,
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import { getMessageContent } from '../../utils/utils';
+import { formatBTC, formatMoney } from '../../utils/utils';
 import styles from './MyOrderList.less';
 
 const TabPane = Tabs.TabPane;
@@ -90,53 +90,40 @@ export default class List extends Component {
     },
     {
       title: '法币',
-      dataIndex: 'currency',
-      render: (_, row) => (
-        <span className="text-blue">
-          <span>{row.trading_volume ? row.trading_volume : '-'}</span>
-          {row.currency ? row.currency : '-'}
-        </span>
-      ),
+      dataIndex: 'currency'
     },
     {
-      title: '交易金额',
+      title: '交易金额(BTC)',
       dataIndex: 'amount',
       render: (v, row) => {
         return (
-          <span className="text-blue">
-            <span>{row.trading_count ? row.trading_count : '-'}</span>BTC
-          </span>
+          <span >{row.trading_count ? formatBTC(row.trading_count) : '-'}</span>
         );
       },
     },
     {
-      title: '交易费',
-      dataIndex: 'fee',
-      render: (v, row) => {
-        return <span dangerouslySetInnerHTML={{ __html: `¥ ${numeral(v).format('0,0.0000000000')}` }} />;
-      },
+      title: '交易费(BTC)',
+      dataIndex: 'fees',
+      render: v => <span dangerouslySetInnerHTML={{ __html: `${formatBTC(v)}` }} />
     },
     {
       title: '总BTC',
       dataIndex: 'trading_count',
       render: (v, row) => {
+        let total = row.trading_count + row.fees;
+        console.log(row.trading_count, row.fees);
         return (
-          <span className="text-blue">
-            <span>{row.trading_count ? row.trading_count : '-'}</span>BTC
-          </span>
+          <span>{formatBTC(total)}</span>
         );
-        // return <span dangerouslySetInnerHTML={{ __html: `¥ ${numeral(v).format('0,0.00')}` }} />;
       },
     },
     {
       title: '汇率',
       dataIndex: 'trading_price',
       render: (v, row) => {
-        // return <span dangerouslySetInnerHTML={{ __html: `¥ ${numeral(v).format('0,0.00')}` }} />;
         return (
-          <span className="text-blue">
-            {row.trading_price ? row.trading_price : '-'}{' '}
-            <span>{row.currency ? row.currency : '-'}</span>
+          <span>
+            {formatMoney(row.trading_price)} <span>{row.currency ? row.currency : '-'}</span>
           </span>
         );
       },

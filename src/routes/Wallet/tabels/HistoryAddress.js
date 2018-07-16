@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import moment from 'moment';
 import { Table, Tabs, Button, Icon, Card, Modal, Badge, Tooltip } from 'antd';
-import numeral from 'numeral';
 import { map } from 'lodash';
 import DescriptionList from 'components/DescriptionList';
 import styles from './TransferList.less';
