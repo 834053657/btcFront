@@ -241,7 +241,7 @@ export function getMessageContent(msgObj) {
 }
 
 export function getDefaultLocal() {
-  let lang = navigator.browserLanguage ? navigator.browserLanguage : navigator.language;
+  const lang = navigator.browserLanguage ? navigator.browserLanguage : navigator.language;
   if (lang === 'en') {
     return 'en_GB';
   } else {

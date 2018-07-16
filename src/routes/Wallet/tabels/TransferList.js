@@ -51,7 +51,7 @@ export default class TransferList extends Component {
       render: (v, row) => {
         return (
           <span className={row.type === 1 ? 'text-green' : 'text-red'}>
-            <b>{row.type === 1 ? '+' : '-'}</b> {numeral(v).format('0,0.00')}
+            <b>{row.type === 1 ? '+' : '-'}</b> {numeral(v).format('0,0.00000000')}
           </span>
         );
       },
@@ -60,7 +60,7 @@ export default class TransferList extends Component {
       title: '手续费',
       dataIndex: 'fee',
       render: (v, row) => {
-        return <span>{`￥${numeral(v).format('0,0.00')}`}</span>;
+        return <span>{`￥${numeral(v).format('0,0.00000000')}`}</span>;
       },
     },
     {
@@ -162,10 +162,10 @@ export default class TransferList extends Component {
         </Description>
         <Description term="账号">{this.getMethodContent(modalInfo)}</Description>
         <Description term="金额">
-          <span>{`¥ ${type === 1 ? '+' : '-'}${numeral(amount).format('0,0.00')}`}</span>
+          <span>{`¥ ${type === 1 ? '+' : '-'}${numeral(amount).format('0,0.0000000000')}`}</span>
         </Description>
         <Description term="手续费">
-          <span>{`¥ ${numeral(fee).format('0,0.00')}`}</span>
+          <span>{`¥ ${numeral(fee).format('0,0.0000000000')}`}</span>
         </Description>
         <Description term="交易时间">
           {created_at ? moment(created_at * 1000).format('YYYY-MM-DD HH:mm:ss') : '-'}

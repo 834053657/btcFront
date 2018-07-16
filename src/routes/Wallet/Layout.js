@@ -104,13 +104,13 @@ export default class Layout extends Component {
                 总资产折合：<span
                   className="text-blue"
                   dangerouslySetInnerHTML={{
-                    __html: `${numeral(wallet.amount || 0).format('0,0.00')} BTC`,
+                    __html: `${numeral(wallet.amount || 0).format('0,0.00000000')} BTC`,
                   }}
                 />{' '}
                 | 冻结：<span
                   className="text-blue"
                   dangerouslySetInnerHTML={{
-                    __html: `${numeral(wallet.frozen || 0).format('0,0.00')} BTC`,
+                    __html: `${numeral(wallet.frozen || 0).format('0,0.00000000')} BTC`,
                   }}
                 />{' '}
               </p>

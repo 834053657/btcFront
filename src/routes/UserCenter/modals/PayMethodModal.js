@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Steps, Divider } from 'antd';
-import { delay } from 'lodash';
+import { delay, map } from 'lodash';
 import PayMethodForm from '../forms/PayMethodForm';
 import styles from './EmailModal.less';
 
@@ -19,22 +19,19 @@ export default class MobileModal extends Component {
 
   state = {};
 
-  handleSubmit = (err, values) => {
-    console.log(err, values);
-    if (!err) {
-      this.props.dispatch({
-        type: 'user/submitUserPayMethod',
-        payload: {
-          ...values,
-          id: this.props.data.id,
-        },
-        callback: this.props.onCancel,
-      });
-    }
+  handleSubmit = (values) => {
+    this.props.dispatch({
+      type: 'user/submitUserPayMethod',
+      payload: {
+        ...values,
+        id: this.props.data.id,
+      },
+      callback: this.props.onCancel,
+    });
   };
 
   render() {
-    const { title, data, onCancel } = this.props;
+    const { title, data, onCancel, payMents=[]}  = this.props;
 
     return (
       <Modal
@@ -46,7 +43,7 @@ export default class MobileModal extends Component {
         footer={null}
       >
         {!!data && (
-          <PayMethodForm initialValues={data} onSubmit={this.handleSubmit} onCancel={onCancel} />
+          <PayMethodForm payMents={payMents}  initialValues={data} onSubmit={this.handleSubmit} onCancel={onCancel} />
         )}
       </Modal>
     );

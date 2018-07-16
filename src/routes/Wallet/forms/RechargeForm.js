@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import numeral from 'numeral';
 import {
   Form,
   Input,
@@ -138,7 +139,13 @@ class RechargeForm extends Component {
             style={{ marginBottom: 15 }}
             message={
               <span>
-                您最多可以发送 <a>{`${wallet.amount} 个BTC`}</a>
+                您最多可以发送
+                <span
+                  className="text-blue"
+                  dangerouslySetInnerHTML={{
+                    __html: `${numeral(wallet.amount || 0).format('0,0.00000000')} BTC`,
+                  }}
+                />
               </span>
             }
             type="info"

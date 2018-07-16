@@ -125,7 +125,7 @@ export default {
     *verifyCaptcha({ payload, callback }, { call }) {
       const res = yield call(postVerifyCaptcha, payload);
       if (res.code === 0) {
-        callback && callback(res.data);
+        yield callback && callback(res.data);
       } else {
         message.error(res.msg);
       }

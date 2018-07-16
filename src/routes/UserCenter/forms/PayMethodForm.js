@@ -294,7 +294,7 @@ export default class PayMethodForm extends Component {
     } else if (obj.status === 'done' && obj.response) {
       url = obj.response.hash;
     }
-    return upload.prefix + url;
+    return url ? upload.prefix + url : null;
   };
 
   beforeUpload = file => {
@@ -311,7 +311,7 @@ export default class PayMethodForm extends Component {
     let imageUrl = null;
     if (Array.isArray(fileList) && fileList[0] && fileList[0].status === 'done') {
       const file = fileList[0];
-      imageUrl = file.response ? upload.prefix + file.response.hash : file.url;
+      imageUrl = file.response && file.response.hash ? upload.prefix + file.response.hash : file.url;
     }
 
     const uploadButton = (
@@ -356,10 +356,18 @@ export default class PayMethodForm extends Component {
       [...keys(fields), 'payment_method'],
       { force: true },
       (err, values) => {
-        if (values.payment_detail && values.payment_detail.ercodeUrl) {
-          values.payment_detail.ercodeUrl = this.getImgUrl(values.payment_detail.ercodeUrl[0]);
+        if(!err) {
+          if (values.payment_detail && values.payment_detail.ercodeUrl) {
+            const url = this.getImgUrl(values.payment_detail.ercodeUrl[0]);
+            if(url) {
+              values.payment_detail.ercodeUrl = url;
+            }else {
+              return message.error('请上传收款码')
+            }
+          }
+          this.props.onSubmit(values);
         }
-        this.props.onSubmit(err, values);
+
       }
     );
   };
@@ -394,9 +402,8 @@ export default class PayMethodForm extends Component {
 
   render() {
     const { formItemLayout } = this.state;
-    const { form, submitting, initialValues = {} } = this.props;
+    const { form, submitting, initialValues = {}, payMents=[] } = this.props;
     const { id } = initialValues || {};
-    const PAY_MENTS = omit(CONFIG.payments, 'site');
     const { getFieldDecorator } = form;
 
     return (
@@ -404,11 +411,11 @@ export default class PayMethodForm extends Component {
         <Form onSubmit={this.handleSubmit} hideRequiredMark>
           <Form.Item {...formItemLayout} label="支付方式">
             {getFieldDecorator('payment_method', {
-              initialValue: initialValues.payment_method || 'alipay',
+              initialValue: initialValues.payment_method,
               rules: [{ required: true, message: '请选择支付方式' }],
             })(
               <Select size="large" placeholder="请选择支付方式">
-                {map(PAY_MENTS, (text, key) => (
+                {map(payMents, (text, key) => (
                   <Option key={key} value={key}>
                     {text}
                   </Option>

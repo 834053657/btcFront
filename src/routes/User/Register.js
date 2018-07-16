@@ -398,7 +398,7 @@ export default class Register extends Component {
 
         {!!infoVisible && (
           <Modal
-            destroyOnClose-={true}
+            destroyOnClose
             visible
             zIndex={1032}
             maskClosable={false}

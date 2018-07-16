@@ -16,14 +16,14 @@ import {
   Popconfirm,
   Popover,
 } from 'antd';
-import { map } from 'lodash';
+import { map, omit, size } from 'lodash';
 import G2Validation from 'components/G2Validation';
 import DescriptionList from 'components/DescriptionList';
 import { getPayIcon } from '../../utils/utils';
 import EmailModal from './modals/EmailModal';
 import MobileModal from './modals/MobileModal';
 import PayMethodModal from './modals/PayMethodModal';
-import PasswordForm from './forms/PasswordForm';
+import PwdModal from './modals/PwdModal';
 import RealNameForm from './forms/RealNameForm';
 import VideoAuthForm from './forms/VideoAuthForm';
 
@@ -89,18 +89,6 @@ export default class UserCenterPage extends Component {
     this.setState({
       pwdModalVisible: true,
     });
-  };
-
-  handlePwdSubmit = (err, values) => {
-    if (!err) {
-      this.props.dispatch({
-        type: 'user/submitUpdatePassword',
-        payload: {
-          ...values,
-        },
-        callback: this.hidePwdlModal,
-      });
-    }
   };
 
   showG2Modal = () => {
@@ -173,24 +161,6 @@ export default class UserCenterPage extends Component {
     this.setState({
       payMethodModalVisible: data,
     });
-  };
-
-  renderPwdModal = () => {
-    const { pwdModalVisible } = this.state;
-    return (
-      <Modal
-        width={500}
-        title="修改密码"
-        visible={pwdModalVisible}
-        onCancel={this.hidePwdlModal}
-        maskClosable={false}
-        footer={null}
-      >
-        {pwdModalVisible && (
-          <PasswordForm onCancel={this.hidePwdlModal} onSubmit={this.handlePwdSubmit} />
-        )}
-      </Modal>
-    );
   };
 
   renderRealNameModal = () => {
@@ -333,6 +303,7 @@ export default class UserCenterPage extends Component {
       mobileModalVisible,
       g2ModalVisible,
       realNameModalVisible,
+      pwdModalVisible,
       payMethodModalVisible,
       uploadLoading,
     } = this.state;
@@ -342,6 +313,8 @@ export default class UserCenterPage extends Component {
     const real_name_status = real_name.status || 1;
     const video_status = video.status || 1;
     const { first_trade_at } = trade || {};
+    const existsPayments = map(payments, item => item.payment_method)
+    const ENABLE_PAY_MENTS = omit(CONFIG.payments, existsPayments);
 
     return (
       <Fragment>
@@ -621,7 +594,7 @@ export default class UserCenterPage extends Component {
                     );
                   })}
                 </div>
-                {payments.length < 10 && (
+                {size(ENABLE_PAY_MENTS) > 0 && (
                   <div className={styles.box_footer}>
                     <a onClick={this.showPayMethodModal}>
                       <Icon type="plus" /> 添加新的支付方式
@@ -648,7 +621,15 @@ export default class UserCenterPage extends Component {
               />
             )}
 
-            {this.renderPwdModal()}
+            {pwdModalVisible && (
+              <PwdModal
+                {...this.props}
+                visible={pwdModalVisible}
+                onCancel={this.hidePwdlModal}
+              />
+            )}
+
+            {/*{this.renderPwdModal()}*/}
 
             <G2Validation
               title="安全验证"
@@ -663,6 +644,7 @@ export default class UserCenterPage extends Component {
 
             <PayMethodModal
               {...this.props}
+              payMents={ENABLE_PAY_MENTS}
               title={
                 payMethodModalVisible && payMethodModalVisible.id ? '修改支付方式' : '添加支付方式'
               }

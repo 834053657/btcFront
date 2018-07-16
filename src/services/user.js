@@ -34,12 +34,13 @@ export async function resetPassword(params) {
  * @returns {Promise<Object>}
  */
 export async function updatePassword(params) {
-  const { old_password, password: new_password } = params || {};
+  const { old_password, password: new_password, verify_token } = params || {};
   return request('/btc/user/update_password', {
     method: 'POST',
     body: {
       old_password,
       new_password,
+      verify_token
     },
   });
 }
@@ -66,7 +67,7 @@ export async function updateG2Validate(params) {
 }
 
 export async function checkG2Validate(params) {
-  return request('/btc/user/verify_g2fa_code', {
+  return request('/btc/user/2fa_verify', {
     method: 'POST',
     body: params,
   });
