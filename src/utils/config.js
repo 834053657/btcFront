@@ -171,11 +171,43 @@ export default {
   //社交账号
   QQ: {
     1: '客服： 乌小笨',
-    2: '客服： 乌小乌',
-    3: '客服： 乌小黑',
-    4: '客服： 乌小蒙',
+    2: '客服： 乌小辉',
+    3: '客服： 乌小贤',
+    4: '客服： 乌小博',
+    5: '客服： 乌小刚',
+    6: '客服： 乌小新',
+    7: '客服： 乌小明',
+  },
+  //账号对应的链接
+  QQ_link: {
+    1: 'http://wpa.qq.com/msgrd?v=3&uin=3002734213&site=qq&menu=yes',
+    2: 'http://wpa.qq.com/msgrd?v=3&uin=3002791486&site=qq&menu=yes',
+    3: 'http://wpa.qq.com/msgrd?v=3&uin=3002752935&site=qq&menu=yes',
+    4: 'http://wpa.qq.com/msgrd?v=3&uin=3002733618&site=qq&menu=yes',
+    5: 'http://wpa.qq.com/msgrd?v=3&uin=3002772861&site=qq&menu=yes',
+    6: 'http://wpa.qq.com/msgrd?v=3&uin=3002763180&site=qq&menu=yes',
+    7: 'http://wpa.qq.com/msgrd?v=3&uin=3002793748&site=qq&menu=yes',
+  },
+  //邮箱
+  Email: {
+    1: 'contact@utomarket.com',
+  },
+  //微信二维码图片
+  WeChat: {
+    1: 'https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2136740882,3271518133&fm=58&bpow=630&bpoh=630',
+  },
+  //微博二维码图片
+  weibo: {
+    1: 'https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=1426575500,1228520832&fm=58&bpow=727&bpoh=536',
   },
 
+  transaction_status: {
+    '1': '待审核',
+    '2': '已取消',
+    '3': '已发送',
+    '4': '待确认',
+    '5': '已收到',
+  },
   //从字典中复制过来的
   order_type: {
     '1': '买入',

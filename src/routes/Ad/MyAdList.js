@@ -147,7 +147,9 @@ export default class List extends Component {
             {r.status === 1 && (
               <span>
                 {/*<Divider type="vertical" />*/}
-                <a onClick={() => this.updateAd(r, 2)}>暂停</a>
+                <a onClick={() => this.updateAd(r, 2)} className="text-green">
+                  暂停
+                </a>
               </span>
             )}
             {r.status === 2 && (
@@ -157,7 +159,7 @@ export default class List extends Component {
               </span>
             )}
             {[1, 2].indexOf(r.status) > -1 && (
-              <span>
+              <span onClick={this.testRow.bind(this, r)}>
                 <Divider type="vertical" />
                 <Link to={`/ad/edit/${r.id}`}>编辑</Link>
               </span>
@@ -171,7 +173,7 @@ export default class List extends Component {
                   okText="确认"
                   cancelText="取消"
                 >
-                  <a>删除</a>
+                  <a className="text-red">删除</a>
                 </Popconfirm>
               </span>
             )}
@@ -180,7 +182,9 @@ export default class List extends Component {
       },
     },
   ];
-
+  testRow = e => {
+    console.log(e);
+  };
   handleTableChange = (pagination, filtersArg, sorter) => {
     const { dispatch, getValue } = this.props;
     const { formValues } = this.state;
@@ -216,11 +220,14 @@ export default class List extends Component {
         <Col span={12} className={styles.title}>
           我的广告
         </Col>
-        {/*<Col span={12} className={styles.more}>*/}
-        {/*<a className={styles.itunes_btn} href="/#/ad/terms">*/}
-        {/*交易条款管理*/}
-        {/*</a>*/}
-        {/*</Col>*/}
+        <Col span={12} className={styles.more}>
+          <a
+            className={styles.itunes_btn}
+            onClick={() => this.props.dispatch(routerRedux.goBack())}
+          >
+            返回
+          </a>
+        </Col>
       </Row>
     );
 

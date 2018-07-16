@@ -144,7 +144,7 @@ export default class List extends Component {
     {
       title: '操作',
       dataIndex: '_opt_',
-      render: (_, row) => <Link to={`/card/deal-line/${row.id}`}>查看</Link>,
+      render: (_, row) => <Link to={`/trade/step/${row.id}`}>查看</Link>,
     },
   ];
 
@@ -192,10 +192,23 @@ export default class List extends Component {
   render() {
     const { type } = this.state;
     const { data: { list, pagination }, loading } = this.props;
-    console.log(list.length);
-
+    const content = (
+      <Row gutter={24}>
+        <Col span={12} className={styles.title}>
+          我的订单
+        </Col>
+        <Col span={12} className={styles.more}>
+          <a
+            className={styles.itunes_btn}
+            onClick={() => this.props.dispatch(routerRedux.goBack())}
+          >
+            返回
+          </a>
+        </Col>
+      </Row>
+    );
     return (
-      <PageHeaderLayout title="我的订单">
+      <PageHeaderLayout content={content}>
         <div>
           <Card bordered={false} className={styles.message_list}>
             <Tabs activeKey={type} onChange={this.handleChangeType}>
