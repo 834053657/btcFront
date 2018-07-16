@@ -21,6 +21,10 @@ export default class Register extends Component {
 
   componentDidMount() {}
 
+  componentWillUnmount() {
+    clearInterval(this.timer);
+  }
+
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields({ force: true }, (err, values) => {

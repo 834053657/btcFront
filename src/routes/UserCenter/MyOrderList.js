@@ -108,7 +108,7 @@ export default class List extends Component {
       title: '总BTC',
       dataIndex: 'trading_count',
       render: (v, row) => {
-        let total = row.trading_count + row.fees;
+        const total = row.trading_count + row.fees;
         console.log(row.trading_count, row.fees);
         return <span>{formatBTC(total)}</span>;
       },

@@ -26,18 +26,21 @@ class SecureValidationForm extends Component {
     count: 0,
   };
 
-  componentDidMount() {
+  componentWillUnmount() {
     clearInterval(this.interval);
   }
 
   handleSendCaptcha = () => {
     const { validateFields, getFieldValue } = this.props.form;
-    const type = getFieldValue('type');
-    const fieldsName = type === 'mail' ? ['mail', 'type'] : ['nation_code', 'phone', 'type'];
 
-    validateFields(fieldsName, { force: true }, (err, values) => {
+    validateFields(['type'], { force: true }, (err, values) => {
       if (!err) {
-        this.props.onGetCaptcha(values, () => {
+        const params = {
+          ...values,
+          data: this.props.verify_data[values.type].data,
+        };
+
+        this.props.onGetCaptcha(params, () => {
           let count = 59;
           this.setState({ count });
           this.interval = setInterval(() => {
@@ -60,11 +63,11 @@ class SecureValidationForm extends Component {
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields({ force: true }, (err, values) => {
-      console.log(err, values);
       const params = {
         ...values,
         data: this.props.verify_data[values.type].data,
       };
+
       this.props.onSubmit(err, params);
     });
   };
@@ -81,7 +84,6 @@ class SecureValidationForm extends Component {
         sm: { span: 20 },
       },
     };
-    console.log(verify_data);
 
     return (
       <div className={classNames(className, styles.login)}>
