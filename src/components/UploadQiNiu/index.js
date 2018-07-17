@@ -32,7 +32,6 @@ export default class UploadQiNiu extends Component {
       });
     } else if (info.file.status === 'done') {
       const url = this.getImgUrl(info.file)
-      console.log(url);
       this.props.onChange(url);
       this.setState({ uploading: false });
     } else if (info.file.status === 'error') {

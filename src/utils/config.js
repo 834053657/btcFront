@@ -213,6 +213,10 @@ export default {
     '1': '买入',
     '2': '出售',
   },
+  order_type_desc: {
+    '1': '买',
+    '2': '卖',
+  },
 
   card_type: [],
 };
