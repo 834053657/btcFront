@@ -1,20 +1,15 @@
 import React, { Component } from 'react';
-import { connect } from 'dva';
 import PropTypes from 'prop-types';
-import { Form, Input, Button, Upload, Select, message, Icon } from 'antd';
+import { Form, Input, Button, Select } from 'antd';
 import { omit, map, keys } from 'lodash';
-import { getAuthority } from '../../../utils/authority';
+import UploadQiNiu from 'components/UploadQiNiu';
 import styles from './PayMethodForm.less';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
-const Dragger = Upload.Dragger;
 const { TextArea } = Input;
 
-@connect(({ user, loading }) => ({
-  result: user.changePassword.result,
-  submitting: loading.effects['register/submit'],
-}))
+
 @Form.create()
 export default class PayMethodForm extends Component {
   static defaultProps = {
@@ -74,13 +69,9 @@ export default class PayMethodForm extends Component {
           },
           'payment_detail.ercodeUrl': {
             lablel: '收款码',
-            component: () => this.renderDragger('payment_detail.ercodeUrl'),
+            component: <UploadQiNiu />,
             options: {
-              initialValue: payment_detail.ercodeUrl
-                ? [{ url: payment_detail.ercodeUrl, status: 'done' }]
-                : [],
-              valuePropName: 'fileList',
-              getValueFromEvent: this.normFile,
+              initialValue: payment_detail.ercodeUrl,
               rules: [
                 {
                   required: true,
@@ -123,13 +114,9 @@ export default class PayMethodForm extends Component {
           },
           'payment_detail.ercodeUrl': {
             lablel: '收款码',
-            component: () => this.renderDragger('payment_detail.ercodeUrl'),
+            component: <UploadQiNiu />,
             options: {
-              initialValue: payment_detail.ercodeUrl
-                ? [{ url: payment_detail.ercodeUrl, status: 'done' }]
-                : [],
-              valuePropName: 'fileList',
-              getValueFromEvent: this.normFile,
+              initialValue: payment_detail.ercodeUrl,
               rules: [
                 {
                   required: true,
@@ -245,13 +232,9 @@ export default class PayMethodForm extends Component {
           },
           'payment_detail.ercodeUrl': {
             lablel: '收款码',
-            component: () => this.renderDragger('payment_detail.ercodeUrl'),
+            component: <UploadQiNiu />,
             options: {
-              initialValue: payment_detail.ercodeUrl
-                ? [{ url: payment_detail.ercodeUrl, status: 'done' }]
-                : [],
-              valuePropName: 'fileList',
-              getValueFromEvent: this.normFile,
+              initialValue: payment_detail.ercodeUrl,
               rules: [
                 {
                   required: true,
@@ -265,87 +248,6 @@ export default class PayMethodForm extends Component {
     };
   }
 
-  normFile = e => {
-    if (Array.isArray(e)) {
-      return e;
-    }
-    return e && [e.file];
-  };
-
-  uploadHandler = (type, info) => {
-    if (info.file.status === 'uploading') {
-      this.setState({
-        uploading: true,
-      });
-    } else if (info.file.status === 'done') {
-      this.setState({ uploading: false });
-    } else if (info.file.status === 'error') {
-      this.setState({ uploading: false });
-      message.error('上传错误，可能请求已过期，请刷新页面重试');
-    }
-  };
-
-  getImgUrl = (obj = {}) => {
-    const { upload = {} } = getAuthority() || {};
-    let url = '';
-
-    if (obj.status === 'done' && obj.url) {
-      url = obj.url;
-    } else if (obj.status === 'done' && obj.response) {
-      url = obj.response.hash;
-    }
-    return url ? upload.prefix + url : null;
-  };
-
-  beforeUpload = file => {
-    const isLt2M = file.size / 1024 / 1024 < 5;
-    if (!isLt2M) {
-      message.error('头像必须小于5M!');
-    }
-    return isLt2M;
-  };
-
-  renderDragger = type => {
-    const { upload = {} } = getAuthority() || {};
-    const fileList = this.props.form.getFieldValue(type);
-    let imageUrl = null;
-    if (Array.isArray(fileList) && fileList[0] && fileList[0].status === 'done') {
-      const file = fileList[0];
-      imageUrl =
-        file.response && file.response.hash ? upload.prefix + file.response.hash : file.url;
-    }
-
-    const uploadButton = (
-      <div>
-        <p className="ant-upload-drag-icon">
-          <Icon type={this.state.uploading ? 'loading' : 'inbox'} />
-        </p>
-        <p className="ant-upload-text">单击或拖动文件到此区域进行上传</p>
-      </div>
-    );
-
-    const uploadBtn = (
-      <Dragger
-        name="file"
-        accept="image/gif, image/png, image/jpg, image/jpeg, image/bmp"
-        showUploadList={false}
-        multiple={false}
-        action={upload.domain}
-        onChange={this.uploadHandler.bind(this, type)}
-        beforeUpload={this.beforeUpload}
-        data={{ token: upload.token }}
-      >
-        {imageUrl ? (
-          <img style={{ maxWidth: '100%', maxHeight: '150px' }} src={imageUrl} alt={type} />
-        ) : (
-          uploadButton
-        )}
-      </Dragger>
-    );
-
-    return uploadBtn;
-  };
-
   handleSubmit = e => {
     e.preventDefault();
     const { getFieldValue } = this.props.form;
@@ -358,14 +260,6 @@ export default class PayMethodForm extends Component {
       { force: true },
       (err, values) => {
         if (!err) {
-          if (values.payment_detail && values.payment_detail.ercodeUrl) {
-            const url = this.getImgUrl(values.payment_detail.ercodeUrl[0]);
-            if (url) {
-              values.payment_detail.ercodeUrl = url;
-            } else {
-              return message.error('请上传收款码');
-            }
-          }
           this.props.onSubmit(values);
         }
       }
