@@ -311,7 +311,8 @@ export default class PayMethodForm extends Component {
     let imageUrl = null;
     if (Array.isArray(fileList) && fileList[0] && fileList[0].status === 'done') {
       const file = fileList[0];
-      imageUrl = file.response && file.response.hash ? upload.prefix + file.response.hash : file.url;
+      imageUrl =
+        file.response && file.response.hash ? upload.prefix + file.response.hash : file.url;
     }
 
     const uploadButton = (
@@ -356,18 +357,17 @@ export default class PayMethodForm extends Component {
       [...keys(fields), 'payment_method'],
       { force: true },
       (err, values) => {
-        if(!err) {
+        if (!err) {
           if (values.payment_detail && values.payment_detail.ercodeUrl) {
             const url = this.getImgUrl(values.payment_detail.ercodeUrl[0]);
-            if(url) {
+            if (url) {
               values.payment_detail.ercodeUrl = url;
-            }else {
-              return message.error('请上传收款码')
+            } else {
+              return message.error('请上传收款码');
             }
           }
           this.props.onSubmit(values);
         }
-
       }
     );
   };
@@ -402,7 +402,7 @@ export default class PayMethodForm extends Component {
 
   render() {
     const { formItemLayout } = this.state;
-    const { form, submitting, initialValues = {}, payMents=[] } = this.props;
+    const { form, submitting, initialValues = {}, payMents = [] } = this.props;
     const { id } = initialValues || {};
     const { getFieldDecorator } = form;
 

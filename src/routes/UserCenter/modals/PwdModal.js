@@ -81,12 +81,12 @@ export default class EmailModal extends Component {
     }
   };
 
-  handleSendCaptcha = ( values, callback) => {
+  handleSendCaptcha = (values, callback) => {
     return this.props.dispatch({
       type: 'global/sendVerify',
       payload: {
         data: {
-          ...values
+          ...values,
         },
         type: values.type,
         usage: 6,
@@ -95,30 +95,30 @@ export default class EmailModal extends Component {
     });
   };
 
-  getSecureValidationData = (user) => {
-    const { email, telephone, telephone_code} = user || {};
-    const verify_data = {}
+  getSecureValidationData = user => {
+    const { email, telephone, telephone_code } = user || {};
+    const verify_data = {};
 
-    if(email) {
+    if (email) {
       verify_data.mail = {
         text: `${CONFIG.verify_type.mail} ${email}`,
         data: {
-          mail: email
-        }
-      }
+          mail: email,
+        },
+      };
     }
-    if(telephone && telephone_code) {
+    if (telephone && telephone_code) {
       verify_data.sms = {
         text: `${CONFIG.verify_type.sms}+${telephone_code}${telephone}`,
         data: {
           nation_code: telephone_code,
-          phone: telephone
-        }
-      }
+          phone: telephone,
+        },
+      };
     }
 
     return verify_data;
-  }
+  };
 
   render() {
     const { className, form, submitting, visible, title, currentUser, onCancel } = this.props;
@@ -147,9 +147,7 @@ export default class EmailModal extends Component {
       },
       {
         title: '修改密码',
-        component: (
-          <PasswordForm onCancel={onCancel} onSubmit={this.handleBindSubmit} />
-        ),
+        component: <PasswordForm onCancel={onCancel} onSubmit={this.handleBindSubmit} />,
       },
       {
         title: '完成',
@@ -158,7 +156,7 @@ export default class EmailModal extends Component {
 
     steps = steps.filter(item => !item.hide);
 
-    console.log(this.state)
+    console.log(this.state);
 
     return (
       <Modal

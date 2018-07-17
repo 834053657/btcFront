@@ -262,6 +262,11 @@ export const getRouterData = app => {
     '/form/basic-form': {
       component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/BasicForm')),
     },
+    '/authentication/': {
+      component: dynamicWrapper(app, ['global', 'authentication'], () => {
+        import('../routes/Authentication/AuthenticationPage');
+      }),
+    },
   };
 
   // Get name from ./menu.js or just set it in the router data.

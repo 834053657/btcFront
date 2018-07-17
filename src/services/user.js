@@ -40,7 +40,7 @@ export async function updatePassword(params) {
     body: {
       old_password,
       new_password,
-      verify_token
+      verify_token,
     },
   });
 }
@@ -107,4 +107,14 @@ export async function getG2Secret(params) {
 
 export async function queryMyOrderList(params) {
   return request(`/btc/order/mine?${stringify(params)}`);
+}
+
+export function authForC1(stage, body) {
+  return request(`/btc/user/auth/c1`, { method: 'POST', body });
+}
+export function authForC2(stage, body) {
+  return request(`/btc/user/auth/c2`, { method: 'POST', body });
+}
+export function authForC3(stage, body) {
+  return request(`/btc/user/auth/c3`, { method: 'POST', body });
 }

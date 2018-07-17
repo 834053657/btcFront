@@ -19,7 +19,7 @@ export default class MobileModal extends Component {
 
   state = {};
 
-  handleSubmit = (values) => {
+  handleSubmit = values => {
     this.props.dispatch({
       type: 'user/submitUserPayMethod',
       payload: {
@@ -31,7 +31,7 @@ export default class MobileModal extends Component {
   };
 
   render() {
-    const { title, data, onCancel, payMents=[]}  = this.props;
+    const { title, data, onCancel, payMents = [] } = this.props;
 
     return (
       <Modal
@@ -43,7 +43,12 @@ export default class MobileModal extends Component {
         footer={null}
       >
         {!!data && (
-          <PayMethodForm payMents={payMents}  initialValues={data} onSubmit={this.handleSubmit} onCancel={onCancel} />
+          <PayMethodForm
+            payMents={payMents}
+            initialValues={data}
+            onSubmit={this.handleSubmit}
+            onCancel={onCancel}
+          />
         )}
       </Modal>
     );

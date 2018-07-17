@@ -4,7 +4,7 @@ import { Table, Tabs, Button, Icon, Card, Modal, Badge, Tooltip } from 'antd';
 // import numeral from 'numeral';
 import { map } from 'lodash';
 // import DescriptionList from 'components/DescriptionList';
-import { formatBTC } from '../../../utils/utils'
+import { formatBTC } from '../../../utils/utils';
 import styles from './TransferList.less';
 
 // const { Description } = DescriptionList;
@@ -26,7 +26,7 @@ export default class TransferList extends Component {
     this.handleTableChange();
   }
 
-/*  showModal = row => {
+  /*  showModal = row => {
     this.setState({
       modalInfo: row,
     });
@@ -120,7 +120,7 @@ export default class TransferList extends Component {
     });
   };
 
-/*  getMethodContent = item => {
+  /*  getMethodContent = item => {
     const { paid_type, payment = {} } = item || {};
     let content = '';
 
@@ -151,7 +151,7 @@ export default class TransferList extends Component {
     this.fetch({ status });
   };
 
-/*  renderDetail = modalInfo => {
+  /*  renderDetail = modalInfo => {
     const { created_at, amount, fee, goods_type, trade_type, payment, type } = modalInfo || {};
     return (
       <DescriptionList col={1} className={styles.detailBox}>
@@ -194,7 +194,7 @@ export default class TransferList extends Component {
           pagination={{ ...pagination, pageSize: pagination.page_size, current: pagination.page }}
           onChange={this.handleTableChange}
         />
-      {/*  <Modal
+        {/*  <Modal
           title="交易详情"
           visible={!!modalInfo}
           onOk={this.hideModal}

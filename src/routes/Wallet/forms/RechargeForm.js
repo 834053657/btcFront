@@ -18,7 +18,7 @@ import {
 } from 'antd';
 import { map, filter } from 'lodash';
 import classNames from 'classnames';
-import {formatBTC } from '../../../utils/utils';
+import { formatBTC } from '../../../utils/utils';
 
 import styles from './RechargeForm.less';
 
