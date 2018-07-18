@@ -8,13 +8,13 @@ import styles from './index.less';
 
 const weibocontent = (
   <div>
-    <img src={CONFIG.weibo[1]} alt="" style={{ width: '80px', height: '80px' }} />
+    <img src={CONFIG.weibo} alt="" style={{ width: '80px', height: '80px' }} />
   </div>
 );
 
 const wexincontent = (
   <div>
-    <img src={CONFIG.WeChat[1]} alt="" style={{ width: '80px', height: '80px' }} />
+    <img src={CONFIG.WeChat} alt="" style={{ width: '80px', height: '80px' }} />
   </div>
 );
 
@@ -40,7 +40,7 @@ const GlobalFooter = ({ className }) => {
     <div className={clsString}>
       <div className={styles.about}>
         <div className={styles.title}>关于我们</div>
-        <ul>
+        <ul className={styles.mg_left10}>
           <li className={styles.pages}>
             <Link to="/article/about">团队介绍</Link>
           </li>
@@ -60,7 +60,7 @@ const GlobalFooter = ({ className }) => {
       </div>
       <div className={styles.help}>
         <div className={styles.title}>帮助教程</div>
-        <ul>
+        <ul className={styles.mg_left10}>
           <li className={styles.pages}>
             <Link to="/article/course">新手教程</Link>
           </li>
@@ -77,32 +77,34 @@ const GlobalFooter = ({ className }) => {
       </div>
       <div className={styles.relation}>
         <div className={styles.title}>联系我们</div>
-        <ul>
-          <li className={styles.pages}>
+        <ul className={styles.mg_left10}>
+          <li className={styles.concat_web}>
             社交账号:
             <a href="">
-              <Icon type="facebook" style={{ margin: '10px', fontSize: 20 }} />
+              <Icon type="facebook" />
             </a>
             <Popover placement="top" trigger="hover" content={weibocontent}>
-              <Icon type="weibo-circle" style={{ margin: '10px', fontSize: 20 }} />
+              <Icon type="weibo-circle" />
             </Popover>
             <Popover placement="top" trigger="hover" content={wexincontent}>
-              <Icon type="wechat" style={{ margin: '10px', fontSize: 20 }} />
+              <Icon type="wechat" />
             </Popover>
             <Popover placement="top" trigger="hover" content={qqcontent}>
-              <Icon type="qq" style={{ margin: '10px', fontSize: 20 }} />
+              <Icon type="qq" />
             </Popover>
           </li>
           <li className={styles.Email}>
-            客服邮箱:{' '}
-            <a style={{ color: '#ccc' }} href={CONFIG.Email[1]}>
-              {CONFIG.Email[1]}
-            </a>
+            <p>
+              客服邮箱:{' '}
+              <a style={{ color: '#ccc' }} href={`mailto:${CONFIG.Email}`}>
+                {CONFIG.Email}
+              </a>
+            </p>
           </li>
           <li className={styles.phone}>
-            客服热线: <span>187-6440-3666</span>
+            <p><span>客服热线:</span> <span>187-6440-3666</span></p>
           </li>
-          <li className={styles.time}>热线时间：每天8：00——24：00</li>
+          <li className={styles.time}><p>热线时间：每天8：00 ~ 24：00</p></li>
         </ul>
       </div>
     </div>

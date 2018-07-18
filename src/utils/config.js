@@ -194,17 +194,11 @@ export default {
     7: 'http://wpa.qq.com/msgrd?v=3&uin=3002793748&site=qq&menu=yes',
   },
   //邮箱
-  Email: {
-    1: 'contact@utomarket.com',
-  },
+  Email: 'contact@utomarket.com',
   //微信二维码图片
-  WeChat: {
-    1: '../../public/weixin.jpg',
-  },
+  WeChat: '../../public/weixin.jpg',
   //微博二维码图片
-  weibo: {
-    1: '../../public/weibo.png',
-  },
+  weibo: '../../public/weibo.png',
 
   transaction_status: {
     '1': '待审核',

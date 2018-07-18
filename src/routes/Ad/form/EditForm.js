@@ -424,7 +424,7 @@ export default class EditForm extends Component {
             {payments.length === 0 ? (
               <FormItem {...formItemLayout} label="收款方式">
                 <span>
-                  <Link to="/user-center/index">请先加入收款方式</Link>
+                  <Link to="/user-center/index">请先添加收款方式</Link>
                 </span>
               </FormItem>
             ) : (
