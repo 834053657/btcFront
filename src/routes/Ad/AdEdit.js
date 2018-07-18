@@ -7,9 +7,10 @@ import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './AdEdit.less';
 import EditForm from './form/EditForm';
 
-@connect(({ ad, loading }) => ({
+@connect(({ ad, user, loading }) => ({
   initialValues: ad.adDetail,
   price: ad.price,
+  currentUser: user.currentUser,
   loading: loading.effects['ad/fetchAdDetail'],
   freshLoading: loading.effects['ad/fetchNewPrice'],
   submitting: loading.effects['ad/postPublish'],

@@ -125,7 +125,7 @@ export const getRouterData = app => {
       redirectPath: '/user/login',
     },
     '/ad/edit/:id': {
-      component: dynamicWrapper(app, ['ad'], () => import('../routes/Ad/AdEdit')),
+      component: dynamicWrapper(app, ['ad','user'], () => import('../routes/Ad/AdEdit')),
       authority: checkLogined,
       redirectPath: '/user/login',
     },
