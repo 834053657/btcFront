@@ -36,37 +36,18 @@ export default class EditForm extends Component {
     };
   }
 
-  fetchRefresh = (obj = {}) => {
-    console.log(obj);
-    this.props.dispatch({
-      type: 'ad/fetchNewPrice',
-      payload: {
-        currency: obj || 'CNY',
-      },
-    });
-    this.setState({ freshLoading: true });
-    setTimeout(() => {
-      this.setState({ freshLoading: false });
-    }, 1000);
-  };
-
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
         const { id } = this.props.initialValues || {};
-        this.props.onSubmit && this.props.onSubmit({ ...values });
+        this.props.onSubmit && this.props.onSubmit({ ...values, id });
       }
     });
-    this.setState({ loading: true });
-    setTimeout(() => {
-      this.setState({ loading: false });
-    }, 1000);
   };
   handleChange = e => {};
 
   getUserAccount = info => {
-    console.log(info);
     const { payment_method, payment_detail = {} } = info || {};
     if (payment_method === 'bank') {
       return payment_detail.bank_account;
@@ -180,8 +161,7 @@ export default class EditForm extends Component {
   clickBtn = value => {};
 
   render() {
-    console.log(this.props);
-    const { form, num, price = {}, initialValues = {}, submitting, currentUser } = this.props;
+    const { form, num, price = {}, initialValues = {}, freshLoading, submitting, currentUser,getPrice } = this.props;
     const { getFieldDecorator, getFieldValue } = form || {};
     const { payments = {} } = currentUser || {};
 
@@ -190,7 +170,7 @@ export default class EditForm extends Component {
         <FormItem>
           <div className={styles.chooseBtn}>
             {getFieldDecorator('ad_type', {
-              initialValue: initialValues.ad_type ? initialValues.ad_type + '' : '1',
+              initialValue: initialValues.ad_type ? initialValues.ad_type  : 1,
               rules: [
                 {
                   required: true,
@@ -202,7 +182,7 @@ export default class EditForm extends Component {
                 {map(typeMap, (text, value) => (
                   <RadioButton
                     key={value}
-                    value={value}
+                    value={+value}
                     onClick={this.clickBtn.bind(this, value)}
                     className={styles.Btn}
                   >
@@ -241,7 +221,7 @@ export default class EditForm extends Component {
               },
             ],
           })(
-            <Select style={{ width: 170 }}>
+            <Select style={{ width: 170 }} placeholder="请选择所在地">
               {map(CONFIG.country, item => (
                 <Option key={item.code} value={item.code}>
                   {item.name}
@@ -281,7 +261,6 @@ export default class EditForm extends Component {
               })(
                 <InputNumber
                   min={0}
-                  precision={4}
                   style={{ width: 170, position: 'absolute', marginTop: '5px' }}
                   placeholder="市场价比例"
                   addonAfter="%"
@@ -303,8 +282,8 @@ export default class EditForm extends Component {
                 </span>
                 <Button
                   type="primary"
-                  onClick={this.fetchRefresh.bind(this, getFieldValue('currency'))}
-                  loading={this.state.freshLoading}
+                  onClick={getPrice.bind(this, getFieldValue('currency'))}
+                  loading={freshLoading}
                 >
                   刷新
                 </Button>
@@ -327,11 +306,12 @@ export default class EditForm extends Component {
             <InputNumber
               min={0}
               precision={4}
-              placeholder="交易价格"
+              placeholder={`${getFieldValue('currency')}/BTC`}
               style={{ width: 170 }}
               onChange={this.handleChange}
             />
           )}
+
         </FormItem>
 
         <FormItem label="交易限额" {...formItemLayout}>
@@ -484,20 +464,23 @@ export default class EditForm extends Component {
           <div>
             <FormItem>
               <div>
-                {getFieldDecorator('trusted_user', {})(
+                {getFieldDecorator('trusted_user', {
+                  initialValue: initialValues.trusted_user
+
+                })(
                   <Checkbox onChange={this.handleChangeTrust}>仅限受信任的交易者</Checkbox>
                 )}
               </div>
             </FormItem>
             <FormItem>
-              {form.getFieldValue('trusted_user') ? (
+              {getFieldValue('trusted_user') ? (
                 ''
               ) : (
                 <div>
                   <span className="bt-trade-level-auth">交易者的认证等级</span>
                   <span style={{ marginLeft: 20 }}>
                     {getFieldDecorator('user_auth_level', {
-                      initialValue: '0',
+                      initialValue: initialValues.user_auth_level || 0,
                       rules: [
                         {
                           required: true,
@@ -506,10 +489,10 @@ export default class EditForm extends Component {
                       ],
                     })(
                       <RadioGroup>
-                        <Radio value="1">C1</Radio>
-                        <Radio value="2">C2</Radio>
-                        <Radio value="3">C3</Radio>
-                        <Radio value="0">不限</Radio>
+                        {
+                          map(CONFIG.auth_level, (text, value) => <Radio key={value} value={+value} >{text}</Radio>)
+                        }
+                        <Radio value={0}>不限</Radio>
                       </RadioGroup>
                     )}
                   </span>
@@ -521,17 +504,19 @@ export default class EditForm extends Component {
 
         <FormItem {...formItemLayout} label="交易条款">
           {getFieldDecorator('trading_term', {
+            initialValue: initialValues.trading_term,
             rules: [
               {
                 required: true,
                 message: '请输入',
               },
             ],
-          })(<TextArea placeholder="交易备注" rows={4} style={{ width: 390 }} />)}
+          })(<TextArea placeholder="交易条款" rows={4} style={{ width: 390 }} />)}
         </FormItem>
 
         <FormItem {...formItemLayout} label="自动回复">
           {getFieldDecorator('auto_replies', {
+            initialValue: initialValues.auto_replies || CONFIG.auto_replies_msg[getFieldValue('ad_type')] ,
             rules: [
               {
                 required: true,
@@ -588,11 +573,11 @@ export default class EditForm extends Component {
         <FormItem>
           <div className={styles.btnBox}>
             {initialValues.id ? (
-              <Button type="primary" htmlType="submit" loading={this.state.loading}>
+              <Button type="primary" htmlType="submit" loading={submitting}>
                 确认修改
               </Button>
             ) : num && num > 0 ? (
-              <Button type="primary" htmlType="submit" loading={this.state.loading}>
+              <Button type="primary" htmlType="submit" loading={submitting}>
                 确认发布
               </Button>
             ) : (

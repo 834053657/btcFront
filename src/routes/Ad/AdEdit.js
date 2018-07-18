@@ -7,21 +7,18 @@ import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './AdEdit.less';
 import EditForm from './form/EditForm';
 
-const statusMap = ['warning', 'processing', 'error', 'default'];
-
-const RadioButton = Radio.Button;
-const RadioGroup = Radio.Group;
-
 @connect(({ ad, loading }) => ({
   initialValues: ad.adDetail,
   price: ad.price,
   loading: loading.effects['ad/fetchAdDetail'],
+  freshLoading: loading.effects['ad/fetchNewPrice'],
+  submitting: loading.effects['ad/postPublish'],
 }))
 export default class AdEdit extends Component {
   componentWillMount() {}
   componentDidMount() {
     const { params: { id } } = this.props.match || {};
-    this.fetchDetail(id, this.fetchPrice);
+    this.fetchDetail(id, (obj={}) => this.fetchPrice(obj.currency));
   }
 
   fetchDetail = (id, callback) => {
@@ -29,17 +26,17 @@ export default class AdEdit extends Component {
     dispatch({
       type: 'ad/fetchAdDetail',
       payload: {
-        ad_id: id,
+        id,
       },
       callback,
     });
   };
 
-  fetchPrice = obj => {
+  fetchPrice = (currency='CNY') => {
     this.props.dispatch({
       type: 'ad/fetchNewPrice',
       payload: {
-        currency: obj.currency,
+        currency
       },
     });
   };
@@ -87,7 +84,7 @@ export default class AdEdit extends Component {
     return (
       <PageHeaderLayout content={content}>
         <div className={styles.background}>
-          <EditForm {...this.props} onSubmit={this.handleSubmit} />
+          <EditForm {...this.props}  getPrice={this.fetchPrice}  onSubmit={this.handleSubmit} />
         </div>
       </PageHeaderLayout>
     );
