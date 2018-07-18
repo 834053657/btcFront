@@ -34,16 +34,18 @@ export default class AdPublish extends Component {
   fetchRemain = () => {
     this.props.dispatch({
       type: 'ad/fetchUserRemain',
-      payload: {},
     });
   };
 
   handleSubmit = value => {
-    const { dispatch } = this.props;
+    const { dispatch, price } = this.props;
+    console.log(value);
+    // console.log(price)
     dispatch({
       type: 'ad/postPublish',
       payload: {
         ...value,
+        market_price: price,
         trusted_user: +!!value.trusted_user,
       },
       callback: () => {
@@ -53,12 +55,13 @@ export default class AdPublish extends Component {
   };
 
   render() {
+    const { num } = this.props;
     return (
       <PageHeaderLayout title="发布广告">
         <div className={styles.background}>
           <div style={{ paddingLeft: '20px', width: '640px', marginBottom: '30px' }}>
             <Alert
-              message="您最多可以创建 4 条交易广告，在您创建广告的时候，请您创建适合您需求的广告条数."
+              message={`您最多可以创建 ${num} 条交易广告，在您创建广告的时候，请您创建适合您需求的广告条数.`}
               type="info"
               showIcon
             />

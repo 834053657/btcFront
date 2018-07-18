@@ -33,6 +33,7 @@ export default class UserDetails extends Component {
       visible: false,
       type: '1',
       disabled: false,
+      comment_visbile: true,
     };
   }
 
@@ -152,7 +153,7 @@ export default class UserDetails extends Component {
           <Description term="已确认的交易次数" className={styles.UserStyle}>
             {trader.trade_times ? trader.trade_times : '-'}
           </Description>
-          <Description term="评价得分" className={styles.UserStyle}>
+          <Description term="好评率" className={styles.UserStyle}>
             {trader.good_ratio ? trader.good_ratio : '-'}
           </Description>
           <Description term="第一次购买" className={styles.UserStyle}>
@@ -174,11 +175,7 @@ export default class UserDetails extends Component {
             {userMessage.country_code}
           </Description>
           <Description term="信任" className={styles.UserStyle}>
-            {userMessage.is_trust ? (
-              <span>{userMessage.is_trust === true ? '是' : '否'}</span>
-            ) : (
-              '-'
-            )}
+            <span>{userMessage.is_trust === true ? '是' : '否'}</span>
           </Description>
         </DescriptionList>
       </div>
@@ -229,7 +226,7 @@ export default class UserDetails extends Component {
         const { type } = this.state;
         return (
           <Fragment>
-            <Link to={type === '1' ? `/trade/detail/${row.ad_id}` : ''}>
+            <Link to={type === '1' ? `/trade/detail/${row.ad_id}` : `/trade/detail/${row.ad_id}`}>
               <Button type="primary">{type ? typeMap[type] : '-'}</Button>
             </Link>
           </Fragment>
@@ -245,23 +242,50 @@ export default class UserDetails extends Component {
     });
   };
 
-  hadleShowAll = () => {};
+  handleShowAll = () => {
+    const { comment_visbile } = this.state;
+    this.setState({
+      comment_visbile: !comment_visbile,
+    });
+  };
 
   UserComment = () => {
     // console.log(this.props)
     const { comment } = this.props;
+    const { comment_visbile } = this.state;
 
     return (
       <div>
         <DescriptionList col={1} style={{ margin: '30px' }}>
           {map(comment, (item, index) => {
-            return (
-              <List.Item key={index} style={{ width: '40%', borderBottom: '1px solid #ccc' }}>
+            return comment_visbile === true ? (
+              index < 3 ? (
+                <List.Item key={index} style={{ width: '100%', borderBottom: '1px solid #ccc' }}>
+                  <List.Item.Meta
+                    avatar={
+                      <Icon
+                        style={{ fontSize: 39 }}
+                        type={item.star && item.star < 4 ? 'like' : 'dislike'}
+                      />
+                    }
+                    title={
+                      <a>
+                        {item.created_at
+                          ? moment(item.created_at * 1000).format('YYYY-MM-DD HH:mm:ss')
+                          : '-'}
+                      </a>
+                    }
+                    description={item.content}
+                  />
+                </List.Item>
+              ) : null
+            ) : (
+              <List.Item key={index} style={{ width: '100%', borderBottom: '1px solid #ccc' }}>
                 <List.Item.Meta
                   avatar={
                     <Icon
                       style={{ fontSize: 39 }}
-                      type={item.rating_type === 1 ? 'like' : 'dislike'}
+                      type={item.star && item.star < 4 ? 'like' : 'dislike'}
                     />
                   }
                   title={
@@ -277,8 +301,8 @@ export default class UserDetails extends Component {
             );
           })}
         </DescriptionList>
-        <a className={styles.All} onClick={this.hadleShowAll}>
-          显示所有用户评论
+        <a className={styles.All} onClick={this.handleShowAll}>
+          {comment_visbile === true ? '显示所有用户评论' : '显示部分用户评论'}
         </a>
       </div>
     );
@@ -356,7 +380,7 @@ export default class UserDetails extends Component {
             </div>
           </div>
           <div>
-            <div style={{ margin: '80px 0 30px' }} className={styles.comment}>
+            <div className={styles.comment}>
               <h2>评论</h2>
             </div>
           </div>

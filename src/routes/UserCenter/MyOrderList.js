@@ -174,7 +174,7 @@ export default class List extends Component {
 
   render() {
     const { type } = this.state;
-    const { data: { list, pagination }, loading } = this.props;
+    const { data: { list, pagination, statistics = {} }, loading } = this.props;
     const content = (
       <Row gutter={24}>
         <Col span={12} className={styles.title}>
@@ -195,9 +195,9 @@ export default class List extends Component {
         <div>
           <Card bordered={false} className={styles.message_list}>
             <Tabs activeKey={type} onChange={this.handleChangeType}>
-              <TabPane tab="全部" key="" />
+              <TabPane tab={`全部(${statistics[0] || 0})`} key="" />
               {map(CONFIG.order_status, (text, value) => (
-                <TabPane tab={text + '(' + list.length + ')'} key={value} />
+                <TabPane tab={`${text}(${statistics[value] || 0})`} key={value} />
               ))}
             </Tabs>
             <Table

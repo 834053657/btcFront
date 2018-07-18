@@ -23,6 +23,15 @@ export default class Step1 extends PureComponent {
     });
   };
 
+  handleSubmitEvaluate = values => {
+    console.log('1', values);
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'trade/postContent',
+      payload: values,
+    });
+  };
+
   renderPaymentMethodInfo = info => {
     const { payment_detail = {}, payment_method = {} } = info || {};
     let content = null;
@@ -70,10 +79,10 @@ export default class Step1 extends PureComponent {
   };
 
   render() {
-    const { submitting, orderDetail, renderButtons, handleReport } = this.props;
-    const { ad = {}, order = {} } = orderDetail || {};
+    const { orderDetail, renderButtons, handleReport } = this.props;
+    const { ad = {}, order = {}, rating = {} } = orderDetail || {};
     const { trading_price, owner = {}, currency, trading_term, payment_methods = [] } = ad || {};
-    const { status, pay_limit_at, trading_count, trading_volume } = order || {};
+    const { id, status, pay_limit_at, trading_count, trading_volume } = order || {};
     const order_status = CONFIG.orderEngStatus[status];
 
     return (
@@ -120,7 +129,9 @@ export default class Step1 extends PureComponent {
             className={styles.term_box}
             title={`对用户${owner.nickname}留下评价`}
           >
-            <EvaluateForm {...this.props} />
+            {id && (
+              <EvaluateForm id={id} initialValues={rating} onSubmit={this.handleSubmitEvaluate} />
+            )}
           </Card>
         </Card>
       </div>

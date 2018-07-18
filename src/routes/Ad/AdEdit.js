@@ -45,14 +45,15 @@ export default class AdEdit extends Component {
   };
 
   handleSubmit = value => {
-    // console.log('下面是value');
-    // console.log(value);
-    const { dispatch } = this.props;
+    const { dispatch, price } = this.props;
+    const { id } = this.props.initialValues;
     dispatch({
       type: 'ad/postPublish',
       payload: {
         ...value,
         trusted_user: +!!value.trusted_user,
+        ad_id: id,
+        market_price: price,
       },
       callback: () => {
         this.props.dispatch(routerRedux.push('/ad/my'));
@@ -64,7 +65,7 @@ export default class AdEdit extends Component {
     // const { adDetail } = this.props
     // console.log(adDetail.ad_type)
     // console.log(this.props.initialValues);
-    console.log(this.props);
+    // console.log(this.props);
     const content = (
       <Row gutter={24} className={styles.headers}>
         <Col span={12} className={styles.title}>

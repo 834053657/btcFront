@@ -29,6 +29,7 @@ export default {
     g2Info: {},
     myOrders: {
       list: [],
+      statistics: {},
       pagination: {},
     },
   },
@@ -219,11 +220,12 @@ export default {
       };
     },
     saveMyOrderList(state, { payload }) {
-      const { items = [], paginator } = payload || {};
+      const { items = [], statistics = {}, paginator = {} } = payload || {};
       return {
         ...state,
         myOrders: {
           list: items,
+          statistics,
           pagination: { ...paginator, current: paginator.page },
         },
       };

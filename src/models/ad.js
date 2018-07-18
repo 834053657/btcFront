@@ -63,6 +63,7 @@ export default {
       }
       if (callback) callback();
     },
+
     *daleteAd({ payload, callback }, { call }) {
       const response = yield call(deleteMyAd, payload);
       if (response.code === 0) {
@@ -132,7 +133,7 @@ export default {
     setPrice(state, { payload }) {
       return {
         ...state,
-        price: payload.at_price,
+        price: payload.ad_price,
       };
     },
     setRemain(state, { payload }) {

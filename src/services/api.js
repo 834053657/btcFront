@@ -360,7 +360,6 @@ export async function getHistoryAddress(params) {
 // }
 
 export async function getTradeList(params) {
-
   return request(`/btc/ad/list?${stringify(params)}`);
 }
 
@@ -469,5 +468,12 @@ export async function getFile({ type, local }) {
   return request(`../../public/article/${type}_${local}.html?r=${Math.random()}`, {
     Accept: 'text/html',
     'Content-Type': 'text/html;  charset=utf-8',
+  });
+}
+//评价用户
+export async function submitEvaluate(params) {
+  return request('/btc/order/rating', {
+    method: 'POST',
+    body: params,
   });
 }

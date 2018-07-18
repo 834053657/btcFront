@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Select, Button, Form, Input, Radio, Checkbox, Col, Card, Alert, Icon } from 'antd';
 import { map } from 'lodash';
+import { Link } from 'dva/router';
 import InputNumber from 'components/InputNumber';
 import styles from './EditForm.less';
 
@@ -36,11 +37,12 @@ export default class EditForm extends Component {
   }
 
   fetchRefresh = (obj = {}) => {
+    console.log(obj);
     // const { dispatch } = this.props;
     this.props.dispatch({
       type: 'ad/fetchNewPrice',
       payload: {
-        currency: obj.currency || 'CNY',
+        currency: obj || 'CNY',
       },
     });
   };
@@ -50,7 +52,7 @@ export default class EditForm extends Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         const { id } = this.props.initialValues || {};
-        this.props.onSubmit && this.props.onSubmit({ ...values, id });
+        this.props.onSubmit && this.props.onSubmit({ ...values });
       }
     });
   };
@@ -91,12 +93,12 @@ export default class EditForm extends Component {
     });
   };
 
-  handleChangePer = ratio => {
+  handleChangePer = (ratio, _) => {
     const { form, price } = this.props;
-    const trading_price = ratio * price / 100;
+    const trading_price = _.floor(ratio * price / 100, 4);
 
     const numBTC = form.getFieldValue('max_count');
-    const max_volume = numBTC * trading_price;
+    const max_volume = _.floor(numBTC * trading_price, 2);
 
     const re = /^[+-]?\d*\.?\d*$/;
     if (re.test(ratio)) {
@@ -110,12 +112,12 @@ export default class EditForm extends Component {
   };
 
   // 计算最大发布交易额
-  handleChangeBtc = v => {
+  handleChangeBtc = (v, _) => {
     const { form } = this.props;
     const nums = form.getFieldValue('trading_price');
     const numBTC = v;
 
-    const max_volume = numBTC * nums;
+    const max_volume = _.floor(numBTC * nums, 2);
 
     const re = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
     if (re.test(numBTC)) {
@@ -124,11 +126,11 @@ export default class EditForm extends Component {
   };
 
   // 计算交易比特币限额
-  handleChangeMax = e => {
+  handleChangeMax = (e, _) => {
     const { form } = this.props;
     const num = form.getFieldValue('trading_price');
     const numMax = e;
-    const max_count = numMax * (1 / num);
+    const max_count = _.floor(numMax * (1 / num), 4);
     const re = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
 
     if (re.test(numMax)) {
@@ -136,11 +138,11 @@ export default class EditForm extends Component {
     }
   };
   // 计算交易价格
-  handleChangeRat = e => {
+  handleChangeRat = (e, _) => {
     const { form, price } = this.props;
     const numBTC = form.getFieldValue('max_count');
     const numMax = e;
-    const trading_price_ratio = numMax / price * 100;
+    const trading_price_ratio = _.floor(numMax / price * 100, 4);
 
     const re = /^[+-]?\d*\.?\d*$/;
 
@@ -263,6 +265,7 @@ export default class EditForm extends Component {
               })(
                 <InputNumber
                   min={0}
+                  precision={4}
                   style={{ width: 170, position: 'absolute', marginTop: '5px' }}
                   placeholder="市场价比例"
                   addonAfter="%"
@@ -281,7 +284,10 @@ export default class EditForm extends Component {
                 <span style={{ marginRight: '20px' }}>
                   {price} {getFieldValue('currency')} / BTC
                 </span>
-                <Button type="primary" onClick={this.fetchRefresh}>
+                <Button
+                  type="primary"
+                  onClick={this.fetchRefresh.bind(this, getFieldValue('currency'))}
+                >
                   刷新
                 </Button>
               </div>
@@ -302,7 +308,7 @@ export default class EditForm extends Component {
           })(
             <InputNumber
               min={0}
-              step={0.0001}
+              precision={4}
               placeholder="交易价格"
               style={{ width: 170 }}
               onChange={this.handleChange}
@@ -321,12 +327,13 @@ export default class EditForm extends Component {
                     required: true,
                     message: '请输入可交易数量',
                   },
+                  { type: 'number', trigger: 'blur', min: 0.0001, message: '最少交易0.0001BTC' },
                 ],
               })(
                 <InputNumber
                   disabled={!getFieldValue('trading_price')}
                   min={0}
-                  step={0.00000001}
+                  precision={4}
                   style={{ width: 170, position: 'absolute', marginTop: '5px' }}
                   placeholder="交易限额"
                   addonAfter="BTC"
@@ -351,7 +358,7 @@ export default class EditForm extends Component {
                 <InputNumber
                   disabled={!getFieldValue('trading_price')}
                   min={100}
-                  step={0.01}
+                  precision={2}
                   style={{ width: 170, position: 'absolute', marginTop: '5px' }}
                   placeholder="最小交易额"
                   addonAfter={getFieldValue('currency')}
@@ -380,7 +387,7 @@ export default class EditForm extends Component {
                 <InputNumber
                   disabled={!getFieldValue('trading_price')}
                   min={0}
-                  step={0.01}
+                  precision={2}
                   style={{ width: 170, position: 'absolute', marginTop: '5px' }}
                   placeholder="最大交易额"
                   addonAfter={getFieldValue('currency')}
@@ -417,7 +424,9 @@ export default class EditForm extends Component {
           <div>
             {payments.length === 0 ? (
               <FormItem {...formItemLayout} label="付款方式">
-                <a>请先加入付款方式</a>
+                <span>
+                  <Link to="/user-center/index">请先加入付款方式</Link>
+                </span>
               </FormItem>
             ) : (
               <FormItem {...formItemLayout} label="付款方式">
@@ -469,7 +478,7 @@ export default class EditForm extends Component {
                 <div>
                   <span className="bt-trade-level-auth">交易者的认证等级</span>
                   <span style={{ marginLeft: 20 }}>
-                    {getFieldDecorator('way', {
+                    {getFieldDecorator('user_auth_level', {
                       initialValue: '0',
                       rules: [
                         {
@@ -568,7 +577,9 @@ export default class EditForm extends Component {
               <Button type="primary" htmlType="submit" loading={submitting}>
                 确认发布
               </Button>
-            ) : null}
+            ) : (
+              `您的剩余可发布广告条数为 ${num}`
+            )}
           </div>
         </FormItem>
       </Form>
