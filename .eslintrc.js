@@ -82,6 +82,7 @@ module.exports = {
     'function-paren-newline': [0],
     'no-restricted-globals': [0],
     'require-yield': [1],
+    'font-family-no-missing-generic-family-keyword': [0],
   },
   parserOptions: {
     ecmaFeatures: {
