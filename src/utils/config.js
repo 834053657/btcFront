@@ -194,7 +194,7 @@ export default {
   },
   //微信二维码图片
   WeChat: {
-    1: 'https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2136740882,3271518133&fm=58&bpow=630&bpoh=630',
+    1: '../../public/weixin.jpg',
   },
   //微博二维码图片
   weibo: {

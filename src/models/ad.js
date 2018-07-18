@@ -8,6 +8,7 @@ import {
   updateAd,
   deleteMyAd,
   queryMyRemain,
+  recoverAd,
 } from '../services/api';
 
 export default {
@@ -63,7 +64,16 @@ export default {
       }
       if (callback) callback();
     },
-
+    // recoverAd  恢复操作
+    *recoverAd({ payload, callback }, { call }) {
+      const response = yield call(recoverAd, payload);
+      if (response.code === 0) {
+        message.success('操作成功');
+      } else {
+        message.error(response.msg);
+      }
+      if (callback) callback();
+    },
     *daleteAd({ payload, callback }, { call }) {
       const response = yield call(deleteMyAd, payload);
       if (response.code === 0) {
