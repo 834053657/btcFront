@@ -40,11 +40,11 @@ export default class UserDetails extends Component {
   componentWillMount() {}
 
   componentDidMount() {
-    const { params: { ad_no } } = this.props.match || {};
+    const { params: { uid } } = this.props.match || {};
     this.props.dispatch({
       type: 'userDetails/fetchDetails',
       payload: {
-        userid: ad_no,
+        target_uid: uid,
       },
     });
   }
@@ -56,6 +56,7 @@ export default class UserDetails extends Component {
 
   handleToTrust = type => {
     const { params: { uid } } = this.props.match || {};
+    console.log(uid);
     this.props.dispatch({
       type: 'userDetails/submitRating',
       payload: {
@@ -319,6 +320,7 @@ export default class UserDetails extends Component {
   };
 
   render() {
+    console.log(this.props);
     const { list = [] } = this.props;
     const { pagination = {}, loading } = this.props;
     const { type } = this.state;

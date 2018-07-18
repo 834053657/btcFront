@@ -81,7 +81,7 @@ class RechargeForm extends Component {
   formatter = count => {
     const { blockConfirmFee = [] } = this.props;
     const feeObj = find(blockConfirmFee, item => item.count === count) || {};
-    console.log(feeObj);
+    // console.log(feeObj);
     return `在${count}个区块内打包，费率为${feeObj.fee}比特币/byte`;
   };
 
@@ -122,7 +122,7 @@ class RechargeForm extends Component {
     };
     const maxBlock = maxBy(blockConfirmFee, item => item.count) || {};
     const minBlock = minBy(blockConfirmFee, item => item.count) || {};
-    console.log(blockConfirmFee, maxBlock, maxBlock);
+    // console.log(blockConfirmFee, maxBlock, maxBlock);
 
     return (
       <Row gutter={24}>

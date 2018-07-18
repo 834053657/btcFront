@@ -70,10 +70,11 @@ export default class List extends Component {
       title: '用户',
       dataIndex: 'user_',
       render: (text, row) => {
+        console.log(row.owner.id);
         const { online, avatar, nickname } = row.owner || {};
         return (
           <div>
-            <Link to={`/personage/${row.ad_no}`}>
+            <Link to={`/personage/${row.owner.id}`}>
               <Badge status={online ? 'success' : 'default'} offset={[35, -5]} dot>
                 <Avatar size="large" src={avatar} />
               </Badge>

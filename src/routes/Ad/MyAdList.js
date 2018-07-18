@@ -55,6 +55,16 @@ export default class List extends Component {
       callback: this.refreshGrid,
     });
   };
+
+  recoverAd = row => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'ad/recoverAd',
+      payload: {
+        ad_id: row.id,
+      },
+    });
+  };
   DeleteAd = r => {
     const { dispatch } = this.props;
     dispatch({
@@ -155,7 +165,7 @@ export default class List extends Component {
             {r.status === 2 && (
               <span>
                 <Divider type="vertical" />
-                <a onClick={() => this.updateAd(r, 1)}>恢复</a>
+                <a onClick={() => this.recoverAd(r, 1)}>恢复</a>
               </span>
             )}
             {[1, 2].indexOf(r.status) > -1 && (
