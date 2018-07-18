@@ -311,7 +311,7 @@ export default class TradeStep extends PureComponent {
       const { dispatch, match: { params = {} } } = this.props;
       dispatch({
         type: 'trade/reportAd',
-        payload: { ...values, id: params.id },
+        payload: { ...values, ad_id: params.id },
         callback: this.handleHideReportModal,
       });
     }

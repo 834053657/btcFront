@@ -1,5 +1,4 @@
 import { stringify } from 'qs';
-import fetch from 'dva/fetch';
 import request from '../utils/request';
 
 export async function queryBanners() {
@@ -41,7 +40,7 @@ export async function queryChatHistory(params) {
 }
 
 export async function queryBlockConfirmFee() {
-  return request('/btc//wallet/block_confirm_fee');
+  return request('/btc/wallet/block_fees');
 }
 
 export async function queryFee(params) {

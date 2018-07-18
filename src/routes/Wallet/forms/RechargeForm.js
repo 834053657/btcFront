@@ -16,7 +16,7 @@ import {
   Slider,
   Spin,
 } from 'antd';
-import { map, filter } from 'lodash';
+import { map, find, filter, minBy, maxBy } from 'lodash';
 import classNames from 'classnames';
 import { formatBTC } from '../../../utils/utils';
 
@@ -78,10 +78,11 @@ class RechargeForm extends Component {
     });
   };
 
-  formatter = value => {
-    const { blockConfirmFee = {} } = this.props;
-    const fee = blockConfirmFee[value] || '-';
-    return `在${value}个区块内打包，费率为${fee}比特币/byte`;
+  formatter = count => {
+    const { blockConfirmFee = [] } = this.props;
+    const feeObj = find(blockConfirmFee, item => item.count === count) || {};
+    console.log(feeObj);
+    return `在${count}个区块内打包，费率为${feeObj.fee}比特币/byte`;
   };
 
   handleGetFee = v => {
@@ -102,7 +103,14 @@ class RechargeForm extends Component {
   };
 
   render() {
-    const { className, form, rechargSubmitting, feeLoading, currentUser } = this.props;
+    const {
+      className,
+      form,
+      rechargSubmitting,
+      feeLoading,
+      currentUser,
+      blockConfirmFee = {},
+    } = this.props;
     const { wallet = {} } = currentUser || {};
     const { getFieldDecorator, getFieldValue, setFieldsValue } = form;
     const customPanelStyle = {
@@ -112,26 +120,9 @@ class RechargeForm extends Component {
       border: 0,
       overflow: 'hidden',
     };
-    const marks = {
-      1: {
-        style: {
-          color: '#52c41a',
-        },
-        label: <strong>快: 1次</strong>,
-      },
-      12: {
-        style: {
-          color: '#faad14',
-        },
-        label: <strong>中: 12次</strong>,
-      },
-      25: {
-        style: {
-          color: '#f5222d',
-        },
-        label: <strong>慢: 25次</strong>,
-      },
-    };
+    const maxBlock = maxBy(blockConfirmFee, item => item.count) || {};
+    const minBlock = minBy(blockConfirmFee, item => item.count) || {};
+    console.log(blockConfirmFee, maxBlock, maxBlock);
 
     return (
       <Row gutter={24}>
@@ -184,16 +175,23 @@ class RechargeForm extends Component {
                 />
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label="选择手续费">
+            <FormItem {...formItemLayout} label="费率">
               {getFieldDecorator('count', {
-                initialValue: 12,
+                initialValue: 1,
                 rules: [
                   {
                     required: true,
-                    message: '请选择到账确认次数！',
+                    message: '请选择费率！',
                   },
                 ],
-              })(<Slider tipFormatter={this.formatter} step={1} max={25} min={1} />)}
+              })(
+                <Slider
+                  tipFormatter={this.formatter}
+                  step={1}
+                  max={maxBlock.count}
+                  min={minBlock.count}
+                />
+              )}
             </FormItem>
             {/* <Select size="large" placeholder="请选择到账确认次数">
                   {map(CONFIG.feeList, (text, value) => (
@@ -203,7 +201,7 @@ class RechargeForm extends Component {
                   ))}
                 </Select>*/}
 
-            <FormItem {...formItemLayout} label="手续费">
+            <FormItem {...formItemLayout} label="实际手续费">
               <span className="text-red">{`${formatBTC(this.state.fee)} `}</span> BTC
               <Button
                 type="primary"

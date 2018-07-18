@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { map } from 'lodash';
 import { Button, Card, Row, Col, Badge, Radio, Input, Steps, Icon } from 'antd';
 import DescriptionList from 'components/DescriptionList';
+import CountDown from 'components/CountDown';
 import { getPayIcon } from '../../../utils/utils';
 import EvaluateForm from '../forms/EvaluateForm';
 import styles from './Step1.less';
@@ -82,23 +83,32 @@ export default class Step1 extends PureComponent {
     const { orderDetail, renderButtons, handleReport } = this.props;
     const { ad = {}, order = {}, rating = {} } = orderDetail || {};
     const { trading_price, owner = {}, currency, trading_term, payment_methods = [] } = ad || {};
-    const { id, status, pay_limit_at, trading_count, trading_volume } = order || {};
+    const { id, status, pay_limit_at, trading_count, trading_volume, order_type } = order || {};
     const order_status = CONFIG.orderEngStatus[status];
 
     return (
       <div className={styles.page}>
         <Card bordered={false} className={styles.info}>
           <Meta
-            title={`${trading_volume} ${currency} 买 ${trading_count} BTC`}
+            title={`${trading_volume} ${currency} ${
+              CONFIG.order_type_desc[order_type]
+            } ${trading_count} BTC`}
             // description="中国"
           />
           <DescriptionList style={{ marginTop: 15 }} size="large" col="1">
             <Description term="汇率">
-              {trading_price} {currency}
+              {trading_price} {currency} / BTC
             </Description>
             {/*<Description term="交易限额"> {trading_price_ratio} BTC ({min_volume} {currency} ~ {max_volume} {currency})</Description>*/}
             {order_status === 'wait_pay' && (
-              <Description term="付款倒计时">{pay_limit_at} 分钟</Description>
+              <Description term="付款倒计时">
+                {pay_limit_at && (
+                  <CountDown
+                    target={new Date().getTime() + pay_limit_at * 1000}
+                    formatstr="mm:ss"
+                  />
+                )}
+              </Description>
             )}
             <Description term="付款方式">
               <Radio.Group onChange={this.handleModeChange} value={this.state.payType}>

@@ -72,9 +72,9 @@ export default {
     },
     *createOrder({ payload }, { call, put }) {
       const res = yield call(submitCreateOrder, payload);
-      if (res.code === 0) {
+      if (res.code === 0 && res.data) {
         message.success('下单成功');
-        yield put(routerRedux.push(`/trade/step/${payload.ad_id}`));
+        yield put(routerRedux.push(`/trade/step/${res.data.order_id}`));
       } else {
         message.error(res.msg);
       }

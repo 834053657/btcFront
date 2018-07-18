@@ -62,7 +62,7 @@ class CountDown extends Component {
   //  <span>{moment(time).format('hh:mm:ss')}</span>
   // );
   defaultFormat = time => {
-    const { formatStr = 'hh:mm:ss' } = this.props;
+    const { formatstr = 'hh:mm:ss' } = this.props;
     const hours = 60 * 60 * 1000;
     const minutes = 60 * 1000;
 
@@ -70,11 +70,11 @@ class CountDown extends Component {
     const m = Math.floor((time - h * hours) / minutes);
     const s = Math.floor((time - h * hours - m * minutes) / 1000);
     let content = '';
-    if (formatStr === 'ss') {
+    if (formatstr === 'ss') {
       content = <span>{fixedZero(s)}</span>;
-    } else if (formatStr === 'mm') {
+    } else if (formatstr === 'mm') {
       content = <span>{fixedZero(m)}</span>;
-    } else if (formatStr === 'mm:ss') {
+    } else if (formatstr === 'mm:ss') {
       content = (
         <span>
           {fixedZero(m)}:{fixedZero(s)}

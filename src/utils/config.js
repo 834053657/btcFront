@@ -235,6 +235,10 @@ export default {
       subTitle: '阻止交易伙伴与您进行交易，不要给他任何评价。',
     },
   },
+  order_type_desc: {
+    '1': '买',
+    '2': '卖',
+  },
 
   card_type: [],
 };
