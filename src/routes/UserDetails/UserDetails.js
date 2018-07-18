@@ -55,7 +55,6 @@ export default class UserDetails extends Component {
   };
 
   handleToTrust = type => {
-    const { loading } = this.state;
     const { params: { uid } } = this.props.match || {};
     this.props.dispatch({
       type: 'userDetails/submitRating',

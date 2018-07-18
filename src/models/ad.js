@@ -19,8 +19,8 @@ export default {
       pagination: {},
     },
     adDetail: {},
-    price: null,
-    remains: null,
+    price: {},
+    remains: 0,
   },
 
   effects: {
@@ -104,6 +104,8 @@ export default {
           type: 'setPrice',
           payload: response.data,
         });
+      } else {
+        message.error(response.msg);
       }
     },
   },
@@ -133,7 +135,7 @@ export default {
     setPrice(state, { payload }) {
       return {
         ...state,
-        price: payload.ad_price,
+        price: payload,
       };
     },
     setRemain(state, { payload }) {

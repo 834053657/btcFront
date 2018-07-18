@@ -39,13 +39,13 @@ export default class AdPublish extends Component {
 
   handleSubmit = value => {
     const { dispatch, price } = this.props;
-    console.log(value);
-    // console.log(price)
+    const { currency } = value;
+    // console.log(value)
     dispatch({
       type: 'ad/postPublish',
       payload: {
         ...value,
-        market_price: price,
+        market_price: currency === 'CNY' ? price.ad_price_cny : price.ad_price_usd,
         trusted_user: +!!value.trusted_user,
       },
       callback: () => {

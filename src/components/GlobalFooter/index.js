@@ -100,7 +100,7 @@ const GlobalFooter = ({ className }) => {
             </a>
           </li>
           <li className={styles.phone}>
-            客服热线: <span>400-099-2347</span>
+            客服热线: <span>187-6440-3666</span>
           </li>
           <li className={styles.time}>热线时间：每天8：00——24：00</li>
         </ul>

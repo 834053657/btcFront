@@ -47,13 +47,15 @@ export default class AdEdit extends Component {
   handleSubmit = value => {
     const { dispatch, price } = this.props;
     const { id } = this.props.initialValues;
+    const { currency } = value;
+
     dispatch({
       type: 'ad/postPublish',
       payload: {
         ...value,
         trusted_user: +!!value.trusted_user,
         ad_id: id,
-        market_price: price,
+        market_price: currency === 'CNY' ? price.ad_price_cny : price.ad_price_usd,
       },
       callback: () => {
         this.props.dispatch(routerRedux.push('/ad/my'));

@@ -198,7 +198,7 @@ export default {
   },
   //微博二维码图片
   weibo: {
-    1: 'https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=1426575500,1228520832&fm=58&bpow=727&bpoh=536',
+    1: '../../public/weibo.png',
   },
 
   transaction_status: {

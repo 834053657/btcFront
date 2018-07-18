@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Select, Button, Form, Input, Radio, Checkbox, Col, Card, Alert, Icon } from 'antd';
-import { map } from 'lodash';
+import { map, floor } from 'lodash';
 import { Link } from 'dva/router';
 import InputNumber from 'components/InputNumber';
 import styles from './EditForm.less';
@@ -38,13 +38,16 @@ export default class EditForm extends Component {
 
   fetchRefresh = (obj = {}) => {
     console.log(obj);
-    // const { dispatch } = this.props;
     this.props.dispatch({
       type: 'ad/fetchNewPrice',
       payload: {
         currency: obj || 'CNY',
       },
     });
+    this.setState({ freshLoading: true });
+    setTimeout(() => {
+      this.setState({ freshLoading: false });
+    }, 1000);
   };
 
   handleSubmit = e => {
@@ -55,10 +58,15 @@ export default class EditForm extends Component {
         this.props.onSubmit && this.props.onSubmit({ ...values });
       }
     });
+    this.setState({ loading: true });
+    setTimeout(() => {
+      this.setState({ loading: false });
+    }, 1000);
   };
   handleChange = e => {};
 
   getUserAccount = info => {
+    console.log(info);
     const { payment_method, payment_detail = {} } = info || {};
     if (payment_method === 'bank') {
       return payment_detail.bank_account;
@@ -93,12 +101,14 @@ export default class EditForm extends Component {
     });
   };
 
-  handleChangePer = (ratio, _) => {
+  handleChangePer = ratio => {
     const { form, price } = this.props;
-    const trading_price = _.floor(ratio * price / 100, 4);
+    const newPrice =
+      form.getFieldValue('currency') === 'CNY' ? price.ad_price_cny : price.ad_price_usd;
+    const trading_price = floor(ratio * newPrice / 100, 4);
 
     const numBTC = form.getFieldValue('max_count');
-    const max_volume = _.floor(numBTC * trading_price, 2);
+    const max_volume = floor(numBTC * trading_price, 2);
 
     const re = /^[+-]?\d*\.?\d*$/;
     if (re.test(ratio)) {
@@ -112,12 +122,12 @@ export default class EditForm extends Component {
   };
 
   // 计算最大发布交易额
-  handleChangeBtc = (v, _) => {
+  handleChangeBtc = v => {
     const { form } = this.props;
     const nums = form.getFieldValue('trading_price');
     const numBTC = v;
 
-    const max_volume = _.floor(numBTC * nums, 2);
+    const max_volume = floor(numBTC * nums, 2);
 
     const re = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
     if (re.test(numBTC)) {
@@ -126,11 +136,11 @@ export default class EditForm extends Component {
   };
 
   // 计算交易比特币限额
-  handleChangeMax = (e, _) => {
+  handleChangeMax = e => {
     const { form } = this.props;
     const num = form.getFieldValue('trading_price');
     const numMax = e;
-    const max_count = _.floor(numMax * (1 / num), 4);
+    const max_count = floor(numMax * (1 / num), 4);
     const re = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
 
     if (re.test(numMax)) {
@@ -138,11 +148,13 @@ export default class EditForm extends Component {
     }
   };
   // 计算交易价格
-  handleChangeRat = (e, _) => {
+  handleChangeRat = e => {
     const { form, price } = this.props;
     const numBTC = form.getFieldValue('max_count');
     const numMax = e;
-    const trading_price_ratio = _.floor(numMax / price * 100, 4);
+    const newPrice =
+      form.getFieldValue('currency') === 'CNY' ? price.ad_price_cny : price.ad_price_usd;
+    const trading_price_ratio = floor(numMax / newPrice * 100, 4);
 
     const re = /^[+-]?\d*\.?\d*$/;
 
@@ -154,6 +166,11 @@ export default class EditForm extends Component {
   };
 
   handleChangeCur = currency => {
+    const { form } = this.props;
+    form.setFieldsValue({ trading_price: 0 });
+    form.setFieldsValue({ trading_price_ratio: 0 });
+    form.setFieldsValue({ max_volume: 0 });
+
     this.setState({
       nowCurrency: currency,
     });
@@ -163,12 +180,11 @@ export default class EditForm extends Component {
   clickBtn = value => {};
 
   render() {
-    const { payments = {} } = this.props.currentUser || {};
-    const { getFieldDecorator, getFieldValue } = this.props.form;
-    const { price, initialValues = {}, submitting } = this.props;
-    const { form } = this.props;
-    const { num } = this.props;
-    // console.log(num);
+    console.log(this.props);
+    const { form, num, price = {}, initialValues = {}, submitting, currentUser } = this.props;
+    const { getFieldDecorator, getFieldValue } = form || {};
+    const { payments = {} } = currentUser || {};
+
     return (
       <Form className={styles.form} hideRequiredMark onSubmit={this.handleSubmit}>
         <FormItem>
@@ -282,11 +298,13 @@ export default class EditForm extends Component {
             <FormItem>
               <div>
                 <span style={{ marginRight: '20px' }}>
-                  {price} {getFieldValue('currency')} / BTC
+                  {getFieldValue('currency') === 'CNY' ? price.ad_price_cny : price.ad_price_usd}{' '}
+                  {getFieldValue('currency')} / BTC
                 </span>
                 <Button
                   type="primary"
                   onClick={this.fetchRefresh.bind(this, getFieldValue('currency'))}
+                  loading={this.state.freshLoading}
                 >
                   刷新
                 </Button>
@@ -327,7 +345,7 @@ export default class EditForm extends Component {
                     required: true,
                     message: '请输入可交易数量',
                   },
-                  { type: 'number', trigger: 'blur', min: 0.0001, message: '最少交易0.0001BTC' },
+                  { type: 'number', min: 0.0001, message: '最少交易0.0001BTC' },
                 ],
               })(
                 <InputNumber
@@ -570,11 +588,11 @@ export default class EditForm extends Component {
         <FormItem>
           <div className={styles.btnBox}>
             {initialValues.id ? (
-              <Button type="primary" htmlType="submit" loading={submitting}>
+              <Button type="primary" htmlType="submit" loading={this.state.loading}>
                 确认修改
               </Button>
             ) : num && num > 0 ? (
-              <Button type="primary" htmlType="submit" loading={submitting}>
+              <Button type="primary" htmlType="submit" loading={this.state.loading}>
                 确认发布
               </Button>
             ) : (
