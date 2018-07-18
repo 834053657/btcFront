@@ -110,6 +110,7 @@ export default class Step1 extends PureComponent {
                 )}
               </Description>
             )}
+            <i className="anticon anticon-western_union" />
             <Description term="付款方式">
               <Radio.Group onChange={this.handleModeChange} value={this.state.payType}>
                 {map(payment_methods, (item, index) => (

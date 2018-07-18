@@ -114,17 +114,25 @@ export const getRouterData = app => {
     // 发布广告
     '/publish_ad/': {
       component: dynamicWrapper(app, ['ad', 'user'], () => import('../routes/Ad/AdPublish')),
+      authority: checkLogined,
+      redirectPath: '/user/login',
     },
 
     // 我的广告
     '/ad/my': {
       component: dynamicWrapper(app, ['ad'], () => import('../routes/Ad/MyAdList')),
+      authority: checkLogined,
+      redirectPath: '/user/login',
     },
     '/ad/edit/:id': {
       component: dynamicWrapper(app, ['ad'], () => import('../routes/Ad/AdEdit')),
+      authority: checkLogined,
+      redirectPath: '/user/login',
     },
     '/order/my': {
       component: dynamicWrapper(app, ['user'], () => import('../routes/UserCenter/MyOrderList')),
+      authority: checkLogined,
+      redirectPath: '/user/login',
     },
 
     // 帮助，隐私，条款路由控制
@@ -175,6 +183,8 @@ export const getRouterData = app => {
     },
     '/wallet': {
       component: dynamicWrapper(app, ['user', 'wallet'], () => import('../routes/Wallet/Layout')),
+      authority: checkLogined,
+      redirectPath: '/user/login',
     },
     '/form/step-form': {
       component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/StepForm/index')),

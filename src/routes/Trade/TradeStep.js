@@ -91,12 +91,12 @@ export default class TradeStep extends PureComponent {
       renderButtons: () => {
         return this.checkIsBuyer()
           ? [
-              <Button key="ok" type="primary" onClick={this.handlePay}>
-                确认支付
-              </Button>,
-              <Button key="cancel" style={{ marginLeft: 25 }} onClick={this.handleShowCancelModal}>
-                取消订单
-              </Button>,
+            <Button key="ok" type="primary" onClick={this.handlePay}>
+              确认支付
+            </Button>,
+            <Button key="cancel" style={{ marginLeft: 25 }} onClick={this.handleShowCancelModal}>
+              取消订单
+            </Button>,
             ]
           : null;
       },
@@ -132,7 +132,7 @@ export default class TradeStep extends PureComponent {
           );
         }
         buttons.push(
-          <Button key="cancel" onClick={this.handleAppeal}>
+          <Button key="cancel" onClick={this.handleShowAppealModal}>
             申述
           </Button>
         );
