@@ -164,6 +164,7 @@ export default class EditForm extends Component {
     const { form, num, price = {}, initialValues = {}, freshLoading, submitting, currentUser,getPrice } = this.props;
     const { getFieldDecorator, getFieldValue } = form || {};
     const { payments = {} } = currentUser || {};
+    console.log(payments);
 
     return (
       <Form className={styles.form} hideRequiredMark onSubmit={this.handleSubmit}>
@@ -178,7 +179,7 @@ export default class EditForm extends Component {
                 },
               ],
             })(
-              <RadioGroup size="large">
+              <RadioGroup size="large" disabled={!!initialValues.id}>
                 {map(typeMap, (text, value) => (
                   <RadioButton
                     key={value}
@@ -418,32 +419,32 @@ export default class EditForm extends Component {
             )}
           </FormItem>
         </Col>
-        {getFieldValue('ad_type') === '2' ? (
+        {getFieldValue('ad_type') === 2 ? (
           <div>
             {payments.length === 0 ? (
-              <FormItem {...formItemLayout} label="付款方式">
+              <FormItem {...formItemLayout} label="收款方式">
                 <span>
-                  <Link to="/user-center/index">请先加入付款方式</Link>
+                  <Link to="/user-center/index">请先加入收款方式</Link>
                 </span>
               </FormItem>
             ) : (
-              <FormItem {...formItemLayout} label="付款方式">
+              <FormItem {...formItemLayout} label="收款方式">
                 {getFieldDecorator('payment_methods', {
                   initialValue: initialValues.payment_methods,
                   rules: [
                     {
                       required: true,
-                      message: '请选择付款方式',
+                      message: '请选择收款方式',
                     },
                   ],
                 })(
                   <Select
                     mode="multiple"
                     style={{ maxWidth: 286, width: '100%' }}
-                    placeholder="选择付款方式"
+                    placeholder="选择收款方式"
                   >
                     {map(payments, item => (
-                      <Option key={item.id} value={item.id}>
+                      <Option key={item.id} value={+item.id}>
                         <span>
                           {item.payment_method && CONFIG.payments[item.payment_method]
                             ? CONFIG.payments[item.payment_method]
@@ -525,12 +526,12 @@ export default class EditForm extends Component {
             ],
           })(<TextArea placeholder="自动回复" rows={4} style={{ width: 390 }} />)}
         </FormItem>
-        {getFieldValue('ad_type') === '1' ? (
-          ''
-        ) : (
+        {getFieldValue('ad_type') === 2 && (
           <div>
             <FormItem {...formItemLayout} label="最小交易量">
-              {getFieldDecorator('min_trade_count', {})(
+              {getFieldDecorator('min_trade_count', {
+                initialValue: initialValues.min_trade_count,
+              })(
                 <InputNumber
                   min={0}
                   step={0.0001}
@@ -541,7 +542,9 @@ export default class EditForm extends Component {
             </FormItem>
 
             <FormItem {...formItemLayout} label="最低评价得分">
-              {getFieldDecorator('min_rating_score', {})(
+              {getFieldDecorator('min_rating_score', {
+                initialValue: initialValues.min_rating_score,
+              })(
                 <InputNumber
                   min={0}
                   max={100}
@@ -553,7 +556,9 @@ export default class EditForm extends Component {
             </FormItem>
 
             <FormItem {...formItemLayout} label="新卖家限额">
-              {getFieldDecorator('new_buyer_limit', {})(
+              {getFieldDecorator('new_buyer_limit', {
+                initialValue: initialValues.new_buyer_limit,
+              })(
                 <InputNumber
                   min={0}
                   step={0.0001}
