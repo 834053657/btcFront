@@ -8,7 +8,7 @@ const RadioGroup = Radio.Group;
 const { TextArea } = Input;
 
 @Form.create()
-export default class SearchForm extends Component {
+export default class EvaluateForm extends Component {
   state = {};
 
   handleSubmit = e => {

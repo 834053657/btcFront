@@ -268,6 +268,12 @@ export function getPayIcon(type) {
     case 'bank':
       iconType = 'credit-card';
       break;
+    case 'westernunion':
+      iconType = 'western_union';
+      break;
+    case 'paytm':
+      iconType = 'paytm';
+      break;
     default:
       iconType = 'credit-card';
   }

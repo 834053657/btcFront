@@ -110,6 +110,7 @@ export default class Step1 extends PureComponent {
                 )}
               </Description>
             )}
+            <i className="anticon anticon-western_union" />
             <Description term="付款方式">
               <Radio.Group onChange={this.handleModeChange} value={this.state.payType}>
                 {map(payment_methods, (item, index) => (
@@ -140,7 +141,7 @@ export default class Step1 extends PureComponent {
             title={`对用户${owner.nickname}留下评价`}
           >
             {id && (
-              <EvaluateForm id={id} initialValues={rating} onSubmit={this.handleSubmitEvaluate} />
+              <EvaluateForm id={id} initialValues={rating || {}} onSubmit={this.handleSubmitEvaluate} />
             )}
           </Card>
         </Card>
