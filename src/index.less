@@ -1,4 +1,5 @@
 @import '~antd/lib/style/color/colors.less';
+@import '/iconfont/iconfont.css';
 @import './utils/utils.less';
 
 html,
@@ -30,6 +31,12 @@ body {
 .globalSpin {
   width: 100%;
   margin: 40px 0 !important;
+}
+
+:global(.anticon) {
+  &:before {
+    font-family: 'anticon', 'btcfont' !important;
+  }
 }
 
 // temp fix for https://github.com/ant-design/ant-design/commit/a1fafb5b727b62cb0be29ce6e9eca8f579d4f8b7

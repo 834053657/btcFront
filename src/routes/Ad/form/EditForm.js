@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Select, Button, Form, Input, Radio, Checkbox, Col, Card, Alert, Icon } from 'antd';
-import { map } from 'lodash';
+import { map, floor } from 'lodash';
+import { Link } from 'dva/router';
 import InputNumber from 'components/InputNumber';
 import styles from './EditForm.less';
 
@@ -34,16 +35,6 @@ export default class EditForm extends Component {
       grade: true,
     };
   }
-
-  fetchRefresh = (obj = {}) => {
-    // const { dispatch } = this.props;
-    this.props.dispatch({
-      type: 'ad/fetchNewPrice',
-      payload: {
-        currency: obj.currency || 'CNY',
-      },
-    });
-  };
 
   handleSubmit = e => {
     e.preventDefault();
@@ -93,10 +84,12 @@ export default class EditForm extends Component {
 
   handleChangePer = ratio => {
     const { form, price } = this.props;
-    const trading_price = ratio * price / 100;
+    const newPrice =
+      form.getFieldValue('currency') === 'CNY' ? price.ad_price_cny : price.ad_price_usd;
+    const trading_price = floor(ratio * newPrice / 100, 4);
 
     const numBTC = form.getFieldValue('max_count');
-    const max_volume = numBTC * trading_price;
+    const max_volume = floor(numBTC * trading_price, 2);
 
     const re = /^[+-]?\d*\.?\d*$/;
     if (re.test(ratio)) {
@@ -115,7 +108,7 @@ export default class EditForm extends Component {
     const nums = form.getFieldValue('trading_price');
     const numBTC = v;
 
-    const max_volume = numBTC * nums;
+    const max_volume = floor(numBTC * nums, 2);
 
     const re = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
     if (re.test(numBTC)) {
@@ -128,7 +121,7 @@ export default class EditForm extends Component {
     const { form } = this.props;
     const num = form.getFieldValue('trading_price');
     const numMax = e;
-    const max_count = numMax * (1 / num);
+    const max_count = floor(numMax * (1 / num), 4);
     const re = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
 
     if (re.test(numMax)) {
@@ -140,7 +133,9 @@ export default class EditForm extends Component {
     const { form, price } = this.props;
     const numBTC = form.getFieldValue('max_count');
     const numMax = e;
-    const trading_price_ratio = numMax / price * 100;
+    const newPrice =
+      form.getFieldValue('currency') === 'CNY' ? price.ad_price_cny : price.ad_price_usd;
+    const trading_price_ratio = floor(numMax / newPrice * 100, 4);
 
     const re = /^[+-]?\d*\.?\d*$/;
 
@@ -152,6 +147,11 @@ export default class EditForm extends Component {
   };
 
   handleChangeCur = currency => {
+    const { form } = this.props;
+    form.setFieldsValue({ trading_price: 0 });
+    form.setFieldsValue({ trading_price_ratio: 0 });
+    form.setFieldsValue({ max_volume: 0 });
+
     this.setState({
       nowCurrency: currency,
     });
@@ -161,18 +161,26 @@ export default class EditForm extends Component {
   clickBtn = value => {};
 
   render() {
-    const { payments = {} } = this.props.currentUser || {};
-    const { getFieldDecorator, getFieldValue } = this.props.form;
-    const { price, initialValues = {}, submitting } = this.props;
-    const { form } = this.props;
-    const { num } = this.props;
-    // console.log(num);
+    const {
+      form,
+      num,
+      price = {},
+      initialValues = {},
+      freshLoading,
+      submitting,
+      currentUser,
+      getPrice,
+    } = this.props;
+    const { getFieldDecorator, getFieldValue } = form || {};
+    const { payments = {} } = currentUser || {};
+    console.log(payments);
+
     return (
       <Form className={styles.form} hideRequiredMark onSubmit={this.handleSubmit}>
         <FormItem>
           <div className={styles.chooseBtn}>
             {getFieldDecorator('ad_type', {
-              initialValue: initialValues.ad_type ? initialValues.ad_type + '' : '1',
+              initialValue: initialValues.ad_type ? initialValues.ad_type : 1,
               rules: [
                 {
                   required: true,
@@ -180,11 +188,11 @@ export default class EditForm extends Component {
                 },
               ],
             })(
-              <RadioGroup size="large">
+              <RadioGroup size="large" disabled={!!initialValues.id}>
                 {map(typeMap, (text, value) => (
                   <RadioButton
                     key={value}
-                    value={value}
+                    value={+value}
                     onClick={this.clickBtn.bind(this, value)}
                     className={styles.Btn}
                   >
@@ -223,7 +231,7 @@ export default class EditForm extends Component {
               },
             ],
           })(
-            <Select style={{ width: 170 }}>
+            <Select style={{ width: 170 }} placeholder="请选择所在地">
               {map(CONFIG.country, item => (
                 <Option key={item.code} value={item.code}>
                   {item.name}
@@ -279,9 +287,14 @@ export default class EditForm extends Component {
             <FormItem>
               <div>
                 <span style={{ marginRight: '20px' }}>
-                  {price} {getFieldValue('currency')} / BTC
+                  {getFieldValue('currency') === 'CNY' ? price.ad_price_cny : price.ad_price_usd}{' '}
+                  {getFieldValue('currency')} / BTC
                 </span>
-                <Button type="primary" onClick={this.fetchRefresh}>
+                <Button
+                  type="primary"
+                  onClick={getPrice.bind(this, getFieldValue('currency'))}
+                  loading={freshLoading}
+                >
                   刷新
                 </Button>
               </div>
@@ -302,8 +315,8 @@ export default class EditForm extends Component {
           })(
             <InputNumber
               min={0}
-              step={0.0001}
-              placeholder="交易价格"
+              precision={4}
+              placeholder={`${getFieldValue('currency')}/BTC`}
               style={{ width: 170 }}
               onChange={this.handleChange}
             />
@@ -321,12 +334,13 @@ export default class EditForm extends Component {
                     required: true,
                     message: '请输入可交易数量',
                   },
+                  { type: 'number', min: 0.0001, message: '最少交易0.0001BTC' },
                 ],
               })(
                 <InputNumber
                   disabled={!getFieldValue('trading_price')}
                   min={0}
-                  step={0.1}
+                  precision={4}
                   style={{ width: 170, position: 'absolute', marginTop: '5px' }}
                   placeholder="交易限额"
                   addonAfter="BTC"
@@ -351,7 +365,7 @@ export default class EditForm extends Component {
                 <InputNumber
                   disabled={!getFieldValue('trading_price')}
                   min={100}
-                  step={0.1}
+                  precision={2}
                   style={{ width: 170, position: 'absolute', marginTop: '5px' }}
                   placeholder="最小交易额"
                   addonAfter={getFieldValue('currency')}
@@ -380,7 +394,7 @@ export default class EditForm extends Component {
                 <InputNumber
                   disabled={!getFieldValue('trading_price')}
                   min={0}
-                  step={0.1}
+                  precision={2}
                   style={{ width: 170, position: 'absolute', marginTop: '5px' }}
                   placeholder="最大交易额"
                   addonAfter={getFieldValue('currency')}
@@ -413,30 +427,32 @@ export default class EditForm extends Component {
             )}
           </FormItem>
         </Col>
-        {getFieldValue('ad_type') === '2' ? (
+        {getFieldValue('ad_type') === 2 ? (
           <div>
             {payments.length === 0 ? (
-              <FormItem {...formItemLayout} label="付款方式">
-                <a>请先加入付款方式</a>
+              <FormItem {...formItemLayout} label="收款方式">
+                <span>
+                  <Link to="/user-center/index">请先添加收款方式</Link>
+                </span>
               </FormItem>
             ) : (
-              <FormItem {...formItemLayout} label="付款方式">
+              <FormItem {...formItemLayout} label="收款方式">
                 {getFieldDecorator('payment_methods', {
                   initialValue: initialValues.payment_methods,
                   rules: [
                     {
                       required: true,
-                      message: '请选择付款方式',
+                      message: '请选择收款方式',
                     },
                   ],
                 })(
                   <Select
                     mode="multiple"
                     style={{ maxWidth: 286, width: '100%' }}
-                    placeholder="选择付款方式"
+                    placeholder="选择收款方式"
                   >
                     {map(payments, item => (
-                      <Option key={item.id} value={item.id}>
+                      <Option key={item.id} value={+item.id}>
                         <span>
                           {item.payment_method && CONFIG.payments[item.payment_method]
                             ? CONFIG.payments[item.payment_method]
@@ -453,54 +469,63 @@ export default class EditForm extends Component {
           </div>
         ) : null}
 
-        <FormItem {...formItemLayout} required label="安全选项">
+        <FormItem {...formItemLayout} label="安全选项">
           <div>
-            <div>
-              {getFieldDecorator('trusted_user', {})(
-                <Checkbox onChange={this.handleChangeTrust}>仅限受信任的交易者</Checkbox>
-              )}
-            </div>
-            {form.getFieldValue('trusted_user') ? (
-              ''
-            ) : (
+            <FormItem>
               <div>
-                <span className="bt-trade-level-auth">交易者的认证等级</span>
-                <span style={{ marginLeft: 20 }}>
-                  {getFieldDecorator('way', {
-                    initialValue: '0',
-                    rules: [
-                      {
-                        required: true,
-                        message: '请选择',
-                      },
-                    ],
-                  })(
-                    <RadioGroup>
-                      <Radio value="1">C1</Radio>
-                      <Radio value="2">C2</Radio>
-                      <Radio value="3">C3</Radio>
-                      <Radio value="0">不限</Radio>
-                    </RadioGroup>
-                  )}
-                </span>
+                {getFieldDecorator('trusted_user', {
+                  initialValue: initialValues.trusted_user,
+                })(<Checkbox onChange={this.handleChangeTrust}>仅限受信任的交易者</Checkbox>)}
               </div>
-            )}
+            </FormItem>
+            <FormItem>
+              {getFieldValue('trusted_user') ? (
+                ''
+              ) : (
+                <div>
+                  <span className="bt-trade-level-auth">交易者的认证等级</span>
+                  <span style={{ marginLeft: 20 }}>
+                    {getFieldDecorator('user_auth_level', {
+                      initialValue: initialValues.user_auth_level || 0,
+                      rules: [
+                        {
+                          required: true,
+                          message: '请选择',
+                        },
+                      ],
+                    })(
+                      <RadioGroup>
+                        {map(CONFIG.auth_level, (text, value) => (
+                          <Radio key={value} value={+value}>
+                            {text}
+                          </Radio>
+                        ))}
+                        <Radio value={0}>不限</Radio>
+                      </RadioGroup>
+                    )}
+                  </span>
+                </div>
+              )}
+            </FormItem>
           </div>
         </FormItem>
 
         <FormItem {...formItemLayout} label="交易条款">
           {getFieldDecorator('trading_term', {
+            initialValue: initialValues.trading_term,
             rules: [
               {
                 required: true,
                 message: '请输入',
               },
             ],
-          })(<TextArea placeholder="交易备注" rows={4} style={{ width: 390 }} />)}
+          })(<TextArea placeholder="交易条款" rows={4} style={{ width: 390 }} />)}
         </FormItem>
 
         <FormItem {...formItemLayout} label="自动回复">
           {getFieldDecorator('auto_replies', {
+            initialValue:
+              initialValues.auto_replies || CONFIG.auto_replies_msg[getFieldValue('ad_type')],
             rules: [
               {
                 required: true,
@@ -509,12 +534,12 @@ export default class EditForm extends Component {
             ],
           })(<TextArea placeholder="自动回复" rows={4} style={{ width: 390 }} />)}
         </FormItem>
-        {getFieldValue('ad_type') === '1' ? (
-          ''
-        ) : (
+        {getFieldValue('ad_type') === 2 && (
           <div>
             <FormItem {...formItemLayout} label="最小交易量">
-              {getFieldDecorator('min_trade_count', {})(
+              {getFieldDecorator('min_trade_count', {
+                initialValue: initialValues.min_trade_count,
+              })(
                 <InputNumber
                   min={0}
                   step={0.0001}
@@ -525,7 +550,9 @@ export default class EditForm extends Component {
             </FormItem>
 
             <FormItem {...formItemLayout} label="最低评价得分">
-              {getFieldDecorator('min_rating_score', {})(
+              {getFieldDecorator('min_rating_score', {
+                initialValue: initialValues.min_rating_score,
+              })(
                 <InputNumber
                   min={0}
                   max={100}
@@ -537,7 +564,9 @@ export default class EditForm extends Component {
             </FormItem>
 
             <FormItem {...formItemLayout} label="新卖家限额">
-              {getFieldDecorator('new_buyer_limit', {})(
+              {getFieldDecorator('new_buyer_limit', {
+                initialValue: initialValues.new_buyer_limit,
+              })(
                 <InputNumber
                   min={0}
                   step={0.0001}
@@ -564,7 +593,9 @@ export default class EditForm extends Component {
               <Button type="primary" htmlType="submit" loading={submitting}>
                 确认发布
               </Button>
-            ) : null}
+            ) : (
+              `您的剩余可发布广告条数为 ${num}`
+            )}
           </div>
         </FormItem>
       </Form>

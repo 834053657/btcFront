@@ -15,6 +15,7 @@ import {
   updateAvatar,
   queryMyOrderList,
   checkG2Validate,
+  updateCountry,
 } from '../services/user';
 import { setAuthority } from '../utils/authority';
 
@@ -29,6 +30,7 @@ export default {
     g2Info: {},
     myOrders: {
       list: [],
+      statistics: {},
       pagination: {},
     },
   },
@@ -80,10 +82,23 @@ export default {
     *submitChangeEmail({ payload, callback }, { call, put }) {
       const response = yield call(updateEmail, payload);
       if (response.code === 0) {
+        message.success('操作成功!');
+        yield callback && callback();
         yield put({
           type: 'fetchCurrent',
         });
-        callback && callback();
+      } else {
+        message.error(response.msg);
+      }
+    },
+    *submitChangeCountry({ payload, callback }, { call, put }) {
+      const response = yield call(updateCountry, payload);
+      if (response.code === 0) {
+        message.success('操作成功!');
+        yield callback && callback();
+        yield put({
+          type: 'fetchCurrent',
+        });
       } else {
         message.error(response.msg);
       }
@@ -91,11 +106,11 @@ export default {
     *submitChangeMobile({ payload, callback }, { call, put }) {
       const response = yield call(updateMobile, payload);
       if (response.code === 0) {
+        message.success('操作成功');
+        yield callback && callback();
         yield put({
           type: 'fetchCurrent',
         });
-        // message.success('操作成功');
-        yield callback && callback();
       } else {
         message.error(response.msg);
       }
@@ -222,11 +237,12 @@ export default {
       };
     },
     saveMyOrderList(state, { payload }) {
-      const { items = [], paginator } = payload || {};
+      const { items = [], statistics = {}, paginator = {} } = payload || {};
       return {
         ...state,
         myOrders: {
           list: items,
+          statistics,
           pagination: { ...paginator, current: paginator.page },
         },
       };

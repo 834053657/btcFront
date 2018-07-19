@@ -268,18 +268,24 @@ export function getPayIcon(type) {
     case 'bank':
       iconType = 'credit-card';
       break;
+    case 'westernunion':
+      iconType = 'western_union';
+      break;
+    case 'paytm':
+      iconType = 'paytm';
+      break;
     default:
       iconType = 'credit-card';
   }
   return iconType;
 }
 
-export function formatBTC(btc=0) {
-  return numeral(btc || 0).format('0,0.00000000')
+export function formatBTC(btc = 0) {
+  return numeral(btc || 0).format('0,0.00000000');
 }
 
 export function formatMoney(rmb) {
-  return numeral(rmb || 0).format('0,0.00')
+  return numeral(rmb || 0).format('0,0.00');
 }
 
 /**

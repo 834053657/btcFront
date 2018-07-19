@@ -48,7 +48,7 @@ export default class List extends Component {
     {
       title: '交易单号',
       dataIndex: 'order_no',
-      render: (v, row) => <Link to={`/card/deal-line/${row.id}`}>{v}</Link>,
+      render: (v, row) => <Link to={`/trade/step/${row.id}`}>{v}</Link>,
     },
     {
       title: '创建时间',
@@ -85,36 +85,32 @@ export default class List extends Component {
       title: '交易状态',
       dataIndex: 'status',
       render: (val, row) => (
-        <span>{val && CONFIG.paymentStatus[val] ? CONFIG.paymentStatus[val] : '-'}</span>
+        <span>{val && CONFIG.order_status[val] ? CONFIG.order_status[val] : '-'}</span>
       ),
     },
     {
       title: '法币',
-      dataIndex: 'currency'
+      dataIndex: 'currency',
     },
     {
       title: '交易金额(BTC)',
       dataIndex: 'amount',
       render: (v, row) => {
-        return (
-          <span >{row.trading_count ? formatBTC(row.trading_count) : '-'}</span>
-        );
+        return <span>{row.trading_count ? formatBTC(row.trading_count) : '-'}</span>;
       },
     },
     {
       title: '交易费(BTC)',
       dataIndex: 'fees',
-      render: v => <span dangerouslySetInnerHTML={{ __html: `${formatBTC(v)}` }} />
+      render: v => <span dangerouslySetInnerHTML={{ __html: `${formatBTC(v)}` }} />,
     },
     {
       title: '总BTC',
       dataIndex: 'trading_count',
       render: (v, row) => {
-        let total = row.trading_count + row.fees;
+        const total = row.trading_count + row.fees;
         console.log(row.trading_count, row.fees);
-        return (
-          <span>{formatBTC(total)}</span>
-        );
+        return <span>{formatBTC(total)}</span>;
       },
     },
     {
@@ -178,7 +174,7 @@ export default class List extends Component {
 
   render() {
     const { type } = this.state;
-    const { data: { list, pagination }, loading } = this.props;
+    const { data: { list, pagination, statistics = {} }, loading } = this.props;
     const content = (
       <Row gutter={24}>
         <Col span={12} className={styles.title}>
@@ -199,9 +195,9 @@ export default class List extends Component {
         <div>
           <Card bordered={false} className={styles.message_list}>
             <Tabs activeKey={type} onChange={this.handleChangeType}>
-              <TabPane tab="全部" key="" />
+              <TabPane tab={`全部(${statistics[0] || 0})`} key="" />
               {map(CONFIG.order_status, (text, value) => (
-                <TabPane tab={text + '(' + list.length + ')'} key={value} />
+                <TabPane tab={`${text}(${statistics[value] || 0})`} key={value} />
               ))}
             </Tabs>
             <Table

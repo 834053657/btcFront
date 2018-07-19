@@ -1,5 +1,4 @@
 import { stringify } from 'qs';
-import fetch from 'dva/fetch';
 import request from '../utils/request';
 
 export async function queryBanners() {
@@ -36,12 +35,8 @@ export async function readOrderMessage(params) {
   });
 }
 
-export async function queryChatHistory(params) {
-  return request(`/btc/message/get_chat_history?${stringify(params)}`);
-}
-
 export async function queryBlockConfirmFee() {
-  return request('/btc//wallet/block_confirm_fee');
+  return request('/btc/wallet/block_fees');
 }
 
 export async function queryFee(params) {
@@ -273,11 +268,6 @@ export async function getSellDetail(params) {
   return request(`/btc/ad/card/sell/detail?${stringify(params)}`);
 }
 
-//获取申诉详情
-export async function getAppealInfo(params) {
-  return request(`/btc/message/get_chat_history?${stringify(params)}`);
-}
-
 export async function postCheck(params) {
   return request('/btc/order/check', {
     method: 'POST',
@@ -360,7 +350,6 @@ export async function getHistoryAddress(params) {
 // }
 
 export async function getTradeList(params) {
-
   return request(`/btc/ad/list?${stringify(params)}`);
 }
 
@@ -469,5 +458,19 @@ export async function getFile({ type, local }) {
   return request(`../../public/article/${type}_${local}.html?r=${Math.random()}`, {
     Accept: 'text/html',
     'Content-Type': 'text/html;  charset=utf-8',
+  });
+}
+//评价用户
+export async function submitEvaluate(params) {
+  return request('/btc/order/rating', {
+    method: 'POST',
+    body: params,
+  });
+}
+//恢复广告recoverAd
+export async function recoverAd(params) {
+  return request('btc/ad/resume', {
+    method: 'POST',
+    body: params,
   });
 }

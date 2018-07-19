@@ -108,12 +108,13 @@ export default class TransferList extends Component {
 
   fetch = (params = {}) => {
     const { pagination = {} } = this.props.transfer || {};
-    console.log(pagination);
+    // console.log(pagination);
 
     params.status = params.status || this.state.status;
     params.page = params.page || pagination.page;
     params.page_size = params.page_size || pagination.page_size;
-
+    // console.log('以下')
+    // console.log(params,'params')
     this.props.dispatch({
       type: 'wallet/fetchTransfer',
       payload: params,

@@ -10,7 +10,8 @@ import {
   submitOrderRelease,
   submitOrderCancel,
   submitOrderAppeal,
-  getTradeHistory
+  getTradeHistory,
+  submitEvaluate,
 } from '../services/api';
 
 export default {
@@ -27,7 +28,7 @@ export default {
     orderDetail: {},
     tradeIm: {
       historyList: [],
-    }
+    },
   },
 
   effects: {
@@ -41,13 +42,13 @@ export default {
     },
     *fetchImHistory({ payload, callback }, { call, put }) {
       const res = yield call(getTradeHistory, payload);
-      if(res.code === 0) {
-       yield put({
-         type: 'saveImHistory',
-         payload: res.data,
-       });
-       yield callback && callback();
-     }
+      if (res.code === 0) {
+        yield put({
+          type: 'saveImHistory',
+          payload: res.data,
+        });
+        yield callback && callback();
+      }
     },
     *fetchDetail({ payload, callback }, { call, put }) {
       const res = yield call(queryAdDetails, payload);
@@ -71,9 +72,9 @@ export default {
     },
     *createOrder({ payload }, { call, put }) {
       const res = yield call(submitCreateOrder, payload);
-      if (res.code === 0) {
+      if (res.code === 0 && res.data) {
         message.success('下单成功');
-        yield put(routerRedux.push(`/trade/step/${payload.ad_id}`));
+        yield put(routerRedux.push(`/trade/step/${res.data.order_id}`));
       } else {
         message.error(res.msg);
       }
@@ -91,7 +92,7 @@ export default {
       const res = yield call(submitOrderConfirm, payload);
       if (res.code === 0) {
         yield put({
-          type: 'fetchDetail',
+          type: 'fetchOrderDetail',
           payload: {
             id: payload.order_id,
           },
@@ -104,7 +105,7 @@ export default {
       const res = yield call(submitOrderRelease, payload);
       if (res.code === 0) {
         yield put({
-          type: 'fetchDetail',
+          type: 'fetchOrderDetail',
           payload: {
             id: payload.order_id,
           },
@@ -117,7 +118,7 @@ export default {
       const res = yield call(submitOrderCancel, payload);
       if (res.code === 0) {
         yield put({
-          type: 'fetchDetail',
+          type: 'fetchOrderDetail',
           payload: {
             id: payload.order_id,
           },
@@ -127,11 +128,27 @@ export default {
         message.error(res.msg);
       }
     },
+    //评价用户
+    *postContent({ payload, callback }, { call, put }) {
+      const response = yield call(submitEvaluate, payload);
+      if (response.code === 0) {
+        message.success('操作成功');
+        yield put({
+          type: 'fetchOrderDetail',
+          payload: {
+            id: payload.order_id,
+          },
+        });
+        callback && callback(response);
+      } else {
+        message.error(response.msg);
+      }
+    },
     *orderAppeal({ payload, callback }, { call, put }) {
       const res = yield call(submitOrderAppeal, payload);
       if (res.code === 0) {
         yield put({
-          type: 'fetchDetail',
+          type: 'fetchOrderDetail',
           payload: {
             id: payload.order_id,
           },
@@ -155,7 +172,7 @@ export default {
       };
     },
     saveImHistory(state, { payload }) {
-      const { items=[] } = payload || {};
+      const { items = [] } = payload || {};
       console.log(items);
       return {
         ...state,

@@ -89,6 +89,8 @@ export default {
         page: payload.paginator.page,
         total: payload.paginator.total,
       };
+      console.log('------');
+      console.log(pagination);
       return {
         ...state,
         transfer: {

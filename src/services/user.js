@@ -52,6 +52,12 @@ export async function updateEmail(params) {
   });
 }
 
+export async function updateCountry(params) {
+  return request('/btc/user/country', {
+    method: 'POST',
+    body: params,
+  });
+}
 export async function updateMobile(params) {
   return request('/btc/user/update_telephone', {
     method: 'POST',

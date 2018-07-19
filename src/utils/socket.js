@@ -108,7 +108,7 @@ export function dvaSocket(url, option) {
         },
         receive_message: (response, dispatch, getState) => {
           const res = JSON.parse(response) || {};
-          if(res.code === 0 && res.data) {
+          if (res.code === 0 && res.data) {
             const uid = get(getState(), 'user.currentUser.user.id');
             const historyList = get(getState(), 'trade.tradeIm.historyList') || [];
             const senderId = get(res, 'data.sender.id');
@@ -119,8 +119,7 @@ export function dvaSocket(url, option) {
               payload: { items: historyList },
             });
             uid !== senderId ? playAudio() : null;
-
-          }else {
+          } else {
             message.error(res.msg);
           }
         },
@@ -183,7 +182,9 @@ export function dvaSocket(url, option) {
         {
           evaluate: (action, dispatch, getState) => action.type === 'SOCKET/OPEN',
           request: (action, dispatch, getState, socket) => {
-            if(isDev) {return}
+            if (isDev) {
+              return;
+            }
             console.log('SOCKET/OPEN', socket);
             // socket.on('connect', (data)=> {
             //   console.log('connectxxx');

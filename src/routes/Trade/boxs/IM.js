@@ -31,13 +31,13 @@ export default class TradeIM extends PureComponent {
   };
 
   componentDidMount() {
-    const { orderId, dispatch } = this.props;
-    dispatch({
-      type: 'trade/fetchImHistory',
-      payload: {
-        order_id: orderId,
-      },
-    });
+    // const { orderId, dispatch } = this.props;
+    // dispatch({
+    //   type: 'trade/fetchImHistory',
+    //   payload: {
+    //     order_id: orderId,
+    //   },
+    // });
   }
 
   componentWillUnmount() {}

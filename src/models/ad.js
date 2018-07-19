@@ -8,6 +8,7 @@ import {
   updateAd,
   deleteMyAd,
   queryMyRemain,
+  recoverAd,
 } from '../services/api';
 
 export default {
@@ -19,8 +20,8 @@ export default {
       pagination: {},
     },
     adDetail: {},
-    price: null,
-    remains: null,
+    price: {},
+    remains: 0,
   },
 
   effects: {
@@ -56,6 +57,16 @@ export default {
     },
     *updateAd({ payload, callback }, { call }) {
       const response = yield call(updateAd, payload);
+      if (response.code === 0) {
+        message.success('操作成功');
+      } else {
+        message.error(response.msg);
+      }
+      if (callback) callback();
+    },
+    // recoverAd  恢复操作
+    *recoverAd({ payload, callback }, { call }) {
+      const response = yield call(recoverAd, payload);
       if (response.code === 0) {
         message.success('操作成功');
       } else {
@@ -103,6 +114,8 @@ export default {
           type: 'setPrice',
           payload: response.data,
         });
+      } else {
+        message.error(response.msg);
       }
     },
   },
@@ -132,7 +145,7 @@ export default {
     setPrice(state, { payload }) {
       return {
         ...state,
-        price: payload.at_price,
+        price: payload,
       };
     },
     setRemain(state, { payload }) {

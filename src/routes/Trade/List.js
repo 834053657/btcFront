@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import { Link, routerRedux } from 'dva/router';
 import moment from 'moment';
 import { Table, Alert, Button, Icon, Radio, Avatar, Badge, Tag, Popover } from 'antd';
-import { map } from 'lodash';
+import { map, forEachRight } from 'lodash';
 import { stringify } from 'qs';
 import BlankLayout from '../../layouts/BlankLayout';
 import SearchForm from './forms/SearchForm';
@@ -14,22 +14,17 @@ import { getQueryString, getPayIcon } from '../../utils/utils';
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 
-const typeMap = {
-  1: '购买',
-  2: '出售',
-};
-
 @connect(({ trade, loading }) => ({
   ...trade.tradeList,
   loading: loading.models.message,
 }))
 export default class List extends Component {
   constructor(props) {
-    const { search } = props.location;
-    const { ad_type = '1' } = getQueryString(search);
     super(props);
+    const { search } = props.location;
+    const { ad_type = 1 } = getQueryString(search);
     this.state = {
-      ad_type,
+      ad_type: +ad_type,
       searchVisible: false,
       searchValues: {
         countries: 'CN',
@@ -73,7 +68,7 @@ export default class List extends Component {
         const { online, avatar, nickname } = row.owner || {};
         return (
           <div>
-            <Link to={`/personage/${row.ad_no}`}>
+            <Link to={`/personage/${row.owner.id}`}>
               <Badge status={online ? 'success' : 'default'} offset={[35, -5]} dot>
                 <Avatar size="large" src={avatar} />
               </Badge>
@@ -140,7 +135,7 @@ export default class List extends Component {
         return (
           <Fragment>
             <Link to={`/trade/detail/${r.id}`}>
-              <Button type="primary">{ad_type ? typeMap[ad_type] : '-'}</Button>
+              <Button type="primary">{ad_type ? CONFIG.trade_ad_type[ad_type] : '-'}</Button>
             </Link>
           </Fragment>
         );
@@ -149,14 +144,14 @@ export default class List extends Component {
   ];
 
   handleTypeChange = e => {
-    const type = e.target.value;
+    const ad_type = e.target.value;
     this.setState({
-      type,
+      ad_type,
     });
-    this.fetch({ type });
+    this.fetch({ ad_type });
     this.props.dispatch(
       routerRedux.replace({
-        search: stringify({ type }),
+        search: stringify({ ad_type }),
       })
     );
   };
@@ -233,9 +228,9 @@ export default class List extends Component {
               onChange={this.handleTypeChange}
               style={{ marginBottom: 8 }}
             >
-              {map(typeMap, (text, value) => (
-                <RadioButton key={value} value={value}>
-                  {text}
+              {map(CONFIG.trade_ad_type, (text, value) => (
+                <RadioButton key={value} value={+value}>
+                  我要{text}
                 </RadioButton>
               ))}
             </RadioGroup>

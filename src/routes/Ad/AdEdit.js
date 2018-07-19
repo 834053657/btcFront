@@ -7,27 +7,22 @@ import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './AdEdit.less';
 import EditForm from './form/EditForm';
 
-const statusMap = ['warning', 'processing', 'error', 'default'];
-
-const RadioButton = Radio.Button;
-const RadioGroup = Radio.Group;
-
-@connect(({ ad, loading }) => ({
+@connect(({ ad, user, loading }) => ({
   initialValues: ad.adDetail,
   price: ad.price,
+  currentUser: user.currentUser,
   loading: loading.effects['ad/fetchAdDetail'],
+  freshLoading: loading.effects['ad/fetchNewPrice'],
+  submitting: loading.effects['ad/postPublish'],
 }))
 export default class AdEdit extends Component {
   componentWillMount() {}
-
   componentDidMount() {
     const { params: { id } } = this.props.match || {};
-    this.fetchDetail(id, this.fetchPrice);
+    this.fetchDetail(id, (obj = {}) => this.fetchPrice(obj.currency));
   }
 
   fetchDetail = (id, callback) => {
-    // console.log(id)
-
     const { dispatch } = this.props;
     dispatch({
       type: 'ad/fetchAdDetail',
@@ -38,24 +33,27 @@ export default class AdEdit extends Component {
     });
   };
 
-  fetchPrice = obj => {
+  fetchPrice = (currency = 'CNY') => {
     this.props.dispatch({
       type: 'ad/fetchNewPrice',
       payload: {
-        currency: obj.currency,
+        currency,
       },
     });
   };
 
   handleSubmit = value => {
-    // console.log('下面是value');
-    // console.log(value);
-    const { dispatch } = this.props;
+    const { dispatch, price } = this.props;
+    const { id } = this.props.initialValues;
+    const { currency } = value;
+
     dispatch({
       type: 'ad/postPublish',
       payload: {
         ...value,
         trusted_user: +!!value.trusted_user,
+        ad_id: id,
+        market_price: currency === 'CNY' ? price.ad_price_cny : price.ad_price_usd,
       },
       callback: () => {
         this.props.dispatch(routerRedux.push('/ad/my'));
@@ -67,7 +65,7 @@ export default class AdEdit extends Component {
     // const { adDetail } = this.props
     // console.log(adDetail.ad_type)
     // console.log(this.props.initialValues);
-    console.log(this.props);
+    // console.log(this.props);
     const content = (
       <Row gutter={24} className={styles.headers}>
         <Col span={12} className={styles.title}>
@@ -87,7 +85,7 @@ export default class AdEdit extends Component {
     return (
       <PageHeaderLayout content={content}>
         <div className={styles.background}>
-          <EditForm {...this.props} onSubmit={this.handleSubmit} />
+          <EditForm {...this.props} getPrice={this.fetchPrice} onSubmit={this.handleSubmit} />
         </div>
       </PageHeaderLayout>
     );

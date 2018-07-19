@@ -9,11 +9,6 @@ let menuData = [
     name: '发布广告',
     path: 'publish_ad',
   },
-  {
-    name: '咨询列表',
-
-    path: 'counsel',
-  },
 ];
 
 if (__KG_API_ENV__ === 'dev') {
