@@ -7,20 +7,20 @@ const Step = Steps.Step;
 export default class Authentication extends Component {
   static state = {};
   static propTypes = {
-    hideSubmitButton: PropTypes.bool,
+    hideGotoButton: PropTypes.bool,
   };
   static defaultProps = {
-    hideSubmitButton: true,
+    hideGotoButton: true,
   };
   render() {
     return (
       <div className={this.props.className}>
-        <Steps size="small" current={0}>
+        <Steps size={this.props.size || 'small'} current={0}>
           <Step title="C1实名认证" />
           <Step title="C2证件认证" />
           <Step title="C3视频认证" />
         </Steps>
-        {this.props.hideSubmitButton === false && (
+        {this.props.hideGotoButton === false && (
           <Button className={styles.btnBlock} size="large" type="primary">
             开始认证
           </Button>

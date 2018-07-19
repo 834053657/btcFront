@@ -263,9 +263,9 @@ export const getRouterData = app => {
       component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/BasicForm')),
     },
     '/authentication/': {
-      component: dynamicWrapper(app, ['global', 'authentication'], () => {
-        import('../routes/Authentication/AuthenticationPage');
-      }),
+      component: dynamicWrapper(app, ['authentication'], () =>
+        import('../routes/Authentication/AuthenticationPage')
+      ),
     },
   };
 
