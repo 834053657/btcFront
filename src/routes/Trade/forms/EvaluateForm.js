@@ -16,7 +16,7 @@ export default class EvaluateForm extends Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         const { id } = this.props || {};
-        this.props.onSubmit && this.props.onSubmit({ ...values, id });
+        this.props.onSubmit && this.props.onSubmit({ ...values, order_id: id });
       }
     });
   };
@@ -34,6 +34,12 @@ export default class EvaluateForm extends Component {
         <FormItem>
           {getFieldDecorator('star', {
             initialValue: initialValues.star,
+            rules: [
+              {
+                required: true,
+                message: '请选择评价',
+              },
+            ],
           })(
             <RadioGroup className={styles.select}>
               {map(CONFIG.startList, (item, key) => {
@@ -52,6 +58,12 @@ export default class EvaluateForm extends Component {
         <FormItem>
           {getFieldDecorator('content', {
             initialValue: initialValues.content,
+            rules: [
+              {
+                required: true,
+                message: '请输入评价',
+              },
+            ],
           })(<TextArea rows={4} />)}
         </FormItem>
         <div style={{ overflow: 'hidden' }}>

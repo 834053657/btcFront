@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import { map, findIndex } from 'lodash';
-import { Button, Card, Row, Col, Modal, Form, Input, Steps, Icon } from 'antd';
+import { Button, Card, Row, Col, Modal, Spin, Input, Steps, Icon } from 'antd';
 import ConfirmModal from '../../components/ConfirmModal';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import Step1 from './boxs/Step1.js';
@@ -23,7 +23,7 @@ const { Step } = Steps;
 	------ 确认释放 申述
 
 	----完成 // 已支付 - 释放 - 完成订单
-	------ 申述
+	------ //申述
 
 	---- 申述 // 已支付 - 申述中
 	--------- 确认释放
@@ -43,7 +43,7 @@ const { Step } = Steps;
 
 
 ----完成 // 已支付 - 释放 - 完成订单
------- 申述
+------  xx // 申述
 
 ---- 申述 // 已支付 - 申述中
 --------- 取消订单
@@ -91,12 +91,12 @@ export default class TradeStep extends PureComponent {
       renderButtons: () => {
         return this.checkIsBuyer()
           ? [
-            <Button key="ok" type="primary" onClick={this.handlePay}>
-              确认支付
-            </Button>,
-            <Button key="cancel" style={{ marginLeft: 25 }} onClick={this.handleShowCancelModal}>
-              取消订单
-            </Button>,
+              <Button key="ok" type="primary" onClick={this.handlePay}>
+                确认支付
+              </Button>,
+              <Button key="cancel" style={{ marginLeft: 25 }} onClick={this.handleShowCancelModal}>
+                取消订单
+              </Button>,
             ]
           : null;
       },
@@ -155,13 +155,13 @@ export default class TradeStep extends PureComponent {
           text: '完成订单',
         },
       ],
-      renderButtons: () => {
-        return (
-          <Button key="cancel" onClick={this.handleShowAppealModal}>
-            申述
-          </Button>
-        );
-      },
+      // renderButtons: () => {
+      //   return (
+      //     <Button key="cancel" onClick={this.handleShowAppealModal}>
+      //       申述
+      //     </Button>
+      //   );
+      // },
     },
     cancel: {
       steps: [
@@ -338,7 +338,7 @@ export default class TradeStep extends PureComponent {
   };
 
   render() {
-    const { orderDetail, match: { params = {} } } = this.props;
+    const { loading, orderDetail, match: { params = {} } } = this.props;
     const { order = {} } = orderDetail || {};
     const order_status = CONFIG.orderEngStatus[order.status];
     const currentObj = order_status ? this.orderSteps[order_status] : {};
@@ -347,27 +347,29 @@ export default class TradeStep extends PureComponent {
 
     return (
       <PageHeaderLayout className="ant-layout-content" breadcrumbList={breadcrumbList}>
-        <Card bordered={false}>
-          <Steps current={current} className={styles.steps}>
-            {map(currentObj.steps, item => (
-              <Step key={item.key} title={item.text} status={item.status} />
-            ))}
-          </Steps>
-          <div className={styles.page}>
-            <Row gutter={24}>
-              <Col span={10} className={styles.left}>
-                <Step1
-                  {...this.props}
-                  renderButtons={currentObj.renderButtons}
-                  handleReport={this.handleShowReportModal}
-                />
-              </Col>
-              <Col span={14} className={styles.right}>
-                <IM {...this.props} orderId={params.id} />
-              </Col>
-            </Row>
-          </div>
-        </Card>
+        <Spin spinning={loading}>
+          <Card bordered={false}>
+            <Steps current={current} className={styles.steps}>
+              {map(currentObj.steps, item => (
+                <Step key={item.key} title={item.text} status={item.status} />
+              ))}
+            </Steps>
+            <div className={styles.page}>
+              <Row gutter={24}>
+                <Col span={10} className={styles.left}>
+                  <Step1
+                    {...this.props}
+                    renderButtons={currentObj.renderButtons}
+                    handleReport={this.handleShowReportModal}
+                  />
+                </Col>
+                <Col span={14} className={styles.right}>
+                  <IM {...this.props} orderId={params.id} />
+                </Col>
+              </Row>
+            </div>
+          </Card>
+        </Spin>
 
         <ConfirmModal
           visible={this.state.cancelModal}

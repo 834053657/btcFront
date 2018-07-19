@@ -85,7 +85,7 @@ export default class List extends Component {
       title: '交易状态',
       dataIndex: 'status',
       render: (val, row) => (
-        <span>{val && CONFIG.paymentStatus[val] ? CONFIG.paymentStatus[val] : '-'}</span>
+        <span>{val && CONFIG.order_status[val] ? CONFIG.order_status[val] : '-'}</span>
       ),
     },
     {
