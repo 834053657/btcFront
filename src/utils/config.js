@@ -44,6 +44,10 @@ export default {
     1: '买入',
     2: '出售',
   },
+  trade_ad_type: {
+    1: '出售',
+    2: '购买',
+  },
   auth_status: {
     1: '未认证',
     2: '认证中',
@@ -150,10 +154,6 @@ export default {
     1: '交易',
     2: '充值',
     3: '提现',
-  },
-  paymentStatus: {
-    1: '已付款',
-    2: '未付款',
   },
   orderEngStatus: {
     1: 'wait_pay',

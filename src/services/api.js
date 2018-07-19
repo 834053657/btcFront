@@ -35,10 +35,6 @@ export async function readOrderMessage(params) {
   });
 }
 
-export async function queryChatHistory(params) {
-  return request(`/btc/message/get_chat_history?${stringify(params)}`);
-}
-
 export async function queryBlockConfirmFee() {
   return request('/btc/wallet/block_fees');
 }
@@ -270,11 +266,6 @@ export async function getAdDetail(params) {
 //创建出售
 export async function getSellDetail(params) {
   return request(`/btc/ad/card/sell/detail?${stringify(params)}`);
-}
-
-//获取申诉详情
-export async function getAppealInfo(params) {
-  return request(`/btc/message/get_chat_history?${stringify(params)}`);
 }
 
 export async function postCheck(params) {

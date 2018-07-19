@@ -92,7 +92,7 @@ export default {
       const res = yield call(submitOrderConfirm, payload);
       if (res.code === 0) {
         yield put({
-          type: 'fetchDetail',
+          type: 'fetchOrderDetail',
           payload: {
             id: payload.order_id,
           },
@@ -105,7 +105,7 @@ export default {
       const res = yield call(submitOrderRelease, payload);
       if (res.code === 0) {
         yield put({
-          type: 'fetchDetail',
+          type: 'fetchOrderDetail',
           payload: {
             id: payload.order_id,
           },
@@ -118,7 +118,7 @@ export default {
       const res = yield call(submitOrderCancel, payload);
       if (res.code === 0) {
         yield put({
-          type: 'fetchDetail',
+          type: 'fetchOrderDetail',
           payload: {
             id: payload.order_id,
           },
@@ -129,10 +129,16 @@ export default {
       }
     },
     //评价用户
-    *postContent({ payload, callback }, { call }) {
+    *postContent({ payload, callback }, { call, put }) {
       const response = yield call(submitEvaluate, payload);
       if (response.code === 0) {
         message.success('操作成功');
+        yield put({
+          type: 'fetchOrderDetail',
+          payload: {
+            id: payload.order_id,
+          },
+        });
         callback && callback(response);
       } else {
         message.error(response.msg);
@@ -142,7 +148,7 @@ export default {
       const res = yield call(submitOrderAppeal, payload);
       if (res.code === 0) {
         yield put({
-          type: 'fetchDetail',
+          type: 'fetchOrderDetail',
           payload: {
             id: payload.order_id,
           },

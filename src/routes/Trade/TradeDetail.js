@@ -1,9 +1,12 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { Button, Card, Row, Col, Badge, Form, Input, Avatar, Icon, Select } from 'antd';
-import { map, isNumber, floor } from 'lodash';
+import { map, isNumber, floor,omit } from 'lodash';
 import DescriptionList from 'components/DescriptionList';
+import { routerRedux } from 'dva/router';
 import InputNumber from 'components/InputNumber';
+import ConfirmModal from 'components/ConfirmModal';
+import PayMethodModal from '../UserCenter/modals/PayMethodModal';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './TradeDetail.less';
 import { getPayIcon } from '../../utils/utils';
@@ -31,7 +34,10 @@ const formItemLayout = {
 }))
 @Form.create()
 export default class TradeDetail extends PureComponent {
-  state = {};
+  state = {
+    reportAdModal: false,
+    payMethodModalVisible: false
+  };
 
   componentDidMount() {
     const { dispatch } = this.props;
@@ -42,13 +48,15 @@ export default class TradeDetail extends PureComponent {
     });
   }
 
-  handleReport = () => {
-    const { dispatch } = this.props;
-
-    dispatch({
-      type: 'trade/reportAd',
-      payload: { ad_id: this.props.match.params.id },
-    });
+  handleSubmitReport = (err, values) => {
+    if (!err) {
+      const { dispatch, match: { params = {} } } = this.props;
+      dispatch({
+        type: 'trade/reportAd',
+        payload: { ...values, ad_id: params.id },
+        callback: this.handleHideReportModal,
+      });
+    }
   };
 
   handleChangeVolume = v => {
@@ -87,6 +95,12 @@ export default class TradeDetail extends PureComponent {
     });
   };
 
+  hidePayMethodModal = () => {
+    this.setState({
+      payMethodModalVisible: false,
+    });
+  };
+
   getUserAccount = info => {
     const { payment_method, payment_detail = {} } = info || {};
     if (payment_method === 'bank') {
@@ -96,16 +110,36 @@ export default class TradeDetail extends PureComponent {
     }
   };
 
+  showReportModal = () => {
+    this.setState({
+      reportAdModal: true
+    })
+  }
+
+  handleHideReportModal = () => {
+    this.setState({
+      reportAdModal: false
+    })
+  }
+
+  showAddPaymentsModal = () => {
+    this.setState({
+      payMethodModalVisible: true
+    })
+  }
+
   render() {
     const { submitting, detail = {}, currentUser } = this.props;
     const { getFieldDecorator } = this.props.form;
     const { payments = {} } = currentUser || {};
     const { owner = {}, ad_type } = detail || {};
-    const breadcrumbList = [{ title: '首页', href: '/' }, { title: '购买' }];
+    const breadcrumbList = [{ title: '首页', href: '/' }, { title: '广告详情'}];
     // const currencyDes =  detail.currency ? CONFIG.currencyList[detail.currency]: '-';
+    const existsPayments = map(payments, item => item.payment_method)
+    const ENABLE_PAY_MENTS = omit(CONFIG.payments, existsPayments);
 
     return (
-      <PageHeaderLayout className="ant-layout-content" breadcrumbList={breadcrumbList}>
+      <PageHeaderLayout className="ant-layout-content" title={ad_type ?  `${CONFIG.trade_ad_type[ad_type]}比特币` : null} breadcrumbList={breadcrumbList}>
         <div className={styles.page}>
           <Row gutter={24}>
             <Col span={14} className={styles.left}>
@@ -140,7 +174,7 @@ export default class TradeDetail extends PureComponent {
                     {owner.trade_times} / {owner.good_ratio}%
                   </Description>
                   <Description term="付款期限">{detail.payment_limit} 分钟</Description>
-                  {ad_type === 1 && (
+                  {ad_type === 2 && (
                     <Description term="付款方式">
                       {map(detail.payment_methods, item => (
                         <Icon className={styles.pay_method} key={item} type={getPayIcon(item)} />
@@ -149,14 +183,14 @@ export default class TradeDetail extends PureComponent {
                   )}
                 </DescriptionList>
                 <Form hideRequiredMark style={{ marginTop: 15 }} onSubmit={this.handleSubmit}>
-                  {ad_type === 2 ? (
+                  {ad_type === 1 ? ( // 买入的广告类型 才需要用户添加收款方式
                     <div>
                       {
                         <FormItem {...formItemLayout} label="收款方式">
                           {payments.length <= 0 ? (
-                            <a href="">请先添加收款方式</a>
+                            <a onClick={this.showAddPaymentsModal}>请先添加收款方式</a>
                           ) : (
-                            getFieldDecorator('payments', {
+                            getFieldDecorator('payment_methods', {
                               rules: [
                                 {
                                   required: true,
@@ -235,7 +269,7 @@ export default class TradeDetail extends PureComponent {
                   </FormItem>
 
                   <FormItem className={styles.buttonBox}>
-                    <Button key="back" onClick={this.props.onCancel}>
+                    <Button key="back" onClick={() => this.props.dispatch(routerRedux.goBack())}>
                       取消
                     </Button>
                     <Button
@@ -255,7 +289,7 @@ export default class TradeDetail extends PureComponent {
                 className={styles.term_box}
                 title={`用户${owner.nickname}的交易条款`}
                 actions={[
-                  <a className={styles.report} onClick={this.handleReport}>
+                  <a className={styles.report} onClick={this.showReportModal}>
                     <Icon type="flag" /> 举报这则交易信息
                   </a>,
                 ]}
@@ -265,6 +299,21 @@ export default class TradeDetail extends PureComponent {
             </Col>
           </Row>
         </div>
+
+        <ConfirmModal
+          visible={this.state.reportAdModal}
+          title="举报"
+          onSubmit={this.handleSubmitReport}
+          onCancel={this.handleHideReportModal}
+        />
+
+        <PayMethodModal
+          {...this.props}
+          payMents={ENABLE_PAY_MENTS}
+          title='添加支付方式'
+          data={this.state.payMethodModalVisible}
+          onCancel={this.hidePayMethodModal}
+        />
       </PageHeaderLayout>
     );
   }
