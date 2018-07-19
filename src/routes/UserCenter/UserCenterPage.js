@@ -26,6 +26,7 @@ import PayMethodModal from './modals/PayMethodModal';
 import PwdModal from './modals/PwdModal';
 import RealNameForm from './forms/RealNameForm';
 import VideoAuthForm from './forms/VideoAuthForm';
+import CountryModal from './modals/CountryModal';
 
 import styles from './UserCenterPage.less';
 
@@ -45,6 +46,7 @@ export default class UserCenterPage extends Component {
     videoAuthModalVisible: false,
     payMethodModalVisible: false,
     uploadLoading: false,
+    countryModalVisible: false,
   };
 
   componentDidMount() {
@@ -160,6 +162,17 @@ export default class UserCenterPage extends Component {
   showPayMethodModal = (data = true) => {
     this.setState({
       payMethodModalVisible: data,
+    });
+  };
+
+  showCountryModal = () => {
+    this.setState({
+      countryModalVisible: true,
+    });
+  };
+  hideCountryModal = () => {
+    this.setState({
+      countryModalVisible: false,
     });
   };
 
@@ -298,6 +311,7 @@ export default class UserCenterPage extends Component {
   };
 
   render() {
+    console.log(this.props);
     const {
       emailModalVisible,
       mobileModalVisible,
@@ -306,6 +320,7 @@ export default class UserCenterPage extends Component {
       pwdModalVisible,
       payMethodModalVisible,
       uploadLoading,
+      countryModalVisible,
     } = this.state;
     const { currentUser } = this.props;
     const { auth, user = {}, payments = [], upload = {}, trade = {} } = currentUser || {};
@@ -313,7 +328,7 @@ export default class UserCenterPage extends Component {
     const real_name_status = real_name.status || 1;
     const video_status = video.status || 1;
     const { first_trade_at } = trade || {};
-    const existsPayments = map(payments, item => item.payment_method)
+    const existsPayments = map(payments, item => item.payment_method);
     const ENABLE_PAY_MENTS = omit(CONFIG.payments, existsPayments);
 
     return (
@@ -386,6 +401,25 @@ export default class UserCenterPage extends Component {
                   </div>
                 </div>
                 <div className={styles.box_content}>
+                  <div className={styles.box_item}>
+                    <div className={styles.box_item_meta}>
+                      <Icon type="global" />
+                      <div className={styles.box_item_meta_head}>
+                        <h4 className={styles.box_item_title}>国家</h4>
+                      </div>
+                    </div>
+                    <div className={styles.box_item_content}>
+                      {user.country_code && CONFIG.countrysMap[user.country_code]
+                        ? CONFIG.countrysMap[user.country_code].name
+                        : null}
+                    </div>
+                    <ul className={styles.box_item_action}>
+                      <li>
+                        <a onClick={this.showCountryModal}>选择</a>
+                      </li>
+                    </ul>
+                  </div>
+
                   <div className={styles.box_item}>
                     <div className={styles.box_item_meta}>
                       <Icon type="mail" />
@@ -604,6 +638,15 @@ export default class UserCenterPage extends Component {
               </div>
             </div>
 
+            {countryModalVisible && (
+              <CountryModal
+                {...this.props}
+                // email={user.email}
+                visible={countryModalVisible}
+                onCancel={this.hideCountryModal}
+              />
+            )}
+
             {emailModalVisible && (
               <EmailModal
                 {...this.props}
@@ -622,11 +665,7 @@ export default class UserCenterPage extends Component {
             )}
 
             {pwdModalVisible && (
-              <PwdModal
-                {...this.props}
-                visible={pwdModalVisible}
-                onCancel={this.hidePwdlModal}
-              />
+              <PwdModal {...this.props} visible={pwdModalVisible} onCancel={this.hidePwdlModal} />
             )}
 
             {/*{this.renderPwdModal()}*/}

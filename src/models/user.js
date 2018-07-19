@@ -15,6 +15,7 @@ import {
   updateAvatar,
   queryMyOrderList,
   checkG2Validate,
+  updateCountry,
 } from '../services/user';
 import { setAuthority } from '../utils/authority';
 
@@ -76,6 +77,18 @@ export default {
     },
     *submitChangeEmail({ payload, callback }, { call, put }) {
       const response = yield call(updateEmail, payload);
+      if (response.code === 0) {
+        message.success('操作成功!');
+        yield callback && callback();
+        yield put({
+          type: 'fetchCurrent',
+        });
+      } else {
+        message.error(response.msg);
+      }
+    },
+    *submitChangeCountry({ payload, callback }, { call, put }) {
+      const response = yield call(updateCountry, payload);
       if (response.code === 0) {
         message.success('操作成功!');
         yield callback && callback();

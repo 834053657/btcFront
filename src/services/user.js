@@ -40,7 +40,7 @@ export async function updatePassword(params) {
     body: {
       old_password,
       new_password,
-      verify_token
+      verify_token,
     },
   });
 }
@@ -52,6 +52,12 @@ export async function updateEmail(params) {
   });
 }
 
+export async function updateCountry(params) {
+  return request('/btc/user/country', {
+    method: 'POST',
+    body: params,
+  });
+}
 export async function updateMobile(params) {
   return request('/btc/user/update_telephone', {
     method: 'POST',
