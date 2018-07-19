@@ -29,7 +29,7 @@ export default class TradeIM extends PureComponent {
   state = {
     maxImg: null,
   };
-  取消订单
+
   componentDidMount() {
     // const { orderId, dispatch } = this.props;
     // dispatch({
