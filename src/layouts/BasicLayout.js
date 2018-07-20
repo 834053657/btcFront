@@ -123,6 +123,10 @@ class BasicLayout extends React.Component {
         type: 'global/fetchNotices',
         payload: { status: 0, type: 1 },
       });
+      this.props.dispatch({
+        type: 'global/fetchOrders',
+        payload: { status: '1,2,3' },
+      });
     }
   }
   componentWillUnmount() {
@@ -184,11 +188,11 @@ class BasicLayout extends React.Component {
     });
   };
   handleNoticeClear = type => {
-    message.success(`清空了${type}`);
     this.props.dispatch({
       type: 'global/readNotices',
       payload: { all: true },
       callback: () => {
+        message.success(`清空了${type}`);
         this.props.dispatch({
           type: 'global/fetchNotices',
           payload: { status: 0, type: 2 },
@@ -301,6 +305,7 @@ class BasicLayout extends React.Component {
       match,
       location,
       local,
+      orders,
     } = this.props;
     const bashRedirect = this.getBashRedirect();
     const layout = (
@@ -322,6 +327,7 @@ class BasicLayout extends React.Component {
         <Layout>
           <Header style={{ padding: 0 }}>
             <GlobalHeader
+              orders={orders}
               logo={logo}
               local={local}
               menuData={getMenuData()}
@@ -382,6 +388,7 @@ export default connect(({ user, global, loading }) => ({
   currentUser: user.currentUser,
   collapsed: global.collapsed,
   local: global.local,
+  orders: global.orders,
   fetchingNotices: loading.effects['global/fetchNotices'],
   notices: global.notices,
   noticesCount: global.noticesCount,

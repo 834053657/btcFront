@@ -60,12 +60,17 @@ export default class NoticeIcon extends PureComponent {
   };
 
   getNotificationBox() {
-    const { list, loading, locale } = this.props;
-
+    const { list, loading, locale, title } = this.props;
+    const title_count = list.length > 0 ? `${title} (${list.length})` : title;
     const contentList = (
       <List
         {...this.props}
         data={list}
+        header={
+          <span className="text-blue" style={{ paddingLeft: 15 }}>
+            {title_count}
+          </span>
+        }
         onClick={item => this.onItemClick(item)}
         onClear={() => this.props.onClear(this.props.title)}
         onView={this.onViewMore}
@@ -87,9 +92,9 @@ export default class NoticeIcon extends PureComponent {
     const notificationBox = this.getNotificationBox();
     const trigger = (
       <span className={noticeButtonClass}>
-        <Badge count={count} className={styles.badge}>
-          <Icon type="bell" className={styles.icon} />
-        </Badge>
+        {/*<Badge count={count} className={styles.badge}>*/}
+        <Icon type="profile" className={styles.icon} />
+        {/*</Badge>*/}
       </span>
     );
     if (!notificationBox) {

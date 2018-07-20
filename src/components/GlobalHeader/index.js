@@ -5,8 +5,9 @@ import { map, groupBy } from 'lodash';
 import Debounce from 'lodash-decorators/debounce';
 import { Link } from 'dva/router';
 import numeral from 'numeral';
-import { getMessageContent } from '../../utils/utils'
+import { getMessageContent } from '../../utils/utils';
 import NoticeIcon from '../NoticeIcon';
+import MessageIcon from '../CustomNoticeIcon';
 import TopMenu from '../TopMenu';
 import styles from './index.less';
 
@@ -32,9 +33,7 @@ export default class GlobalHeader extends PureComponent {
         newNotice.key = newNotice.id;
       }
 
-      newNotice.description = getMessageContent(notice)
-
-
+      newNotice.description = getMessageContent(notice);
 
       // if (newNotice.extra && newNotice.status) {
       //   const color = {
@@ -52,10 +51,10 @@ export default class GlobalHeader extends PureComponent {
       return newNotice;
     });
     return groupBy(newNotices, item => {
-      if(!!~[1,11,12,21,22,31].indexOf(item.msg_type)) {
-        return "system";
-      }else {
-        return "trade";
+      if (~[1, 11, 12, 21, 22, 31].indexOf(item.msg_type)) {
+        return 'system';
+      } else {
+        return 'trade';
       }
     });
   }
@@ -87,7 +86,7 @@ export default class GlobalHeader extends PureComponent {
       onNoticeView,
       onNoticeClick,
       onLanguageChange,
-      notices,
+      orders = [],
       noticesCount,
       local,
     } = this.props;
@@ -172,6 +171,14 @@ export default class GlobalHeader extends PureComponent {
                   emptyImage="https://gw.alipayobjects.com/zos/rmsportal/sAuJeJzSKbUmHfBQRzmZ.svg"
                 />
               </NoticeIcon>
+              <MessageIcon
+                onItemClick={onNoticeClick}
+                title="进行中订单"
+                emptyText="目前无正在进行中的订单"
+                emptyImage="https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg"
+                list={orders}
+                popupAlign={{ offset: [20, -16] }}
+              />
               <Dropdown overlay={menu}>
                 <span className={`${styles.action} ${styles.account}`}>
                   <Avatar size="small" className={styles.avatar} src={currentUser.user.avatar} />
