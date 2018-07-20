@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Select, Button, Form, Input, Radio, Checkbox, Col, Card, Alert, Icon } from 'antd';
+import { Select, Button, Form, Input, Radio, Checkbox, Row, Col, Card, Tooltip, Icon } from 'antd';
 import { map, floor } from 'lodash';
 import { Link } from 'dva/router';
 import InputNumber from 'components/InputNumber';
@@ -22,6 +22,17 @@ const formItemLayout = {
   },
 };
 
+const formItemLayout1 = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 7 },
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 10 },
+  },
+};
+
 const typeMap = {
   '1': '在线买入',
   '2': '在线卖出',
@@ -33,6 +44,7 @@ export default class EditForm extends Component {
     super(props);
     this.state = {
       grade: true,
+      floatPrice: false,
     };
   }
 
@@ -103,48 +115,48 @@ export default class EditForm extends Component {
   };
 
   // 计算最大发布交易额
-  handleChangeBtc = v => {
-    const { form } = this.props;
-    const nums = form.getFieldValue('trading_price');
-    const numBTC = v;
-
-    const max_volume = floor(numBTC * nums, 2);
-
-    const re = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
-    if (re.test(numBTC)) {
-      form.setFieldsValue({ max_volume });
-    }
-  };
+  // handleChangeBtc = v => {
+  //   const { form } = this.props;
+  //   const nums = form.getFieldValue('trading_price');
+  //   const numBTC = v;
+  //
+  //   const max_volume = floor(numBTC * nums, 2);
+  //
+  //   const re = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
+  //   if (re.test(numBTC)) {
+  //     form.setFieldsValue({ max_volume });
+  //   }
+  // };
 
   // 计算交易比特币限额
-  handleChangeMax = e => {
-    const { form } = this.props;
-    const num = form.getFieldValue('trading_price');
-    const numMax = e;
-    const max_count = floor(numMax * (1 / num), 4);
-    const re = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
-
-    if (re.test(numMax)) {
-      form.setFieldsValue({ max_count });
-    }
-  };
+  // handleChangeMax = e => {
+  //   const { form } = this.props;
+  //   const num = form.getFieldValue('trading_price');
+  //   const numMax = e;
+  //   const max_count = floor(numMax * (1 / num), 4);
+  //   const re = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
+  //
+  //   if (re.test(numMax)) {
+  //     form.setFieldsValue({ max_count });
+  //   }
+  // };
   // 计算交易价格
-  handleChangeRat = e => {
-    const { form, price } = this.props;
-    const numBTC = form.getFieldValue('max_count');
-    const numMax = e;
-    const newPrice =
-      form.getFieldValue('currency') === 'CNY' ? price.ad_price_cny : price.ad_price_usd;
-    const trading_price_ratio = floor(numMax / newPrice * 100, 4);
-
-    const re = /^[+-]?\d*\.?\d*$/;
-
-    if (re.test(numMax)) {
-      form.setFieldsValue({ trading_price_ratio }, () => {
-        this.handleChangeBtc(numBTC);
-      });
-    }
-  };
+  // handleChangeRat = e => {
+  //   const { form, price } = this.props;
+  //   const numBTC = form.getFieldValue('max_count');
+  //   const numMax = e;
+  //   const newPrice =
+  //     form.getFieldValue('currency') === 'CNY' ? price.ad_price_cny : price.ad_price_usd;
+  //   const trading_price_ratio = floor(numMax / newPrice * 100, 4);
+  //
+  //   const re = /^[+-]?\d*\.?\d*$/;
+  //
+  //   if (re.test(numMax)) {
+  //     form.setFieldsValue({ trading_price_ratio }, () => {
+  //       this.handleChangeBtc(numBTC);
+  //     });
+  //   }
+  // };
 
   handleChangeCur = currency => {
     const { form } = this.props;
@@ -158,20 +170,36 @@ export default class EditForm extends Component {
     return currency;
   };
 
+  handleChangeFloat = () => {
+    const { floatPrice } = this.state;
+    this.setState({
+      floatPrice: !floatPrice,
+    });
+  };
+
   clickBtn = value => {};
 
   render() {
-    const { form, num, price = {}, initialValues = {}, freshLoading, submitting, currentUser,getPrice } = this.props;
+    const {
+      form,
+      num,
+      price = {},
+      initialValues = {},
+      freshLoading,
+      submitting,
+      currentUser,
+      getPrice,
+    } = this.props;
     const { getFieldDecorator, getFieldValue } = form || {};
     const { payments = {} } = currentUser || {};
     console.log(payments);
-
+    const { floatPrice } = this.state;
     return (
       <Form className={styles.form} hideRequiredMark onSubmit={this.handleSubmit}>
         <FormItem>
           <div className={styles.chooseBtn}>
             {getFieldDecorator('ad_type', {
-              initialValue: initialValues.ad_type ? initialValues.ad_type  : 1,
+              initialValue: initialValues.ad_type ? initialValues.ad_type : 1,
               rules: [
                 {
                   required: true,
@@ -230,6 +258,11 @@ export default class EditForm extends Component {
               ))}
             </Select>
           )}
+          <span style={{ marginLeft: '10px' }}>
+            <Tooltip title={CONFIG.tooltip[1]}>
+              <Icon className="bt-icon-question" type="question-circle" title="" />
+            </Tooltip>
+          </span>
         </FormItem>
 
         <FormItem {...formItemLayout} label="交易币种">
@@ -251,29 +284,14 @@ export default class EditForm extends Component {
               ))}
             </Select>
           )}
+          <span style={{ marginLeft: '10px' }}>
+            <Tooltip title={CONFIG.tooltip[2]}>
+              <Icon className="bt-icon-question" type="question-circle" title="" />
+            </Tooltip>
+          </span>
         </FormItem>
 
-        <FormItem label="市场价比例" {...formItemLayout}>
-          <Col span={9} className={styles.no_margin} style={{ position: 'relative' }}>
-            <FormItem>
-              {getFieldDecorator('trading_price_ratio', {
-                initialValue: initialValues.trading_price_ratio,
-                onChange: this.handleChangePer,
-              })(
-                <InputNumber
-                  min={0}
-                  style={{ width: 170, position: 'absolute', marginTop: '5px' }}
-                  placeholder="市场价比例"
-                  addonAfter="%"
-                />
-              )}
-            </FormItem>
-          </Col>
-          <Col span={5}>
-            <span style={{ display: 'inline-block', width: '100%', textAlign: 'center' }}>
-              市场参考价格:
-            </span>
-          </Col>
+        <FormItem {...formItemLayout} label="市场参考价格">
           <Col span={7}>
             <FormItem>
               <div>
@@ -291,56 +309,112 @@ export default class EditForm extends Component {
               </div>
             </FormItem>
           </Col>
+          <Col>
+            <span style={{ marginLeft: '58px' }}>
+              <Tooltip title={CONFIG.tooltip[5]}>
+                <Icon className="bt-icon-question" type="question-circle" title="" />
+              </Tooltip>
+            </span>
+          </Col>
         </FormItem>
 
-        <FormItem {...formItemLayout} label="交易价格">
-          {getFieldDecorator('trading_price', {
-            initialValue: initialValues.trading_price,
-            onChange: this.handleChangeRat,
-            rules: [
-              {
-                required: true,
-                message: '请输入交易价格',
-              },
-            ],
-          })(
-            <InputNumber
-              min={0}
-              precision={4}
-              placeholder={`${getFieldValue('currency')}/BTC`}
-              style={{ width: 170 }}
-              onChange={this.handleChange}
-            />
-          )}
+        <FormItem label="交易价格" {...formItemLayout}>
+          <Col span={6}>
+            {getFieldDecorator('trading_price', {
+              initialValue: initialValues.trading_price,
+              onChange: this.handleChangeRat,
+              rules: [
+                {
+                  required: true,
+                  message: '请输入交易价格',
+                },
+              ],
+            })(
+              <InputNumber
+                min={0}
+                precision={4}
+                placeholder={`${getFieldValue('currency')}/BTC`}
+                style={{ width: 170 }}
+                onChange={this.handleChange}
+                disabled={floatPrice}
+              />
+            )}
+          </Col>
+          <span style={{ marginLeft: '18px' }}>
+            <Tooltip title={CONFIG.tooltip[5]}>
+              <Icon className="bt-icon-question" type="question-circle" title="" />
+            </Tooltip>
+          </span>
+        </FormItem>
 
+        {floatPrice === true ? (
+          <FormItem label="浮动比例" {...formItemLayout}>
+            {getFieldDecorator('trading_price_ratio', {
+              initialValue: initialValues.trading_price_ratio,
+              onChange: this.handleChangePer,
+              rules: [
+                {
+                  required: true,
+                  message: '请输入浮动比例',
+                },
+              ],
+            })(
+              <InputNumber
+                min={0}
+                precision={0}
+                style={{ width: 170 }}
+                placeholder="市场价比例"
+                addonAfter="%"
+              />
+            )}
+          </FormItem>
+        ) : null}
+
+        <FormItem {...formItemLayout} label="浮动价格">
+          <Col span={7} className={styles.no_margin_floatPrice}>
+            <FormItem>
+              {getFieldDecorator('123', {
+                // initialValue: initialValues.max_count,
+                onChange: this.handleChangeFloat,
+                rules: [],
+              })(<Checkbox>使用浮动价格</Checkbox>)}
+            </FormItem>
+          </Col>
+          <Col span={1}>
+            <span>
+              <Tooltip title={CONFIG.tooltip[2]}>
+                <Icon className="bt-icon-question" type="question-circle" title="" />
+              </Tooltip>
+            </span>
+          </Col>
         </FormItem>
 
         <FormItem label="交易限额" {...formItemLayout}>
-          <Col span={7} className={styles.no_margin}>
-            <FormItem>
-              {getFieldDecorator('max_count', {
-                initialValue: initialValues.max_count,
-                onChange: this.handleChangeBtc,
-                rules: [
-                  {
-                    required: true,
-                    message: '请输入可交易数量',
-                  },
-                  { type: 'number', min: 0.0001, message: '最少交易0.0001BTC' },
-                ],
-              })(
-                <InputNumber
-                  disabled={!getFieldValue('trading_price')}
-                  min={0}
-                  precision={4}
-                  style={{ width: 170, position: 'absolute', marginTop: '5px' }}
-                  placeholder="交易限额"
-                  addonAfter="BTC"
-                />
-              )}
-            </FormItem>
-          </Col>
-          <Col span={8}>
+          {/*<Col span={7} className={styles.no_margin}>*/}
+          {/*<FormItem>*/}
+          {/*{getFieldDecorator('max_count', {*/}
+          {/*initialValue: initialValues.max_count,*/}
+          {/*onChange: this.handleChangeBtc,*/}
+          {/*rules: [*/}
+          {/*{*/}
+          {/*required: true,*/}
+          {/*message: '请输入可交易数量',*/}
+          {/*},*/}
+          {/*{ type: 'number', min: 0.0001, message: '最少交易0.0001BTC' },*/}
+          {/*],*/}
+          {/*})(*/}
+          {/*<InputNumber*/}
+          {/*disabled={!getFieldValue('trading_price')}*/}
+          {/*min={0}*/}
+          {/*precision={4}*/}
+          {/*style={{ width: 170, position: 'absolute', marginTop: '5px' }}*/}
+          {/*placeholder="交易限额"*/}
+          {/*addonAfter="BTC"*/}
+          {/*/>*/}
+          {/*)}*/}
+          {/*</FormItem>*/}
+          {/*</Col>*/}
+          <Col span={8} className={styles.limitPrice}>
             <FormItem>
               {getFieldDecorator('min_volume', {
                 initialValue: initialValues.min_volume || 100,
@@ -365,8 +439,8 @@ export default class EditForm extends Component {
               )}
             </FormItem>
           </Col>
-          <Col span={1}>
-            <span style={{ display: 'inline-block', width: '100%', textAlign: 'center' }}>--</span>
+          <Col span={2}>
+            <span style={{ display: 'inline-block', width: '70%', textAlign: 'center' }}>--</span>
           </Col>
           <Col span={3}>
             <FormItem>
@@ -394,10 +468,15 @@ export default class EditForm extends Component {
               )}
             </FormItem>
           </Col>
+          <div style={{ float: 'right', paddingRight: '20%' }}>
+            <Tooltip title={CONFIG.tooltip[7]}>
+              <Icon className="bt-icon-question" type="question-circle" title="" />
+            </Tooltip>
+          </div>
         </FormItem>
 
-        <Col span={50}>
-          <FormItem {...formItemLayout} label="付款期限">
+        <FormItem {...formItemLayout} label="付款期限">
+          <Col span={6}>
             {getFieldDecorator('payment_limit', {
               initialValue: initialValues.payment_limit,
               rules: [
@@ -417,14 +496,25 @@ export default class EditForm extends Component {
                 addonAfter="分钟"
               />
             )}
-          </FormItem>
-        </Col>
+          </Col>
+          <span style={{ marginLeft: '16px' }}>
+            <Tooltip title={CONFIG.tooltip[12]}>
+              <Icon className="bt-icon-question" type="question-circle" title="" />
+            </Tooltip>
+          </span>
+        </FormItem>
+
         {getFieldValue('ad_type') === 2 ? (
           <div>
             {payments.length === 0 ? (
               <FormItem {...formItemLayout} label="收款方式">
                 <span>
                   <Link to="/user-center/index">请先添加收款方式</Link>
+                </span>
+                <span style={{ marginLeft: '16px' }}>
+                  <Tooltip title={CONFIG.tooltip[14]}>
+                    <Icon className="bt-icon-question" type="question-circle" title="" />
+                  </Tooltip>
                 </span>
               </FormItem>
             ) : (
@@ -456,6 +546,11 @@ export default class EditForm extends Component {
                     ))}
                   </Select>
                 )}
+                <span style={{ marginLeft: '10px' }}>
+                  <Tooltip title={CONFIG.tooltip[3]}>
+                    <Icon className="bt-icon-question" type="question-circle" title="" />
+                  </Tooltip>
+                </span>
               </FormItem>
             )}
           </div>
@@ -466,11 +561,13 @@ export default class EditForm extends Component {
             <FormItem>
               <div>
                 {getFieldDecorator('trusted_user', {
-                  initialValue: initialValues.trusted_user
-
-                })(
-                  <Checkbox onChange={this.handleChangeTrust}>仅限受信任的交易者</Checkbox>
-                )}
+                  initialValue: initialValues.trusted_user,
+                })(<Checkbox onChange={this.handleChangeTrust}>仅限受信任的交易者</Checkbox>)}
+                <span style={{ marginLeft: '10px' }}>
+                  <Tooltip title={CONFIG.tooltip[13]}>
+                    <Icon className="bt-icon-question" type="question-circle" title="" />
+                  </Tooltip>
+                </span>
               </div>
             </FormItem>
             <FormItem>
@@ -490,9 +587,11 @@ export default class EditForm extends Component {
                       ],
                     })(
                       <RadioGroup>
-                        {
-                          map(CONFIG.auth_level, (text, value) => <Radio key={value} value={+value} >{text}</Radio>)
-                        }
+                        {map(CONFIG.auth_level, (text, value) => (
+                          <Radio key={value} value={+value}>
+                            {text}
+                          </Radio>
+                        ))}
                         <Radio value={0}>不限</Radio>
                       </RadioGroup>
                     )}
@@ -513,11 +612,17 @@ export default class EditForm extends Component {
               },
             ],
           })(<TextArea placeholder="交易条款" rows={4} style={{ width: 390 }} />)}
+          <span style={{ marginLeft: '10px' }}>
+            <Tooltip title={CONFIG.tooltip[8]}>
+              <Icon className="bt-icon-question" type="question-circle" title="" />
+            </Tooltip>
+          </span>
         </FormItem>
 
         <FormItem {...formItemLayout} label="自动回复">
           {getFieldDecorator('auto_replies', {
-            initialValue: initialValues.auto_replies || CONFIG.auto_replies_msg[getFieldValue('ad_type')] ,
+            initialValue:
+              initialValues.auto_replies || CONFIG.auto_replies_msg[getFieldValue('ad_type')],
             rules: [
               {
                 required: true,
@@ -525,47 +630,73 @@ export default class EditForm extends Component {
               },
             ],
           })(<TextArea placeholder="自动回复" rows={4} style={{ width: 390 }} />)}
+          <span style={{ marginLeft: '10px' }}>
+            <Tooltip title="1">
+              <Icon className="bt-icon-question" type="question-circle" title="" />
+            </Tooltip>
+          </span>
         </FormItem>
         {getFieldValue('ad_type') === 2 && (
           <div>
             <FormItem {...formItemLayout} label="最小交易量">
-              {getFieldDecorator('min_trade_count', {
-                initialValue: initialValues.min_trade_count,
-              })(
-                <InputNumber
-                  min={0}
-                  step={0.0001}
-                  placeholder="最小交易量"
-                  style={{ width: 170 }}
-                />
-              )}
+              <Col span={6}>
+                {getFieldDecorator('min_trade_count', {
+                  initialValue: initialValues.min_trade_count,
+                })(
+                  <InputNumber
+                    min={0}
+                    step={0.0001}
+                    placeholder="最小交易量"
+                    style={{ width: 170 }}
+                  />
+                )}
+              </Col>
+              <span style={{ marginLeft: '14px' }}>
+                <Tooltip title={CONFIG.tooltip[9]}>
+                  <Icon className="bt-icon-question" type="question-circle" title="" />
+                </Tooltip>
+              </span>
             </FormItem>
 
             <FormItem {...formItemLayout} label="最低评价得分">
-              {getFieldDecorator('min_rating_score', {
-                initialValue: initialValues.min_rating_score,
-              })(
-                <InputNumber
-                  min={0}
-                  max={100}
-                  style={{ width: 170, position: 'absolute', marginTop: '5px' }}
-                  placeholder="最低评价得分"
-                  addonAfter="%"
-                />
-              )}
+              <Col span={6}>
+                {getFieldDecorator('min_rating_score', {
+                  initialValue: initialValues.min_rating_score,
+                })(
+                  <InputNumber
+                    min={0}
+                    max={100}
+                    style={{ width: 170, position: 'absolute', marginTop: '5px' }}
+                    placeholder="最低评价得分"
+                    addonAfter="%"
+                  />
+                )}
+              </Col>
+              <span style={{ marginLeft: '14px' }}>
+                <Tooltip title={CONFIG.tooltip[10]}>
+                  <Icon className="bt-icon-question" type="question-circle" title="" />
+                </Tooltip>
+              </span>
             </FormItem>
 
             <FormItem {...formItemLayout} label="新卖家限额">
-              {getFieldDecorator('new_buyer_limit', {
-                initialValue: initialValues.new_buyer_limit,
-              })(
-                <InputNumber
-                  min={0}
-                  step={0.0001}
-                  placeholder="新卖家限额"
-                  style={{ width: 170 }}
-                />
-              )}
+              <Col span={6}>
+                {getFieldDecorator('new_buyer_limit', {
+                  initialValue: initialValues.new_buyer_limit,
+                })(
+                  <InputNumber
+                    min={0}
+                    step={0.0001}
+                    placeholder="新卖家限额"
+                    style={{ width: 170 }}
+                  />
+                )}
+              </Col>
+              <span style={{ marginLeft: '14px' }}>
+                <Tooltip title={CONFIG.tooltip[11]}>
+                  <Icon className="bt-icon-question" type="question-circle" title="" />
+                </Tooltip>
+              </span>
             </FormItem>
             {/*<FormItem {...formItemLayout} label="付款详细信息">*/}
             {/*{getFieldDecorator('trading_notes', {})(*/}

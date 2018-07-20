@@ -47,12 +47,13 @@
     }
   }
 
-  //:global(.ant-col-50) {
-  //  :global(.ant-form-explain) {
-  //    margin-top: 37px;
-  //  }
-  //}
+  :global(.ant-form-item-children) {
+    :global(.ant-form-item) {
+      margin-bottom: 0;
+    }
+  }
   :global(.ant-col-9) {
+    width: 27.5%;
     :global(.ant-form-explain) {
       margin-top: 37px;
     }
@@ -62,7 +63,110 @@
       margin-top: 37px;
     }
   }
+  :global(.EditForm__no_margin_price___3H_rE) {
+    margin-top: 3px;
+  }
+  .no_margin_price {
+    //margin-right: 15px;
+  }
+  //交易价格的格式
+  :global(.ant-col-sm-6) {
+    width: 21%;
+  }
+
+  .deal_price {
+    background-color: red;
+    width: 100%;
+    //min-width: 900px;
+    //padding-left: 100px;
+    .title_price {
+      //margin-left: 100px;
+      //float: left;
+      background-color: #f0f2f5;
+      width: 15%;
+      text-align: right;
+      padding-right: 23px;
+      height: 30px;
+      line-height: 30px;
+    }
+    .price {
+      background-color: #ccc;
+      float: left;
+      width: 35%;
+    }
+    .title_radio {
+      float: left;
+      background-color: #f0f2f5;
+      width: 15%;
+      text-align: right;
+      height: 30px;
+      line-height: 30px;
+    }
+    .ratio {
+      background-color: #434e59;
+      float: left;
+      width: 35%;
+    }
+    .tip {
+      background-color: #1890ff;
+      float: left;
+      width: 4%;
+    }
+    .tip_1 {
+      background-color: #1890ff;
+      float: left;
+      width: 20px;
+      margin-bottom: 40px;
+      margin-right: 4%;
+    }
+  }
+  .limitPrice {
+    :global(.ant-form-item-control-wrapper) {
+      margin-left: 0;
+    }
+  }
+  .no_margin_floatPrice {
+    :global(.ant-form-item-control-wrapper) {
+      margin-left: 0;
+    }
+  }
+  :global(.EditForm__no_margin_floatPrice___2L6ph) {
+    width: 20%;
+  }
+  //bt-icon-question
+  .price_box {
+    width: 700px;
+    padding-left: 5%;
+    //style={{width:'700px',paddingLeft:'60px'}}
+    :global(.bt-icon-question) {
+      margin-top: 9px;
+    }
+  }
+  :global(.ant-btn-primary) {
+    z-index: 9;
+  }
+
+  :global(.ant-input-number) {
+    z-index: 1000;
+  }
+  //.no_margin_radio {
+  //  margin-right:-199px;
+  //  :global(.ant-form-item-control-wrapper) {
+  //    margin-left: 0;
+  //  }
+  //}
+  :global(.ant-col-6) {
+    margin-top: 3px;
+    margin-right: 10px;
+  }
+
+  .icon_question :global(.anticon-question-circle) {
+    position: absolute;
+    right: -193px;
+    bottom: 8px;
+  }
 }
+
 .chooseBtn {
   .Btn {
     width: 150px;
