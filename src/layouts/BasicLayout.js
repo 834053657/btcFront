@@ -115,17 +115,14 @@ class BasicLayout extends React.Component {
     });
 
     if (token && user.id) {
-      // this.props.dispatch({
-      //   type: 'SOCKET/OPEN',
-      // });
       this.props.dispatch({
         type: 'user/fetchCurrent',
         callback: this.setSocketToken,
       });
-      // this.props.dispatch({
-      //   type: 'global/fetchNotices',
-      //   payload: { status: 0, type: 1 },
-      // });
+      this.props.dispatch({
+        type: 'global/fetchNotices',
+        payload: { status: 0, type: 1 },
+      });
     }
   }
   componentWillUnmount() {
@@ -256,7 +253,6 @@ class BasicLayout extends React.Component {
       this.props.dispatch(routerRedux.push('/exception/trigger'));
       return;
     }
-    console.log(key);
     if (key === 'userCenter') {
       this.props.dispatch(routerRedux.push('/user-center/index'));
       return;
@@ -280,9 +276,9 @@ class BasicLayout extends React.Component {
   };
   handleNoticeVisibleChange = visible => {
     if (visible) {
-      // this.props.dispatch({
-      //   type: 'global/fetchNotices',
-      // });
+      this.props.dispatch({
+        type: 'global/fetchNotices',
+      });
     }
   };
 

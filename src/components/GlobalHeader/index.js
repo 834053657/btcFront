@@ -5,11 +5,10 @@ import { map, groupBy } from 'lodash';
 import Debounce from 'lodash-decorators/debounce';
 import { Link } from 'dva/router';
 import numeral from 'numeral';
-import NoticeIcon from '../CustomNoticeIcon';
-// import HeaderSearch from '../HeaderSearch';
+import { getMessageContent } from '../../utils/utils'
+import NoticeIcon from '../NoticeIcon';
 import TopMenu from '../TopMenu';
 import styles from './index.less';
-import { getLocale, setLocale } from '../../utils/authority';
 
 const { SubMenu } = Menu;
 const MenuItemGroup = Menu.ItemGroup;
@@ -25,29 +24,40 @@ export default class GlobalHeader extends PureComponent {
     }
     const newNotices = notices.map(notice => {
       const newNotice = { ...notice };
-      if (newNotice.datetime) {
-        newNotice.datetime = moment(notice.datetime).fromNow();
+      if (newNotice.created_at) {
+        newNotice.datetime = moment(notice.created_at).fromNow();
       }
       // transform id to item key
       if (newNotice.id) {
         newNotice.key = newNotice.id;
       }
-      if (newNotice.extra && newNotice.status) {
-        const color = {
-          todo: '',
-          processing: 'blue',
-          urgent: 'red',
-          doing: 'gold',
-        }[newNotice.status];
-        newNotice.extra = (
-          <Tag color={color} style={{ marginRight: 0 }}>
-            {newNotice.extra}
-          </Tag>
-        );
-      }
+
+      newNotice.description = getMessageContent(notice)
+
+
+
+      // if (newNotice.extra && newNotice.status) {
+      //   const color = {
+      //     todo: '',
+      //     processing: 'blue',
+      //     urgent: 'red',
+      //     doing: 'gold',
+      //   }[newNotice.status];
+      //   newNotice.extra = (
+      //     <Tag color={color} style={{ marginRight: 0 }}>
+      //       {newNotice.extra}
+      //     </Tag>
+      //   );
+      // }
       return newNotice;
     });
-    return groupBy(newNotices, 'type');
+    return groupBy(newNotices, item => {
+      if(!!~[1,11,12,21,22,31].indexOf(item.msg_type)) {
+        return "system";
+      }else {
+        return "trade";
+      }
+    });
   }
 
   toggle = () => {
@@ -104,7 +114,8 @@ export default class GlobalHeader extends PureComponent {
         {map(CONFIG.language, (text, value) => <Menu.Item key={value}>{text}</Menu.Item>)}
       </Menu>
     );
-    // const noticeData = this.getNoticeData();
+    const noticeData = this.getNoticeData();
+    console.log(noticeData);
 
     return (
       <div className={styles.header}>
@@ -147,11 +158,20 @@ export default class GlobalHeader extends PureComponent {
                 onPopupVisibleChange={onNoticeVisibleChange}
                 loading={fetchingNotices}
                 popupAlign={{ offset: [20, -16] }}
-                list={notices}
-                title="消息"
-                emptyText="您已读完所有消息"
-                emptyImage="https://gw.alipayobjects.com/zos/rmsportal/sAuJeJzSKbUmHfBQRzmZ.svg"
-              />
+              >
+                <NoticeIcon.Tab
+                  list={noticeData['trade']}
+                  title="交易信息"
+                  emptyText="你已查看所有通知"
+                  emptyImage="https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg"
+                />
+                <NoticeIcon.Tab
+                  list={noticeData['system']}
+                  title="系统公告"
+                  emptyText="您已读完所有消息"
+                  emptyImage="https://gw.alipayobjects.com/zos/rmsportal/sAuJeJzSKbUmHfBQRzmZ.svg"
+                />
+              </NoticeIcon>
               <Dropdown overlay={menu}>
                 <span className={`${styles.action} ${styles.account}`}>
                   <Avatar size="small" className={styles.avatar} src={currentUser.user.avatar} />
