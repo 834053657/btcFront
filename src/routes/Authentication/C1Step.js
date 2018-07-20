@@ -30,7 +30,6 @@ export default class AuthenticationPage extends PureComponent {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log(values);
         this.props.dispatch({
           type: 'authentication/submitInfo',
           payload: values,
@@ -40,8 +39,8 @@ export default class AuthenticationPage extends PureComponent {
   };
 
   render() {
-    const { getFieldDecorator } = this.props.form;
-    let { default_country, default_card_type } = this.props.authentication;
+    const { getFieldDecorator } = this.props.form
+    const { default_country, default_card_type } = this.props.authentication
     return (
       <Form onSubmit={this.handleSubmit}>
         <FormItem {...formItemLayout} label="所在国家">

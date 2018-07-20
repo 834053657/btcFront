@@ -4,7 +4,7 @@ import { Row, Col, Form, Select, Input, Button } from 'antd';
 import { connect } from 'dva';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './AuthenticationPage.less';
-import C1Stage from './C1Stage';
+import C1Step from './C1Step';
 
 @connect(({ authentication }) => ({
   authentication,
@@ -21,11 +21,11 @@ export default class AuthenticationPage extends Component {
         <div className={styles.page}>
           <Row>
             <Col offset={2} span={20}>
-              <AuthStep size="default" />
+              <AuthStep size="default" step={this.props.authentication.step} />
             </Col>
           </Row>
           <br />
-          {[<C1Stage />][this.props.authentication.stage]}
+          {[<C1Step />][this.props.authentication.step]}
         </div>
       </PageHeaderLayout>
     );

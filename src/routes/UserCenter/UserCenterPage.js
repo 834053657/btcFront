@@ -32,7 +32,8 @@ import styles from './UserCenterPage.less';
 
 const { Description } = DescriptionList;
 
-@connect(({ global, user, loading }) => ({
+@connect(({ authentication, global, user, loading }) => ({
+  authentication,
   currentUser: user.currentUser,
   loading: loading.models.global,
 }))
@@ -509,7 +510,11 @@ export default class UserCenterPage extends Component {
                     请如实填写您的身份信息，一经认证不可修改
                   </div>
                 </div>
-                <AuthStep className={styles.box_content} />
+                <AuthStep
+                  hideGotoButton={this.props.authentication.step > 1}
+                  step={this.props.authentication.step}
+                  className={styles.box_content}
+                />
               </div>
 
               {/* 支付方式 */}

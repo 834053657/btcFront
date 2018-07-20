@@ -76,7 +76,9 @@ function checkLogined() {
 export const getRouterData = app => {
   const routerConfig = {
     '/': {
-      component: dynamicWrapper(app, ['user', 'login'], () => import('../layouts/BasicLayout')),
+      component: dynamicWrapper(app, ['user', 'authentication', 'login'], () =>
+        import('../layouts/BasicLayout')
+      ),
     },
     '/trade/index': {
       component: dynamicWrapper(app, ['trade'], () => import('../routes/Trade/List')),
