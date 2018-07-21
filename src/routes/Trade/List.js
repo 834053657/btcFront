@@ -14,8 +14,9 @@ import { getQueryString, getPayIcon } from '../../utils/utils';
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 
-@connect(({ trade, loading }) => ({
+@connect(({ trade, global, loading }) => ({
   ...trade.tradeList,
+  topNotice: global.topNotice,
   loading: loading.models.message,
 }))
 export default class List extends Component {
@@ -36,6 +37,9 @@ export default class List extends Component {
 
   componentDidMount() {
     this.fetch();
+    this.props.dispatch({
+      type: 'global/fetchTopNotice',
+    });
   }
 
   componentWillUnmount() {
@@ -201,18 +205,22 @@ export default class List extends Component {
   };
 
   render() {
-    const { list = [], pagination = {}, loading } = this.props;
+    const { list = [], pagination = {}, loading, topNotice = {} } = this.props;
     const { ad_type, searchVisible, searchValues = {} } = this.state;
     const { countries, currency, pay_methods, money } = searchValues || {};
 
     return (
       <BlankLayout>
         <div className={styles.header}>
-          <Alert
-            message="系统公告：本网站内测期间，为答谢各位会员，所有转账免矿工手续费，答谢活动截止至3.15 12：00."
-            type="info"
-            showIcon
-          />
+          {topNotice ? (
+            <div className={styles.header}>
+              <Alert
+                message={<Link to={`/message/info-detail/${topNotice.id}`}>{topNotice.title}</Link>}
+                type="info"
+                showIcon
+              />
+            </div>
+          ) : null}
         </div>
 
         <div className={styles.banners}>
@@ -266,9 +274,9 @@ export default class List extends Component {
                     ? CONFIG.payments[pay_methods]
                     : '全部支付方式'}
                 </Tag>
-                {searchValues.money && (
+                {money && (
                   <Tag closable onClose={this.handleClearMoney}>
-                    {searchValues.money}
+                    {money}
                   </Tag>
                 )}
                 <Icon type="search" />
