@@ -18,7 +18,7 @@ export async function queryMessageList(params) {
 }
 
 export async function queryMoreMessageList(params) {
-  return request(`/btc/info/all${stringify(params)}`);
+  return request(`/btc/info/all?${stringify(params)}`);
 }
 
 export async function readMessage(params) {

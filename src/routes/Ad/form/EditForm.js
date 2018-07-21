@@ -390,31 +390,31 @@ export default class EditForm extends Component {
         </FormItem>
 
         <FormItem label="交易限额" {...formItemLayout}>
-          {/*<Col span={7} className={styles.no_margin}>*/}
-          {/*<FormItem>*/}
-          {/*{getFieldDecorator('max_count', {*/}
-          {/*initialValue: initialValues.max_count,*/}
-          {/*onChange: this.handleChangeBtc,*/}
-          {/*rules: [*/}
-          {/*{*/}
-          {/*required: true,*/}
-          {/*message: '请输入可交易数量',*/}
-          {/*},*/}
-          {/*{ type: 'number', min: 0.0001, message: '最少交易0.0001BTC' },*/}
-          {/*],*/}
-          {/*})(*/}
-          {/*<InputNumber*/}
-          {/*disabled={!getFieldValue('trading_price')}*/}
-          {/*min={0}*/}
-          {/*precision={4}*/}
-          {/*style={{ width: 170, position: 'absolute', marginTop: '5px' }}*/}
-          {/*placeholder="交易限额"*/}
-          {/*addonAfter="BTC"*/}
-          {/*/>*/}
-          {/*)}*/}
-          {/*</FormItem>*/}
-          {/*</Col>*/}
-          <Col span={8} className={styles.limitPrice}>
+          <Col span={7} className={styles.no_margin}>
+            <FormItem>
+              {getFieldDecorator('max_count', {
+                initialValue: initialValues.max_count,
+                onChange: this.handleChangeBtc,
+                rules: [
+                  {
+                    required: true,
+                    message: '请输入可交易数量',
+                  },
+                  { type: 'number', min: 0.0001, message: '最少交易0.0001BTC' },
+                ],
+              })(
+                <InputNumber
+                  // disabled={!getFieldValue('trading_price')}
+                  min={0}
+                  precision={4}
+                  style={{ width: 170, position: 'absolute', marginTop: '5px' }}
+                  placeholder="交易限额"
+                  addonAfter="BTC"
+                />
+              )}
+            </FormItem>
+          </Col>
+          <Col span={7}>
             <FormItem>
               {getFieldDecorator('min_volume', {
                 initialValue: initialValues.min_volume || 100,
@@ -429,7 +429,7 @@ export default class EditForm extends Component {
                 ],
               })(
                 <InputNumber
-                  disabled={!getFieldValue('trading_price')}
+                  // disabled={!getFieldValue('trading_price')}
                   min={100}
                   precision={2}
                   style={{ width: 170, position: 'absolute', marginTop: '5px' }}
@@ -440,7 +440,7 @@ export default class EditForm extends Component {
             </FormItem>
           </Col>
           <Col span={2}>
-            <span style={{ display: 'inline-block', width: '70%', textAlign: 'center' }}>--</span>
+            <span style={{ display: 'inline-block', width: '155%', textAlign: 'center' }}>--</span>
           </Col>
           <Col span={3}>
             <FormItem>
@@ -458,7 +458,7 @@ export default class EditForm extends Component {
                 ],
               })(
                 <InputNumber
-                  disabled={!getFieldValue('trading_price')}
+                  // disabled={!getFieldValue('trading_price')}
                   min={0}
                   precision={2}
                   style={{ width: 170, position: 'absolute', marginTop: '5px' }}
@@ -468,7 +468,7 @@ export default class EditForm extends Component {
               )}
             </FormItem>
           </Col>
-          <div style={{ float: 'right', paddingRight: '20%' }}>
+          <div style={{ float: 'right' }}>
             <Tooltip title={CONFIG.tooltip[7]}>
               <Icon className="bt-icon-question" type="question-circle" title="" />
             </Tooltip>
