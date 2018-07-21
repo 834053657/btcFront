@@ -5,7 +5,7 @@ import { getLocale, setLocale } from '../utils/authority';
 import {
   queryOrderList,
   queryConfigs,
-  queryBanners,
+  queryTopNotice,
   postVerify,
   postVerifyCaptcha,
   queryMessageList,
@@ -26,15 +26,16 @@ export default {
     statistics: {},
     banners: [],
     local: getLocale(),
+    topNotice: {},
   },
 
   effects: {
-    *fetchBanners(_, { call, put }) {
-      const response = yield call(queryBanners);
+    *fetchTopNotice(_, { call, put }) {
+      const response = yield call(queryTopNotice);
 
       if (response && response.code === 0) {
         yield put({
-          type: 'setBanners',
+          type: 'setTopNotice',
           payload: response.data,
         });
       }
@@ -128,10 +129,10 @@ export default {
   },
 
   reducers: {
-    setBanners(state, { payload }) {
+    setTopNotice(state, { payload }) {
       return {
         ...state,
-        banners: payload,
+        topNotice: payload,
       };
     },
     setLanguage(state, { payload }) {

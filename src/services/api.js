@@ -1,8 +1,8 @@
 import { stringify } from 'qs';
 import request from '../utils/request';
 
-export async function queryBanners() {
-  return request('/btc/info/banners');
+export async function queryTopNotice() {
+  return request('/btc/info/top_notice');
 }
 
 export async function queryInfoList(params) {
