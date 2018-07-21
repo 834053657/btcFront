@@ -50,7 +50,7 @@ export default function CustomNoticeList({
                     </span>
                     <span className={styles.datetime}>
                       {<span className={styles.news}>新消息:</span>}
-                      {item.message_count}
+                      {item.message_count || 0}
                     </span>
                   </div>
                 }

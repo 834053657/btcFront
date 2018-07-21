@@ -125,7 +125,7 @@ class BasicLayout extends React.Component {
       });
       this.props.dispatch({
         type: 'global/fetchOrders',
-        payload: { status: '1,2,3' },
+        payload: { status: '1,2,5' },
       });
     }
   }
@@ -294,6 +294,7 @@ class BasicLayout extends React.Component {
     if (visible) {
       this.props.dispatch({
         type: 'global/fetchOrders',
+        payload: { status: '1,2,5' },
       });
     }
   };
