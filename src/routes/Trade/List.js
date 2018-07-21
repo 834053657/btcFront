@@ -212,7 +212,7 @@ export default class List extends Component {
     return (
       <BlankLayout>
         <div className={styles.header}>
-          {topNotice ? (
+          {topNotice.id ? (
             <div className={styles.header}>
               <Alert
                 message={<Link to={`/message/info-detail/${topNotice.id}`}>{topNotice.title}</Link>}
