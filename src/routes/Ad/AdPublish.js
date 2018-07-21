@@ -66,7 +66,12 @@ export default class AdPublish extends Component {
               showIcon
             />
           </div>
-          <EditForm {...this.props} getPrice={this.fetchPrice}  onSubmit={this.handleSubmit} initialValues={{}} />
+          <EditForm
+            {...this.props}
+            getPrice={this.fetchPrice}
+            onSubmit={this.handleSubmit}
+            initialValues={{}}
+          />
         </div>
       </PageHeaderLayout>
     );

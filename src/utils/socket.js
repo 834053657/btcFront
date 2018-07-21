@@ -8,6 +8,7 @@ import {
   enter_chat_room,
   leave_chat_room,
   receive_message,
+  auth_status_update,
 } from '../services/socket';
 import { playAudio } from './utils';
 
@@ -20,6 +21,11 @@ export function dvaSocket(url, option) {
     const mockServer = new Server(url);
     mockServer.on('connection', async server => {
       console.log('*************8mock-socket connected......');
+
+      // setTimeout(async() => {
+      //   const res = await auth_status_update();
+      //   mockServer.emit('auth_status_update', res)
+      // }, 3000)
       // const res = await push_system_message();
       // mockServer.emit('test', res);
     });
@@ -179,6 +185,22 @@ export function dvaSocket(url, option) {
         },
       },
       asyncs: [
+        {
+          evaluate: (action, dispatch, getState) => action.type === 'SOCKET/ADD_EVENTLISTENER',
+          request: (action, dispatch, getState, socket) => {
+            const { event, callback } = action;
+            socket.on(event, response => {
+              callback(response);
+            });
+          },
+        },
+        {
+          evaluate: (action, dispatch, getState) => action.type === 'SOCKET/TRIGGER_EVENT',
+          request: (action, dispatch, getState, socket) => {
+            const { event, payload } = action;
+            socket.emit(event, payload);
+          },
+        },
         {
           evaluate: (action, dispatch, getState) => action.type === 'SOCKET/OPEN',
           request: (action, dispatch, getState, socket) => {

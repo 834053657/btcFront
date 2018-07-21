@@ -44,6 +44,10 @@ export default {
           type: 'saveCurrentUser',
           payload: response.data,
         });
+        yield put({
+          type: 'authentication/updateAuthStatus',
+          payload: response.data.auth,
+        });
         callback && setTimeout(callback(user.id, response.data.token, 'CN-zh'), 3000);
       } else {
         message.error(response.msg);

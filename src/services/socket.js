@@ -16,3 +16,7 @@ export async function leave_chat_room(params) {
 export async function receive_message(params) {
   return request(`/btc/socket/receive_message?${stringify(params)}`);
 }
+
+export async function auth_status_update(params) {
+  return request(`/btc/socket/auth_status_update?${stringify(params)}`);
+}
