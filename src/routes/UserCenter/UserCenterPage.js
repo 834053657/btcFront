@@ -503,7 +503,7 @@ export default class UserCenterPage extends Component {
                   <div className={styles.box_head_wrapper}>
                     <div className={styles.box_head_title}>身份认证</div>
                     <div className={styles.box_head_extra}>
-                      <span>认证等级: {'C1'}</span>
+                      <span>认证等级: {'C' + (this.props.authentication.step + 1)}</span>
                     </div>
                   </div>
                   <div className={styles.box_head_subtitle}>
@@ -514,6 +514,8 @@ export default class UserCenterPage extends Component {
                   hideGotoButton={this.props.authentication.step > 1}
                   step={this.props.authentication.step}
                   className={styles.box_content}
+                  status={this.props.authentication.status}
+                  reason={this.props.authentication.reason}
                 />
               </div>
 

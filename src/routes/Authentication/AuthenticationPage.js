@@ -1,31 +1,48 @@
 import { AuthStep } from 'components/Authentication';
 import React, { Component } from 'react';
-import { Row, Col, Form, Select, Input, Button } from 'antd';
+import { Alert, Row, Col, Form, Select, Input, Button } from 'antd';
 import { connect } from 'dva';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './AuthenticationPage.less';
 import C1Step from './C1Step';
+import C2Step from './C2Step';
+import C3Step from './C3Step';
 
 @connect(({ authentication }) => ({
   authentication,
 }))
 export default class AuthenticationPage extends Component {
-  static state = {};
   render() {
     const breadcrumbList = [
       { title: '个人中心', href: '/user-center/index' },
       { title: '身份认证' },
     ];
+    const { reason, status, step } = this.props.authentication;
     return (
       <PageHeaderLayout className="ant-layout-content" breadcrumbList={breadcrumbList}>
         <div className={styles.page}>
           <Row>
-            <Col offset={2} span={20}>
-              <AuthStep size="default" step={this.props.authentication.step} />
+            <Col offset={4} span={16}>
+              <AuthStep size="default" reason={reason} status={status} step={step} />
             </Col>
           </Row>
           <br />
-          {[<C1Step />][this.props.authentication.step]}
+          <Row>
+            <Col offset={4} span={16}>
+              {status !== 3 && (
+                <Alert
+                  message="为了您的资金安全，需验证您的身份才可以进行交易认证，信息一经常验证不能修改，请务必如实填写"
+                  type="info"
+                  showIcon
+                />
+              )}
+            </Col>
+          </Row>
+          <br />
+          {
+            // [<C1Step />, <C2Step />,  <C3Step />][2]
+            [<C1Step />, <C2Step />, <C3Step />][this.props.authentication.step]
+          }
         </div>
       </PageHeaderLayout>
     );

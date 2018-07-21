@@ -65,8 +65,9 @@ export default {
   reducers: {
     UPDATE_AUTH_STATUS(state, { payload }) {
       const detailList = flatMap(payload);
-      const step = findIndex(detailList, o => includes([2, 1], o.status));
-      const status = detailList[step].status;
+      const step = findIndex(detailList, o => includes(['3', '2', '1'], o.status));
+      const status = Number(detailList[step].status);
+      const reason = detailList[step].reason;
       const detail = reduce(
         detailList,
         (o, no) => {
@@ -79,6 +80,7 @@ export default {
         step,
         status,
         ...detail,
+        reason,
       };
     },
     SUBMIT_INFO(state, payload) {
