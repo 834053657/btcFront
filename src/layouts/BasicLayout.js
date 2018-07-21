@@ -115,17 +115,18 @@ class BasicLayout extends React.Component {
     });
 
     if (token && user.id) {
-      // this.props.dispatch({
-      //   type: 'SOCKET/OPEN',
-      // });
       this.props.dispatch({
         type: 'user/fetchCurrent',
         callback: this.setSocketToken,
       });
-      // this.props.dispatch({
-      //   type: 'global/fetchNotices',
-      //   payload: { status: 0, type: 1 },
-      // });
+      this.props.dispatch({
+        type: 'global/fetchNotices',
+        payload: { status: 0, type: 1 },
+      });
+      this.props.dispatch({
+        type: 'global/fetchOrders',
+        payload: { status: '1,2,5' },
+      });
     }
   }
   componentWillUnmount() {
@@ -187,11 +188,11 @@ class BasicLayout extends React.Component {
     });
   };
   handleNoticeClear = type => {
-    message.success(`清空了${type}`);
     this.props.dispatch({
       type: 'global/readNotices',
       payload: { all: true },
       callback: () => {
+        message.success(`清空了${type}`);
         this.props.dispatch({
           type: 'global/fetchNotices',
           payload: { status: 0, type: 2 },
@@ -201,6 +202,10 @@ class BasicLayout extends React.Component {
   };
   handleNoticeViewMore = type => {
     this.props.dispatch(routerRedux.push('/message/list'));
+  };
+
+  handleOrderClick = item => {
+    this.props.dispatch(routerRedux.push(`/trade/step/${item.id}`));
   };
   handleNoticeRead = item => {
     let type = 'global/readNotices';
@@ -256,7 +261,6 @@ class BasicLayout extends React.Component {
       this.props.dispatch(routerRedux.push('/exception/trigger'));
       return;
     }
-    console.log(key);
     if (key === 'userCenter') {
       this.props.dispatch(routerRedux.push('/user-center/index'));
       return;
@@ -280,9 +284,18 @@ class BasicLayout extends React.Component {
   };
   handleNoticeVisibleChange = visible => {
     if (visible) {
-      // this.props.dispatch({
-      //   type: 'global/fetchNotices',
-      // });
+      this.props.dispatch({
+        type: 'global/fetchNotices',
+      });
+    }
+  };
+
+  handleOrderVisibleChange = visible => {
+    if (visible) {
+      this.props.dispatch({
+        type: 'global/fetchOrders',
+        payload: { status: '1,2,5' },
+      });
     }
   };
 
@@ -299,12 +312,14 @@ class BasicLayout extends React.Component {
       currentUser,
       collapsed,
       fetchingNotices,
+      fetchingOrders,
       notices,
       noticesCount,
       routerData,
       match,
       location,
       local,
+      orders,
     } = this.props;
     const bashRedirect = this.getBashRedirect();
     const layout = (
@@ -326,6 +341,7 @@ class BasicLayout extends React.Component {
         <Layout>
           <Header style={{ padding: 0 }}>
             <GlobalHeader
+              orders={orders}
               logo={logo}
               local={local}
               menuData={getMenuData()}
@@ -333,6 +349,7 @@ class BasicLayout extends React.Component {
               location={location}
               currentUser={currentUser}
               fetchingNotices={fetchingNotices}
+              fetchinOrders={fetchingOrders}
               notices={notices}
               noticesCount={noticesCount}
               collapsed={collapsed}
@@ -340,9 +357,11 @@ class BasicLayout extends React.Component {
               onNoticeClear={this.handleNoticeClear}
               onNoticeView={this.handleNoticeViewMore}
               onNoticeClick={this.handleNoticeRead}
+              onOrderClick={this.handleOrderClick}
               onCollapse={this.handleMenuCollapse}
               onMenuClick={this.handleMenuClick}
               onNoticeVisibleChange={this.handleNoticeVisibleChange}
+              onOrderVisibleChange={this.handleOrderVisibleChange}
               onLanguageChange={this.handleSetLocale}
             />
           </Header>
@@ -386,7 +405,9 @@ export default connect(({ user, global, loading }) => ({
   currentUser: user.currentUser,
   collapsed: global.collapsed,
   local: global.local,
+  orders: global.orders,
   fetchingNotices: loading.effects['global/fetchNotices'],
+  fetchingOrders: loading.effects['global/fetchOrders'],
   notices: global.notices,
   noticesCount: global.noticesCount,
 }))(BasicLayout);

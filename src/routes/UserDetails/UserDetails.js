@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import moment from 'moment';
 
 import { Icon, Table, Button, Modal, Radio, List, Badge } from 'antd';
-import { map } from 'lodash';
+import { map, filter } from 'lodash';
 import { Link, routerRedux } from 'dva/router';
 import DescriptionList from 'components/DescriptionList';
 import ConfirmModal from '../../components/ConfirmModal';
@@ -90,7 +90,7 @@ export default class UserDetails extends Component {
         <div className={styles.UserName}>
           <span style={{ margin: '30px' }}>
             <img
-              style={{ width: '100px', borderRadius: '50%' }}
+              style={{ width: '50px', borderRadius: '50%' }}
               src={userMessage.avatar}
               // src="http://images.91jianke.com/default_avatar_11.png"
               alt=""
@@ -103,7 +103,7 @@ export default class UserDetails extends Component {
               dot
               status={userMessage.online ? 'success' : 'default'}
             >
-              <b style={{ fontSize: '30px', margin: '10px' }}>{userMessage.nickname}</b>
+              <span style={{ fontSize: '25px', margin: '10px' }}>{userMessage.nickname}</span>
             </Badge>
             <a className={styles.report} onClick={this.handleShowReport}>
               <Icon type="flag" />举报
@@ -111,7 +111,7 @@ export default class UserDetails extends Component {
           </span>
         </div>
 
-        <div>
+        <div className={styles.user_trust}>
           {userMessage.is_trust === true ? (
             <Button
               className={styles.trust}
@@ -139,7 +139,7 @@ export default class UserDetails extends Component {
             </div>
           )}
         </div>
-        <DescriptionList style={{ margin: '30px' }}>
+        <DescriptionList style={{ margin: '15px' }}>
           <Description term="国家" className={styles.UserStyle}>
             {userMessage.country_code && CONFIG.countrysMap[userMessage.country_code]
               ? CONFIG.countrysMap[userMessage.country_code].name
@@ -182,58 +182,64 @@ export default class UserDetails extends Component {
     );
   };
 
-  columns = [
-    {
-      title: '付款方式',
-      dataIndex: 'payment_methods',
-      render: (_, row) => {
-        return (
-          <div>
-            {map(row.payment_methods, item => {
-              return (
-                <span className={styles.pay_method} key={item}>
-                  <Icon key={item} type={getPayIcon(item)} />
-                </span>
-              );
-            })}
-          </div>
-        );
+  renderColumns = () => {
+    let columns = [
+      {
+        title: '付款方式',
+        dataIndex: 'payment_methods',
+        render: (_, row) => {
+          return (
+            <div>
+              {map(row.payment_methods, item => {
+                return (
+                  <span className={styles.pay_method} key={item}>
+                    <Icon key={item} type={getPayIcon(item)} />
+                  </span>
+                );
+              })}
+            </div>
+          );
+        },
       },
-    },
-    {
-      title: '价格',
-      dataIndex: 'trading_price',
-      // width: '15%',
-      render: text => {
-        return <div>{text}</div>;
+      {
+        title: '价格',
+        dataIndex: 'trading_price',
+        // width: '15%',
+        render: text => {
+          return <div>{text}</div>;
+        },
       },
-    },
-    {
-      title: '限额',
-      dataIndex: 'condition_',
-      render: (v, row) => {
-        const { max_volume = 0, min_volume = 0 } = row || {};
-        return (
-          <span>
-            {min_volume} - {max_volume} {row.currency}
-          </span>
-        );
+      {
+        title: '限额',
+        dataIndex: 'condition_',
+        render: (v, row) => {
+          const { max_volume = 0, min_volume = 0 } = row || {};
+          return (
+            <span>
+              {min_volume} - {max_volume} {row.currency}
+            </span>
+          );
+        },
       },
-    },
-    {
-      title: '操作',
-      render: row => {
-        const { type } = this.state;
-        return (
-          <Fragment>
-            <Link to={type === '1' ? `/trade/detail/${row.ad_id}` : `/trade/detail/${row.ad_id}`}>
-              <Button type="primary">{type ? typeMap[type] : '-'}</Button>
-            </Link>
-          </Fragment>
-        );
+      {
+        title: '操作',
+        render: row => {
+          const { type } = this.state;
+          return (
+            <Fragment>
+              <Link to={type === '1' ? `/trade/detail/${row.ad_id}` : `/trade/detail/${row.ad_id}`}>
+                <Button type="primary">{type ? typeMap[type] : '-'}</Button>
+              </Link>
+            </Fragment>
+          );
+        },
       },
-    },
-  ];
+    ];
+    if (this.state.type === '1') {
+      columns = filter(columns, item => item.dataIndex !== 'payment_methods');
+    }
+    return columns;
+  };
 
   handleTypeChange = e => {
     const type = e.target.value;
@@ -357,7 +363,7 @@ export default class UserDetails extends Component {
                     loading={loading}
                     rowKey={record => record.ad_id}
                     dataSource={list.buy}
-                    columns={this.columns}
+                    columns={this.renderColumns()}
                     pagination={false}
                     onChange={this.handleTableChange}
                     footer={null}
@@ -367,7 +373,7 @@ export default class UserDetails extends Component {
                     loading={loading}
                     rowKey={record => record.ad_id}
                     dataSource={list.sell}
-                    columns={this.columns}
+                    columns={this.renderColumns()}
                     pagination={false}
                     onChange={this.handleTableChange}
                     footer={null}

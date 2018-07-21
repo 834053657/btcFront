@@ -2,6 +2,7 @@ import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import { map, findIndex } from 'lodash';
 import { Button, Card, Row, Col, Modal, Spin, Input, Steps, Icon } from 'antd';
+import { routerRedux } from 'dva/router';
 import ConfirmModal from '../../components/ConfirmModal';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import Step1 from './boxs/Step1.js';
@@ -64,13 +65,25 @@ export default class TradeStep extends PureComponent {
   };
 
   componentDidMount() {
-    const { dispatch, match: { params = {} } } = this.props;
-
-    dispatch({
-      type: 'trade/fetchOrderDetail',
-      payload: { id: params.id },
-    });
+    const { match: { params = {} } } = this.props;
+    this.fetchDetail(params.id);
   }
+
+  componentWillUpdate(nextProps, nextState) {
+    const { id } = this.props.match.params || {};
+    const { id: nextId } = nextProps.match.params || {};
+
+    if (id !== nextId) {
+      this.fetchDetail(nextId);
+    }
+  }
+
+  fetchDetail = id => {
+    this.props.dispatch({
+      type: 'trade/fetchOrderDetail',
+      payload: { id },
+    });
+  };
 
   orderSteps = {
     wait_pay: {
@@ -346,7 +359,14 @@ export default class TradeStep extends PureComponent {
     const breadcrumbList = [{ title: '首页', href: '/' }, { title: '订单号: ' + params.id }];
 
     return (
-      <PageHeaderLayout className="ant-layout-content" breadcrumbList={breadcrumbList}>
+      <PageHeaderLayout
+        className="ant-layout-content"
+        breadcrumbList={breadcrumbList}
+        tabActiveKey={params.id}
+        extraContent={
+          <Button onClick={() => this.props.dispatch(routerRedux.goBack())}>返回</Button>
+        }
+      >
         <Spin spinning={loading}>
           <Card bordered={false}>
             <Steps current={current} className={styles.steps}>

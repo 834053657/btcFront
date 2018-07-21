@@ -40,20 +40,34 @@ export default class NoticeIcon extends PureComponent {
     if (!children) {
       return null;
     }
+
     const panes = React.Children.map(children, child => {
       const title =
         child.props.list && child.props.list.length > 0
           ? `${child.props.title} (${child.props.list.length})`
           : child.props.title;
+      const footer = [
+        <div
+          key="clear"
+          className={styles.clear}
+          onClick={() => this.props.onClear(child.props.title)}
+        >
+          <a>清空{child.props.title}</a>
+        </div>,
+        <div key="view_more" className={styles.view_more}>
+          <a>查看更多</a>
+        </div>,
+      ];
       return (
         <TabPane tab={title} key={child.props.title}>
           <List
             {...child.props}
             data={child.props.list}
             onClick={item => this.onItemClick(item, child.props)}
-            onClear={() => this.props.onClear(child.props.title)}
-            title={child.props.title}
+            // onClear={() => this.props.onClear(child.props.title)}
+            // title={child.props.title}
             locale={locale}
+            footer={footer}
           />
         </TabPane>
       );

@@ -3,10 +3,9 @@ import { mapKeys, groupBy, orderBy, map } from 'lodash';
 import { getLocale, setLocale } from '../utils/authority';
 
 import {
-  queryNotices,
-  queryStatistics,
+  queryOrderList,
   queryConfigs,
-  queryBanners,
+  queryTopNotice,
   postVerify,
   postVerifyCaptcha,
   queryMessageList,
@@ -22,19 +21,21 @@ export default {
     collapsed: false,
     oldNotices: [],
     notices: [],
+    orders: [],
     noticesCount: null,
     statistics: {},
     banners: [],
     local: getLocale(),
+    topNotice: {},
   },
 
   effects: {
-    *fetchBanners(_, { call, put }) {
-      const response = yield call(queryBanners);
+    *fetchTopNotice(_, { call, put }) {
+      const response = yield call(queryTopNotice);
 
       if (response && response.code === 0) {
         yield put({
-          type: 'setBanners',
+          type: 'setTopNotice',
           payload: response.data,
         });
       }
@@ -60,23 +61,14 @@ export default {
         payload: res,
       });
     },
-    // *fetchNotices_bak(_, { call, put }) {
-    //   const data = yield call(queryNotices);
-    //   yield put({
-    //     type: 'saveNotices',
-    //     payload: data,
-    //   });
-    //   yield put({
-    //     type: 'user/changeNotifyCount',
-    //     payload: data.length,
-    //   });
-    // },
-    *fetchStatistics(_, { call, put }) {
-      // const res = yield call(queryStatistics);
-      // yield put({
-      //   type: 'saveStatistics',
-      //   payload: res.data,
-      // });
+    *fetchOrders({ payload }, { call, put }) {
+      const res = yield call(queryOrderList, payload);
+      if (res.code === 0 && res.data) {
+        yield put({
+          type: 'saveOrders',
+          payload: res.data,
+        });
+      }
     },
     *clearNotices_bak({ payload }, { put, select }) {
       yield put({
@@ -137,10 +129,10 @@ export default {
   },
 
   reducers: {
-    setBanners(state, { payload }) {
+    setTopNotice(state, { payload }) {
       return {
         ...state,
-        banners: payload,
+        topNotice: payload,
       };
     },
     setLanguage(state, { payload }) {
@@ -193,10 +185,10 @@ export default {
         noticesCount: items.length,
       };
     },
-    saveStatistics(state, { payload }) {
+    saveOrders(state, { payload }) {
       return {
         ...state,
-        statistics: payload,
+        orders: payload.items || [],
       };
     },
     saveClearedNotices(state, { payload }) {

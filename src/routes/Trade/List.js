@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import { Link, routerRedux } from 'dva/router';
 import moment from 'moment';
 import { Table, Alert, Button, Icon, Radio, Avatar, Badge, Tag, Popover } from 'antd';
-import { map, forEachRight } from 'lodash';
+import { map, forEachRight, filter } from 'lodash';
 import { stringify } from 'qs';
 import BlankLayout from '../../layouts/BlankLayout';
 import SearchForm from './forms/SearchForm';
@@ -14,8 +14,9 @@ import { getQueryString, getPayIcon } from '../../utils/utils';
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 
-@connect(({ trade, loading }) => ({
+@connect(({ trade, global, loading }) => ({
   ...trade.tradeList,
+  topNotice: global.topNotice,
   loading: loading.models.message,
 }))
 export default class List extends Component {
@@ -36,6 +37,9 @@ export default class List extends Component {
 
   componentDidMount() {
     this.fetch();
+    // this.props.dispatch({
+    //   type: 'global/fetchTopNotice',
+    // });
   }
 
   componentWillUnmount() {
@@ -60,88 +64,96 @@ export default class List extends Component {
       },
     });
   };
-  columns = [
-    {
-      title: '用户',
-      dataIndex: 'user_',
-      render: (text, row) => {
-        const { online, avatar, nickname } = row.owner || {};
-        return (
-          <div>
-            <Link to={`/personage/${row.owner.id}`}>
-              <Badge status={online ? 'success' : 'default'} offset={[35, -5]} dot>
-                <Avatar size="large" src={avatar} />
-              </Badge>
-              <span className="name">{nickname}</span>
-            </Link>
-          </div>
-        );
-      },
-    },
-    {
-      title: '所在国家',
-      dataIndex: 'country_code',
-      render: v => <span>{v && CONFIG.countrysMap[v] ? CONFIG.countrysMap[v].name : '-'}</span>,
-    },
-    {
-      title: '交易笔数/好评率',
-      dataIndex: 'volume_like',
-      render: (v, row) => {
-        const { trade_times, good_ratio } = row.owner || {};
 
-        return <span>{`${trade_times} / ${good_ratio}%`}</span>;
+  renderColumns = () => {
+    let columns = [
+      {
+        title: '用户',
+        dataIndex: 'user_',
+        render: (text, row) => {
+          const { online, avatar, nickname } = row.owner || {};
+          return (
+            <div>
+              <Link to={`/personage/${row.owner.id}`}>
+                <Badge status={online ? 'success' : 'default'} offset={[35, -5]} dot>
+                  <Avatar size="large" src={avatar} />
+                </Badge>
+                <span className="name">{nickname}</span>
+              </Link>
+            </div>
+          );
+        },
       },
-    },
-    {
-      title: '支付方式',
-      dataIndex: 'payment_methods',
-      render: (v, row) => {
-        return (
-          <div>
-            {map(row.payment_methods, item => (
-              <Icon className={styles.pay_method} key={item} type={getPayIcon(item)} />
-            ))}
-          </div>
-        );
+      {
+        title: '所在国家',
+        dataIndex: 'country_code',
+        render: v => <span>{v && CONFIG.countrysMap[v] ? CONFIG.countrysMap[v].name : '-'}</span>,
       },
-    },
-    {
-      title: '价格',
-      dataIndex: 'trading_price',
-      render: (v, row) => {
-        return (
-          <span>
-            {v} {v} / BTC
-          </span>
-        );
+      {
+        title: '交易笔数/好评率',
+        dataIndex: 'volume_like',
+        render: (v, row) => {
+          const { trade_times, good_ratio } = row.owner || {};
+
+          return <span>{`${trade_times} / ${good_ratio}%`}</span>;
+        },
       },
-    },
-    {
-      title: '限额',
-      dataIndex: 'condition_',
-      render: (v, row) => {
-        const { max_volume = 0, min_volume = 0 } = row || {};
-        return (
-          <span>
-            {min_volume} - {max_volume} {row.currency}
-          </span>
-        );
+      {
+        title: '支付方式',
+        dataIndex: 'payment_methods',
+        render: (v, row) => {
+          return (
+            <div>
+              {map(row.payment_methods, item => (
+                <Icon className={styles.pay_method} key={item} type={getPayIcon(item)} />
+              ))}
+            </div>
+          );
+        },
       },
-    },
-    {
-      title: '操作',
-      render: r => {
-        const { ad_type } = this.state;
-        return (
-          <Fragment>
-            <Link to={`/trade/detail/${r.id}`}>
-              <Button type="primary">{ad_type ? CONFIG.trade_ad_type[ad_type] : '-'}</Button>
-            </Link>
-          </Fragment>
-        );
+      {
+        title: '价格',
+        dataIndex: 'trading_price',
+        render: (v, row) => {
+          return (
+            <span>
+              {v} {v} / BTC
+            </span>
+          );
+        },
       },
-    },
-  ];
+      {
+        title: '限额',
+        dataIndex: 'condition_',
+        render: (v, row) => {
+          const { max_volume = 0, min_volume = 0 } = row || {};
+          return (
+            <span>
+              {min_volume} - {max_volume} {row.currency}
+            </span>
+          );
+        },
+      },
+      {
+        title: '操作',
+        render: r => {
+          const { ad_type } = this.state;
+          return (
+            <Fragment>
+              <Link to={`/trade/detail/${r.id}`}>
+                <Button type="primary">{ad_type ? CONFIG.trade_ad_type[ad_type] : '-'}</Button>
+              </Link>
+            </Fragment>
+          );
+        },
+      },
+    ];
+    if (this.state.ad_type === 1) {
+      columns = filter(columns, item => item.dataIndex !== 'payment_methods');
+    }
+
+    return columns;
+  };
 
   handleTypeChange = e => {
     const ad_type = e.target.value;
@@ -201,18 +213,22 @@ export default class List extends Component {
   };
 
   render() {
-    const { list = [], pagination = {}, loading } = this.props;
+    const { list = [], pagination = {}, loading, topNotice = {} } = this.props;
     const { ad_type, searchVisible, searchValues = {} } = this.state;
     const { countries, currency, pay_methods, money } = searchValues || {};
 
     return (
       <BlankLayout>
         <div className={styles.header}>
-          <Alert
-            message="系统公告：本网站内测期间，为答谢各位会员，所有转账免矿工手续费，答谢活动截止至3.15 12：00."
-            type="info"
-            showIcon
-          />
+          {topNotice.id ? (
+            <div className={styles.header}>
+              <Alert
+                message={<Link to={`/message/info-detail/${topNotice.id}`}>{topNotice.title}</Link>}
+                type="info"
+                showIcon
+              />
+            </div>
+          ) : null}
         </div>
 
         <div className={styles.banners}>
@@ -266,9 +282,9 @@ export default class List extends Component {
                     ? CONFIG.payments[pay_methods]
                     : '全部支付方式'}
                 </Tag>
-                {searchValues.money && (
+                {money && (
                   <Tag closable onClose={this.handleClearMoney}>
-                    {searchValues.money}
+                    {money}
                   </Tag>
                 )}
                 <Icon type="search" />
@@ -281,7 +297,7 @@ export default class List extends Component {
             loading={loading}
             rowKey={record => record.id}
             dataSource={list}
-            columns={this.columns}
+            columns={this.renderColumns()}
             pagination={pagination}
             onChange={this.handleTableChange}
           />

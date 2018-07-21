@@ -25,8 +25,8 @@ message.config({
 });
 
 notification.config({
-  placement: 'bottomRight',
-  bottom: 50,
+  placement: 'topRight',
+  top: 50,
   duration: 2,
 });
 
