@@ -64,13 +64,25 @@ export default class TradeStep extends PureComponent {
   };
 
   componentDidMount() {
-    const { dispatch, match: { params = {} } } = this.props;
-
-    dispatch({
-      type: 'trade/fetchOrderDetail',
-      payload: { id: params.id },
-    });
+    const { match: { params = {} } } = this.props;
+    this.fetchDetail(params.id);
   }
+
+  componentWillUpdate(nextProps, nextState) {
+    const { id } = this.props.match.params || {};
+    const { id: nextId } = nextProps.match.params || {};
+
+    if (id !== nextId) {
+      this.fetchDetail(nextId);
+    }
+  }
+
+  fetchDetail = id => {
+    this.props.dispatch({
+      type: 'trade/fetchOrderDetail',
+      payload: { id },
+    });
+  };
 
   orderSteps = {
     wait_pay: {

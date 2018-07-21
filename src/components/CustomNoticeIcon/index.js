@@ -6,7 +6,7 @@ import styles from './index.less';
 
 const { TabPane } = Tabs;
 
-export default class NoticeIcon extends PureComponent {
+export default class CustomNoticeIcon extends PureComponent {
   static defaultProps = {
     // onItemClick: () => {},
     onPopupVisibleChange: () => {},
@@ -32,12 +32,10 @@ export default class NoticeIcon extends PureComponent {
 
   onItemClick = item => {
     const { onItemClick } = this.props;
+    this.setState({
+      visible: false,
+    });
     onItemClick(item);
-    if (item.msg_type === 1) {
-      this.setState({
-        visible: false,
-      });
-    }
   };
   onTabChange = tabType => {
     this.setState({ tabType });
@@ -56,7 +54,7 @@ export default class NoticeIcon extends PureComponent {
     this.setState({
       visible,
     });
-    this.props.onPopupVisibleChange();
+    this.props.onPopupVisibleChange(visible);
   };
 
   getNotificationBox() {
@@ -87,7 +85,7 @@ export default class NoticeIcon extends PureComponent {
   }
 
   render() {
-    const { className, count, popupAlign, onPopupVisibleChange, list } = this.props;
+    const { className, count, popupAlign, list } = this.props;
     const noticeButtonClass = classNames(className, styles.noticeButton);
     const notificationBox = this.getNotificationBox();
     const trigger = (

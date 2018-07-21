@@ -7,7 +7,7 @@ import { Link } from 'dva/router';
 import numeral from 'numeral';
 import { getMessageContent } from '../../utils/utils';
 import NoticeIcon from '../NoticeIcon';
-import MessageIcon from '../CustomNoticeIcon';
+import OrderIcon from '../CustomNoticeIcon';
 import TopMenu from '../TopMenu';
 import styles from './index.less';
 
@@ -78,17 +78,20 @@ export default class GlobalHeader extends PureComponent {
       currentUser = {},
       collapsed,
       fetchingNotices,
+      fetchingOrders,
       isMobile,
       logo,
       onNoticeVisibleChange,
+      onOrderVisibleChange,
       onMenuClick,
       onNoticeClear,
       onNoticeView,
-      onNoticeClick,
       onLanguageChange,
       orders = [],
       noticesCount,
       local,
+      onOrderClick,
+      onNoticeClick,
     } = this.props;
     const { wallet } = currentUser || {};
     const menu = (
@@ -171,13 +174,15 @@ export default class GlobalHeader extends PureComponent {
                   emptyImage="https://gw.alipayobjects.com/zos/rmsportal/sAuJeJzSKbUmHfBQRzmZ.svg"
                 />
               </NoticeIcon>
-              <MessageIcon
-                onItemClick={onNoticeClick}
+              <OrderIcon
                 title="进行中订单"
                 emptyText="目前无正在进行中的订单"
                 emptyImage="https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg"
                 list={orders}
                 popupAlign={{ offset: [20, -16] }}
+                loading={fetchingOrders}
+                onItemClick={onOrderClick}
+                onPopupVisibleChange={onOrderVisibleChange}
               />
               <Dropdown overlay={menu}>
                 <span className={`${styles.action} ${styles.account}`}>
