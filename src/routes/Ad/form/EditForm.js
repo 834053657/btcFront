@@ -101,16 +101,16 @@ export default class EditForm extends Component {
     const trading_price = floor(ratio * newPrice / 100, 4);
 
     const numBTC = form.getFieldValue('max_count');
-    const max_volume = floor(numBTC * trading_price, 2);
+    // const max_volume = floor(numBTC * trading_price, 2);
 
     const re = /^[+-]?\d*\.?\d*$/;
     if (re.test(ratio)) {
       form.setFieldsValue({ trading_price });
-      if (numBTC !== null) {
-        if (!isNaN(max_volume)) {
-          form.setFieldsValue({ max_volume });
-        }
-      }
+      // if (numBTC !== null) {
+      //   if (!isNaN(max_volume)) {
+      //     form.setFieldsValue({ max_volume });
+      //   }
+      // }
     }
   };
 
@@ -177,6 +177,10 @@ export default class EditForm extends Component {
     });
   };
 
+  handleLimitText = e => {
+    console.log(e.target.value);
+  };
+
   clickBtn = value => {};
 
   render() {
@@ -192,7 +196,7 @@ export default class EditForm extends Component {
     } = this.props;
     const { getFieldDecorator, getFieldValue } = form || {};
     const { payments = {} } = currentUser || {};
-    console.log(payments);
+    // console.log(payments);
     const { floatPrice } = this.state;
     return (
       <Form className={styles.form} hideRequiredMark onSubmit={this.handleSubmit}>
@@ -361,7 +365,7 @@ export default class EditForm extends Component {
             })(
               <InputNumber
                 min={0}
-                precision={0}
+                precision={2}
                 style={{ width: 170 }}
                 placeholder="市场价比例"
                 addonAfter="%"
@@ -610,8 +614,12 @@ export default class EditForm extends Component {
                 required: true,
                 message: '请输入',
               },
+              {
+                max: 200,
+                message: '最多输入200个字符',
+              },
             ],
-          })(<TextArea placeholder="交易条款" rows={4} style={{ width: 390 }} />)}
+          })(<TextArea placeholder="交易条款(最多200个字符)" rows={4} style={{ width: 390 }} />)}
           <span style={{ marginLeft: '10px' }}>
             <Tooltip title={CONFIG.tooltip[8]}>
               <Icon className="bt-icon-question" type="question-circle" title="" />
@@ -628,8 +636,14 @@ export default class EditForm extends Component {
                 required: true,
                 message: '请输入',
               },
+              {
+                max: 200,
+                message: '最多输入200个字符',
+              },
             ],
-          })(<TextArea placeholder="自动回复" rows={4} style={{ width: 390 }} />)}
+          })(
+            <TextArea placeholder="自动回复(最多输入200个字符)" rows={4} style={{ width: 390 }} />
+          )}
           <span style={{ marginLeft: '10px' }}>
             <Tooltip title="1">
               <Icon className="bt-icon-question" type="question-circle" title="" />
@@ -664,7 +678,8 @@ export default class EditForm extends Component {
                   initialValue: initialValues.min_rating_score,
                 })(
                   <InputNumber
-                    min={0}
+                    min={0.01}
+                    precision={2}
                     max={100}
                     style={{ width: 170, position: 'absolute', marginTop: '5px' }}
                     placeholder="最低评价得分"
