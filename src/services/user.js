@@ -115,12 +115,12 @@ export async function queryMyOrderList(params) {
   return request(`/btc/order/mine?${stringify(params)}`);
 }
 
-export function authForC1(stage, body) {
+export function authForC1(body) {
   return request(`/btc/user/auth/c1`, { method: 'POST', body });
 }
-export function authForC2(stage, body) {
+export function authForC2(body) {
   return request(`/btc/user/auth/c2`, { method: 'POST', body });
 }
-export function authForC3(stage, body) {
+export function authForC3(body) {
   return request(`/btc/user/auth/c3`, { method: 'POST', body });
 }

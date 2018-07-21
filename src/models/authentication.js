@@ -54,6 +54,7 @@ export default {
           type: 'SUBMIT_INFO',
           payload,
         });
+        return res;
       } else {
         message.error(res.msg || '提交失败');
       }
@@ -65,7 +66,8 @@ export default {
   reducers: {
     UPDATE_AUTH_STATUS(state, { payload }) {
       const detailList = flatMap(payload);
-      const step = findIndex(detailList, o => includes(['3', '2', '1'], o.status));
+      let step = findIndex(detailList, o => includes(['3', '2', '1'], o.status));
+      step === -1 && (step = 2);
       const status = Number(detailList[step].status);
       const reason = detailList[step].reason;
       const detail = reduce(
@@ -86,10 +88,26 @@ export default {
     SUBMIT_INFO(state, payload) {
       return {
         ...state,
-        step: state.step < 2 ? state.step + 1 : state.step,
         status: 2,
+        reason: null,
         ...payload,
       };
+    },
+  },
+  subscriptions: {
+    auth_status_update({ dispatch }) {
+      dispatch({
+        type: 'SOCKET/ADD_EVENTLISTENER',
+        event: 'auth_status_update',
+        callback(res) {
+          if (res.code === 0) {
+            dispatch({
+              type: 'updateAuthStatus',
+              payload: res.data,
+            });
+          }
+        },
+      });
     },
   },
 };

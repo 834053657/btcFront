@@ -323,7 +323,7 @@ export default class UserCenterPage extends Component {
       uploadLoading,
       countryModalVisible,
     } = this.state;
-    const { currentUser } = this.props;
+    const { currentUser, authentication } = this.props;
     const { auth, user = {}, payments = [], upload = {}, trade = {} } = currentUser || {};
     const { real_name = {}, video = {} } = auth || {};
     const real_name_status = real_name.status || 1;
@@ -503,7 +503,14 @@ export default class UserCenterPage extends Component {
                   <div className={styles.box_head_wrapper}>
                     <div className={styles.box_head_title}>身份认证</div>
                     <div className={styles.box_head_extra}>
-                      <span>认证等级: {'C' + (this.props.authentication.step + 1)}</span>
+                      {authentication.step === 0 && authentication.status !== 4 ? (
+                        <span>未认证</span>
+                      ) : (
+                        <span>
+                          认证等级:{' '}
+                          {'C' + (authentication.step + (authentication.status === 4 ? 1 : 0))}
+                        </span>
+                      )}
                     </div>
                   </div>
                   <div className={styles.box_head_subtitle}>
@@ -511,11 +518,10 @@ export default class UserCenterPage extends Component {
                   </div>
                 </div>
                 <AuthStep
-                  hideGotoButton={this.props.authentication.step > 1}
+                  hideGotoButton={authentication.step > 1 && authentication.status === 4}
                   step={this.props.authentication.step}
                   className={styles.box_content}
                   status={this.props.authentication.status}
-                  reason={this.props.authentication.reason}
                 />
               </div>
 

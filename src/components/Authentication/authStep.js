@@ -7,6 +7,7 @@ import styles from './index.less';
 const Step = Steps.Step;
 export default class Authentication extends Component {
   state = {};
+
   static propTypes = {
     hideGotoButton: PropTypes.bool,
     step: PropTypes.number,
@@ -14,13 +15,15 @@ export default class Authentication extends Component {
     reason: PropTypes.string,
     stepTitleList: PropTypes.array,
   };
+
   static defaultProps = {
     hideGotoButton: true,
     step: 0,
-    status: 1, // 1：未认证，2：认证中，3：未通过，4，已通过
+    status: 1,
     reason: null,
     stepTitleList: ['C1实名认证', 'C2实名认证', 'C3视频认证'],
   };
+
   render() {
     const { reason, step, status } = this.props;
     const stepStatus = ['wait', 'process', 'error', 'finish'][status - 1];
@@ -28,7 +31,13 @@ export default class Authentication extends Component {
       <div className={this.props.className}>
         <Steps status={stepStatus} size={this.props.size || 'small'} current={step}>
           {this.props.stepTitleList.map((title, index) => {
-            return <Step title={title} description={step === index && reason ? reason : null} />;
+            return (
+              <Step
+                key={index}
+                title={title}
+                description={step === index && status === 3 && reason ? reason : null}
+              />
+            );
           })}
         </Steps>
         {this.props.hideGotoButton === false && (

@@ -23,13 +23,15 @@ export default class AuthenticationPage extends Component {
         <div className={styles.page}>
           <Row>
             <Col offset={4} span={16}>
-              <AuthStep size="default" reason={reason} status={status} step={step} />
+              <AuthStep size="default" status={status} step={step} />
             </Col>
           </Row>
           <br />
           <Row>
             <Col offset={4} span={16}>
-              {status !== 3 && (
+              {status === 3 && reason ? (
+                <Alert message={reason} type="error" showIcon />
+              ) : (
                 <Alert
                   message="为了您的资金安全，需验证您的身份才可以进行交易认证，信息一经常验证不能修改，请务必如实填写"
                   type="info"
@@ -39,10 +41,11 @@ export default class AuthenticationPage extends Component {
             </Col>
           </Row>
           <br />
-          {
-            // [<C1Step />, <C2Step />,  <C3Step />][2]
-            [<C1Step />, <C2Step />, <C3Step />][this.props.authentication.step]
-          }
+          <Row>
+            <Col offset={4} span={16}>
+              {[<C1Step />, <C2Step />, <C3Step />][this.props.authentication.step]}
+            </Col>
+          </Row>
         </div>
       </PageHeaderLayout>
     );

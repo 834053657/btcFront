@@ -14,7 +14,6 @@ const formItemLayout = {
   required: false,
 };
 const buttonItemLayout = {
-  wrapperCol: { span: 10 },
   style: { textAlign: 'right' },
 };
 
@@ -57,13 +56,14 @@ export default class C2Step extends PureComponent {
 
     return (
       <Form onSubmit={this.handleSubmit}>
-        <Row type="flex" justify="center">
-          <Col offset={2} span={8}>
-            <FormItem label="正面">
+        <Row gutter={20}>
+          <Col span={12}>
+            <FormItem label="正面" required={false}>
               {getFieldDecorator('front_image', {
                 valuePropName: 'file',
+                rules: [{ type: 'url', required: true, message: '不正确的照片' }],
               })(
-                <UploadQiNiu value={getFieldValue('front_image')}>
+                <UploadQiNiu disabled={disabledForm} value={getFieldValue('front_image')}>
                   <p className="ant-upload-drag-icon">
                     <Icon type="inbox" />
                   </p>
@@ -73,12 +73,13 @@ export default class C2Step extends PureComponent {
               )}
             </FormItem>
           </Col>
-          <Col offset={2} span={8}>
-            <FormItem label="反面">
+          <Col span={12}>
+            <FormItem label="反面" required={false}>
               {getFieldDecorator('back_image', {
                 valuePropName: 'file',
+                rules: [{ type: 'url', required: true, message: '不正确的照片' }],
               })(
-                <UploadQiNiu value={getFieldValue('back_image')}>
+                <UploadQiNiu disabled={disabledForm} value={getFieldValue('back_image')}>
                   <p className="ant-upload-drag-icon">
                     <Icon type="inbox" />
                   </p>

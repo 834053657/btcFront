@@ -1,20 +1,18 @@
 import { AuthStep } from 'components/Authentication';
 import UploadQiNiu from 'components/UploadQiNiu';
 import React, { PureComponent } from 'react';
-import { Row, Col, Icon, message, Form, Button } from 'antd';
+import { Row, Col, Icon, message, Form, Button, Spin } from 'antd';
 import { connect } from 'dva';
-import { map, includes } from 'lodash';
+import { get, map, includes } from 'lodash';
 import styles from './AuthenticationPage.less';
 
 const FormItem = Form.Item;
-
+const Fragment = React.Fragment;
 // styles
 const formItemLayout = {
-  wrapperCol: { span: 12 },
   required: false,
 };
 const buttonItemLayout = {
-  wrapperCol: { span: 10 },
   style: { textAlign: 'right' },
 };
 
@@ -26,13 +24,23 @@ const buttonItemLayout = {
 export default class C3Step extends PureComponent {
   state = {
     uploadLoading: false,
+    faceid_url: null,
+    goFaceID: false,
   };
 
-  componentDidMount() {
-    const { video } = this.props.authentication;
-    // this.props.form.setFieldsValue({
-    //   video
-    // })
+  constructor(props) {
+    super(props);
+    const { country_code, card_type } = this.props.authentication;
+    this.state.goFaceID = country_code === 'CN' && card_type === 1;
+    this.props
+      .dispatch({
+        type: 'authentication/authForC3',
+      })
+      .then(res => {
+        this.setState({
+          faceid_url: get(res, 'data.url', null),
+        });
+      });
   }
 
   handleSubmit = e => {
@@ -61,24 +69,41 @@ export default class C3Step extends PureComponent {
     const disabledForm = includes([2, 4], status);
     const { upload = {} } = this.props.user.currentUser;
     const { uploadLoading } = this.state;
-
     return (
-      <Form onSubmit={this.handleSubmit}>
-        <Row type="flex" justify="center">
-          <Col span={8}>
-            <FormItem label="录制视频">
+      <Fragment>
+        {this.state.goFaceID ? (
+          <Spin spinning={!this.state.faceid_url}>
+            <iframe
+              width="100%"
+              height="700px"
+              frameBorder="0"
+              src={this.state.faceid_url}
+              title="视频认证"
+            />
+          </Spin>
+        ) : (
+          <Form layout="vertical" onSubmit={this.handleSubmit}>
+            <FormItem label="录制视频" {...formItemLayout}>
               {getFieldDecorator('video', {
                 valuePropName: 'file',
-              })(<UploadQiNiu value={getFieldValue('video')} />)}
+                rules: [{ type: 'url', required: true, message: '不正确的视频' }],
+              })(
+                <UploadQiNiu
+                  disabled={disabledForm}
+                  accept={UploadQiNiu.MIME_TYPE.VIDEO}
+                  sizeLimitMB={5}
+                  value={getFieldValue('video')}
+                />
+              )}
             </FormItem>
-          </Col>
-        </Row>
-        <FormItem {...buttonItemLayout}>
-          <Button type="primary" htmlType="submit" disabled={disabledForm}>
-            <Icon type={uploadLoading ? 'loading' : 'upload'} />提交审核
-          </Button>
-        </FormItem>
-      </Form>
+            <FormItem {...buttonItemLayout}>
+              <Button type="primary" htmlType="submit" disabled={disabledForm}>
+                <Icon type={uploadLoading ? 'loading' : 'upload'} />提交审核
+              </Button>
+            </FormItem>
+          </Form>
+        )}
+      </Fragment>
     );
   }
 }
