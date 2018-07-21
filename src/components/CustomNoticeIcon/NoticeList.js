@@ -1,6 +1,7 @@
 import React from 'react';
 import { Avatar, List, Icon, Badge } from 'antd';
 import classNames from 'classnames';
+import { formatBTC } from '../../utils/utils';
 import styles from './NoticeList.less';
 
 export default function CustomNoticeList({
@@ -36,19 +37,25 @@ export default function CustomNoticeList({
                 // avatar={item.avatar ? <Avatar className={styles.avatar} src={item.avatar} /> : null}
                 title={
                   <div className={styles.title}>
-                    <span>订单编号: {item.ad_no}</span>
-                    <div className={styles.extra}>abc</div>
+                    <span>订单编号: {item.order_no}</span>
+                    <div className={styles.extra}>{CONFIG.order_status[item.status]}</div>
                   </div>
                 }
                 description={
                   <div>
-                    <div className={styles.description} title={item.description}>
-                      {item.description}
-                    </div>
-                    <div className={styles.datetime}>{item.datetime}</div>
+                    <span className={styles.description} title={item.description}>
+                      <span className={styles.des_num}>交易数额:</span>
+                      {formatBTC(item.trading_count)}
+                      <span className={styles.des_btc}>BTC</span>
+                    </span>
+                    <span className={styles.datetime}>
+                      {<span className={styles.news}>新消息:</span>}
+                      {item.message_count}
+                    </span>
                   </div>
                 }
               />
+              <span>{<Icon type="right" />}</span>
             </List.Item>
           );
         })}
