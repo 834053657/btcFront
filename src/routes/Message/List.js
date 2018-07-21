@@ -2,10 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Link, routerRedux } from 'dva/router';
 import moment from 'moment';
+import { map } from 'lodash';
 import { Table, Tabs, Button, Icon, Card, Modal } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import { getMessageContent } from '../../utils/utils';
 import styles from './Message.less';
+
+const TabPane = Tabs.TabPane;
 
 @connect(({ message, loading }) => ({
   data: message.msgData,
@@ -16,6 +19,8 @@ export default class List extends Component {
     super();
 
     this.state = {
+      type: 'trade',
+      status: '',
       selectedRows: [],
     };
   }
@@ -132,6 +137,9 @@ export default class List extends Component {
     const { dispatch, getValue } = this.props;
     const { formValues } = this.state;
 
+    const { status, type } = this.state;
+    const msg_type = CONFIG.message.types[type].value;
+    // console.log(msg_type)
     const filters = Object.keys(filtersArg).reduce((obj, key) => {
       const newObj = { ...obj };
       newObj[key] = getValue(filtersArg[key]);
@@ -141,10 +149,13 @@ export default class List extends Component {
     // this.setState({
     //   type,
     // });
+    console.log(status, type);
     const params = {
       page: pagination.current,
       page_size: pagination.pageSize,
       ...formValues,
+      status,
+      msg_type,
       // ...filters,
     };
     if (sorter.field) {
@@ -157,13 +168,51 @@ export default class List extends Component {
     });
   };
 
+  handleChangeType = type => {
+    console.log(CONFIG.message.types[type].value);
+    this.props.dispatch({
+      type: 'message/fetchMessageList',
+      payload: {
+        msg_type: CONFIG.message.types[type].value,
+      },
+    });
+    this.setState({
+      type,
+    });
+  };
+
+  handleChangeStatus = value => {
+    const status = value;
+    // console.log(status);
+    this.props.dispatch({
+      type: 'message/fetchMessageList',
+      payload: {
+        status: value,
+      },
+    });
+    this.setState({
+      status,
+    });
+  };
+
   render() {
     const { data: { list, pagination }, loading } = this.props;
-    const { selectedRows } = this.state;
+    const { type, status } = this.state;
 
+    // console.log(this.props)
+    // console.log(type);
     return (
       <PageHeaderLayout title="消息中心">
-        <div>
+        <div className={styles.message_bgc}>
+          <Tabs activeKey={type} onChange={this.handleChangeType}>
+            {map(CONFIG.message.types, (item, value) => <TabPane tab={item.text} key={value} />)}
+          </Tabs>
+          <Tabs activeKey={status} onChange={this.handleChangeStatus}>
+            <TabPane tab="全部" key="" />
+            {map(CONFIG.message.status, (text, value) => (
+              <TabPane tab={text && text} key={+value} />
+            ))}
+          </Tabs>
           <Card bordered={false} className={styles.message_list}>
             <Table
               loading={loading}
