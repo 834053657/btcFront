@@ -17,6 +17,10 @@ export async function queryMessageList(params) {
   return request(`/btc/message/all?${stringify(params)}`);
 }
 
+export async function queryOrderList(params) {
+  return request(`/btc/order/all?${stringify(params)}`);
+}
+
 export async function queryMoreMessageList(params) {
   return request(`/btc/info/all?${stringify(params)}`);
 }
