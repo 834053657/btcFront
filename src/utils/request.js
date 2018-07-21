@@ -29,7 +29,7 @@ function checkStatus(response) {
   const errortext = codeMessage[response.status] || response.statusText;
   if (response.status !== 401) {
     notification.error({
-      message: `请求错误 ${response.status}: ${response.url}`,
+      message: `请求错误 ${response.status}`, //: ${response.url}
       description: errortext,
     });
   }
@@ -109,7 +109,7 @@ export default function request(postUrl, options, base_url) {
         return {};
       }
       if (status >= 404 && status < 422) {
-        dispatch(routerRedux.push('/exception/404'));
+        // dispatch(routerRedux.push('/exception/404'));
         return {};
       }
     });
