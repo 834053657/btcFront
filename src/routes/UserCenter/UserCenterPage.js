@@ -17,6 +17,7 @@ import {
   Popover,
 } from 'antd';
 import { map, omit, size } from 'lodash';
+import { AuthStep } from 'components/Authentication';
 import G2Validation from 'components/G2Validation';
 import DescriptionList from 'components/DescriptionList';
 import { getPayIcon } from '../../utils/utils';
@@ -27,12 +28,12 @@ import PwdModal from './modals/PwdModal';
 import RealNameForm from './forms/RealNameForm';
 import VideoAuthForm from './forms/VideoAuthForm';
 import CountryModal from './modals/CountryModal';
-
 import styles from './UserCenterPage.less';
 
 const { Description } = DescriptionList;
 
-@connect(({ global, user, loading }) => ({
+@connect(({ authentication, global, user, loading }) => ({
+  authentication,
   currentUser: user.currentUser,
   loading: loading.models.global,
 }))
@@ -322,7 +323,7 @@ export default class UserCenterPage extends Component {
       uploadLoading,
       countryModalVisible,
     } = this.state;
-    const { currentUser } = this.props;
+    const { currentUser, authentication } = this.props;
     const { auth, user = {}, payments = [], upload = {}, trade = {} } = currentUser || {};
     const { real_name = {}, video = {} } = auth || {};
     const real_name_status = real_name.status || 1;
@@ -501,76 +502,27 @@ export default class UserCenterPage extends Component {
                 <div className={styles.box_head}>
                   <div className={styles.box_head_wrapper}>
                     <div className={styles.box_head_title}>身份认证</div>
+                    <div className={styles.box_head_extra}>
+                      {authentication.step === 0 && authentication.status !== 4 ? (
+                        <span>未认证</span>
+                      ) : (
+                        <span>
+                          认证等级:{' '}
+                          {'C' + (authentication.step + (authentication.status === 4 ? 1 : 0))}
+                        </span>
+                      )}
+                    </div>
                   </div>
                   <div className={styles.box_head_subtitle}>
                     请如实填写您的身份信息，一经认证不可修改
                   </div>
                 </div>
-                <div className={styles.box_content}>
-                  <div className={styles.box_item}>
-                    <div className={styles.box_item_meta}>
-                      <Icon type="idcard" />
-                      <div className={styles.box_item_meta_head}>
-                        <h4 className={styles.box_item_title}>实名认证</h4>
-                        <div className={styles.box_item_descript}>
-                          {CONFIG.auth_status[real_name_status]}
-                          {real_name_status === 3 ? (
-                            <Popover
-                              placement="bottomRight"
-                              title="审核反馈"
-                              content={real_name.reason}
-                              trigger="click"
-                            >
-                              <a> 原因 </a>
-                            </Popover>
-                          ) : null}
-                        </div>
-                      </div>
-                    </div>
-                    <div className={styles.box_item_content}>
-                      <div className={styles.mb4}>
-                        {real_name.auth_detail && real_name.auth_detail.name}
-                      </div>
-                      <div>{real_name.auth_detail && real_name.auth_detail.cardno}</div>
-                    </div>
-                    <ul className={styles.box_item_action}>
-                      <li>
-                        {!!~[1, 3].indexOf(real_name_status) && (
-                          <a onClick={this.showRealNameModal}>编辑</a>
-                        )}
-                      </li>
-                    </ul>
-                  </div>
-                  <div className={styles.box_item}>
-                    <div className={styles.box_item_meta}>
-                      <Icon type="video-camera" />
-                      <div className={styles.box_item_meta_head}>
-                        <h4 className={styles.box_item_title}>高级认证</h4>
-                        <div className={styles.box_item_descript}>
-                          {CONFIG.auth_status[video_status]}
-                          {video_status === 3 ? (
-                            <Popover
-                              placement="bottomRight"
-                              title="审核反馈"
-                              content={video.reason}
-                              trigger="click"
-                            >
-                              <a> 原因 </a>
-                            </Popover>
-                          ) : null}
-                        </div>
-                      </div>
-                    </div>
-                    <div className={styles.box_item_content} />
-                    <ul className={styles.box_item_action}>
-                      <li>
-                        {!!~[1, 3].indexOf(video_status) && (
-                          <a onClick={this.showVideoAuthModal}>编辑</a>
-                        )}
-                      </li>
-                    </ul>
-                  </div>
-                </div>
+                <AuthStep
+                  hideGotoButton={authentication.step > 1 && authentication.status === 4}
+                  step={this.props.authentication.step}
+                  className={styles.box_content}
+                  status={this.props.authentication.status}
+                />
               </div>
 
               {/* 支付方式 */}

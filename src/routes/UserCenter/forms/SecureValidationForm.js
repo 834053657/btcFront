@@ -67,7 +67,6 @@ class SecureValidationForm extends Component {
         ...values,
         data: this.props.verify_data[values.type].data,
       };
-
       this.props.onSubmit(err, params);
     });
   };

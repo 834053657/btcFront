@@ -102,9 +102,13 @@ const GlobalFooter = ({ className }) => {
             </p>
           </li>
           <li className={styles.phone}>
-            <p><span>客服热线:</span> <span>187-6440-3666</span></p>
+            <p>
+              <span>客服热线:</span> <span>187-6440-3666</span>
+            </p>
           </li>
-          <li className={styles.time}><p>热线时间：每天8：00 ~ 24：00</p></li>
+          <li className={styles.time}>
+            <p>热线时间：每天8：00 ~ 24：00</p>
+          </li>
         </ul>
       </div>
     </div>

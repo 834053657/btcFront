@@ -76,7 +76,9 @@ function checkLogined() {
 export const getRouterData = app => {
   const routerConfig = {
     '/': {
-      component: dynamicWrapper(app, ['user', 'login'], () => import('../layouts/BasicLayout')),
+      component: dynamicWrapper(app, ['user', 'authentication', 'login'], () =>
+        import('../layouts/BasicLayout')
+      ),
     },
     '/trade/index': {
       component: dynamicWrapper(app, ['trade'], () => import('../routes/Trade/List')),
@@ -271,6 +273,11 @@ export const getRouterData = app => {
     },
     '/form/basic-form': {
       component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/BasicForm')),
+    },
+    '/authentication/': {
+      component: dynamicWrapper(app, ['authentication'], () =>
+        import('../routes/Authentication/AuthenticationPage')
+      ),
     },
   };
 

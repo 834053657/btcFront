@@ -35,7 +35,9 @@ class ImageValidation extends Component {
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields({ force: true }, (err, values) => {
-      this.props.onSubmit(err, values.code, this.loadCaptcha);
+      if (!err) {
+        this.props.onSubmit(values.code, this.loadCaptcha);
+      }
     });
   };
 

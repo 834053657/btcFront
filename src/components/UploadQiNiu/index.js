@@ -12,6 +12,23 @@ export default class UploadQiNiu extends Component {
     uploading: false,
   };
 
+  static MIME_TYPE = {
+    IMAGE: 'image/gif, image/png, image/jpg, image/jpeg, image/bmp',
+    VIDEO: 'video/mp4,video/x-m4v,video/*',
+  };
+
+  static propTypes = {
+    accept: PropTypes.string,
+    sizeLimitMB: PropTypes.number,
+    disabled: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    accept: UploadQiNiu.MIME_TYPE.IMAGE,
+    sizeLimitMB: 5,
+    disabled: false,
+  };
+
   getImgUrl = (obj = {}) => {
     const { upload = {} } = getAuthority() || {};
 
@@ -40,11 +57,11 @@ export default class UploadQiNiu extends Component {
   };
 
   beforeUpload = file => {
-    const isLt2M = file.size / 1024 / 1024 < 5;
-    if (!isLt2M) {
-      message.error('头像必须小于5M!');
+    const isLtMB = file.size / 1024 / 1024 < this.props.sizeLimitMB;
+    if (!isLtMB) {
+      message.error(`文件必须小于${this.props.sizeLimitMB}M!`);
     }
-    return isLt2M;
+    return isLtMB;
   };
 
   render() {
@@ -64,7 +81,8 @@ export default class UploadQiNiu extends Component {
       <Spin spinning={this.state.uploading}>
         <Dragger
           name="file"
-          accept="image/gif, image/png, image/jpg, image/jpeg, image/bmp"
+          disabled={this.props.disabled}
+          accept={this.props.accept}
           showUploadList={false}
           multiple={false}
           action={upload.domain}

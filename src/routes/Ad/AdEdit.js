@@ -19,7 +19,7 @@ export default class AdEdit extends Component {
   componentWillMount() {}
   componentDidMount() {
     const { params: { id } } = this.props.match || {};
-    this.fetchDetail(id, (obj={}) => this.fetchPrice(obj.currency));
+    this.fetchDetail(id, (obj = {}) => this.fetchPrice(obj.currency));
   }
 
   fetchDetail = (id, callback) => {
@@ -33,11 +33,11 @@ export default class AdEdit extends Component {
     });
   };
 
-  fetchPrice = (currency='CNY') => {
+  fetchPrice = (currency = 'CNY') => {
     this.props.dispatch({
       type: 'ad/fetchNewPrice',
       payload: {
-        currency
+        currency,
       },
     });
   };
@@ -85,7 +85,7 @@ export default class AdEdit extends Component {
     return (
       <PageHeaderLayout content={content}>
         <div className={styles.background}>
-          <EditForm {...this.props}  getPrice={this.fetchPrice}  onSubmit={this.handleSubmit} />
+          <EditForm {...this.props} getPrice={this.fetchPrice} onSubmit={this.handleSubmit} />
         </div>
       </PageHeaderLayout>
     );
