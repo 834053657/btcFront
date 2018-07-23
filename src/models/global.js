@@ -1,6 +1,7 @@
 import { message } from 'antd';
-import { mapKeys, groupBy, orderBy, map } from 'lodash';
+import { filter, mapKeys, groupBy, orderBy, map } from 'lodash';
 import { getLocale, setLocale } from '../utils/authority';
+import getMessage from '../utils/getMessage';
 
 import {
   queryOrderList,
@@ -150,6 +151,9 @@ export default {
     },
     saveNotices(state, { payload }) {
       const { data: { items } } = payload || {};
+
+      // let newItems = filter(items.map(item => getMessage(item)), message => value)
+
       let newItems = [];
       const tmp1 = [];
       let tmp2 = [];
