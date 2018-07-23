@@ -304,7 +304,7 @@ export default class EditForm extends Component {
                   {getFieldValue('currency')} / BTC
                 </span>
                 <Button
-                  type="primary"
+                  type="ghost"
                   onClick={getPrice.bind(this, getFieldValue('currency'))}
                   loading={freshLoading}
                 >

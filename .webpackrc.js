@@ -1,7 +1,5 @@
 const path = require('path');
 
-console.log('process.env.KG_API_ENV', process.env.KG_API_ENV, process.env.KG_API_ENV == 'test');
-
 export default {
   entry: 'src/index.js',
   extraBabelPlugins: [['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }]],

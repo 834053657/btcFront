@@ -2,10 +2,10 @@
 @import '../../utils/utils.less';
 
 .header {
-  height: 64px;
+  height: 60px;
   padding: 0 12px 0 0;
-  background: @menu-dark-bg;
-  color: #fff;
+  //background: @menu-dark-bg;
+  //color: #fff;
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
   position: relative;
 }
@@ -18,15 +18,17 @@
 }
 
 .logo {
-  height: 64px;
-  line-height: 58px;
+  height: 100%;
+  //line-height: 58px;
   vertical-align: top;
   display: inline-block;
   padding: 0 24px;
   cursor: pointer;
   font-size: 20px;
-  color: #fff;
+  //color: #fff;
   img {
+    height: 100%;
+    width: auto;
     display: inline-block;
     vertical-align: middle;
   }
@@ -55,7 +57,7 @@ i.trigger {
 .right {
   float: right;
   height: 100%;
-  background: @menu-dark-bg;
+  background: @menu-bg;
   .action {
     cursor: pointer;
     padding: 0 12px;
@@ -67,9 +69,12 @@ i.trigger {
       vertical-align: middle;
       color: @text-color;
     }
+    i:hover {
+      color: @primary-5;
+    }
     &:hover,
-    &:global(.ant-popover-open) {
-      background: @primary-5;
+    &:global(.ant-popover-open .anticon) {
+      color: @primary-5;
     }
   }
   .search {
@@ -114,7 +119,7 @@ i.trigger {
       position: absolute;
       right: 12px;
       top: 0;
-      background: @menu-dark-bg;
+      background: @menu-bg;
       .account {
         .avatar {
           margin-right: 0;
