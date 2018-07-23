@@ -66,38 +66,36 @@ export default class Register extends Component {
     });
   };
 
-  onGetCaptcha = (err, code, loadCaptcha) => {
+  onGetCaptcha = (captcha, loadCaptcha) => {
     const { form } = this.props;
     const mail = form.getFieldValue('email');
-    if (!err) {
-      this.props.dispatch({
-        type: 'register/sendVerify',
-        payload: {
-          code,
-          data: {
-            mail,
-          },
-          type: 'mail',
-          usage: 1,
+    this.props.dispatch({
+      type: 'register/sendVerify',
+      payload: {
+        captcha,
+        data: {
+          mail,
         },
-        callback: res => {
-          if (res.code === 0) {
-            let count = 59;
-            this.setState({ count, imageValidationVisible: false });
-            this.interval = setInterval(() => {
-              count -= 1;
-              this.setState({ count });
-              if (count === 0) {
-                clearInterval(this.interval);
-              }
-            }, 1000);
-          } else {
-            loadCaptcha();
-            message.error(res.msg);
-          }
-        },
-      });
-    }
+        type: 'mail',
+        usage: 1,
+      },
+      callback: res => {
+        if (res.code === 0) {
+          let count = 59;
+          this.setState({ count, imageValidationVisible: false });
+          this.interval = setInterval(() => {
+            count -= 1;
+            this.setState({ count });
+            if (count === 0) {
+              clearInterval(this.interval);
+            }
+          }, 1000);
+        } else {
+          loadCaptcha();
+          message.error(res.msg);
+        }
+      },
+    });
   };
 
   getPasswordStatus = () => {

@@ -3,8 +3,8 @@ import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
 import { Form, Input, Button, Modal, Alert, Select, Row, Col } from 'antd';
 import { map } from 'lodash';
+import ImageValidation from 'components/ImageValidation';
 import styles from './ForgetPassword.less';
-import { getCaptcha } from '../../services/api';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -17,6 +17,7 @@ const InputGroup = Input.Group;
 export default class Register extends Component {
   state = {
     count: 0,
+    imageValidationVisible: false,
   };
 
   componentDidMount() {}
@@ -40,17 +41,39 @@ export default class Register extends Component {
     });
   };
 
-  onGetCaptcha = (values, callback) => {
-    return this.props.dispatch({
-      type: 'global/sendVerify',
-      payload: {
-        data: {
-          ...values,
-        },
-        type: values.type,
-        usage: 7,
-      },
-      callback,
+  onGetCaptcha = (captcha, loadCaptcha) => {
+    const { validateFields, getFieldValue } = this.props.form;
+    const type = getFieldValue('type');
+    const fieldsName = type === 'mail' ? ['mail', 'type'] : ['nation_code', 'phone', 'type'];
+
+    validateFields(fieldsName, { force: true }, (err, values) => {
+      if (!err) {
+        this.props.dispatch({
+          type: 'global/sendVerify',
+          payload: {
+            captcha,
+            data: {
+              ...values,
+            },
+            type: values.type,
+            usage: 7,
+          },
+          callback: () => {
+            let count = 59;
+            this.setState({ count, imageValidationVisible: false });
+            this.interval = setInterval(() => {
+              count -= 1;
+              this.setState({ count });
+              if (count === 0) {
+                clearInterval(this.interval);
+              }
+            }, 1000);
+          },
+          onError: () => {
+            loadCaptcha && loadCaptcha();
+          },
+        });
+      }
     });
   };
 
@@ -61,16 +84,8 @@ export default class Register extends Component {
 
     validateFields(fieldsName, { force: true }, (err, values) => {
       if (!err) {
-        this.onGetCaptcha(values, () => {
-          let count = 59;
-          this.setState({ count });
-          this.interval = setInterval(() => {
-            count -= 1;
-            this.setState({ count });
-            if (count === 0) {
-              clearInterval(this.interval);
-            }
-          }, 1000);
+        this.setState({
+          imageValidationVisible: true,
         });
       }
     });
@@ -79,7 +94,7 @@ export default class Register extends Component {
   render() {
     const { form, submitting } = this.props;
     const { getFieldDecorator, getFieldValue } = form;
-    const { count } = this.state;
+    const { count, imageValidationVisible } = this.state;
     return (
       <div className={styles.main}>
         <h3>忘记密码</h3>
@@ -196,6 +211,15 @@ export default class Register extends Component {
             </Link>
           </FormItem>
         </Form>
+
+        <ImageValidation
+          title="安全验证"
+          onCancel={() => {
+            this.setState({ imageValidationVisible: false });
+          }}
+          onSubmit={this.onGetCaptcha}
+          visible={imageValidationVisible}
+        />
       </div>
     );
   }
