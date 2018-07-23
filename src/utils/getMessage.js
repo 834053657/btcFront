@@ -2,7 +2,7 @@ import { mapValues, template } from 'lodash';
 
 const messageTemplates = {
   '1': {
-    group: 'ad',
+    group: 'id',
     title: '广告编号<%= ad_no %>已被管理员下架',
     description: '下架原因:{content.reason}',
     to: '/ad/my',
