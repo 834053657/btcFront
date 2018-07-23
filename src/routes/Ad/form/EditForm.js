@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Select, Button, Form, Input, Radio, Checkbox, Row, Col, Card, Tooltip, Icon } from 'antd';
-import { map, floor } from 'lodash';
+import { map, floor, omit } from 'lodash';
 import { Link } from 'dva/router';
 import InputNumber from 'components/InputNumber';
 import styles from './EditForm.less';
@@ -38,6 +38,8 @@ const typeMap = {
   '2': '在线卖出',
 };
 
+const CheckboxGroup = Checkbox.Group;
+
 @Form.create()
 export default class EditForm extends Component {
   constructor(props) {
@@ -51,9 +53,10 @@ export default class EditForm extends Component {
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
+      const valued = omit(values, ['trading_price_ratio_choose']);
       if (!err) {
         const { id } = this.props.initialValues || {};
-        this.props.onSubmit && this.props.onSubmit({ ...values, id });
+        this.props.onSubmit && this.props.onSubmit({ ...valued, id });
       }
     });
   };
@@ -262,7 +265,7 @@ export default class EditForm extends Component {
               ))}
             </Select>
           )}
-          <span style={{ marginLeft: '10px' }}>
+          <span style={{ marginLeft: '20px' }}>
             <Tooltip title={CONFIG.tooltip[1]}>
               <Icon className="bt-icon-question" type="question-circle" title="" />
             </Tooltip>
@@ -288,7 +291,7 @@ export default class EditForm extends Component {
               ))}
             </Select>
           )}
-          <span style={{ marginLeft: '10px' }}>
+          <span style={{ marginLeft: '20px' }}>
             <Tooltip title={CONFIG.tooltip[2]}>
               <Icon className="bt-icon-question" type="question-circle" title="" />
             </Tooltip>
@@ -296,25 +299,23 @@ export default class EditForm extends Component {
         </FormItem>
 
         <FormItem {...formItemLayout} label="市场参考价格">
-          <Col span={7}>
+          <Col span={7} className={styles.market_price}>
             <FormItem>
-              <div>
-                <span style={{ marginRight: '20px' }}>
-                  {getFieldValue('currency') === 'CNY' ? price.ad_price_cny : price.ad_price_usd}{' '}
-                  {getFieldValue('currency')} / BTC
-                </span>
-                <Button
-                  type="ghost"
-                  onClick={getPrice.bind(this, getFieldValue('currency'))}
-                  loading={freshLoading}
-                >
-                  刷新
-                </Button>
-              </div>
+              <span style={{ marginRight: '20px' }}>
+                {getFieldValue('currency') === 'CNY' ? price.ad_price_cny : price.ad_price_usd}{' '}
+                {getFieldValue('currency')} / BTC
+              </span>
+              <Button
+                type="ghost"
+                onClick={getPrice.bind(this, getFieldValue('currency'))}
+                loading={freshLoading}
+              >
+                刷新
+              </Button>
             </FormItem>
           </Col>
           <Col>
-            <span style={{ marginLeft: '58px' }}>
+            <span style={{ marginLeft: '40px' }}>
               <Tooltip title={CONFIG.tooltip[5]}>
                 <Icon className="bt-icon-question" type="question-circle" title="" />
               </Tooltip>
@@ -345,7 +346,7 @@ export default class EditForm extends Component {
             )}
           </Col>
           <span style={{ marginLeft: '18px' }}>
-            <Tooltip title={CONFIG.tooltip[5]}>
+            <Tooltip title={CONFIG.tooltip[6]}>
               <Icon className="bt-icon-question" type="question-circle" title="" />
             </Tooltip>
           </span>
@@ -364,7 +365,8 @@ export default class EditForm extends Component {
               ],
             })(
               <InputNumber
-                min={0}
+                min={70}
+                max={170}
                 precision={2}
                 style={{ width: 170 }}
                 placeholder="市场价比例"
@@ -377,7 +379,7 @@ export default class EditForm extends Component {
         <FormItem {...formItemLayout} label="浮动价格">
           <Col span={7} className={styles.no_margin_floatPrice}>
             <FormItem>
-              {getFieldDecorator('123', {
+              {getFieldDecorator('trading_price_ratio_choose', {
                 // initialValue: initialValues.max_count,
                 onChange: this.handleChangeFloat,
                 rules: [],
@@ -386,7 +388,7 @@ export default class EditForm extends Component {
           </Col>
           <Col span={1}>
             <span>
-              <Tooltip title={CONFIG.tooltip[2]}>
+              <Tooltip title={CONFIG.tooltip[4]}>
                 <Icon className="bt-icon-question" type="question-circle" title="" />
               </Tooltip>
             </span>
@@ -412,7 +414,7 @@ export default class EditForm extends Component {
                   min={0}
                   precision={4}
                   style={{ width: 170, position: 'absolute', marginTop: '5px' }}
-                  placeholder="交易限额"
+                  placeholder="广告总交易数"
                   addonAfter="BTC"
                 />
               )}
@@ -436,15 +438,15 @@ export default class EditForm extends Component {
                   // disabled={!getFieldValue('trading_price')}
                   min={100}
                   precision={2}
-                  style={{ width: 170, position: 'absolute', marginTop: '5px' }}
-                  placeholder="最小交易额"
+                  style={{ width: 185, position: 'absolute', marginTop: '5px' }}
+                  placeholder="单笔最小交易额"
                   addonAfter={getFieldValue('currency')}
                 />
               )}
             </FormItem>
           </Col>
           <Col span={2}>
-            <span style={{ display: 'inline-block', width: '155%', textAlign: 'center' }}>--</span>
+            <span style={{ display: 'inline-block', width: '215%', textAlign: 'center' }}>--</span>
           </Col>
           <Col span={3}>
             <FormItem>
@@ -465,14 +467,14 @@ export default class EditForm extends Component {
                   // disabled={!getFieldValue('trading_price')}
                   min={0}
                   precision={2}
-                  style={{ width: 170, position: 'absolute', marginTop: '5px' }}
-                  placeholder="最大交易额"
+                  style={{ width: 185, position: 'absolute', marginTop: '5px' }}
+                  placeholder="单笔最大交易额"
                   addonAfter={getFieldValue('currency')}
                 />
               )}
             </FormItem>
           </Col>
-          <div style={{ float: 'right' }}>
+          <div style={{ marginLeft: '670px' }}>
             <Tooltip title={CONFIG.tooltip[7]}>
               <Icon className="bt-icon-question" type="question-circle" title="" />
             </Tooltip>
@@ -510,58 +512,70 @@ export default class EditForm extends Component {
 
         {getFieldValue('ad_type') === 2 ? (
           <div>
-            {payments.length === 0 ? (
-              <FormItem {...formItemLayout} label="收款方式">
-                <span>
-                  <Link to="/user-center/index">请先添加收款方式</Link>
-                </span>
-                <span style={{ marginLeft: '16px' }}>
-                  <Tooltip title={CONFIG.tooltip[14]}>
-                    <Icon className="bt-icon-question" type="question-circle" title="" />
-                  </Tooltip>
-                </span>
-              </FormItem>
-            ) : (
-              <FormItem {...formItemLayout} label="收款方式">
-                {getFieldDecorator('payment_methods', {
-                  initialValue: initialValues.payment_methods,
-                  rules: [
-                    {
-                      required: true,
-                      message: '请选择收款方式',
-                    },
-                  ],
-                })(
-                  <Select
-                    mode="multiple"
-                    style={{ maxWidth: 286, width: '100%' }}
-                    placeholder="选择收款方式"
-                  >
-                    {map(payments, item => (
-                      <Option key={item.id} value={+item.id}>
-                        <span>
-                          {item.payment_method && CONFIG.payments[item.payment_method]
-                            ? CONFIG.payments[item.payment_method]
-                            : item.payment_method}
-                          <span> - </span>
-                          {this.getUserAccount(item)}
-                        </span>
-                      </Option>
-                    ))}
-                  </Select>
-                )}
-                <span style={{ marginLeft: '10px' }}>
-                  <Tooltip title={CONFIG.tooltip[3]}>
-                    <Icon className="bt-icon-question" type="question-circle" title="" />
-                  </Tooltip>
-                </span>
-              </FormItem>
-            )}
+            {/*{payments.length === 0 ? (*/}
+            {/*<FormItem {...formItemLayout} label="收款方式">*/}
+            {/*<span>*/}
+            {/*<Link to="/user-center/index">请先添加收款方式</Link>*/}
+            {/*</span>*/}
+            {/*<span style={{ marginLeft: '16px' }}>*/}
+            {/*<Tooltip title={CONFIG.tooltip[14]}>*/}
+            {/*<Icon className="bt-icon-question" type="question-circle" title="" />*/}
+            {/*</Tooltip>*/}
+            {/*</span>*/}
+            {/*</FormItem>*/}
+            {/*) : (*/}
+            <FormItem {...formItemLayout} label="收款方式">
+              {getFieldDecorator('payment_methods', {
+                initialValue: initialValues.payment_methods,
+                rules: [
+                  {
+                    required: true,
+                    message: '请选择收款方式',
+                  },
+                ],
+              })(
+                <Checkbox.Group>
+                  {map(CONFIG.payments, (text, value) => {
+                    return (
+                      <Checkbox key={value} value={value}>
+                        {text}
+                      </Checkbox>
+                    );
+                  })}
+                  <Checkbox value="">其他</Checkbox>
+                </Checkbox.Group>
+
+                // <Select
+                //   mode="multiple"
+                //   style={{ maxWidth: 286, width: '100%' }}
+                //   placeholder="选择收款方式"
+                // >
+                //   {map(payments, item => (
+                //     <Option key={item.id} value={+item.id}>
+                //       <span>
+                //         {item.payment_method && CONFIG.payments[item.payment_method]
+                //           ? CONFIG.payments[item.payment_method]
+                //           : item.payment_method}
+                //         <span> - </span>
+                //         {this.getUserAccount(item)}
+                //       </span>
+                //     </Option>
+                //   ))}
+                // </Select>
+                //
+              )}
+              <span style={{ marginLeft: '10px' }}>
+                <Tooltip title={CONFIG.tooltip[3]}>
+                  <Icon className="bt-icon-question" type="question-circle" title="" />
+                </Tooltip>
+              </span>
+            </FormItem>
+            {/*   )}   */}
           </div>
         ) : null}
 
         <FormItem {...formItemLayout} label="安全选项">
-          <div>
+          <div className={styles.trust_person}>
             <FormItem>
               <div>
                 {getFieldDecorator('trusted_user', {
@@ -652,7 +666,7 @@ export default class EditForm extends Component {
         </FormItem>
         {getFieldValue('ad_type') === 2 && (
           <div>
-            <FormItem {...formItemLayout} label="最小交易量">
+            <FormItem {...formItemLayout} label="最小成交数">
               <Col span={6}>
                 {getFieldDecorator('min_trade_count', {
                   initialValue: initialValues.min_trade_count,
@@ -660,7 +674,7 @@ export default class EditForm extends Component {
                   <InputNumber
                     min={0}
                     step={0.0001}
-                    placeholder="最小交易量"
+                    placeholder="最小成交数"
                     style={{ width: 170 }}
                   />
                 )}

@@ -104,7 +104,7 @@ export const getRouterData = app => {
     },
     //个人详情页
     '/personage/:uid': {
-      component: dynamicWrapper(app, ['userDetails'], () =>
+      component: dynamicWrapper(app, ['userDetails', 'user'], () =>
         import('../routes/UserDetails/UserDetails')
       ),
     },
