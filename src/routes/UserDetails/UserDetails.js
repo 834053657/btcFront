@@ -13,6 +13,7 @@ import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import ReportForm from './Form/ReportForm';
 import { getPayIcon } from '../../utils/utils';
+import { getAuthority } from '../../utils/authority';
 
 const { Description } = DescriptionList;
 const RadioButton = Radio.Button;
@@ -22,8 +23,9 @@ const typeMap = {
   '2': '出售',
 };
 
-@connect(({ userDetails, loading }) => ({
+@connect(({ userDetails, loading, user }) => ({
   ...userDetails,
+  currentUser: user.currentUser,
   loading: loading.models.message,
 }))
 export default class UserDetails extends Component {
@@ -48,6 +50,11 @@ export default class UserDetails extends Component {
       },
     });
   }
+
+  checkLogined = () => {
+    const { user, token } = this.props.currentUser || {};
+    return !!(user && token);
+  };
 
   handleUserName = () => {
     const { userMessage } = this.props;
@@ -90,7 +97,7 @@ export default class UserDetails extends Component {
         <div className={styles.UserName}>
           <span style={{ margin: '30px' }}>
             <img
-              style={{ width: '50px', borderRadius: '50%' }}
+              style={{ width: '50px', height: '50px', borderRadius: '50%' }}
               src={userMessage.avatar}
               // src="http://images.91jianke.com/default_avatar_11.png"
               alt=""
@@ -130,7 +137,7 @@ export default class UserDetails extends Component {
               <Icon type="heart-o" style={{ color: '#EAEAEA', marginRight: '5px' }} />信任
             </Button>
           )}
-          {userMessage.online === true ? (
+          {this.checkLogined() ? (
             ''
           ) : (
             <div style={{ margin: '30px' }}>
@@ -326,7 +333,7 @@ export default class UserDetails extends Component {
   };
 
   render() {
-    console.log(this.props);
+    console.log(this.props.userMessage);
     const { list = [] } = this.props;
     const { pagination = {}, loading } = this.props;
     const { type } = this.state;

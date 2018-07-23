@@ -102,7 +102,7 @@ export const getRouterData = app => {
     },
     //个人详情页
     '/personage/:uid': {
-      component: dynamicWrapper(app, ['userDetails'], () =>
+      component: dynamicWrapper(app, ['userDetails', 'user'], () =>
         import('../routes/UserDetails/UserDetails')
       ),
     },
@@ -125,7 +125,7 @@ export const getRouterData = app => {
       redirectPath: '/user/login',
     },
     '/ad/edit/:id': {
-      component: dynamicWrapper(app, ['ad','user'], () => import('../routes/Ad/AdEdit')),
+      component: dynamicWrapper(app, ['ad', 'user'], () => import('../routes/Ad/AdEdit')),
       authority: checkLogined,
       redirectPath: '/user/login',
     },
