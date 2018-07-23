@@ -198,7 +198,7 @@ export default class TopMenu extends PureComponent {
     return (
       <Menu
         key="Menu"
-        theme="dark"
+        theme="light"
         mode="horizontal"
         onOpenChange={this.handleOpenChange}
         selectedKeys={selectedKeys}

@@ -11,7 +11,7 @@ let menuData = [
   },
 ];
 
-if (__KG_API_ENV__ === 'dev') {
+if (__KG_API_ENV__ === 'dev' && false) {
   menuData.push(
     {
       name: 'dashboard',
