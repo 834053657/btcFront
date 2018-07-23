@@ -26,7 +26,8 @@ const typeMap = {
 @connect(({ userDetails, loading, user }) => ({
   ...userDetails,
   currentUser: user.currentUser,
-  loading: loading.models.message,
+  loading: loading.effects['userDetails/fetchDetails'],
+  loading_trust: loading.effects['userDetails/submitRating'],
 }))
 export default class UserDetails extends Component {
   constructor(props) {
@@ -64,6 +65,7 @@ export default class UserDetails extends Component {
   handleToTrust = type => {
     const { params: { uid } } = this.props.match || {};
     console.log(uid);
+    console.log(type);
     this.props.dispatch({
       type: 'userDetails/submitRating',
       payload: {
@@ -72,10 +74,10 @@ export default class UserDetails extends Component {
       },
     });
 
-    this.setState({ loading: true });
-    setTimeout(() => {
-      this.setState({ loading: false });
-    }, 1000);
+    // this.setState({ loading: true });
+    // setTimeout(() => {
+    //   this.setState({ loading: false });
+    // }, 1000);
   };
 
   handleSubmitReport = (err, values) => {
@@ -124,7 +126,7 @@ export default class UserDetails extends Component {
               className={styles.trust}
               onClick={this.handleToTrust.bind(this, 2)}
               type="1"
-              loading={this.state.loading}
+              loading={this.props.loading_trust}
             >
               <Icon type="heart-o" style={{ color: '#ccc', marginRight: '5px' }} />取消信任
             </Button>
@@ -132,7 +134,7 @@ export default class UserDetails extends Component {
             <Button
               className={styles.UNtrust}
               onClick={this.handleToTrust.bind(this, 1)}
-              loading={this.state.loading}
+              loading={this.props.loading_trust}
             >
               <Icon type="heart-o" style={{ color: '#EAEAEA', marginRight: '5px' }} />信任
             </Button>
@@ -333,7 +335,7 @@ export default class UserDetails extends Component {
   };
 
   render() {
-    console.log(this.props.userMessage);
+    // console.log(this.props.userMessage);
     const { list = [] } = this.props;
     const { pagination = {}, loading } = this.props;
     const { type } = this.state;

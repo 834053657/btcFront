@@ -69,7 +69,7 @@ export default class ccc extends Component {
             })(
               <Select
                 showSearch
-                style={{ width: 200 }}
+                style={{ width: '80%', marginLeft: '10%' }}
                 placeholder="请选择国家"
                 filterOption={(input, option) =>
                   option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -86,7 +86,7 @@ export default class ccc extends Component {
             )}
           </FormItem>
           <FormItem>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" className={styles.confirm}>
               确定
             </Button>
             <Button onClick={this.handleOnCancel}>取消</Button>
