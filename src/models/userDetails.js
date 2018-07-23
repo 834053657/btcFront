@@ -10,13 +10,14 @@ export default {
     trader: [],
     list: [],
     comment: [],
+    user: null,
   },
 
   effects: {
     *fetchDetails({ payload }, { call, put }) {
       const response = yield call(queryDetails, payload);
       yield put({
-        type: 'fetchMessage',
+        type: 'saveDetails',
         payload: response,
       });
     },
@@ -26,7 +27,9 @@ export default {
         message.success('操作成功');
         yield put({
           type: 'fetchDetails',
-          payload: payload.target_uid,
+          payload: {
+            target_uid: payload.target_uid,
+          },
         });
         callback && callback();
       } else {
@@ -36,7 +39,7 @@ export default {
   },
 
   reducers: {
-    fetchMessage(state, { payload }) {
+    saveDetails(state, { payload }) {
       const { data: { user, trade, ads, comments } } = payload;
       return {
         ...state,

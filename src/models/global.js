@@ -106,13 +106,14 @@ export default {
       });
       if (callback) callback();
     },
-    *sendVerify({ payload, callback }, { call }) {
+    *sendVerify({ payload, callback, onError }, { call }) {
       const res = yield call(postVerify, payload);
       if (res.code === 0) {
         message.success('发送成功');
         callback && callback();
       } else {
         message.error(res.msg || '操作失败');
+        onError && onError();
       }
     },
     *verifyCaptcha({ payload, callback }, { call }) {

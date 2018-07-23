@@ -123,7 +123,7 @@ export default class GlobalHeader extends PureComponent {
       <div className={styles.header}>
         <Link to="/" className={styles.logo} key="logo">
           <img src={logo} alt="logo" width="32" />
-          <span>{CONFIG.web_name}</span>
+          {/*<span>{CONFIG.web_name}</span>*/}
         </Link>
         {isMobile ? (
           <Icon
@@ -175,6 +175,7 @@ export default class GlobalHeader extends PureComponent {
                 />
               </NoticeIcon>
               <OrderIcon
+                className={styles.action}
                 title="进行中订单"
                 emptyText="目前无正在进行中的订单"
                 emptyImage="https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg"

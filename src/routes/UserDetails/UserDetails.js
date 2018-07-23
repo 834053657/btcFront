@@ -13,6 +13,7 @@ import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import ReportForm from './Form/ReportForm';
 import { getPayIcon } from '../../utils/utils';
+import { getAuthority } from '../../utils/authority';
 
 const { Description } = DescriptionList;
 const RadioButton = Radio.Button;
@@ -22,9 +23,11 @@ const typeMap = {
   '2': '出售',
 };
 
-@connect(({ userDetails, loading }) => ({
+@connect(({ userDetails, loading, user }) => ({
   ...userDetails,
-  loading: loading.models.message,
+  currentUser: user.currentUser,
+  loading: loading.effects['userDetails/fetchDetails'],
+  loading_trust: loading.effects['userDetails/submitRating'],
 }))
 export default class UserDetails extends Component {
   constructor(props) {
@@ -49,6 +52,11 @@ export default class UserDetails extends Component {
     });
   }
 
+  checkLogined = () => {
+    const { user, token } = this.props.currentUser || {};
+    return !!(user && token);
+  };
+
   handleUserName = () => {
     const { userMessage } = this.props;
     return <a>{userMessage.nickname}</a>;
@@ -57,6 +65,7 @@ export default class UserDetails extends Component {
   handleToTrust = type => {
     const { params: { uid } } = this.props.match || {};
     console.log(uid);
+    console.log(type);
     this.props.dispatch({
       type: 'userDetails/submitRating',
       payload: {
@@ -65,10 +74,10 @@ export default class UserDetails extends Component {
       },
     });
 
-    this.setState({ loading: true });
-    setTimeout(() => {
-      this.setState({ loading: false });
-    }, 1000);
+    // this.setState({ loading: true });
+    // setTimeout(() => {
+    //   this.setState({ loading: false });
+    // }, 1000);
   };
 
   handleSubmitReport = (err, values) => {
@@ -90,7 +99,7 @@ export default class UserDetails extends Component {
         <div className={styles.UserName}>
           <span style={{ margin: '30px' }}>
             <img
-              style={{ width: '50px', borderRadius: '50%' }}
+              style={{ width: '50px', height: '50px', borderRadius: '50%' }}
               src={userMessage.avatar}
               // src="http://images.91jianke.com/default_avatar_11.png"
               alt=""
@@ -117,7 +126,7 @@ export default class UserDetails extends Component {
               className={styles.trust}
               onClick={this.handleToTrust.bind(this, 2)}
               type="1"
-              loading={this.state.loading}
+              loading={this.props.loading_trust}
             >
               <Icon type="heart-o" style={{ color: '#ccc', marginRight: '5px' }} />取消信任
             </Button>
@@ -125,12 +134,12 @@ export default class UserDetails extends Component {
             <Button
               className={styles.UNtrust}
               onClick={this.handleToTrust.bind(this, 1)}
-              loading={this.state.loading}
+              loading={this.props.loading_trust}
             >
               <Icon type="heart-o" style={{ color: '#EAEAEA', marginRight: '5px' }} />信任
             </Button>
           )}
-          {userMessage.online === true ? (
+          {this.checkLogined() ? (
             ''
           ) : (
             <div style={{ margin: '30px' }}>
@@ -326,7 +335,7 @@ export default class UserDetails extends Component {
   };
 
   render() {
-    console.log(this.props);
+    // console.log(this.props.userMessage);
     const { list = [] } = this.props;
     const { pagination = {}, loading } = this.props;
     const { type } = this.state;

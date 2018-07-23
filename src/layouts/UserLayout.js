@@ -37,7 +37,7 @@ class UserLayout extends React.PureComponent {
               <div className={styles.header}>
                 <Link to="/">
                   <img alt="logo" className={styles.logo} src={logo} />
-                  <span className={styles.title}>{CONFIG.web_name}</span>
+                  {/*<span className={styles.title}>{CONFIG.web_name}</span>*/}
                 </Link>
               </div>
               <div className={styles.desc}>{CONFIG.web_sub_title}</div>
@@ -89,6 +89,4 @@ class UserLayout extends React.PureComponent {
   }
 }
 
-export default connect(({ global, loading }) => ({
-}))(UserLayout);
-
+export default connect(({ global, loading }) => ({}))(UserLayout);
