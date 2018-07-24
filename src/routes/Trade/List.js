@@ -117,7 +117,7 @@ export default class List extends Component {
         render: (v, row) => {
           return (
             <span>
-              {v} {v} / BTC
+              {v} {row.currency} / BTC
             </span>
           );
         },

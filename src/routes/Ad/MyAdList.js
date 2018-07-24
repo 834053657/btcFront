@@ -110,6 +110,13 @@ export default class List extends Component {
       dataIndex: 'ad_no',
       width: '15%',
       className: styles.ad_no,
+      render: (val, row) => {
+        return (
+          <span>
+            <Link to={`/ad/edit/${row.id}`}>{val}</Link>
+          </span>
+        );
+      },
     },
     {
       title: '交易类型',

@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { map } from 'lodash';
+import { map, size } from 'lodash';
 import { Button, Card, Row, Col, Badge, Radio, Input, Steps, Icon } from 'antd';
 import DescriptionList from 'components/DescriptionList';
 import CountDown from 'components/CountDown';
@@ -33,8 +33,22 @@ export default class Step1 extends PureComponent {
   };
 
   renderPaymentMethodInfo = info => {
-    const { payment_detail = {}, payment_method = {} } = info || {};
+    const { payment_detail = {}, payment_method } = info || {};
     let content = null;
+
+    if (size(payment_detail) === 0) {
+      return (
+        <Card style={{ marginTop: 15 }}>
+          <DescriptionList size="large" col="1">
+            <Description>
+              {this.checkIsBuyer()
+                ? '暂未设置详细的交易信息，请联系对方。'
+                : '暂未设置详细的交易信息。'}
+            </Description>
+          </DescriptionList>
+        </Card>
+      );
+    }
 
     switch (payment_method) {
       case 'bank':
@@ -57,6 +71,15 @@ export default class Step1 extends PureComponent {
               <Description term="支付方式">{CONFIG.payments[payment_method] || '-'}</Description>
               <Description term="姓名">{payment_detail.name}</Description>
               <Description term="汇款信息">{payment_detail.account}</Description>
+            </DescriptionList>
+          </Card>
+        );
+        break;
+      case '':
+        content = (
+          <Card style={{ marginTop: 15 }}>
+            <DescriptionList size="large" col="1">
+              <Description term="支付方式">请与买家沟通</Description>
             </DescriptionList>
           </Card>
         );
@@ -113,7 +136,8 @@ export default class Step1 extends PureComponent {
         <Card bordered={false} className={styles.info}>
           <Meta
             title={`${trading_volume} ${currency} ${
-              CONFIG.order_type_desc[order_type]
+              // CONFIG.order_type_desc[order_type]
+              this.checkIsBuyer() ? '买' : '卖'
             } ${trading_count} BTC`}
             // description="中国"
           />
@@ -124,12 +148,7 @@ export default class Step1 extends PureComponent {
             {/*<Description term="交易限额"> {trading_price_ratio} BTC ({min_volume} {currency} ~ {max_volume} {currency})</Description>*/}
             {order_status === 'wait_pay' && (
               <Description term="付款倒计时">
-                {pay_limit_at ? (
-                  <CountDown
-                    target={new Date().getTime() + pay_limit_at * 1000}
-                    formatstr="mm:ss"
-                  />
-                ) : null}
+                {pay_limit_at ? <CountDown target={pay_limit_at} formatstr="mm:ss" /> : null}
               </Description>
             )}
             {order_status !== 'cancel' ? (

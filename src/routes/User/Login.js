@@ -82,7 +82,6 @@ export default class LoginPage extends Component {
 
   handleSubmitSecure = (err, values) => {
     const { loginInfo } = this.props.login;
-
     this.props.dispatch({
       type: 'login/login',
       payload: {
@@ -105,12 +104,14 @@ export default class LoginPage extends Component {
     return <Alert style={{ marginBottom: 24 }} message={content} type="error" showIcon />;
   };
 
-  handleSendCaptcha = ( values, callback) => {
+  handleSendCaptcha = (values, callback) => {
+    const { loginInfo } = this.props.login;
     return this.props.dispatch({
       type: 'global/sendVerify',
       payload: {
         data: {
-          ...values
+          ...values,
+          username: loginInfo.account,
         },
         type: values.type,
         usage: 6,
@@ -118,7 +119,6 @@ export default class LoginPage extends Component {
       callback,
     });
   };
-
 
   render() {
     const { login, submitting } = this.props;

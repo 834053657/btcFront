@@ -47,7 +47,7 @@ class CountDown extends Component {
       if (Object.prototype.toString.call(props.target) === '[object Date]') {
         targetTime = props.target.getTime();
       } else {
-        targetTime = new Date(props.target).getTime();
+        targetTime = new Date(new Date().getTime() + props.target * 1000).getTime();
       }
     } catch (e) {
       throw new Error('invalid target prop', e);

@@ -55,7 +55,6 @@ export default class NoticeIcon extends PureComponent {
           <a>清空{child.props.title}</a>
         </div>,
         <div key="view_more" className={styles.view_more}>
-          fv
           <a>查看更多</a>
         </div>,
       ];
