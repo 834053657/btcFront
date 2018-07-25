@@ -407,6 +407,9 @@ export default class UserCenterPage extends Component {
                       <Icon type="global" />
                       <div className={styles.box_item_meta_head}>
                         <h4 className={styles.box_item_title}>国家</h4>
+                        <div className={styles.box_item_descript}>
+                          {user.country_code ? '已选择' : '未选择'}
+                        </div>
                       </div>
                     </div>
                     <div className={styles.box_item_content}>

@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Button, Card, Row, Col, Badge, Form, Input, Avatar, Icon, Select } from 'antd';
+import { Button, Card, Row, Col, Badge, Form, Input, Avatar, Icon, Select, Checkbox } from 'antd';
 import { map, isNumber, floor, omit } from 'lodash';
 import DescriptionList from 'components/DescriptionList';
 import { routerRedux } from 'dva/router';
@@ -191,31 +191,27 @@ export default class TradeDetail extends PureComponent {
                     <div>
                       {
                         <FormItem {...formItemLayout} label="收款方式">
-                          {payments.length <= 0 ? (
-                            <a onClick={this.showAddPaymentsModal}>请先添加收款方式</a>
-                          ) : (
-                            getFieldDecorator('payment_methods', {
-                              rules: [
-                                {
-                                  required: true,
-                                  message: '请选择收款方式',
-                                },
-                              ],
-                            })(
-                              <Select size="large" mode="multiple" placeholder="请选择收款方式">
-                                {map(payments, item => (
-                                  <Option key={item.id} value={item.id}>
-                                    <span>
-                                      {item.payment_method && CONFIG.payments[item.payment_method]
-                                        ? CONFIG.payments[item.payment_method]
-                                        : item.payment_method}
-                                      <span> - </span>
-                                      {this.getUserAccount(item)}
-                                    </span>
-                                  </Option>
-                                ))}
-                              </Select>
-                            )
+                          {//   payments.length <= 0 ? (
+                          //   <a onClick={this.showAddPaymentsModal}>请先添加收款方式</a>
+                          // ) : (
+                          getFieldDecorator('payment_methods', {
+                            rules: [
+                              {
+                                required: true,
+                                message: '请选择收款方式',
+                              },
+                            ],
+                          })(
+                            <Checkbox.Group>
+                              {map(CONFIG.payments, (text, value) => {
+                                return (
+                                  <Checkbox key={value} value={value}>
+                                    {text}
+                                  </Checkbox>
+                                );
+                              })}
+                              <Checkbox value="">其他</Checkbox>
+                            </Checkbox.Group>
                           )}
                         </FormItem>
                       }
