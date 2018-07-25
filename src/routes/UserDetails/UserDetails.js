@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
 
-import { Icon, Table, Button, Modal, Radio, List, Badge } from 'antd';
+import { Icon, Table, Button, Avatar, Radio, List, Badge } from 'antd';
 import { map, filter } from 'lodash';
 import { Link, routerRedux } from 'dva/router';
 import DescriptionList from 'components/DescriptionList';
@@ -92,30 +92,18 @@ export default class UserDetails extends Component {
   UserMessage = () => {
     const { userMessage = {}, trader = {} } = this.props;
     const { disabled } = this.state;
+    const { online, avatar, nickname } = userMessage || {};
     return (
       <div className={styles.UserMassage}>
-        <div className={styles.UserName}>
-          <span style={{ margin: '30px' }}>
-            <img
-              style={{ width: '50px', height: '50px', borderRadius: '50%' }}
-              src={userMessage.avatar}
-              // src="http://images.91jianke.com/default_avatar_11.png"
-              alt=""
-            />
-          </span>
-          <span>
-            <Badge
-              offset={[13, 0]}
-              style={{ width: 8, height: 8 }}
-              dot
-              status={userMessage.online ? 'success' : 'default'}
-            >
-              <span style={{ fontSize: '25px', margin: '10px' }}>{userMessage.nickname}</span>
-            </Badge>
-            <a className={styles.report} onClick={this.handleShowReport}>
-              <Icon type="flag" />举报
-            </a>
-          </span>
+        <div>
+          <Badge status={online ? 'success' : 'default'} offset={[60, -5]} dot>
+            <Avatar className={styles.max_avatar} size="large" src={avatar} />
+          </Badge>
+          <span style={{ fontSize: 28, marginLeft: 15 }}>{nickname}</span>
+
+          <a className={styles.report} onClick={this.handleShowReport}>
+            <Icon type="flag" />举报
+          </a>
         </div>
 
         <div className={styles.user_trust}>
@@ -123,13 +111,13 @@ export default class UserDetails extends Component {
             <Button
               className={styles.trust}
               onClick={this.handleToTrust.bind(this, 2)}
-              type="1"
               loading={this.props.loading_trust}
             >
               <Icon type="heart-o" style={{ color: '#ccc', marginRight: '5px' }} />取消信任
             </Button>
           ) : (
             <Button
+              type="primary"
               className={styles.UNtrust}
               onClick={this.handleToTrust.bind(this, 1)}
               loading={this.props.loading_trust}
@@ -242,7 +230,7 @@ export default class UserDetails extends Component {
         },
       },
     ];
-    if (this.state.type === '1') {
+    if (this.state.type === '2') {
       columns = filter(columns, item => item.dataIndex !== 'payment_methods');
     }
     return columns;
@@ -338,16 +326,17 @@ export default class UserDetails extends Component {
     const { pagination = {}, loading } = this.props;
     const { type } = this.state;
     const { visible } = this.state;
+    console.log(this.props);
     return (
       <PageHeaderLayout title="用户详情页">
         <div className={styles.background}>
           <div style={{ margin: '30px 0' }}>
-            <h2>用户信息</h2>
+            <h3>用户信息</h3>
           </div>
           {this.UserMessage()}
           <div>
             <div style={{ margin: '30px 0' }}>
-              <h2>用户的其它交易广告</h2>
+              <h3>用户的其它交易广告</h3>
             </div>
             <div style={{ width: '90%', paddingLeft: '10%' }}>
               <div className={styles.type_box}>
@@ -395,7 +384,7 @@ export default class UserDetails extends Component {
           </div>
           <div>
             <div className={styles.comment}>
-              <h2>评论</h2>
+              <h3>评论</h3>
             </div>
           </div>
           <div>{this.UserComment()}</div>

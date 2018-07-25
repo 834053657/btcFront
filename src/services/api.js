@@ -65,7 +65,7 @@ export async function userWithdraw(params) {
 }
 
 export async function queryMyAdList(params) {
-  return request(`/btc//ad/mine?${stringify(params)}`);
+  return request(`/btc/ad/mine?${stringify(params)}`);
 }
 
 export async function queryTermsList(params) {

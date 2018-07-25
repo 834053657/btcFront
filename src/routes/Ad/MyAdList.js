@@ -179,7 +179,7 @@ export default class List extends Component {
               </span>
             )}
             {[1, 2].indexOf(r.status) > -1 && (
-              <span onClick={this.testRow.bind(this, r)}>
+              <span>
                 <Divider type="vertical" />
                 <Link to={`/ad/edit/${r.id}`}>编辑</Link>
               </span>
@@ -202,9 +202,6 @@ export default class List extends Component {
       },
     },
   ];
-  testRow = e => {
-    console.log(e);
-  };
   handleTableChange = (pagination, filtersArg, sorter) => {
     const { dispatch, getValue } = this.props;
     const { formValues } = this.state;

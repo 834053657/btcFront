@@ -257,7 +257,7 @@ export default class EditForm extends Component {
               },
             ],
           })(
-            <Select style={{ width: 170 }} placeholder="请选择所在地">
+            <Select style={{ width: 185 }} placeholder="请选择所在地">
               {map(CONFIG.country, item => (
                 <Option key={item.code} value={item.code}>
                   {item.name}
@@ -283,7 +283,7 @@ export default class EditForm extends Component {
               },
             ],
           })(
-            <Select style={{ width: 170 }}>
+            <Select style={{ width: 185 }}>
               {map(CONFIG.currencyList, (text, value) => (
                 <Option key={value} value={value}>
                   {text}
@@ -339,13 +339,13 @@ export default class EditForm extends Component {
                 min={0}
                 precision={4}
                 placeholder={`${getFieldValue('currency')}/BTC`}
-                style={{ width: 170 }}
+                style={{ width: 185 }}
                 onChange={this.handleChange}
                 disabled={floatPrice}
               />
             )}
           </Col>
-          <span style={{ marginLeft: '18px' }}>
+          <span style={{ marginLeft: '28px' }}>
             <Tooltip title={CONFIG.tooltip[6]}>
               <Icon className="bt-icon-question" type="question-circle" title="" />
             </Tooltip>
@@ -365,10 +365,10 @@ export default class EditForm extends Component {
               ],
             })(
               <InputNumber
-                min={70}
+                min={30}
                 max={170}
                 precision={2}
-                style={{ width: 170 }}
+                style={{ width: 185 }}
                 placeholder="市场价比例"
                 addonAfter="%"
               />
@@ -395,8 +395,8 @@ export default class EditForm extends Component {
           </Col>
         </FormItem>
 
-        <FormItem label="交易限额" {...formItemLayout}>
-          <Col span={7} className={styles.no_margin}>
+        <FormItem label="广告交易数量" {...formItemLayout}>
+          <Col span={7} className={styles.no_margin_num}>
             <FormItem>
               {getFieldDecorator('max_count', {
                 initialValue: initialValues.max_count,
@@ -413,14 +413,46 @@ export default class EditForm extends Component {
                   // disabled={!getFieldValue('trading_price')}
                   min={0}
                   precision={4}
-                  style={{ width: 170, position: 'absolute', marginTop: '5px' }}
-                  placeholder="广告总交易数"
+                  style={{ width: 185, position: 'absolute', marginTop: '5px' }}
+                  placeholder="广告总交易数额"
                   addonAfter="BTC"
                 />
               )}
             </FormItem>
           </Col>
-          <Col span={7}>
+          <span style={{ marginLeft: '18px' }}>
+            <Tooltip title={CONFIG.tooltip[16]}>
+              <Icon className="bt-icon-question" type="question-circle" title="" />
+            </Tooltip>
+          </span>
+        </FormItem>
+
+        <FormItem label="单笔交易限额" {...formItemLayout}>
+          {/*<Col span={7} className={styles.no_margin}>*/}
+          {/*<FormItem>*/}
+          {/*{getFieldDecorator('max_count', {*/}
+          {/*initialValue: initialValues.max_count,*/}
+          {/*onChange: this.handleChangeBtc,*/}
+          {/*rules: [*/}
+          {/*{*/}
+          {/*required: true,*/}
+          {/*message: '请输入可交易数量',*/}
+          {/*},*/}
+          {/*{ type: 'number', min: 0.0001, message: '最少交易0.0001BTC' },*/}
+          {/*],*/}
+          {/*})(*/}
+          {/*<InputNumber*/}
+          {/*// disabled={!getFieldValue('trading_price')}*/}
+          {/*min={0}*/}
+          {/*precision={4}*/}
+          {/*style={{ width: 170, position: 'absolute', marginTop: '5px' }}*/}
+          {/*placeholder="广告总交易数"*/}
+          {/*addonAfter="BTC"*/}
+          {/*/>*/}
+          {/*)}*/}
+          {/*</FormItem>*/}
+          {/*</Col>*/}
+          <Col span={7} className={styles.no_margin}>
             <FormItem>
               {getFieldDecorator('min_volume', {
                 initialValue: initialValues.min_volume || 100,
@@ -446,7 +478,7 @@ export default class EditForm extends Component {
             </FormItem>
           </Col>
           <Col span={2}>
-            <span style={{ display: 'inline-block', width: '215%', textAlign: 'center' }}>--</span>
+            <span style={{ display: 'inline-block', width: '135%', textAlign: 'center' }}>--</span>
           </Col>
           <Col span={3}>
             <FormItem>
@@ -474,7 +506,7 @@ export default class EditForm extends Component {
               )}
             </FormItem>
           </Col>
-          <div style={{ marginLeft: '670px' }}>
+          <div style={{ marginLeft: '475px' }}>
             <Tooltip title={CONFIG.tooltip[7]}>
               <Icon className="bt-icon-question" type="question-circle" title="" />
             </Tooltip>
@@ -497,13 +529,13 @@ export default class EditForm extends Component {
                 max={30}
                 step={1}
                 precision={0}
-                style={{ width: 170 }}
+                style={{ width: 185 }}
                 placeholder="付款期限"
                 addonAfter="分钟"
               />
             )}
           </Col>
-          <span style={{ marginLeft: '16px' }}>
+          <span style={{ marginLeft: '30px' }}>
             <Tooltip title={CONFIG.tooltip[12]}>
               <Icon className="bt-icon-question" type="question-circle" title="" />
             </Tooltip>
@@ -624,10 +656,10 @@ export default class EditForm extends Component {
           {getFieldDecorator('trading_term', {
             initialValue: initialValues.trading_term,
             rules: [
-              {
-                required: true,
-                message: '请输入',
-              },
+              // {
+              //   required: true,
+              //   message: '请输入',
+              // },
               {
                 max: 200,
                 message: '最多输入200个字符',
@@ -659,7 +691,7 @@ export default class EditForm extends Component {
             <TextArea placeholder="自动回复(最多输入200个字符)" rows={4} style={{ width: 390 }} />
           )}
           <span style={{ marginLeft: '10px' }}>
-            <Tooltip title="1">
+            <Tooltip title={CONFIG.tooltip[15]}>
               <Icon className="bt-icon-question" type="question-circle" title="" />
             </Tooltip>
           </span>
@@ -675,11 +707,11 @@ export default class EditForm extends Component {
                     min={0}
                     step={0.0001}
                     placeholder="最小成交数"
-                    style={{ width: 170 }}
+                    style={{ width: 185 }}
                   />
                 )}
               </Col>
-              <span style={{ marginLeft: '14px' }}>
+              <span style={{ marginLeft: '25px' }}>
                 <Tooltip title={CONFIG.tooltip[9]}>
                   <Icon className="bt-icon-question" type="question-circle" title="" />
                 </Tooltip>
@@ -695,13 +727,13 @@ export default class EditForm extends Component {
                     min={0.01}
                     precision={2}
                     max={100}
-                    style={{ width: 170, position: 'absolute', marginTop: '5px' }}
+                    style={{ width: 185, position: 'absolute', marginTop: '5px' }}
                     placeholder="最低评价得分"
                     addonAfter="%"
                   />
                 )}
               </Col>
-              <span style={{ marginLeft: '14px' }}>
+              <span style={{ marginLeft: '25px' }}>
                 <Tooltip title={CONFIG.tooltip[10]}>
                   <Icon className="bt-icon-question" type="question-circle" title="" />
                 </Tooltip>
@@ -717,11 +749,11 @@ export default class EditForm extends Component {
                     min={0}
                     step={0.0001}
                     placeholder="新卖家限额"
-                    style={{ width: 170 }}
+                    style={{ width: 185 }}
                   />
                 )}
               </Col>
-              <span style={{ marginLeft: '14px' }}>
+              <span style={{ marginLeft: '25px' }}>
                 <Tooltip title={CONFIG.tooltip[11]}>
                   <Icon className="bt-icon-question" type="question-circle" title="" />
                 </Tooltip>

@@ -155,8 +155,8 @@ export default class List extends Component {
       newParams.status = params.type || this.state.type;
       delete newParams.type;
     }
-    console.log({ ...newParams });
-    console.log('  ...n');
+    // console.log({ ...newParams });
+    // console.log('  ...n');
     this.props.dispatch({
       type: 'user/fetchMyOrderList',
       payload: {
