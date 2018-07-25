@@ -11,68 +11,81 @@ const messageTemplates = {
   11: {
     noticeType: 'trade',
     group: '身份认证',
-    title: '您提交的<%- content.step %>认证申请已通过审核'
+    title: '您提交的<%- content.step %>认证申请已通过审核',
+    to: '/authentication'
   },
   12: {
     noticeType: 'trade',
     group: '身份认证',
-    title: '您提交的<%- content.step %>认证申请审核失败'
+    title: '您提交的<%- content.step %>认证申请审核失败',
+    to: '/authentication'
   },
   21: {
     noticeType: 'trade',
     group: '转账',
-    title: '您提交的提现审核已通过审核'
+    title: '您提交的提现审核已通过审核，请留意资产到账',
+    to: '/wallet?activeKey=1'
   },
   22: {
     noticeType: 'trade',
     group: '转账',
     title: '您提交的提现审核失败',
-    description: '驳回原因:<%- content.reason %>'
+    description: '驳回原因:<%- content.reason %>',
+    to: '/wallet?activeKey=1'
   },
   31: {
     noticeType: 'system',
     group: '公告',
-    title: '新增公告<%- title %>'
+    title: '新增公告<%- title %>',
+    to: '/message/info-detail/<%- id %>'
   },
   151: {
     noticeType: 'trade',
     group: '订单<%= content.ref_id %>有新消息',
-    title: '您有一笔新的交易订单'
+    title: '您有一笔新的交易订单',
+    to: '/trade/step/<%= content.ref_id %>',
   },
   152: {
     noticeType: 'trade',
     group: '订单<%= content.ref_id %>有新消息',
-    title: '您有一笔订单尚未标记付款完成，订单将在五分钟后超时自动取消'
+    title: '您有一笔订单尚未标记付款完成，订单将在五分钟后超时自动取消',
+    to: '/trade/step/<%= content.ref_id %>',
   }, 
   153: {
     noticeType: 'trade',
     group: '订单<%= content.ref_id %>有新消息',
-    title: '您有一笔订单已被标记付款完成，请确认款项到账'
+    title: '您有一笔订单已被标记付款完成，请确认款项到账',
+    to: '/trade/step/<%= content.ref_id %>',
   },
   154: {
     noticeType: 'trade',
     group: '订单<%= content.ref_id %>有新消息',
-    title: '您有一笔订单已被标记释放BTC，请留意资产到账'
+    title: '您有一笔订单已被标记释放BTC，请留意资产到账',
+    to: '/trade/step/<%= content.ref_id %>',
   },
   155: {
     noticeType: 'trade',
     group: '订单<%= content.ref_id %>有新消息',
-    title: '您有一笔订单已被买家取消'
+    title: '您有一笔订单已被买家取消',
+    to: '/trade/step/<%= content.ref_id %>',
   },
   156: {
     noticeType: 'trade',
     group: '订单<%= content.ref_id %>有新消息', 
-    title: '您有一笔订单因超时未处理，已被系统自动取消'
+    title: '您有一笔订单因超时未处理，已被系统自动取消',
+    to: '/trade/step/<%= content.ref_id %>',
   },
   157: {
     noticeType: 'trade',
     group: '订单<%= content.ref_id %>有新消息', 
-    title: '您有一条新的交易评价'
+    title: '您有一条新的交易评价',
+    to: '/trade/step/<%= content.ref_id %>',
   },
   158: {
     noticeType: 'trade',
     group: '订单<%= content.ref_id %>有新消息',
-    title: '订单<%- id %>客服已介入申诉'
+    title: '订单<%- id %>客服已介入申诉',
+    to: '/trade/step/<%= content.ref_id %>',
   }
 };
 

@@ -107,7 +107,6 @@ export default {
         type: 'SOCKET/ADD_EVENTLISTENER',
         event: 'auth_status_update',
         callback(res) {
-          console.log('auth gogogo')
           if (res.code === 0) {
             console.log('auth_status_update', res.data)
             dispatch({

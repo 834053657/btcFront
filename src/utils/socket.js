@@ -190,7 +190,7 @@ export function dvaSocket(url, option) {
           request: (action, dispatch, getState, socket) => {
             const { event, callback } = action;
             socket.on(event, response => {
-              callback(response);
+              callback(JSON.parse(response));
             });
           },
         },

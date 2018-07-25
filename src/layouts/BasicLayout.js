@@ -203,8 +203,8 @@ class BasicLayout extends React.Component {
     });
   };
 
-  handleViewMore = type => {
-    this.props.dispatch(routerRedux.replace({
+  handleNoticeViewMore = type => {
+    this.props.dispatch(routerRedux.push({
       pathname: '/message/list',
       search: stringify({ type })
     }));
@@ -343,7 +343,7 @@ class BasicLayout extends React.Component {
               collapsed={collapsed}
               isMobile={this.state.isMobile}
               onNoticeClear={this.handleNoticeClear}
-              onViewMore={this.handleViewMore}
+              onViewMore={this.handleNoticeViewMore}
               onNoticeClick={this.handleNoticeRead}
               onOrderClick={this.handleOrderClick}
               onCollapse={this.handleMenuCollapse}

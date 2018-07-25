@@ -67,7 +67,7 @@ export default class C1Step extends PureComponent {
         </FormItem>
         <FormItem {...formItemLayout} label="证件类型">
           {getFieldDecorator('card_type', {
-            initialValue: card_type || default_card || '获取失败',
+            initialValue: (card_type || default_card || '获取失败').toString(),
           })(
             <Select placeholder="请选择证件类型" disabled={disabledForm}>
               {map(CONFIG.card_types, (card, type) => {

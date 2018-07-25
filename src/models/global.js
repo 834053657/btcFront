@@ -167,13 +167,15 @@ export default {
       }
     },
     pushNotice (state, { payload }) {
-      if (!find(state.notice, { id: payload })) {
+      if (!find(state.notice, { id: payload.id })) {
         const oldNotices = state.notices;
-        const notices = orderBy([payload, ...state.notice])
+        const notices = orderBy([payload].concat(state.notices))
+        console.log(notices)
         return {
           ...state,
           notices,
           oldNotices,
+          noticesCount: notices.length
         }
       }
     },
@@ -217,7 +219,6 @@ export default {
         type: 'SOCKET/ADD_EVENTLISTENER',
         event: 'push_system_message',
         callback(res) {
-          console.log('push_system_message', res)
           if (res.code === 0) {
             dispatch({
               type: 'pushNotice',

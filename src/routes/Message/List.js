@@ -46,20 +46,11 @@ export default class List extends Component {
       dataIndex: 'title',
       width: '70%',
       render: (val, row) => {
-        if (row.id === -1)
+          const mappedRow = getMessage(row)
           return (
-            <a onClick={() => this.readMsg(row)} className={row.status === 1 ? styles.read : ''}>
-              {row.msg_type === 1 ? <Icon type="file-text" /> : <Icon type="bell" />}{' '}
-              {row.msg_type === 1 ? val : getMessage(row)}
+            <a onClick={() => this.gotoDetail(mappedRow)} className={mappedRow.status === 1 ? styles.read : ''}>
+              {mappedRow.title}
             </a>
-          );
-        else
-          return (
-            <Link to={`/message/info-detail/${row.id}`}>
-              <span className={row.status === 1 ? styles.read : ''}>
-                <Icon type="file-text" /> {getMessage(row).title}
-              </span>
-            </Link>
           );
       },
     },
@@ -74,46 +65,39 @@ export default class List extends Component {
     },
   ];
 
-  readMsg = row => {
+  readMsg = (row, callback) => {
     const { dispatch } = this.props;
-
-    if (row.status === 0) {
-      dispatch({
-        type: 'message/readMessage',
-        payload: { all: false, id: row.id },
-        callback: () => {
-          this.changeNotice();
-          this.showMsg(row);
-        },
-      });
-    } else {
-      this.showMsg(row);
-    }
-  };
-
-  changeNotice = () => {
-    const { dispatch } = this.props;
-
-    this.props.dispatch({
-      type: 'global/fetchNotices',
-      payload: { status: 0 },
+    dispatch({
+      type: 'message/readMessage',
+      payload: { all: 0, id: row.id },
+      callback: () => {
+        this.changeNotice(row.noticeType);
+        callback();
+      },
     });
   };
 
-  componentDidUpdate = (prevProps) => {
-    const { search } = prevProps.location;
-    const { type = 'trade', status = '' } = getQueryString(search)
-    if (this.state.status !== status || this.state.type !== type) {
-      this.setState({
-        type,
-        status
-      })
+  changeNotice = (type) => {
+    const { dispatch } = this.props;
+    this.props.dispatch({
+      type: 'global/fetchNotices',
+      payload: { status: 0, type },
+    });
+  };
+
+  gotoDetail = (item) => {
+    const go = () => {
+      const { to = '/exception/404' } = getMessage(item)
+      this.props.dispatch(routerRedux.push(to))
     }
+    if (item.noticeType === 'trade' && item.status === 0) {
+      this.readMsg(item, () => go())
+    } else go() 
+
   }
 
   showMsg = item => {
     const { dispatch } = this.props;
-
     const { to = '/exception/404' } = getMessage(item)
     this.props.dispatch(routerRedux.replace(to))
     // if (item.msg_type === 1) {
@@ -227,8 +211,6 @@ export default class List extends Component {
     const { data: { list, pagination }, loading } = this.props;
     const { search } = this.props.location;
     const { type = 'trade', status = '' } = getQueryString(search);
-    // console.log(this.props)
-    // console.log(type);
     return (
       <PageHeaderLayout title="消息中心">
         <div className={styles.message_bgc}>

@@ -1,4 +1,5 @@
 import { getSystemUrl } from './utils';
+import getMessage from './getMessage'
 
 const { base_url, web_name, socket_url } = getSystemUrl(__KG_API_ENV__);
 
@@ -303,17 +304,17 @@ export default {
   message: {
     types: {
       trade: {
-        value: [1, 2, 3],
+        value: getMessage.Types.trade,
         text: '交易信息',
       },
       system: {
-        value: [101, 102],
+        value: getMessage.Types.system,
         text: '系统公告',
       },
     },
     status: {
-      1: '未读',
-      2: '已读',
+      0: '未读',
+      1: '已读',
     },
   },
 };

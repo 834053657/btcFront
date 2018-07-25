@@ -47,7 +47,7 @@ export default class InfoDetail extends PureComponent {
 
     dispatch({
       type: 'message/readMessage',
-      payload: { all: false, id },
+      payload: { id },
     });
   };
 
