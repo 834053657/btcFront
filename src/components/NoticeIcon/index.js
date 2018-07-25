@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Popover, Icon, Tabs, Badge, Spin } from 'antd';
 import classNames from 'classnames';
+import { size, flatMap } from 'lodash'
 import List from './NoticeList';
 import styles from './index.less';
 
@@ -11,6 +12,7 @@ export default class NoticeIcon extends PureComponent {
     onItemClick: () => {},
     onPopupVisibleChange: () => {},
     onTabChange: () => {},
+    onViewMore: () => {},
     onClear: () => {},
     loading: false,
     locale: {
@@ -18,6 +20,7 @@ export default class NoticeIcon extends PureComponent {
       clear: '清空',
     },
     emptyImage: 'https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg',
+    popupVisible: false,
   };
   static Tab = TabPane;
   constructor(props) {
@@ -42,9 +45,10 @@ export default class NoticeIcon extends PureComponent {
     }
 
     const panes = React.Children.map(children, child => {
+      const len = child.props.list instanceof Array ? child.props.list.length : size(flatMap(child.props.list))
       const title =
-        child.props.list && child.props.list.length > 0
-          ? `${child.props.title} (${child.props.list.length})`
+        child.props.list && len
+          ? `${child.props.title} (${len})`
           : child.props.title;
       const footer = [
         <div
@@ -54,8 +58,11 @@ export default class NoticeIcon extends PureComponent {
         >
           <a>清空{child.props.title}</a>
         </div>,
-        <div key="view_more" className={styles.view_more}>
-          fv
+        <div 
+          key="view_more" 
+          className={styles.view_more}
+          onClick={() => this.props.onViewMore(child.props.type)}
+        >
           <a>查看更多</a>
         </div>,
       ];
@@ -83,7 +90,7 @@ export default class NoticeIcon extends PureComponent {
   }
 
   render() {
-    const { className, count, popupAlign, onPopupVisibleChange } = this.props;
+    const { className, count, popupAlign, onPopupVisibleChange, popupVisible } = this.props;
     const noticeButtonClass = classNames(className, styles.noticeButton);
     const notificationBox = this.getNotificationBox();
     const trigger = (
@@ -96,10 +103,6 @@ export default class NoticeIcon extends PureComponent {
     if (!notificationBox) {
       return trigger;
     }
-    const popoverProps = {};
-    if ('popupVisible' in this.props) {
-      popoverProps.visible = this.props.popupVisible;
-    }
     return (
       <Popover
         placement="bottomRight"
@@ -109,7 +112,7 @@ export default class NoticeIcon extends PureComponent {
         arrowPointAtCenter
         popupAlign={popupAlign}
         onVisibleChange={onPopupVisibleChange}
-        {...popoverProps}
+        visible={popupVisible}
       >
         {trigger}
       </Popover>

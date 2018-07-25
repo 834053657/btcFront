@@ -174,17 +174,17 @@ export function getSystemUrl(env) {
     // base_url = 'http://47.106.111.213:9001';
     web_name += '(DEV)';
     // socket_url = 'http://localhost:3000/socket/push';
-    socket_url = 'http://47.106.111.213:9000/socket.io';
+    socket_url = 'http://47.106.111.213:9010/socket.io';
   } else if (env === 'test1') {
     base_url = 'http://dev.paean.net:8001';
     web_name += '(TEST1)';
     // socket_url = 'http://localhost:3000/socket/push';
-    socket_url = 'http://47.106.111.213:9000/socket.io';
+    socket_url = 'http://47.106.111.213:9010/socket.io';
   } else if (env === 'test2') {
     base_url = 'http://dev.paean.net:8002';
     web_name += '(TEST2)';
     // socket_url = 'http://localhost:3000/socket/push';
-    socket_url = 'http://47.106.111.213:9000/socket.io';
+    socket_url = 'http://47.106.111.213:9010/socket.io';
   }
 
   return { base_url, web_name, socket_url };

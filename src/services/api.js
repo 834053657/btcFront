@@ -10,7 +10,7 @@ export async function queryInfoList(params) {
 }
 
 export async function queryInfoDtl(params) {
-  return request(`/btc/info/detail?${stringify(params)}`);
+  return request(`/btc/message/detail?${stringify(params)}`);
 }
 
 export async function queryMessageList(params) {

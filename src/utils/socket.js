@@ -15,7 +15,7 @@ import { playAudio } from './utils';
 export function dvaSocket(url, option) {
   // 如需调试线上socket 请吧isDev 设置成false
   // const isDev = false;
-  const isDev = process.env.NODE_ENV === 'development';
+  const isDev = process.env.KG_API_ENV === 'dev';
   console.log('socket-url', url);
   if (isDev) {
     const mockServer = new Server(url);
@@ -64,44 +64,45 @@ export function dvaSocket(url, option) {
           // });
         },
         push_system_message: (data, dispatch, getState) => {
-          const { data: msg } = JSON.parse(data);
-          const { oldNotices } = getState().global;
-          const currURL = window.location.href;
+          console.log('push_system_messages', data)
+          // const { data: msg } = JSON.parse(data);
+          // const { oldNotices } = getState().global;
+          // const currURL = window.location.href;
 
-          oldNotices.unshift(msg);
-          const rs = { data: { items: oldNotices } };
-          dispatch({
-            type: 'global/saveNotices',
-            payload: rs,
-          });
+          // oldNotices.unshift(msg);
+          // const rs = { data: { items: oldNotices } };
+          // dispatch({
+          //   type: 'global/saveNotices',
+          //   payload: rs,
+          // });
 
-          if (currURL.indexOf('/card/deal-line/')) {
-            const current_id = currURL.substring(currURL.lastIndexOf('/') + 1);
+          // if (currURL.indexOf('/card/deal-line/')) {
+          //   const current_id = currURL.substring(currURL.lastIndexOf('/') + 1);
 
-            if (msg.content && msg.content.order_id && msg.content.order_id + '' === current_id) {
-              dispatch({
-                type: 'card/fetchOrderDetail',
-                payload: { id: msg.content.order_id },
-              });
-            }
-          }
-
+          //   if (msg.content && msg.content.order_id && msg.content.order_id + '' === current_id) {
+          //     dispatch({
+          //       type: 'card/fetchOrderDetail',
+          //       payload: { id: msg.content.order_id },
+          //     });
+          //   }
+          // }
           /* if (msg.msg_type > 100) {
             dispatch({
               type: 'user/fetchCurrent',
             });
           } */
-          playAudio();
+          // playAudio();
         },
         userinfo: (data, dispatch, getState) => {
-          const { data: msg } = JSON.parse(data);
-          const { currentUser } = getState().user;
-          const { wallet } = currentUser;
+          // console.log(data)
+          // const { data: msg } = JSON.parse(data);
+          // const { currentUser } = getState().user;
+          // const { wallet } = currentUser;
 
-          dispatch({
-            type: 'user/saveCurrentUser',
-            payload: { ...currentUser, wallet: msg.wallet },
-          });
+          // dispatch({
+          //   type: 'user/saveCurrentUser',
+          //   payload: { ...currentUser, wallet: msg.wallet },
+          // });
         },
         disconnection: (data, dispatch, getState) => {
           console.log('disconection', data);
@@ -145,8 +146,7 @@ export function dvaSocket(url, option) {
         post_quick_message: {
           evaluate: (action, dispatch, getState) => action.type === 'post_quick_message',
           data: ({ payload }) => {
-            console.log('ppp', payload);
-            return payload;
+            return JSON.parse(payload);
           },
         },
         pull_system_message: {

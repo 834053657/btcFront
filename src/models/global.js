@@ -1,7 +1,6 @@
 import { message } from 'antd';
-import { filter, mapKeys, groupBy, orderBy, map } from 'lodash';
+import { find, filter, mapKeys, groupBy, orderBy, map } from 'lodash';
 import { getLocale, setLocale } from '../utils/authority';
-import getMessage from '../utils/getMessage';
 
 import {
   queryOrderList,
@@ -47,12 +46,15 @@ export default {
       if (response && response.code === 0) {
         CONFIG = { ...CONFIG, ...response.data };
         CONFIG.countrysMap = mapKeys(response.data.country, 'code');
+        yield put({
+          type: 'authentication/UPDATE_DEFAULT_CONFIG',
+          payload: CONFIG,
+        }); 
       }
       // CONFIG.countrysMap = mapKeys(CONFIG.country, 'code');
     },
     *fetchNotices({ payload }, { call, put }) {
       const res = yield call(queryMessageList, payload);
-
       // only for ui test
       // if (payload && payload.type === 2) res.data.items = [];
       // if (payload && payload.type === 3) res.data.items = res.data.items.slice(0, 2);
@@ -76,7 +78,7 @@ export default {
         type: 'saveClearedNotices',
         payload,
       });
-      const count = yield select(state => state.global.notices.length);
+      const count = yield select(state => state.global.noticesCount);
       yield put({
         type: 'user/changeNotifyCount',
         payload: count,
@@ -151,44 +153,29 @@ export default {
       };
     },
     saveNotices(state, { payload }) {
-      const { data: { items } } = payload || {};
-
-      // let newItems = filter(items.map(item => getMessage(item)), message => value)
-
-      let newItems = [];
-      const tmp1 = [];
-      let tmp2 = [];
-
-      map(items, v => {
-        if (
-          (v.msg_type === 104 || v.msg_type === 108) &&
-          v.content &&
-          v.content.goods_type &&
-          v.content.order_id
-        )
-          tmp1.push(v);
-        else newItems.push(v);
-      });
-      const orderMessages =
-        groupBy(tmp1, d => {
-          return `${d.content.goods_type}_${d.msg_type}_${d.content.order_id}`;
-        }) || [];
-      // console.log(111, orderMessages);
-      map(orderMessages, v => {
-        tmp2 = orderBy(v, ['created_at'], ['desc']);
-        if (tmp2.length > 0) {
-          newItems.push({ ...tmp2[0], count: tmp2.length });
-        }
-      });
-
-      newItems = orderBy(newItems, ['created_at'], ['desc']);
-      // console.log(222, newItems);
+      const { data: { items = [] } } = payload || {};
+      const oldNotices = state.notices
+      const notices = orderBy(items, ['created_at'], ['desc'])
+      // let newItems = filter(items.map(item => getMessage(item)), msg => msg != null)
+      // newItems = orderBy(newItems, ['created_at'], ['desc'])
+      // newItems = groupBy(newItems, item => item.group || 'other')
       return {
         ...state,
-        notices: newItems || [],
-        oldNotices: items,
-        noticesCount: items.length,
-      };
+        notices,
+        oldNotices,
+        noticesCount: items.length
+      }
+    },
+    pushNotice (state, { payload }) {
+      if (!find(state.notice, { id: payload })) {
+        const oldNotices = state.notices;
+        const notices = orderBy([payload, ...state.notice])
+        return {
+          ...state,
+          notices,
+          oldNotices,
+        }
+      }
     },
     saveOrders(state, { payload }) {
       return {
@@ -223,6 +210,21 @@ export default {
         if (typeof window.ga !== 'undefined') {
           window.ga('send', 'pageview', pathname + search);
         }
+      });
+    },
+    push_system_message ({ dispatch }) {
+      dispatch({
+        type: 'SOCKET/ADD_EVENTLISTENER',
+        event: 'push_system_message',
+        callback(res) {
+          console.log('push_system_message', res)
+          if (res.code === 0) {
+            dispatch({
+              type: 'pushNotice',
+              payload: res.data,
+            });
+          }
+        },
       });
     },
   },

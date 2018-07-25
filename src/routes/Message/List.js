@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Link, routerRedux } from 'dva/router';
 import moment from 'moment';
-import { map } from 'lodash';
+import { map, isEqual } from 'lodash';
+import { stringify } from 'qs';
 import { Table, Tabs, Button, Icon, Card, Modal } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import { getMessageContent } from '../../utils/utils';
+import { getQueryString, getMessageContent } from '../../utils/utils';
+import getMessage from '../../utils/getMessage';
 import styles from './Message.less';
 
 const TabPane = Tabs.TabPane;
@@ -16,12 +18,12 @@ const TabPane = Tabs.TabPane;
 }))
 export default class List extends Component {
   constructor(props) {
-    super();
-
+    super(props);
+    const { search } = props.location;
+    const { type = 'trade', status = '' } = getQueryString(search);
     this.state = {
-      type: 'trade',
-      status: '',
-      selectedRows: [],
+      type,
+      status,
     };
   }
 
@@ -31,6 +33,10 @@ export default class List extends Component {
     const { dispatch } = this.props;
     dispatch({
       type: 'message/fetchMessageList',
+      payload: {
+        msg_type: getMessage.Types[this.state.type],
+        status: this.state.status, 
+      }
     });
   }
 
@@ -44,14 +50,14 @@ export default class List extends Component {
           return (
             <a onClick={() => this.readMsg(row)} className={row.status === 1 ? styles.read : ''}>
               {row.msg_type === 1 ? <Icon type="file-text" /> : <Icon type="bell" />}{' '}
-              {row.msg_type === 1 ? val : getMessageContent(row)}
+              {row.msg_type === 1 ? val : getMessage(row)}
             </a>
           );
         else
           return (
             <Link to={`/message/info-detail/${row.id}`}>
               <span className={row.status === 1 ? styles.read : ''}>
-                <Icon type="file-text" /> {val}
+                <Icon type="file-text" /> {getMessage(row).title}
               </span>
             </Link>
           );
@@ -94,39 +100,51 @@ export default class List extends Component {
     });
   };
 
+  componentDidUpdate = (prevProps) => {
+    const { search } = prevProps.location;
+    const { type = 'trade', status = '' } = getQueryString(search)
+    if (this.state.status !== status || this.state.type !== type) {
+      this.setState({
+        type,
+        status
+      })
+    }
+  }
+
   showMsg = item => {
     const { dispatch } = this.props;
 
-    if (item.msg_type === 1) {
-      this.props.dispatch(
-        routerRedux.push(`/message/info-detail/${item.content && item.content.ref_id}`)
-      );
-    } else if ([11, 12, 21, 22].indexOf(item.msg_type) >= 0) {
-      /* Modal.success({
-        // title: item.title,
-        title: '提示',
-        content: getMessageContent(item),
-        onOk: () => {},
-      }); */
-      this.props.dispatch(routerRedux.replace(`/user-center/index`));
-    } else if ([31, 32, 33, 34].indexOf(item.msg_type) >= 0) {
-      this.props.dispatch(routerRedux.replace(`/wallet?activeKey=3`));
-    } else if ([41, 42].indexOf(item.msg_type) >= 0) {
-      this.props.dispatch(routerRedux.replace(`/ad/terms`));
-    } else if (item.msg_type >= 100 && item.msg_type <= 114) {
-      //todo redict to order detail
-      if (item.content && item.content.goods_type === 1)
-        this.props.dispatch(routerRedux.replace(`/itunes/order/${item.content.order_id}`));
-      else if (item.content && item.content.goods_type === 2) {
-        this.props.dispatch(routerRedux.replace(`/card/deal-line/${item.content.order_id}`));
-      }
-    } else if ([131, 132, 133].indexOf(item.msg_type) >= 0) {
-      this.props.dispatch(routerRedux.replace(`/ad/my`));
-    } else {
-      // todo
-      console.log(item.msg_type);
-    }
-
+    const { to = '/exception/404' } = getMessage(item)
+    this.props.dispatch(routerRedux.replace(to))
+    // if (item.msg_type === 1) {
+    //   this.props.dispatch(
+    //     routerRedux.push(`/message/info-detail/${item.content && item.content.ref_id}`)
+    //   );
+    // } else if ([11, 12, 21, 22].indexOf(item.msg_type) >= 0) {
+    //   /* Modal.success({
+    //     // title: item.title,
+    //     title: '提示',
+    //     content: getMessageContent(item),
+    //     onOk: () => {},
+    //   }); */
+    //   this.props.dispatch(routerRedux.replace(`/user-center/index`));
+    // } else if ([31, 32, 33, 34].indexOf(item.msg_type) >= 0) {
+    //   this.props.dispatch(routerRedux.replace(`/wallet?activeKey=3`));
+    // } else if ([41, 42].indexOf(item.msg_type) >= 0) {
+    //   this.props.dispatch(routerRedux.replace(`/ad/terms`));
+    // } else if (item.msg_type >= 100 && item.msg_type <= 114) {
+    //   //todo redict to order detail
+    //   if (item.content && item.content.goods_type === 1)
+    //     this.props.dispatch(routerRedux.replace(`/itunes/order/${item.content.order_id}`));
+    //   else if (item.content && item.content.goods_type === 2) {
+    //     this.props.dispatch(routerRedux.replace(`/card/deal-line/${item.content.order_id}`));
+    //   }
+    // } else if ([131, 132, 133].indexOf(item.msg_type) >= 0) {
+    //   this.props.dispatch(routerRedux.replace(`/ad/my`));
+    // } else {
+    //   // todo
+    //   console.log(item.msg_type);
+    // }
     this.props.dispatch({
       type: 'global/fetchNotices',
       payload: { status: 0, type: 3 },
@@ -137,7 +155,7 @@ export default class List extends Component {
     const { dispatch, getValue } = this.props;
     const { formValues } = this.state;
 
-    const { status, type } = this.state;
+    const { type = 'trade', status = '' } = getQueryString(this.props.location.search);
     const msg_type = CONFIG.message.types[type].value;
     // console.log(msg_type)
     const filters = Object.keys(filtersArg).reduce((obj, key) => {
@@ -149,7 +167,6 @@ export default class List extends Component {
     // this.setState({
     //   type,
     // });
-    console.log(status, type);
     const params = {
       page: pagination.current,
       page_size: pagination.pageSize,
@@ -169,48 +186,59 @@ export default class List extends Component {
   };
 
   handleChangeType = type => {
-    console.log(CONFIG.message.types[type].value);
+    const { status } = getQueryString(this.props.location.search); 
     this.props.dispatch({
       type: 'message/fetchMessageList',
       payload: {
-        msg_type: CONFIG.message.types[type].value,
+        msg_type: getMessage.Types[type],
+        status,
       },
     });
-    this.setState({
-      type,
-    });
+    this.setState({ type });
+    this.props.dispatch(
+      routerRedux.replace({
+        search: stringify({ type, status }),
+      })
+    );  
   };
 
   handleChangeStatus = value => {
     const status = value;
+    const { type } = getQueryString(this.props.location.search);
     // console.log(status);
     this.props.dispatch({
       type: 'message/fetchMessageList',
       payload: {
-        status: value,
+        msg_type: getMessage.Types[type],
+        status: value
       },
     });
     this.setState({
       status,
     });
+    this.props.dispatch(
+      routerRedux.replace({
+        search: stringify({ type, status: value }),
+      })
+    );
   };
 
   render() {
     const { data: { list, pagination }, loading } = this.props;
-    const { type, status } = this.state;
-
+    const { search } = this.props.location;
+    const { type = 'trade', status = '' } = getQueryString(search);
     // console.log(this.props)
     // console.log(type);
     return (
       <PageHeaderLayout title="消息中心">
         <div className={styles.message_bgc}>
           <Tabs activeKey={type} onChange={this.handleChangeType}>
-            {map(CONFIG.message.types, (item, value) => <TabPane tab={item.text} key={value} />)}
+            {map(CONFIG.message.types, (item, key) => <TabPane tab={item.text} key={key} />)}
           </Tabs>
           <Tabs activeKey={status} onChange={this.handleChangeStatus}>
             <TabPane tab="全部" key="" />
-            {map(CONFIG.message.status, (text, value) => (
-              <TabPane tab={text && text} key={+value} />
+            {map(CONFIG.message.status, (value, key) => (
+              <TabPane tab={value} key={+key} />
             ))}
           </Tabs>
           <Card bordered={false} className={styles.message_list}>

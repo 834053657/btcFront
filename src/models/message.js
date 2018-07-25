@@ -1,4 +1,4 @@
-import { queryInfoList, queryInfoDtl, queryMoreMessageList, readMessage } from '../services/api';
+import { queryMessageList, queryInfoList, queryInfoDtl, readMessage } from '../services/api';
 
 export default {
   namespace: 'message',
@@ -32,7 +32,7 @@ export default {
       if (callback) callback();
     },
     *fetchMessageList({ payload }, { call, put }) {
-      const res = yield call(queryMoreMessageList, payload);
+      const res = yield call(queryMessageList, payload)
       yield put({
         type: 'setMessageList',
         payload: res,
@@ -76,7 +76,6 @@ export default {
       };
     },
     setReadMessage(state, { payload }) {
-      console.log(payload);
       return {
         ...state,
       };

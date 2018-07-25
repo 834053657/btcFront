@@ -1,11 +1,12 @@
 import React, { PureComponent } from 'react';
 import { Menu, Icon, Spin, Tag, Dropdown, Avatar, Divider, Tooltip } from 'antd';
 import moment from 'moment';
-import { map, groupBy } from 'lodash';
+import { filter, orderBy, omit, mapValues, map, groupBy } from 'lodash';
 import Debounce from 'lodash-decorators/debounce';
 import { Link } from 'dva/router';
 import numeral from 'numeral';
-import { getMessageContent } from '../../utils/utils';
+// import { getMessageContent } from '../../utils/utils';
+import getMessage from '../../utils/getMessage';
 import NoticeIcon from '../NoticeIcon';
 import OrderIcon from '../CustomNoticeIcon';
 import TopMenu from '../TopMenu';
@@ -18,45 +19,28 @@ export default class GlobalHeader extends PureComponent {
   componentWillUnmount() {
     this.triggerResizeEvent.cancel();
   }
+
   getNoticeData() {
     const { notices = [] } = this.props;
-    if (notices.length === 0) {
-      return {};
+    const mappedNotice = filter(notices.map(item => getMessage(item)), msg => msg != null)
+    const groupedByNotice = groupBy(mappedNotice, item => item.noticeType)
+    let tradeNotice = groupBy(groupedByNotice.trade, item => item.group)
+    tradeNotice = mapValues(tradeNotice, list => {
+      return map(list, (item) => {
+        const datetime = moment(item.created_at * 1000).fromNow()
+        const key = item.id
+        return {
+          ...item,
+          key,
+          datetime
+        }
+      })
+    })
+    return {
+      trade: tradeNotice,
+      system: groupedByNotice.system
     }
-    const newNotices = notices.map(notice => {
-      const newNotice = { ...notice };
-      if (newNotice.created_at) {
-        newNotice.datetime = moment(notice.created_at).fromNow();
-      }
-      // transform id to item key
-      if (newNotice.id) {
-        newNotice.key = newNotice.id;
-      }
 
-      newNotice.description = getMessageContent(notice);
-
-      // if (newNotice.extra && newNotice.status) {
-      //   const color = {
-      //     todo: '',
-      //     processing: 'blue',
-      //     urgent: 'red',
-      //     doing: 'gold',
-      //   }[newNotice.status];
-      //   newNotice.extra = (
-      //     <Tag color={color} style={{ marginRight: 0 }}>
-      //       {newNotice.extra}
-      //     </Tag>
-      //   );
-      // }
-      return newNotice;
-    });
-    return groupBy(newNotices, item => {
-      if (~[1, 11, 12, 21, 22, 31].indexOf(item.msg_type)) {
-        return 'system';
-      } else {
-        return 'trade';
-      }
-    });
   }
 
   toggle = () => {
@@ -89,9 +73,11 @@ export default class GlobalHeader extends PureComponent {
       onLanguageChange,
       orders = [],
       noticesCount,
+      noticesVisible,
       local,
       onOrderClick,
       onNoticeClick,
+      onViewMore,
     } = this.props;
     const { wallet } = currentUser || {};
     const menu = (
@@ -117,7 +103,6 @@ export default class GlobalHeader extends PureComponent {
       </Menu>
     );
     const noticeData = this.getNoticeData();
-    console.log(noticeData);
 
     return (
       <div className={styles.header}>
@@ -155,19 +140,22 @@ export default class GlobalHeader extends PureComponent {
                 className={styles.action}
                 count={noticesCount}
                 onClear={onNoticeClear}
-                onView={onNoticeView}
                 onItemClick={onNoticeClick}
+                onViewMore={onViewMore}
                 onPopupVisibleChange={onNoticeVisibleChange}
+                popupVisible={noticesVisible}
                 loading={fetchingNotices}
                 popupAlign={{ offset: [20, -16] }}
               >
                 <NoticeIcon.Tab
+                  type="trade"
                   list={noticeData['trade']}
                   title="交易信息"
                   emptyText="你已查看所有通知"
                   emptyImage="https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg"
                 />
                 <NoticeIcon.Tab
+                  type="system"
                   list={noticeData['system']}
                   title="系统公告"
                   emptyText="您已读完所有消息"

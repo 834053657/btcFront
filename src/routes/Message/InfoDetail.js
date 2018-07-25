@@ -6,6 +6,7 @@ import { routerRedux } from 'dva/router';
 import { Button, Card, Row, Col, Modal, Form, Input, Table, Icon } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './Detail.less';
+import getMessage from '../../utils/getMessage';
 
 const FormItem = Form.Item;
 
@@ -82,7 +83,7 @@ export default class InfoDetail extends PureComponent {
                 返回
               </a>
             </div>
-            <div className={styles.title}>{data.title}</div>
+            <div className={styles.title}>{getMessage(data).title}</div>
             <div className={styles.publish}>
               <Icon type="clock-circle-o" />
               <span>

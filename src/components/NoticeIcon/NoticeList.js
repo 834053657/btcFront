@@ -1,7 +1,10 @@
 import React from 'react';
-import { Avatar, List } from 'antd';
+import { Collapse, Badge, Icon, Avatar, List } from 'antd';
+import { flatMap, uniqueId, map, size } from 'lodash'
 import classNames from 'classnames';
 import styles from './NoticeList.less';
+
+const Panel = Collapse.Panel; 
 
 export default function NoticeList({
   data = [],
@@ -12,45 +15,70 @@ export default function NoticeList({
   emptyImage,
   footer,
 }) {
+  const NoNotice = (
+    <div className={styles.notFound}>
+      {emptyImage ? <img src={emptyImage} alt="not found" /> : null}
+      <div>{emptyText || locale.emptyText}</div>
+    </div>
+  )
+  const ExpandList = ({list}) => {
+    return (
+      <List className={styles.list}>
+        {list.map((item, i) => {
+          const itemCls = classNames(styles.item, {
+            [styles.read]: item.read,
+          });
+          return (
+            <List.Item className={itemCls} key={item.key || i} onClick={() => onClick(item)}>
+              <List.Item.Meta
+                className={styles.meta}
+                avatar={
+                  item.avatar ? <Avatar className={styles.avatar} src={item.avatar} /> : null
+                }
+                title={
+                  <div className={styles.title}>
+                    {item.title}
+                    <div className={styles.extra}>{item.extra}</div>
+                  </div>
+                }
+                description={
+                  <div>
+                    <div className={styles.description} title={item.description}>
+                      {item.description}
+                    </div>
+                    <div className={styles.datetime}>{item.datetime}</div>
+                  </div>
+                }
+              />
+            </List.Item>
+          );
+        })}
+      </List>
+    ) 
+  }
   return (
     <div>
-      {data.length > 0 ? (
-        <List className={styles.list}>
-          {data.map((item, i) => {
-            const itemCls = classNames(styles.item, {
-              [styles.read]: item.read,
-            });
-            return (
-              <List.Item className={itemCls} key={item.key || i} onClick={() => onClick(item)}>
-                <List.Item.Meta
-                  className={styles.meta}
-                  avatar={
-                    item.avatar ? <Avatar className={styles.avatar} src={item.avatar} /> : null
-                  }
-                  title={
-                    <div className={styles.title}>
-                      {item.title}
-                      <div className={styles.extra}>{item.extra}</div>
-                    </div>
-                  }
-                  description={
-                    <div>
-                      <div className={styles.description} title={item.description}>
-                        {item.description}
-                      </div>
-                      <div className={styles.datetime}>{item.datetime}</div>
-                    </div>
-                  }
-                />
-              </List.Item>
-            );
-          })}
-        </List>
-      ) : (
-        <div className={styles.notFound}>
-          {emptyImage ? <img src={emptyImage} alt="not found" /> : null}
-          <div>{emptyText || locale.emptyText}</div>
-        </div>
+      { size(data) === 0 || size(flatMap(data)) === 0 ? NoNotice : (
+        data instanceof Array ? (<ExpandList list={data} />): map(data, (list, group) => (
+          group !== 'other' && list.length > 1 ? (
+            <Collapse 
+              className={styles.collapseBar} 
+              bordered={false}
+              key={group}
+            > 
+              <Panel
+                className={styles.collapseItem}
+                header={(
+                  <span>{group} <Badge count={list.length} className={styles.badge} /></span>
+                )}
+              >
+                <ExpandList list={list} />
+              </Panel>
+            </Collapse>
+          ) : (
+            <ExpandList list={list} key={group === 'other' ? uniqueId('other_') : group} />
+          )
+        ))
       )}
       <div className={styles.action}>{footer}</div>
     </div>

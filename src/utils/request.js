@@ -1,6 +1,8 @@
 import fetch from 'dva/fetch';
 import { notification } from 'antd';
 import { routerRedux } from 'dva/router';
+import { stringify, parse } from 'qs';
+import { pickBy } from 'lodash'
 import { getAuthority, getLocale } from './authority';
 import CONFIG from './config';
 import store from '../index';
@@ -22,6 +24,7 @@ const codeMessage = {
   503: '服务不可用，服务器暂时过载或维护。',
   504: '网关超时。',
 };
+
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response;
@@ -61,7 +64,7 @@ export default function request(postUrl, options, base_url) {
     },
   };
   const newOptions = { ...defaultOptions, ...options };
-  const url = !isDev ? (base_url || CONFIG.base_url) + postUrl : postUrl;
+  let url = !isDev ? (base_url || CONFIG.base_url) + postUrl : postUrl;
   // console.log(url);
   if (newOptions.method === 'POST' || newOptions.method === 'PUT') {
     if (!(newOptions.body instanceof FormData)) {
@@ -79,6 +82,11 @@ export default function request(postUrl, options, base_url) {
       };
     }
   }
+  try {
+    let queryObj = parse(url.split('?')[1])
+    queryObj = pickBy(queryObj, (v, k) => v !== '')
+    url = url.split('?')[0] + '?' + stringify(queryObj)
+  } catch (e) { e }
 
   return fetch(url, newOptions)
     .then(checkStatus)

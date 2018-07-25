@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Layout, Icon, message, Modal } from 'antd';
 import DocumentTitle from 'react-document-title';
+import { stringify } from 'qs';
 import { connect } from 'dva';
 import { Route, Redirect, Switch, routerRedux } from 'dva/router';
 import { ContainerQuery } from 'react-container-query';
@@ -98,6 +99,7 @@ class BasicLayout extends React.Component {
   }
   state = {
     isMobile,
+    noticesVisible: false,
   };
   getChildContext() {
     const { location, routerData } = this.props;
@@ -121,7 +123,7 @@ class BasicLayout extends React.Component {
       });
       this.props.dispatch({
         type: 'global/fetchNotices',
-        payload: { status: 0, type: 1 },
+        payload: { status: 0 },
       });
       this.props.dispatch({
         type: 'global/fetchOrders',
@@ -190,18 +192,25 @@ class BasicLayout extends React.Component {
   handleNoticeClear = type => {
     this.props.dispatch({
       type: 'global/readNotices',
-      payload: { all: true },
+      payload: { all: 1 },
       callback: () => {
         message.success(`清空了${type}`);
         this.props.dispatch({
           type: 'global/fetchNotices',
-          payload: { status: 0, type: 2 },
+          payload: { status: 0 },
         });
       },
     });
   };
-  handleNoticeViewMore = type => {
-    this.props.dispatch(routerRedux.push('/message/list'));
+
+  handleViewMore = type => {
+    this.props.dispatch(routerRedux.replace({
+      pathname: '/message/list',
+      search: stringify({ type })
+    }));
+    this.setState({
+      noticesVisible: false
+    });
   };
 
   handleOrderClick = item => {
@@ -219,36 +228,7 @@ class BasicLayout extends React.Component {
       type,
       payload,
       callback: () => {
-        if (item.msg_type === 1) {
-          this.props.dispatch(
-            routerRedux.push(`/message/info-detail/${item.content && item.content.ref_id}`)
-          );
-        } else if ([11, 12, 21, 22].indexOf(item.msg_type) >= 0) {
-          /* Modal.success({
-            // title: item.title,
-            title: '提示',
-            content: getMessageContent(item),
-            onOk: () => {},
-          }); */
-          this.props.dispatch(routerRedux.replace(`/user-center/index`));
-        } else if ([31, 32, 33, 34].indexOf(item.msg_type) >= 0) {
-          this.props.dispatch(routerRedux.replace(`/wallet?activeKey=3`));
-        } else if ([41, 42].indexOf(item.msg_type) >= 0) {
-          this.props.dispatch(routerRedux.replace(`/ad/terms`));
-        } else if (item.msg_type >= 100 && item.msg_type <= 114) {
-          //todo redict to order detail
-          if (item.content && item.content.goods_type === 1)
-            this.props.dispatch(routerRedux.replace(`/itunes/order/${item.content.order_id}`));
-          else if (item.content && item.content.goods_type === 2) {
-            this.props.dispatch(routerRedux.replace(`/card/deal-line/${item.content.order_id}`));
-          }
-        } else if ([131, 132, 133].indexOf(item.msg_type) >= 0) {
-          this.props.dispatch(routerRedux.replace(`/ad/my`));
-        } else {
-          // todo
-          console.log(item.msg_type);
-        }
-
+        routerRedux.push(item.to)
         this.props.dispatch({
           type: 'global/fetchNotices',
           payload: { status: 0, type: 3 },
@@ -282,10 +262,17 @@ class BasicLayout extends React.Component {
       });
     }
   };
+
   handleNoticeVisibleChange = visible => {
+    this.setState({
+      noticesVisible: visible
+    });
     if (visible) {
       this.props.dispatch({
         type: 'global/fetchNotices',
+        payload: {
+          status: 0
+        }
       });
     }
   };
@@ -352,10 +339,11 @@ class BasicLayout extends React.Component {
               fetchinOrders={fetchingOrders}
               notices={notices}
               noticesCount={noticesCount}
+              noticesVisible={this.state.noticesVisible}
               collapsed={collapsed}
               isMobile={this.state.isMobile}
               onNoticeClear={this.handleNoticeClear}
-              onNoticeView={this.handleNoticeViewMore}
+              onViewMore={this.handleViewMore}
               onNoticeClick={this.handleNoticeRead}
               onOrderClick={this.handleOrderClick}
               onCollapse={this.handleMenuCollapse}

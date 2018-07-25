@@ -39,8 +39,8 @@ export default class C1Step extends PureComponent {
   render() {
     const { getFieldDecorator } = this.props.form;
     const {
+      default_card,
       default_country,
-      default_card_type,
       country_code,
       card_type,
       name,
@@ -52,7 +52,7 @@ export default class C1Step extends PureComponent {
       <Form onSubmit={this.handleSubmit}>
         <FormItem {...formItemLayout} label="所在国家">
           {getFieldDecorator('country_code', {
-            initialValue: country_code || default_country,
+            initialValue: country_code || default_country || '获取失败',
           })(
             <Select placeholder="请选择所在国家/地区" disabled={disabledForm}>
               {map(CONFIG.country, country => {
@@ -67,7 +67,7 @@ export default class C1Step extends PureComponent {
         </FormItem>
         <FormItem {...formItemLayout} label="证件类型">
           {getFieldDecorator('card_type', {
-            initialValue: (card_type || default_card_type).toString(),
+            initialValue: card_type || default_card || '获取失败',
           })(
             <Select placeholder="请选择证件类型" disabled={disabledForm}>
               {map(CONFIG.card_types, (card, type) => {
