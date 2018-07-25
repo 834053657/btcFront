@@ -85,6 +85,8 @@ export const getRouterData = app => {
     },
     '/trade/detail/:id': {
       component: dynamicWrapper(app, ['trade'], () => import('../routes/Trade/TradeDetail')),
+      authority: checkLogined,
+      redirectPath: '/user/login',
     },
     '/trade/step/:id': {
       component: dynamicWrapper(app, ['trade', 'user'], () => import('../routes/Trade/TradeStep')),
