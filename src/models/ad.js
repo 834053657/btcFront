@@ -1,4 +1,5 @@
 import { message } from 'antd';
+import { routerRedux } from 'dva/router';
 import {
   queryMyAdList,
   removeAd,
@@ -40,6 +41,12 @@ export default {
           payload: res.data,
         });
         yield callback && callback(res.data);
+      } else if (res.code === 1) {
+        // 如果广告已被删除 这返回上一页
+        yield put(routerRedux.goBack());
+        message.error(res.msg);
+      } else {
+        message.error(res.msg);
       }
     },
     *deleteAd({ payload, callback }, { call, put }) {

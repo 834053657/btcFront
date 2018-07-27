@@ -46,13 +46,12 @@ export default class EditForm extends Component {
     super(props);
     this.state = {
       grade: true,
-      floatPrice: false,
     };
   }
 
   handleSubmit = e => {
     e.preventDefault();
-    this.props.form.validateFields((err, values) => {
+    this.props.form.validateFieldsAndScroll((err, values) => {
       const valued = omit(values, ['trading_price_ratio_choose']);
       if (!err) {
         const { id } = this.props.initialValues || {};
@@ -173,17 +172,6 @@ export default class EditForm extends Component {
     return currency;
   };
 
-  handleChangeFloat = () => {
-    const { floatPrice } = this.state;
-    this.setState({
-      floatPrice: !floatPrice,
-    });
-  };
-
-  handleLimitText = e => {
-    console.log(e.target.value);
-  };
-
   clickBtn = value => {};
 
   render() {
@@ -199,8 +187,10 @@ export default class EditForm extends Component {
     } = this.props;
     const { getFieldDecorator, getFieldValue } = form || {};
     const { payments = {} } = currentUser || {};
-    // console.log(payments);
-    const { floatPrice } = this.state;
+    // const FloatPriceDom = (
+    //
+    // )
+    const floatPrice = !!getFieldValue('trading_price_ratio_choose');
     return (
       <Form className={styles.form} hideRequiredMark onSubmit={this.handleSubmit}>
         <FormItem>
@@ -345,34 +335,51 @@ export default class EditForm extends Component {
               />
             )}
           </Col>
-          <span style={{ marginLeft: '28px' }}>
+          <span style={{ marginLeft: '32px' }}>
             <Tooltip title={CONFIG.tooltip[6]}>
               <Icon className="bt-icon-question" type="question-circle" title="" />
             </Tooltip>
           </span>
         </FormItem>
 
-        {floatPrice === true ? (
+        {floatPrice ? (
           <FormItem label="浮动比例" {...formItemLayout}>
-            {getFieldDecorator('trading_price_ratio', {
-              initialValue: initialValues.trading_price_ratio,
-              onChange: this.handleChangePer,
-              rules: [
-                {
-                  required: true,
-                  message: '请输入浮动比例',
-                },
-              ],
-            })(
-              <InputNumber
-                min={30}
-                max={170}
-                precision={2}
-                style={{ width: 185 }}
-                placeholder="市场价比例"
-                addonAfter="%"
-              />
-            )}
+            <Col span={7} className={styles.no_margin_floatPrice_input}>
+              <FormItem>
+                {getFieldDecorator('trading_price_ratio', {
+                  initialValue: initialValues.trading_price_ratio,
+                  onChange: this.handleChangePer,
+                  rules: [
+                    {
+                      required: true,
+                      message: '请输入浮动比例',
+                    },
+                    {
+                      type: 'number',
+                      max: 170,
+                      min: 30,
+                      message: '浮动比例 30% ~ 170%',
+                    },
+                  ],
+                })(
+                  <InputNumber
+                    // min={30}
+                    // max={170}
+                    precision={2}
+                    style={{ width: 185 }}
+                    placeholder="市场价比例"
+                    addonAfter="%"
+                  />
+                )}
+              </FormItem>
+            </Col>
+            <Col span={1}>
+              <span style={{ marginLeft: '15px' }}>
+                <Tooltip title={CONFIG.tooltip[17]}>
+                  <Icon className="bt-icon-question" type="question-circle" title="" />
+                </Tooltip>
+              </span>
+            </Col>
           </FormItem>
         ) : null}
 
@@ -380,8 +387,8 @@ export default class EditForm extends Component {
           <Col span={7} className={styles.no_margin_floatPrice}>
             <FormItem>
               {getFieldDecorator('trading_price_ratio_choose', {
-                // initialValue: initialValues.max_count,
-                onChange: this.handleChangeFloat,
+                initialValue: !!initialValues.trading_price_ratio,
+                valuePropName: 'checked',
                 rules: [],
               })(<Checkbox>使用浮动价格</Checkbox>)}
             </FormItem>
