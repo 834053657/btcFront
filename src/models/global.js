@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import { find, filter, mapKeys, groupBy, orderBy, map } from 'lodash';
+import { find, filter, mapKeys, groupBy, orderBy, map, findIndex } from 'lodash';
 import { getLocale, setLocale } from '../utils/authority';
 
 import {
@@ -156,9 +156,6 @@ export default {
       const { data: { items = [] } } = payload || {};
       const oldNotices = state.notices
       const notices = orderBy(items, ['created_at'], ['desc'])
-      // let newItems = filter(items.map(item => getMessage(item)), msg => msg != null)
-      // newItems = orderBy(newItems, ['created_at'], ['desc'])
-      // newItems = groupBy(newItems, item => item.group || 'other')
       return {
         ...state,
         notices,
@@ -167,10 +164,9 @@ export default {
       }
     },
     pushNotice (state, { payload }) {
-      if (!find(state.notice, { id: payload.id })) {
+      if (!find(state.notices, { id: payload.id })) {
         const oldNotices = state.notices;
         const notices = orderBy([payload].concat(state.notices))
-        console.log(notices)
         return {
           ...state,
           notices,
@@ -180,10 +176,33 @@ export default {
       }
     },
     saveOrders(state, { payload }) {
+      const items = payload.items || []
+      const newOrders = map(items, order => {
+        return {
+          ...order,
+          message_count: filter(state.notices, notice => order.id === notice.message.order_id).length
+        }
+      })
       return {
         ...state,
-        orders: payload.items || [],
+        orders: newOrders,
       };
+    },
+    updateOrder(state, { payload }) {
+      let newOrders = [...state.orders]
+      let index = -1
+      if (~(index = findIndex(newOrders, { id: payload.id }))) {
+        newOrders[index] = {
+          ...newOrders[index],
+          message_count: filter(state.notices, notice => payload.id === notice.message.order_id).length
+        }
+      } else {
+        newOrders = [payload, ...state.orders]
+      }
+      return {
+        ...state,
+        orders: newOrders
+      }
     },
     saveClearedNotices(state, { payload }) {
       return {
@@ -192,13 +211,11 @@ export default {
       };
     },
     setReadMessage(state, { payload }) {
-      console.log(payload);
       return {
         ...state,
       };
     },
     setReadOrderMessage(state, { payload }) {
-      console.log(payload);
       return {
         ...state,
       };
@@ -228,5 +245,19 @@ export default {
         },
       });
     },
+    order_message ({ dispatch }) {
+      dispatch({
+        type: 'SOCKET/ADD_EVENTLISTENER',
+        event: 'order_message',
+        callback(res) {
+          if (res.code === 0) {
+            dispatch({
+              type: 'updateOrder',
+              payload: res.data,
+            });
+          }
+        },
+      });
+    }
   },
 };

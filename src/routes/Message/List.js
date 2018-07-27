@@ -90,10 +90,7 @@ export default class List extends Component {
       const { to = '/exception/404' } = getMessage(item)
       this.props.dispatch(routerRedux.push(to))
     }
-    if (item.noticeType === 'trade' && item.status === 0) {
-      this.readMsg(item, () => go())
-    } else go() 
-
+    this.readMsg(item, () => go())
   }
 
   showMsg = item => {

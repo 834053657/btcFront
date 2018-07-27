@@ -114,21 +114,21 @@ export function dvaSocket(url, option) {
           console.log(data);
         },
         receive_message: (response, dispatch, getState) => {
-          const res = JSON.parse(response) || {};
-          if (res.code === 0 && res.data) {
-            const uid = get(getState(), 'user.currentUser.user.id');
-            const historyList = get(getState(), 'trade.tradeIm.historyList') || [];
-            const senderId = get(res, 'data.sender.id');
+          // const res = JSON.parse(response) || {};
+          // if (res.code === 0 && res.data) {
+          //   const uid = get(getState(), 'user.currentUser.user.id');
+          //   const historyList = get(getState(), 'trade.tradeIm.historyList') || [];
+          //   const senderId = get(res, 'data.sender.id');
 
-            historyList.push(res.data);
-            dispatch({
-              type: 'trade/saveImHistory',
-              payload: { items: historyList },
-            });
-            uid !== senderId ? playAudio() : null;
-          } else {
-            message.error(res.msg);
-          }
+          //   historyList.push(res.data);
+          //   dispatch({
+          //     type: 'trade/saveImHistory',
+          //     payload: { items: historyList },
+          //   });
+          //   uid !== senderId ? playAudio() : null;
+          // } else {
+          //   message.error(res.msg);
+          // }
         },
       },
       emit: {
@@ -197,8 +197,8 @@ export function dvaSocket(url, option) {
         {
           evaluate: (action, dispatch, getState) => action.type === 'SOCKET/TRIGGER_EVENT',
           request: (action, dispatch, getState, socket) => {
-            const { event, payload } = action;
-            socket.emit(event, payload);
+            const { event, payload, callback } = action;
+            socket.emit(event, JSON.stringify(payload), (d) => callback(JSON.parse(d)))
           },
         },
         {

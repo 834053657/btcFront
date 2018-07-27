@@ -214,28 +214,41 @@ class BasicLayout extends React.Component {
   };
 
   handleOrderClick = item => {
-    this.props.dispatch(routerRedux.push(`/trade/step/${item.id}`));
-  };
-  handleNoticeRead = item => {
-    let type = 'global/readNotices';
-    let payload = { all: false, id: item.id };
-
-    if (item.msg_type === 104 || item.msg_type === 108) {
-      type = 'global/readNotices';
-      payload = { all: false, order_id: item.content.order_id };
-    }
-    this.props.dispatch({
-      type,
-      payload,
+    const { dispatch } = this.props;
+    this.setState({
+      noticesVisible: false,
+    });
+    dispatch({
+      type: 'global/readOrderNotices',
+      payload: { all: 0, order_id: item.id },
       callback: () => {
-        routerRedux.push(item.to)
+        this.props.dispatch({
+          type: 'global/fetchOrders',
+          payload: { status: '1,2,5' },
+        });
+      }
+    });
+    dispatch(routerRedux.push(`/trade/step/${item.id}`));
+  };
+
+  handleNoticeRead = item => {
+    const { dispatch } = this.props;
+    this.setState({
+      noticesVisible: false,
+    });
+    dispatch({
+      type: 'global/readNotices',
+      payload: { all: 0, id: item.id },
+      callback: () => {
         this.props.dispatch({
           type: 'global/fetchNotices',
-          payload: { status: 0, type: 3 },
+          payload: { status: 0 },
         });
-      },
+      }
     });
+    dispatch(routerRedux.push(item.to));
   };
+  
   handleMenuClick = ({ key }) => {
     if (key === 'triggerError') {
       this.props.dispatch(routerRedux.push('/exception/trigger'));

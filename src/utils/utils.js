@@ -297,3 +297,15 @@ export function getQueryString(str_) {
   const str = str_.replace('?', '');
   return parse(str) || {};
 }
+
+export function *socketEmit (put, event, payload) {
+  let resolve;
+  const defer = new Promise(_r => resolve = _r)
+  yield put({
+    type: 'SOCKET/TRIGGER_EVENT',
+    event,
+    payload,
+    callback: resolve,
+  })
+  return yield defer
+}
