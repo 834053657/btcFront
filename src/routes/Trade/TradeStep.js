@@ -51,9 +51,10 @@ const { Step } = Steps;
 }
  */
 
-@connect(({ trade, user, loading }) => ({
+@connect(({ trade, im, user, loading }) => ({
   orderDetail: trade.orderDetail,
   tradeIm: trade.tradeIm,
+  im,
   currentUser: user.currentUser,
   loading: loading.effects['trade/fetchOrderDetail'],
 }))

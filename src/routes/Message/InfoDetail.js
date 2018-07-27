@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import classNames from 'classnames';
 import moment from 'moment';
 import { routerRedux } from 'dva/router';
-import { Button, Card, Row, Col, Modal, Form, Input, Table, Icon } from 'antd';
+import { Button, Spin, Card, Row, Col, Modal, Form, Input, Table, Icon } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './Detail.less';
 import getMessage from '../../utils/getMessage';
@@ -23,7 +23,7 @@ const clsString = classNames(
 
 @connect(({ message, loading }) => ({
   data: message.infoDetail,
-  loading: loading.models.message,
+  loading: loading.effects['message/fetchInfoDetail']
 }))
 /* @connect((userDetail, loading) => {
   return {data: userDetail, loading: loading}
@@ -32,13 +32,12 @@ const clsString = classNames(
 export default class InfoDetail extends PureComponent {
   state = {};
 
-  componentDidMount() {
-    const { dispatch } = this.props;
-
+  constructor (props) {
+    super(props)
+    const { dispatch } = props;
     dispatch({
       type: 'message/fetchInfoDetail',
-      payload: { id: this.props.match.params.id },
-      // callback: () => this.readMsg(this.props.match.params.id),
+      payload: { id: props.match.params.id },
     });
   }
 
@@ -53,7 +52,6 @@ export default class InfoDetail extends PureComponent {
 
   render() {
     const { loading, data } = this.props;
-
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -70,38 +68,40 @@ export default class InfoDetail extends PureComponent {
       { title: '更多资讯', href: '/message/info-list' },
       { title: '资讯详情' },
     ];
-
+    if (!data.title) return null
     return (
-      <PageHeaderLayout title="资讯详情" breadcrumbList={breadcrumbList}>
-        <div className={clsString}>
-          <Card bordered={false}>
-            <div>
-              <a
-                className={styles.itunes_btn}
-                onClick={() => this.props.dispatch(routerRedux.goBack())}
-              >
-                返回
-              </a>
-            </div>
-            <div className={styles.title}>{getMessage(data).title}</div>
-            <div className={styles.publish}>
-              <Icon type="clock-circle-o" />
-              <span>
-                {data.publish_at
-                  ? moment(new Date(data.publish_at * 1000)).format('YYYY-MM-DD HH:mm:ss')
-                  : '-'}
-              </span>
-            </div>
-          </Card>
-          <Card className={styles.content}>
-            <div
-              dangerouslySetInnerHTML={{
-                __html: data.content,
-              }}
-            />
-          </Card>
-        </div>
-      </PageHeaderLayout>
+      <Spin spinning={this.props.loading}>
+        <PageHeaderLayout title="资讯详情" breadcrumbList={breadcrumbList}>
+          <div className={clsString}>
+            <Card bordered={false}>
+              <div>
+                <a
+                  className={styles.itunes_btn}
+                  onClick={() => this.props.dispatch(routerRedux.goBack())}
+                >
+                  返回
+                </a>
+              </div>
+              <div className={styles.title}>{data.title}</div>
+              <div className={styles.publish}>
+                <Icon type="clock-circle-o" />
+                <span>
+                  {data.publish_at
+                    ? moment(new Date(data.publish_at * 1000)).format('YYYY-MM-DD HH:mm:ss')
+                    : '-'}
+                </span>
+              </div>
+            </Card>
+            <Card className={styles.content}>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: data.content,
+                }}
+              />
+            </Card>
+          </div>
+        </PageHeaderLayout>
+      </Spin> 
     );
   }
 }

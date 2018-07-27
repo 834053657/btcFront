@@ -2,7 +2,7 @@ import fetch from 'dva/fetch';
 import { notification } from 'antd';
 import { routerRedux } from 'dva/router';
 import { stringify, parse } from 'qs';
-import { pickBy } from 'lodash'
+import { pickBy, mapValues } from 'lodash'
 import { getAuthority, getLocale } from './authority';
 import CONFIG from './config';
 import store from '../index';
@@ -85,6 +85,7 @@ export default function request(postUrl, options, base_url) {
   try {
     let queryObj = parse(url.split('?')[1])
     queryObj = pickBy(queryObj, (v, k) => v !== '')
+    queryObj = mapValues(queryObj, obj => obj instanceof Array ? obj.toString() : obj)
     url = url.split('?')[0] + '?' + stringify(queryObj)
   } catch (e) { e }
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Collapse, Badge, Icon, Avatar, List } from 'antd';
-import { flatMap, uniqueId, map, size } from 'lodash'
+import { flatMap, uniqueId, map, size, truncate } from 'lodash'
 import classNames from 'classnames';
 import styles from './NoticeList.less';
 
@@ -28,6 +28,7 @@ export default function NoticeList({
           const itemCls = classNames(styles.item, {
             [styles.read]: item.read,
           });
+          const description = truncate(item.description, { length: '30' })
           return (
             <List.Item className={itemCls} key={item.key || i} onClick={() => onClick(item)}>
               <List.Item.Meta
@@ -43,8 +44,8 @@ export default function NoticeList({
                 }
                 description={
                   <div>
-                    <div className={styles.description} title={item.description}>
-                      {item.description}
+                    <div className={styles.description} title={description}>
+                      {description}
                     </div>
                     <div className={styles.datetime}>{item.datetime}</div>
                   </div>

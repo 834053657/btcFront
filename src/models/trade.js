@@ -173,7 +173,6 @@ export default {
     },
     saveImHistory(state, { payload }) {
       const { items = [] } = payload || {};
-      console.log(items);
       return {
         ...state,
         tradeIm: {
@@ -199,5 +198,22 @@ export default {
     },
   },
 
-  subscriptions: {},
+  subscriptions: {
+    order_message ({ dispatch }) {
+      dispatch({
+        type: 'SOCKET/ADD_EVENTLISTENER',
+        event: 'order_message',
+        callback(res) {
+          if (res.code === 0) {
+            dispatch({
+              type: 'fetchOrderDetail',
+              payload: {
+                id: res.data.id,
+              }
+            }) 
+          }
+        },
+      });
+    }
+  },
 };
