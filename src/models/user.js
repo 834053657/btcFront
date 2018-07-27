@@ -227,6 +227,17 @@ export default {
         currentUser: action.payload,
       };
     },
+    updateWalletInfo(state, payload) {
+      const currentUser = state.currentUser || { wallet: {} }
+      return {
+        ...currentUser,
+        wallet: {
+          ...currentUser.wallet,
+          amount: payload.amount,
+          frozen: payload.frozen,
+        }
+      }
+    },
     changeNotifyCount(state, action) {
       return {
         ...state,
@@ -247,5 +258,22 @@ export default {
         },
       };
     },
+  },
+  subscriptions: {
+    receive_message ({ dispatch }) {
+      dispatch({
+        type: 'SOCKET/ADD_EVENTLISTENER',
+        event: 'userinfo',
+        callback(res) {
+          if (res.code === 0) {
+            console.log('userinfo', res)
+            dispatch({
+              type: 'RECEIVE_MESSAGE',
+              payload: res.data,
+            });
+          }
+        }, 
+      })
+    }
   },
 };
