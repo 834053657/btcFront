@@ -27,7 +27,8 @@
     "build:test1": "cross-env KG_API_ENV=test1 ESLINT=none roadhog build",
     "deploy:test1": "npm run build:test1 && npm run rsync:test1",
     "build:mock": "cross-env KG_API_ENV=dev ESLINT=none roadhog build",
-    "deploy:mock": "npm run build:mock && npm run rsync:test1"
+    "deploy:mock": "npm run build:mock && npm run rsync:test1",
+    "deploy:test-all": "npm run deploy:test1 && npm run deploy:test2"
   },
   "dependencies": {
     "@antv/data-set": "^0.8.0",
