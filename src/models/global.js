@@ -173,6 +173,8 @@ export default {
           oldNotices,
           noticesCount: notices.length
         }
+      } else {
+        return state
       }
     },
     saveOrders(state, { payload }) {
