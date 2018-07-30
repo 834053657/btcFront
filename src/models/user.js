@@ -230,11 +230,14 @@ export default {
     updateWalletInfo(state, payload) {
       const currentUser = state.currentUser || { wallet: {} }
       return {
+        ...state,
+        currentUser: {
         ...currentUser,
-        wallet: {
-          ...currentUser.wallet,
-          amount: payload.amount,
-          frozen: payload.frozen,
+          wallet: {
+            ...currentUser.wallet,
+            amount: payload.amount,
+            frozen: payload.frozen,
+          } 
         }
       }
     },
@@ -268,7 +271,7 @@ export default {
           if (res.code === 0) {
             console.log('userinfo', res)
             dispatch({
-              type: 'RECEIVE_MESSAGE',
+              type: 'updateWalletInfo',
               payload: res.data,
             });
           }

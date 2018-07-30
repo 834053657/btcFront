@@ -59,7 +59,7 @@ export default {
       const room_id = yield select(state => state.im.room_id)
       const user = yield select(state => state.user.currentUser.user)
       const params = {
-        temp_msg_id: +uniqueId(),
+        temp_msg_id: user.id + +uniqueId(),
         order_id: +order_id,
         content: payload.content,
         sender: user,

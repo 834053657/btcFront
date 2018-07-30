@@ -161,7 +161,8 @@ export default class TradeIM extends PureComponent {
     const historyList = get(this.props, 'im.historyList') || [];
     const item = historyList[index] || {};
     const { message = {}, msg_type, created_at, sender = {} } = item;
-    const content = getMessage(item, 'im').content || ''
+    const detail = getMessage(item, 'im')
+    const content = detail ? detail.content : ''
     return (
       <CellMeasurer
         cache={this.cache}
@@ -235,7 +236,12 @@ export default class TradeIM extends PureComponent {
     };
     return (
       <Spin spinning={false}>
-        <Card bodyStyle={{ padding: 0 }} className={styles.chat_card} title={this.getChatUser()}>
+        <Card 
+          bodyStyle={{ padding: 0 }}
+          className={styles.chat_card} 
+          title={this.getChatUser()}
+          ref={(card) => this.card = card}
+        >
           <div className={styles.card_body}>
             <div className={styles.chat_history}>
               {historyList.length > 0 ? (
@@ -259,7 +265,7 @@ export default class TradeIM extends PureComponent {
                             scrollToIndex={historyList.length - 1}
                             height={390}
                             width={width}
-                            ref={list => this.list = list}
+                            
                             rowRenderer={this.renderMessage}
                             rowCount={historyList.length}
                           />
@@ -283,7 +289,7 @@ export default class TradeIM extends PureComponent {
                 value={message}
                 onChange={this.handlerChangeMsg}
                 rows={4}
-                placeholder={this.props.im.room_id ? "请按回车键发送消息" : "加载中..."}
+                placeholder={this.props.im.room_id ? "请按回车键发送消息" : "进入房间中..."}
                 onKeyPress={this.handleKeyPress}
               />
             </div>

@@ -47,6 +47,7 @@ export default class List extends Component {
       width: '70%',
       render: (val, row) => {
           const mappedRow = getMessage(row)
+          if (!mappedRow) return null
           return (
             <a onClick={() => this.gotoDetail(mappedRow)} className={mappedRow.status === 1 ? styles.read : ''}>
               {mappedRow.title}
@@ -87,16 +88,22 @@ export default class List extends Component {
 
   gotoDetail = (item) => {
     const go = () => {
-      const { to = '/exception/404' } = getMessage(item)
-      this.props.dispatch(routerRedux.push(to))
+      const detail = getMessage(item)
+      if (detail) {
+        const { to = '/exception/404' } = detail
+        this.props.dispatch(routerRedux.push(to)) 
+      }
     }
     this.readMsg(item, () => go())
   }
 
   showMsg = item => {
     const { dispatch } = this.props;
-    const { to = '/exception/404' } = getMessage(item)
-    this.props.dispatch(routerRedux.replace(to))
+    const detail = getMessage(item)
+    if (detail) {
+      const { to = '/exception/404' } = detail
+      this.props.dispatch(routerRedux.push(to)) 
+    }
     // if (item.msg_type === 1) {
     //   this.props.dispatch(
     //     routerRedux.push(`/message/info-detail/${item.content && item.content.ref_id}`)
