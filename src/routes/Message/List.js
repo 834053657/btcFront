@@ -36,6 +36,7 @@ export default class List extends Component {
       payload: {
         msg_type: getMessage.Types[this.state.type],
         status: this.state.status, 
+        page_size: 10,
       }
     });
   }
@@ -180,6 +181,7 @@ export default class List extends Component {
       payload: {
         msg_type: getMessage.Types[type],
         status,
+        page_size: 10,
       },
     });
     this.setState({ type });
@@ -198,7 +200,8 @@ export default class List extends Component {
       type: 'message/fetchMessageList',
       payload: {
         msg_type: getMessage.Types[type],
-        status: value
+        status: value,
+        age_size: 10,
       },
     });
     this.setState({
