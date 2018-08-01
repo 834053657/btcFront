@@ -4,6 +4,7 @@ import { Layout, Icon, message, Modal } from 'antd';
 import DocumentTitle from 'react-document-title';
 import { stringify } from 'qs';
 import { connect } from 'dva';
+import { get } from 'lodash';
 import { Route, Redirect, Switch, routerRedux } from 'dva/router';
 import { ContainerQuery } from 'react-container-query';
 import classNames from 'classnames';
@@ -236,9 +237,11 @@ class BasicLayout extends React.Component {
     this.setState({
       noticesVisible: false,
     });
+    const orderId = get(item, 'message.order_id')
+    const idAttr = orderId ? { order_id: orderId } : { id: item.id } 
     dispatch({
       type: 'global/readNotices',
-      payload: { all: 0, id: item.id },
+      payload: { all: 0, ...idAttr },
       callback: () => {
         this.props.dispatch({
           type: 'global/fetchNotices',
