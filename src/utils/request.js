@@ -86,7 +86,9 @@ export default function request(postUrl, options, base_url) {
     let queryObj = parse(url.split('?')[1])
     queryObj = pickBy(queryObj, (v, k) => v !== '')
     queryObj = mapValues(queryObj, obj => obj instanceof Array ? obj.toString() : obj)
-    url = url.split('?')[0] + '?' + stringify(queryObj)
+    if (url.split('?').length > 1) {
+      url = url.split('?')[0] + '?' + stringify(queryObj)
+    }
   } catch (e) { e }
 
   return fetch(url, newOptions)
