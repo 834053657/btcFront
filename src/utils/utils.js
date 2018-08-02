@@ -251,9 +251,11 @@ export function getDefaultLocal() {
 }
 
 export function playAudio() {
-  const audio = document.createElement('audio');
-  audio.src = require('../../public/audio/msg.mp3');
-  audio.play();
+  try {
+    const audio = document.createElement('audio');
+    audio.src = require('../../public/audio/msg.mp3');
+    audio.play();
+  } catch (e) { e }
 }
 
 export function getPayIcon(type) {
