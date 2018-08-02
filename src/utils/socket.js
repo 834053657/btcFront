@@ -222,6 +222,10 @@ export function dvaSocket(url, option) {
               },
             };
             socket.open();
+            dispatch({
+              type: 'global/fetchNotices',
+              payload: { status: 0 },
+            })
             // socket.onconnect((data)=> {
             //   console.log('onconnect')
             // });
