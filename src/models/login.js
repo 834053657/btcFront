@@ -75,6 +75,7 @@ export default {
     },
     *logout({ payload }, { put, select }) {
       const { isRedirect } = payload || {};
+      yield put({ type: 'global/unmountIntercomWidget' })
       try {
         if (isRedirect) {
           // get location pathname

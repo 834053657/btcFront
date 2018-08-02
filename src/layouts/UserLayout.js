@@ -16,8 +16,10 @@ class UserLayout extends React.PureComponent {
     this.props.dispatch({
       type: 'global/fetchConfigs',
     });
+    this.props.dispatch({
+      type: 'global/mountIntercomWidget'
+    })
   }
-
   getPageTitle() {
     const { routerData, location } = this.props;
     const { pathname } = location;

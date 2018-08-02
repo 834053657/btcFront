@@ -95,5 +95,6 @@ module.exports = {
     CONFIG: true,
     __KG_API_ENV__: true,
     __KG_DATATIME__: true,
+    __INTERCOM_APP_ID__: true,
   },
 };

@@ -138,7 +138,6 @@ export default {
         created_at: Date.now(),
         sender: mapValues(payload.sender, (val, key) => isEmpty(val) && includes(['avatar', 'nickname'], key) ? '数据有误' : val)
       }
-
       const historyList = orderBy([newMsg, ...state.historyList], ['created_at'], 'asc')
       return {
         ...state,

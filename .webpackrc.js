@@ -6,6 +6,7 @@ export default {
   define: {
     __KG_API_ENV__: process.env.KG_API_ENV,
     __KG_DATATIME__: new Date().toLocaleString(),
+    __INTERCOM_APP_ID__: 'g796dx79',
   },
   env: {
     development: {
