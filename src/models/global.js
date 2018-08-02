@@ -1,6 +1,7 @@
 import { message } from 'antd';
 import { find, filter, mapKeys, groupBy, orderBy, map, findIndex } from 'lodash';
 import { getLocale, setLocale } from '../utils/authority';
+import { playAudio } from '../utils/utils';
 
 import {
   queryOrderList,
@@ -243,6 +244,7 @@ export default {
               type: 'pushNotice',
               payload: res.data,
             });
+            playAudio()
           }
         },
       });

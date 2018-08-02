@@ -10,7 +10,6 @@ import {
   receive_message,
   auth_status_update,
 } from '../services/socket';
-import { playAudio } from './utils';
 
 export function dvaSocket(url, option) {
   // 如需调试线上socket 请吧isDev 设置成false
