@@ -57,6 +57,10 @@ export function dvaSocket(url, option) {
       on: {
         connect: (data, dispatch, getState, socket) => {
           console.log('connect success', data);
+          dispatch({
+            type: 'global/fetchNotices',
+            payload: { status: 0 },
+          })
           // dispatch({
           //   type: 'global/fetchNotices',
           //   payload: { status: 0 },
@@ -222,10 +226,6 @@ export function dvaSocket(url, option) {
               },
             };
             socket.open();
-            dispatch({
-              type: 'global/fetchNotices',
-              payload: { status: 0 },
-            })
             // socket.onconnect((data)=> {
             //   console.log('onconnect')
             // });
