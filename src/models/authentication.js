@@ -19,43 +19,13 @@ export default {
   effects: {
     *submitInfo({ payload }, { call, put, select }) {
       const step = yield select(state => state.authentication.step);
-      const effectName = ['authForC1', 'authForC2', 'authForC3'][step];
-      return yield put({
-        type: effectName,
+      const api = [authForC1, authForC2, authForC3][step];
+      yield put({
+        type: 'SUBMIT_INFO',
         payload,
       });
-    },
-    *authForC1({ payload }, { call, put, select }) {
-      const res = yield call(authForC1, payload);
-      if (res.code === 0) {
-        yield put({
-          type: 'SUBMIT_INFO',
-          payload,
-        });
-      } else {
-        message.error(res.msg || '提交失败');
-      }
-    },
-    *authForC2({ payload }, { call, put }) {
-      const res = yield call(authForC2, payload);
-      if (res.code === 0) {
-        yield put({
-          type: 'SUBMIT_INFO',
-          payload,
-        });
-      } else {
-        message.error(res.msg || '提交失败');
-      }
-    },
-    *authForC3({ payload }, { call, put }) {
-      const res = yield call(authForC3, payload);
-      if (res.code === 0) {
-        yield put({
-          type: 'SUBMIT_INFO',
-          payload,
-        });
-        return res;
-      } else {
+      const res = yield call(api, payload)
+      if (res.code !== 0) {
         message.error(res.msg || '提交失败');
       }
     },
