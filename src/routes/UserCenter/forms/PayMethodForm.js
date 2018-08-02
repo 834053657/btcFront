@@ -59,10 +59,10 @@ export default class PayMethodForm extends Component {
                   required: true,
                   message: '请输入账号！',
                 },
-                {
-                  pattern: /^[0-9]{4,30}$/,
-                  message: '请输入4~30位的数字',
-                },
+                // {
+                //   pattern: /^[0-9]{4,30}$/,
+                //   message: '请输入4~30位的数字',
+                // },
               ],
             },
           },
@@ -104,10 +104,10 @@ export default class PayMethodForm extends Component {
                   required: true,
                   message: '请输入账号！',
                 },
-                {
-                  pattern: /^[0-9]{4,30}$/,
-                  message: '请输入4~30位的数字',
-                },
+                // {
+                //   pattern: /^[0-9]{4,30}[a-z][A-Z]$/,
+                //   message: '请输入4~30位的数字,字母',
+                // },
               ],
             },
           },
@@ -222,10 +222,10 @@ export default class PayMethodForm extends Component {
                   required: true,
                   message: '请输入账号！',
                 },
-                {
-                  pattern: /^[0-9]{4,30}$/,
-                  message: '请输入4~30位的数字',
-                },
+                // {
+                //   pattern: /^[0-9]{4,30}$/,
+                //   message: '请输入4~30位的数字',
+                // },
               ],
             },
           },
@@ -298,6 +298,7 @@ export default class PayMethodForm extends Component {
     const { form, submitting, initialValues = {}, payMents = [] } = this.props;
     const { id } = initialValues || {};
     const { getFieldDecorator } = form;
+    const paymentsList = id ? CONFIG.payments : payMents; // 新增只能添加未添加的支付方式
 
     return (
       <div className={styles.main}>
@@ -307,8 +308,8 @@ export default class PayMethodForm extends Component {
               initialValue: initialValues.payment_method,
               rules: [{ required: true, message: '请选择支付方式' }],
             })(
-              <Select size="large" placeholder="请选择支付方式">
-                {map(payMents, (text, key) => (
+              <Select size="large" placeholder="请选择支付方式" disabled={id}>
+                {map(paymentsList, (text, key) => (
                   <Option key={key} value={key}>
                     {text}
                   </Option>

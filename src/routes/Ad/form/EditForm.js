@@ -683,19 +683,19 @@ export default class EditForm extends Component {
         <FormItem {...formItemLayout} label="自动回复">
           {getFieldDecorator('auto_replies', {
             initialValue:
-              initialValues.auto_replies || CONFIG.auto_replies_msg[getFieldValue('ad_type')],
+              initialValues.auto_replies,
             rules: [
-              {
-                required: true,
-                message: '请输入',
-              },
+              // {
+              //   required: true,
+              //   message: '请输入',
+              // },
               {
                 max: 200,
                 message: '最多输入200个字符',
               },
             ],
           })(
-            <TextArea placeholder="自动回复(最多输入200个字符)" rows={4} style={{ width: 390 }} />
+            <TextArea placeholder={CONFIG.auto_replies_msg[getFieldValue('ad_type')]} rows={4} style={{ width: 390 }} />
           )}
           <span style={{ marginLeft: '10px' }}>
             <Tooltip title={CONFIG.tooltip[15]}>
