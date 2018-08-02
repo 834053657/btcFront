@@ -227,12 +227,12 @@ export default {
         currentUser: action.payload,
       };
     },
-    updateWalletInfo(state, payload) {
+    updateWalletInfo(state, { payload }) {
       const currentUser = state.currentUser || { wallet: {} }
       return {
         ...state,
         currentUser: {
-        ...currentUser,
+          ...currentUser,
           wallet: {
             ...currentUser.wallet,
             amount: payload.amount,
