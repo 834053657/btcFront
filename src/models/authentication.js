@@ -28,6 +28,14 @@ export default {
       if (res.code !== 0) {
         message.error(res.msg || '提交失败');
       }
+      return res 
+    },
+    *getVideoURLFromFacePlus ({ payload }, { call, put }) {
+      const res = yield call(authForC3, payload)
+      if (res.code !== 0) {
+        message.error(res.msg || '提交失败');
+      }
+      return res
     },
     *updateAuthStatus({ payload }, { call, put }) {
       yield put({ type: 'UPDATE_AUTH_STATUS', payload });

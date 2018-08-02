@@ -32,15 +32,16 @@ export default class C3Step extends PureComponent {
     super(props);
     const { country_code, card_type } = this.props.authentication;
     this.state.goFaceID = country_code === 'CN' && card_type === 1;
-    this.props
-      .dispatch({
-        type: 'authentication/authForC3',
+    if (this.state.goFaceID) {
+      this.props.dispatch({
+        type: 'authentication/getVideoURLFromFacePlus',
       })
       .then(res => {
         this.setState({
           faceid_url: get(res, 'data.url', null),
         });
       });
+    }
   }
 
   handleSubmit = e => {

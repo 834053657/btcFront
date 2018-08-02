@@ -1,4 +1,5 @@
 import { AuthStep } from 'components/Authentication';
+import Result from 'components/Result';
 import React, { Component } from 'react';
 import { Alert, Row, Col, Form, Select, Input, Button } from 'antd';
 import { connect } from 'dva';
@@ -43,7 +44,12 @@ export default class AuthenticationPage extends Component {
           <br />
           <Row>
             <Col offset={4} span={16}>
-              {[<C1Step />, <C2Step />, <C3Step />][this.props.authentication.step]}
+              {(step >= 2 && status === 4 ) ? (
+                <Result
+                  type="success"
+                  title="您已经完成了所有认证"
+                  style={{ marginTop: 56 }}
+                />) : ([<C1Step />, <C2Step />, <C3Step />][step])}
             </Col>
           </Row>
         </div>
