@@ -70,11 +70,11 @@ const messageTemplates = {
   },
   105: {
     noticeType: 'im',
-    content: '<%= sender.nicekname %>发起申诉，客服正在介入...'
+    content: '<%= sender.nickname %>发起申诉，客服正在介入...'
   },
   106: {
     noticeType: 'im',
-    content: '客服<%= sender.nicekname %>发起申诉，已受理申诉。'
+    content: '客服<%= sender.nickname %>发起申诉，已受理申诉。'
   },
   107: {
     noticeType: 'im',
