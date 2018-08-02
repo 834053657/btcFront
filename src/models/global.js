@@ -1,6 +1,6 @@
 import { message } from 'antd';
 import { find, filter, mapKeys, groupBy, orderBy, map, findIndex } from 'lodash';
-import { getLocale, setLocale } from '../utils/authority';
+import { getAuthority, getLocale, setLocale } from '../utils/authority';
 import { playAudio } from '../utils/utils';
 
 import {
@@ -31,6 +31,26 @@ export default {
   },
 
   effects: {
+    mountIntercomWidget() {
+      const { token, user } = getAuthority() || {};
+      let userInfo = {}
+      if (token && user.id) { 
+        userInfo = {
+          email: user.email,
+          user_id: user.nickname,
+          created_at: user.created_at,
+        }        
+      }
+      window.Intercom("boot", {
+        app_id: __INTERCOM_APP_ID__,
+        ...userInfo
+      })
+      console.log('update intercom')
+    },
+    unmountIntercomWidget() {
+      window.Intercom("shutdown")
+      window.Intercom("boot", { app_id: __INTERCOM_APP_ID__ })
+    },
     *fetchTopNotice(_, { call, put }) {
       const response = yield call(queryTopNotice);
 

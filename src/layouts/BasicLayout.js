@@ -131,6 +131,9 @@ class BasicLayout extends React.Component {
         payload: { status: '1,2,5' },
       });
     }
+    this.props.dispatch({
+      type: 'global/mountIntercomWidget'
+    })
   }
   componentWillUnmount() {
     unenquireScreen(this.enquireHandler);
