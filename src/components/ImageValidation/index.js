@@ -27,6 +27,15 @@ class ImageValidation extends Component {
     this.loadCaptcha();
   }
 
+  componentWillUpdate(nextProps, nextState) {
+    const { visible } = this.props;
+    const { visible: nextVisible } = nextProps;
+
+    if (nextVisible && nextVisible !== visible) {
+      this.loadCaptcha();
+    }
+  }
+
   handleCancel = () => {
     this.props.form.resetFields();
     this.props.onCancel();
@@ -47,7 +56,6 @@ class ImageValidation extends Component {
       usage: 'login',
     };
     const res = await getCaptcha(params);
-    console.log(res);
     if (res.data) {
       this.setState({
         image: res.data.img,

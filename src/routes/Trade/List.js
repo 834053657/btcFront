@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import { Link, routerRedux } from 'dva/router';
 import moment from 'moment';
 import { Table, Alert, Button, Icon, Radio, Avatar, Badge, Tag, Popover } from 'antd';
-import { map, forEachRight, filter } from 'lodash';
+import { map, forEachRight, filter, get } from 'lodash';
 import { stringify } from 'qs';
 import BlankLayout from '../../layouts/BlankLayout';
 import SearchForm from './forms/SearchForm';
@@ -14,7 +14,8 @@ import { getQueryString, getPayIcon } from '../../utils/utils';
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 
-@connect(({ trade, global, loading }) => ({
+@connect(({ trade, global, loading, user }) => ({
+  currentUser: user.currentUser,
   ...trade.tradeList,
   topNotice: global.topNotice,
   loading: loading.models.message,
@@ -138,10 +139,13 @@ export default class List extends Component {
         title: '操作',
         render: r => {
           const { ad_type } = this.state;
+          const uid = get(this.props, 'currentUser.user.id');
+          const { id } = r.owner || {};
+
           return (
             <Fragment>
               <Link to={`/trade/detail/${r.id}`}>
-                <Button type="primary">{ad_type ? CONFIG.trade_ad_type[ad_type] : '-'}</Button>
+                <Button disabled={uid === id} type="primary">{ad_type ? CONFIG.trade_ad_type[ad_type] : '-'}</Button>
               </Link>
             </Fragment>
           );
@@ -157,15 +161,18 @@ export default class List extends Component {
 
   handleTypeChange = e => {
     const ad_type = e.target.value;
-    this.setState({
-      ad_type,
+
+    this.fetch({ ad_type }, ()=> {
+      this.setState({
+        ad_type,
+      });
+      this.props.dispatch(
+        routerRedux.replace({
+          search: stringify({ ad_type }),
+        })
+      );
     });
-    this.fetch({ ad_type });
-    this.props.dispatch(
-      routerRedux.replace({
-        search: stringify({ ad_type }),
-      })
-    );
+
   };
 
   handleTableChange = (pagination, filtersArg, sorter) => {

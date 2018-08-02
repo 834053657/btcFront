@@ -312,7 +312,6 @@ export default class UserCenterPage extends Component {
   };
 
   render() {
-    console.log(this.props);
     const {
       emailModalVisible,
       mobileModalVisible,
@@ -341,7 +340,7 @@ export default class UserCenterPage extends Component {
                 <div className={styles.user_info}>
                   <Avatar size="lager" className={styles.avatar} src={user.avatar} />
                   <div className={styles.info}>
-                    <div className={cx('name', styles.name)}>{user.nickname}</div>
+                    <div className={styles.name}>{user.nickname}</div>
                     <div className={styles.uid}>UID: {user.id}</div>
                   </div>
                 </div>

@@ -129,7 +129,7 @@ export default class LoginPage extends Component {
         <h3>登录</h3>
         <Login onSubmit={this.handleSubmit}>
           {login.error && this.renderMessage(login.error)}
-          <UserName name="account" placeholder="用户名或邮箱" />
+          <UserName name="account" placeholder="用户名/邮箱/手机号" />
           <Password name="password" placeholder="密码" />
           <ImgCaptcha
             name="captcha"

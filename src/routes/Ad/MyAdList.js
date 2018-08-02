@@ -165,7 +165,7 @@ export default class List extends Component {
             {r.status === 1 && (
               <span>
                 {/*<Divider type="vertical" />*/}
-                <a onClick={() => this.updateAd(r, 2)} className="text-green">
+                <a onClick={() => this.updateAd(r, 2)} className="text-red">
                   暂停
                 </a>
               </span>
@@ -184,7 +184,7 @@ export default class List extends Component {
                 <Link to={`/ad/edit/${r.id}`}>编辑</Link>
               </span>
             )}
-            {[1, 2, 4].indexOf(r.status) > -1 && (
+            {[ 2, 4].indexOf(r.status) > -1 && (
               <span>
                 <Divider type="vertical" />
                 <Popconfirm

@@ -1,19 +1,14 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-
 import { Icon, Table, Button, Avatar, Radio, List, Badge } from 'antd';
-import { map, filter } from 'lodash';
-import { Link, routerRedux } from 'dva/router';
+import { map, filter, get } from 'lodash';
+import { Link } from 'dva/router';
 import DescriptionList from 'components/DescriptionList';
 import ConfirmModal from '../../components/ConfirmModal';
-import BlankLayout from '../../layouts/BlankLayout';
 import styles from './UserDetails.less';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-
-import ReportForm from './Form/ReportForm';
 import { getPayIcon } from '../../utils/utils';
-import { getAuthority } from '../../utils/authority';
 
 const { Description } = DescriptionList;
 const RadioButton = Radio.Button;
@@ -35,7 +30,6 @@ export default class UserDetails extends Component {
     this.state = {
       visible: false,
       type: '1',
-      disabled: false,
       comment_visbile: true,
     };
   }
@@ -90,8 +84,10 @@ export default class UserDetails extends Component {
   };
 
   UserMessage = () => {
-    const { userMessage = {}, trader = {} } = this.props;
-    const { disabled } = this.state;
+    const { userMessage = {}, trader = {}, } = this.props;
+    const uid = get(this.props, 'currentUser.user.id');
+    const id = get(this.props, 'match.params.uid');
+
     const { online, avatar, nickname } = userMessage || {};
     return (
       <div className={styles.UserMassage}>
@@ -101,32 +97,37 @@ export default class UserDetails extends Component {
           </Badge>
           <span style={{ fontSize: 28, marginLeft: 15 }}>{nickname}</span>
 
-          <a className={styles.report} onClick={this.handleShowReport}>
-            <Icon type="flag" />举报
-          </a>
+          {
+            this.checkLogined() && uid !== +id ? (
+              <a className={styles.report} onClick={this.handleShowReport}>
+                <Icon type="flag" />举报
+              </a>
+            ): null
+          }
         </div>
 
         <div className={styles.user_trust}>
-          {userMessage.is_trust === true ? (
-            <Button
-              className={styles.trust}
-              onClick={this.handleToTrust.bind(this, 2)}
-              loading={this.props.loading_trust}
-            >
-              <Icon type="heart-o" style={{ color: '#ccc', marginRight: '5px' }} />取消信任
-            </Button>
-          ) : (
-            <Button
-              type="primary"
-              className={styles.UNtrust}
-              onClick={this.handleToTrust.bind(this, 1)}
-              loading={this.props.loading_trust}
-            >
-              <Icon type="heart-o" style={{ color: '#EAEAEA', marginRight: '5px' }} />信任
-            </Button>
-          )}
           {this.checkLogined() ? (
-            ''
+            userMessage.is_trust === true ? (
+              <Button
+                className={styles.trust}
+                onClick={this.handleToTrust.bind(this, 2)}
+                loading={this.props.loading_trust}
+              >
+                <Icon type="heart-o" style={{ color: '#ccc', marginRight: '5px' }} />取消信任
+              </Button>
+            ) : (
+              uid !== +id ? (
+                <Button
+                  type="primary"
+                  className={styles.UNtrust}
+                  onClick={this.handleToTrust.bind(this, 1)}
+                  loading={this.props.loading_trust}
+                >
+                  <Icon type="heart-o" style={{ color: '#EAEAEA', marginRight: '5px' }} />信任
+                </Button>
+              ): null
+            )
           ) : (
             <div style={{ margin: '30px' }}>
               请 <Link to="/user/login">登录</Link> 或 <Link to="/user/register">注册</Link> ， 将{' '}
@@ -220,10 +221,12 @@ export default class UserDetails extends Component {
         title: '操作',
         render: row => {
           const { type } = this.state;
+          const uid = get(this.props, 'currentUser.user.id');
+          const id = get(this.props, 'match.params.uid');
           return (
             <Fragment>
               <Link to={type === '1' ? `/trade/detail/${row.ad_id}` : `/trade/detail/${row.ad_id}`}>
-                <Button type="primary">{type ? typeMap[type] : '-'}</Button>
+                <Button type="primary" disabled={+uid === +id}>{type ? typeMap[type] : '-'}</Button>
               </Link>
             </Fragment>
           );
