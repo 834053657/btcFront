@@ -62,6 +62,7 @@ export default class InfoDetail extends PureComponent {
         this.setState({
           title: CONFIG.articleList[type],
           content,
+
         });
       },
     });
@@ -70,7 +71,6 @@ export default class InfoDetail extends PureComponent {
   render() {
     // const { loading } = this.props;
     const { title, content } = this.state;
-
     return (
       <PageHeaderLayout title={title}>
         <div className={clsString}>

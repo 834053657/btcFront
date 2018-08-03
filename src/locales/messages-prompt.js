@@ -3,14 +3,14 @@ import zh from './zh-prompt.json';
 import { getLocale } from '../utils/authority';
 
 const generatePromptMsgs = () => {
-  const lang = getLocale() || 'zh-CN';
+  const lang = getLocale() || 'zh_CN';
   let message = null;
 
   switch (lang) {
-    case 'en-GB':
+    case 'en_GB':
       message = en;
       break;
-    case 'zh-CN':
+    case 'zh_CN':
       message = zh;
       break;
     default:
@@ -22,14 +22,14 @@ const generatePromptMsgs = () => {
 };
 
 const getPromptMsg = (id, params) => {
-  const lang = getLocale() || 'zh-CN';
+  const lang = getLocale() || 'zh_CN';
   let message = '';
 
   switch (lang) {
-    case 'en-GB':
+    case 'en_GB':
       message = en[id];
       break;
-    case 'zh-CN':
+    case 'zh_CN':
       message = zh[id];
       break;
     default:

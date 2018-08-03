@@ -4,7 +4,47 @@
     "defaultMessage": "用户"
   },
   {
-    "id": "realName.realName_leave_user_leave",
+    "id": "mainList.user_country",
     "defaultMessage": "所在国家"
+  },
+  {
+    "id": "mainList.user_orderEvaluate",
+    "defaultMessage": "交易笔数/好评率"
+  },
+  {
+    "id": "mainList.user_payment_methods",
+    "defaultMessage": "支付方式"
+  },
+  {
+    "id": "mainList.order_trading_price",
+    "defaultMessage": "价格"
+  },
+  {
+    "id": "mainList.price_limit_",
+    "defaultMessage": "限额"
+  },
+  {
+    "id": "mainList.user_operator",
+    "defaultMessage": "操作"
+  },
+  {
+    "id": "mainList.hall_main_title",
+    "defaultMessage": "交易比特币 快速 安全 私密"
+  },
+  {
+    "id": "mainList.hall_second_title",
+    "defaultMessage": "在 15559 个城市 和 248 个国家/地区交易比特币"
+  },
+  {
+    "id": "mainList.user_todo_btn",
+    "defaultMessage": "我要{my}"
+  },
+  {
+    "id": "mainList.all_country",
+    "defaultMessage": "全部国家"
+  },
+  {
+    "id": "mainList.all_pay_methods",
+    "defaultMessage": "全部支付方式"
   }
 ]

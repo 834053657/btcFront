@@ -116,7 +116,7 @@ export default class List extends Component {
         },
       },
       {
-        title: '价格',
+        title: <FM id='mainList.order_trading_price' defaultMessage='价格' />,
         dataIndex: 'trading_price',
         render: (v, row) => {
           return (
@@ -127,7 +127,7 @@ export default class List extends Component {
         },
       },
       {
-        title: '限额',
+        title: <FM id='mainList.price_limit_' defaultMessage='限额' />,
         dataIndex: 'condition_',
         render: (v, row) => {
           const { max_volume = 0, min_volume = 0 } = row || {};
@@ -139,7 +139,7 @@ export default class List extends Component {
         },
       },
       {
-        title: '操作',
+        title: <FM id='mainList.user_operator' defaultMessage='操作' />,
         render: r => {
           const { ad_type } = this.state;
           return (
@@ -236,8 +236,8 @@ export default class List extends Component {
         </div>
 
         <div className={styles.banners}>
-          <h1 className={styles.title}>交易比特币 快速 安全 私密</h1>
-          <h4 className={styles.sub_title}>在 15559 个城市 和 248 个国家/地区交易比特币</h4>
+          <h1 className={styles.title}><FM id='mainList.hall_main_title' defaultMessage='交易比特币 快速 安全 私密' /></h1>
+          <h4 className={styles.sub_title}><FM id='mainList.hall_second_title' defaultMessage='在 15559 个城市 和 248 个国家/地区交易比特币' /></h4>
         </div>
 
         <div>
@@ -250,7 +250,7 @@ export default class List extends Component {
             >
               {map(CONFIG.trade_ad_type, (text, value) => (
                 <RadioButton key={value} value={+value}>
-                  我要{text}
+                  <FM id="mainList.user_todo_btn" defaultMessage="我要{my}" values={{my:text}} />
                 </RadioButton>
               ))}
             </RadioGroup>
@@ -276,7 +276,7 @@ export default class List extends Component {
                 <Tag>
                   {countries && CONFIG.countrysMap[countries]
                     ? CONFIG.countrysMap[countries].name
-                    : '全部国家'}
+                    : <FM id='mainList.all_country' defaultMessage='全部国家' />}
                 </Tag>
                 {currency && CONFIG.currencyList[currency] ? (
                   <Tag>{CONFIG.currencyList[currency]}</Tag>
@@ -284,7 +284,7 @@ export default class List extends Component {
                 <Tag>
                   {pay_methods && CONFIG.payments[pay_methods]
                     ? CONFIG.payments[pay_methods]
-                    : '全部支付方式'}
+                    : <FM id='mainList.all_pay_methods' defaultMessage='全部支付方式' />}
                 </Tag>
                 {money && (
                   <Tag closable onClose={this.handleClearMoney}>

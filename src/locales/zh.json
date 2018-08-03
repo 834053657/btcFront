@@ -1,3 +1,26 @@
 {
-  "mainList.user_name": "用户"
+  "indexHeader.personal_center_down": "个人中心",
+  "indexHeader.personal_sign_in": "注册",
+  "indexHeader.personal_login": "登录",
+  "indexHeader.order_none": "目前无正在进行中的订单",
+  "indexHeader.personal_order_doing": "进行中订单",
+  "indexHeader.personal_read_all_msg": "您已读完所有消息",
+  "indexHeader.personal_check_allMsg": "你已查看所有通知",
+  "indexHeader.deal_msg_": "交易信息",
+  "indexHeader.personal_login_out": "退出登录",
+  "indexHeader.personal_order": "我的订单",
+  "indexHeader.personal_ad": "我的广告",
+  "mainList.user_operator": "操作",
+  "mainList.all_pay_methods": "全部支付方式",
+  "mainList.all_country": "全部国家",
+  "indexHeader.sys_notice": "系统公告",
+  "mainList.hall_main_title": "交易比特币 快速 安全 私密",
+  "mainList.hall_second_title": "在 15559 个城市 和 248 个国家/地区交易比特币",
+  "mainList.order_trading_price": "价格",
+  "mainList.price_limit_": "限额",
+  "mainList.user_country": "所在国家",
+  "mainList.user_name": "用户",
+  "mainList.user_orderEvaluate": "交易笔数/好评率",
+  "mainList.user_payment_methods": "支付方式",
+  "mainList.user_todo_btn": "我要{my}"
 }

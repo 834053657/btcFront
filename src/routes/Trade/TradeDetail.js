@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { Button, Card, Row, Col, Badge, Form, Input, Avatar, Icon, Select, Checkbox } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
+
 import { map, isNumber, floor, omit } from 'lodash';
 import DescriptionList from 'components/DescriptionList';
 import { routerRedux } from 'dva/router';
@@ -133,7 +135,7 @@ export default class TradeDetail extends PureComponent {
     const { getFieldDecorator } = this.props.form;
     const { payments = {} } = currentUser || {};
     const { owner = {}, ad_type } = detail || {};
-    const breadcrumbList = [{ title: '首页', href: '/' }, { title: '广告详情' }];
+    const breadcrumbList = [{ title: <FM id='tradeDetail.main_page' defaultMessage='首页' />, href: '/' }, { title: <FM id='tradeDetail.ad_detail' defaultMessage='广告详情' /> }];
     // const currencyDes =  detail.currency ? CONFIG.currencyList[detail.currency]: '-';
     const existsPayments = map(payments, item => item.payment_method);
     const ENABLE_PAY_MENTS = omit(CONFIG.payments, existsPayments);

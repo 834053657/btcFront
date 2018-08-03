@@ -4,15 +4,15 @@ import appLocaleZh from '../locales/zh-Hans-CN';
 import { getLocale } from './authority';
 
 const getAppLocale = () => {
-  const lang = getLocale() || 'zh';
+  const lang = getLocale() || 'zh_CN';
   console.log(lang)
   let appLocale = null;
   switch (lang) {
-    case 'en-GB':
+    case 'en_GB':
       addLocaleData(appLocaleEn.data);
       appLocale = appLocaleEn;
       break;
-    case 'zh-CN':
+    case 'zh_CN':
       addLocaleData(appLocaleZh.data);
       appLocale = appLocaleZh;
 
@@ -26,7 +26,7 @@ const getAppLocale = () => {
 };
 
 const getLang = () => {
-  return getLocale() || 'zh';
+  return getLocale() || 'zh_CN';
 };
 
 export default {

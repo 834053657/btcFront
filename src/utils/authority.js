@@ -16,8 +16,8 @@ export function getLocale() {
   const browserLang = window.navigator.browserLanguage
     ? window.navigator.browserLanguage
     : window.navigator.language;
-  let defLang = 'zh-CN';
-  if (browserLang.indexOf('en') > -1) defLang = 'en-GB';
+  let defLang = 'zh_CN';
+  if (browserLang.indexOf('en') > -1) defLang = 'en_GB';
   return localStorage.getItem(`kg-utomarket-locale-${__KG_API_ENV__}`);
 }
 
