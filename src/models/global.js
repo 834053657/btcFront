@@ -37,7 +37,8 @@ export default {
       if (token && user.id) { 
         userInfo = {
           email: user.email,
-          user_id: user.nickname,
+          name: user.nickname,
+          user_id: user.id,
           created_at: user.created_at,
         }        
       }
