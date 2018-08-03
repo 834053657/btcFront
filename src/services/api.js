@@ -459,6 +459,7 @@ export async function queryMyRemain(params) {
 }
 
 export async function getFile({ type, local }) {
+  console.log(type, local)
   return request(`../../public/article/${type}_${local}.html?r=${Math.random()}`, {
     Accept: 'text/html',
     'Content-Type': 'text/html;  charset=utf-8',

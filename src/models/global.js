@@ -34,12 +34,12 @@ export default {
     mountIntercomWidget() {
       const { token, user } = getAuthority() || {};
       let userInfo = {}
-      if (token && user.id) { 
+      if (token && user.id) {
         userInfo = {
           email: user.email,
           user_id: user.nickname,
           created_at: user.created_at,
-        }        
+        }
       }
       window.Intercom("boot", {
         app_id: __INTERCOM_APP_ID__,
@@ -69,7 +69,7 @@ export default {
         yield put({
           type: 'authentication/UPDATE_DEFAULT_CONFIG',
           payload: CONFIG,
-        }); 
+        });
       }
       // CONFIG.countrysMap = mapKeys(CONFIG.country, 'code');
     },

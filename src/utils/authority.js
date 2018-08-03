@@ -13,10 +13,14 @@ export function setAuthority(authority) {
 
 // get user locale language
 export function getLocale() {
+  const browserLang = window.navigator.browserLanguage
+    ? window.navigator.browserLanguage
+    : window.navigator.language;
+  let defLang = 'zh_CN';
+  if (browserLang.indexOf('en') > -1) defLang = 'en_GB';
   return localStorage.getItem(`kg-utomarket-locale-${__KG_API_ENV__}`);
 }
 
 export function setLocale(locale) {
-  console.log(locale);
   return localStorage.setItem(`kg-utomarket-locale-${__KG_API_ENV__}`, locale);
 }

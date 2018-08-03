@@ -3,6 +3,7 @@ import 'url-polyfill';
 import dva from 'dva';
 import { message, notification } from 'antd';
 import createHistory from 'history/createHashHistory';
+
 // user BrowserHistory
 // import createHistory from 'history/createBrowserHistory';
 import createLoading from 'dva-loading';
@@ -14,6 +15,8 @@ import { getLocale, setLocale } from './utils/authority';
 import './index.less';
 import CONFIG from './utils/config';
 import { dvaSocket } from './utils/socket';
+import promptMsgs from './locales/messages-prompt';
+
 
 if (!getLocale()) {
   setLocale(getDefaultLocal());
@@ -31,6 +34,9 @@ notification.config({
 });
 
 global.CONFIG = CONFIG;
+global.PROMPT = promptMsgs;
+
+
 
 // 1. Initialize
 const app = dva({

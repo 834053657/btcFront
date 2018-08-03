@@ -54,7 +54,7 @@ export default function request(postUrl, options, base_url) {
   const isDev = process.env.NODE_ENV === 'development';
   const { token, user } = getAuthority() || {};
   const { id } = user || {};
-  const language = getLocale() || 'zh-CN';
+  const language = getLocale() || 'zh_CN';
   const defaultOptions = {
     // credentials: 'include',
     headers: {

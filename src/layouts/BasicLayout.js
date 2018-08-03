@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Layout, Icon, message, Modal } from 'antd';
+import { Layout, Icon, message, Modal,LocaleProvider } from 'antd';
+import { IntlProvider, FormattedMessage } from 'react-intl';
 import DocumentTitle from 'react-document-title';
 import { stringify } from 'qs';
 import { connect } from 'dva';
@@ -18,8 +19,10 @@ import { getRoutes, getMessageContent } from '../utils/utils';
 import Authorized from '../utils/Authorized';
 import { getMenuData } from '../common/menu';
 import logo from '../assets/logo.svg';
-import { getAuthority, setLocale } from '../utils/authority';
+import { getAuthority, setLocale ,getLocale} from '../utils/authority';
+import cintl from '../utils/intl';
 
+const appLocale = cintl.getAppLocale();
 const { Content, Header, Footer } = Layout;
 const { AuthorizedRoute, check } = Authorized;
 
@@ -241,7 +244,7 @@ class BasicLayout extends React.Component {
       noticesVisible: false,
     });
     const orderId = get(item, 'message.order_id')
-    const idAttr = orderId ? { order_id: orderId } : { id: item.id } 
+    const idAttr = orderId ? { order_id: orderId } : { id: item.id }
     dispatch({
       type: 'global/readNotices',
       payload: { all: 0, ...idAttr },
@@ -254,7 +257,7 @@ class BasicLayout extends React.Component {
     });
     dispatch(routerRedux.push(item.to));
   };
-  
+
   handleMenuClick = ({ key }) => {
     if (key === 'triggerError') {
       this.props.dispatch(routerRedux.push('/exception/trigger'));
@@ -306,11 +309,16 @@ class BasicLayout extends React.Component {
   };
 
   handleSetLocale = ({ key }) => {
-    if (key) {
-      this.props.dispatch({
-        type: 'global/setLanguage',
-        payload: key,
-      });
+    // if (key) {
+    //   this.props.dispatch({
+    //     type: 'global/setLanguage',
+    //     payload: key,
+    //   });
+    // }
+    console.log('language', key);
+    if (getLocale() !== key) {
+      setLocale(key);
+      window.location.reload();
     }
   };
   render() {
@@ -397,13 +405,17 @@ class BasicLayout extends React.Component {
         </Layout>
       </Layout>
     );
-
     return (
-      <DocumentTitle title={this.getPageTitle()}>
-        <ContainerQuery query={query}>
-          {params => <div className={classNames(params)}>{layout}</div>}
-        </ContainerQuery>
-      </DocumentTitle>
+
+      <LocaleProvider locale={appLocale.antd}>
+        <IntlProvider locale={appLocale.locale} messages={appLocale.messages}>
+          <DocumentTitle title={this.getPageTitle()}>
+            <ContainerQuery query={query}>
+              {params => <div className={classNames(params)}>{layout}</div>}
+            </ContainerQuery>
+          </DocumentTitle>
+        </IntlProvider>
+      </LocaleProvider>
     );
   }
 }
