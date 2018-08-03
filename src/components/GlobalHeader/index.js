@@ -123,7 +123,7 @@ export default class GlobalHeader extends PureComponent {
         <div className={styles.right}>
           <Dropdown overlay={language}>
             <b className={styles.action}>
-              {local === 'zh_CN' ? CONFIG.language['zh_CN'] : CONFIG.language['en_GB']}
+              {local === 'zh-CN' ? CONFIG.language['zh-CN'] : CONFIG.language['en-GB']}
             </b>
           </Dropdown>
           {currentUser.token && currentUser.user ? (
