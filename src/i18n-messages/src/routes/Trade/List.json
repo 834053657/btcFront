@@ -1,0 +1,10 @@
+[
+  {
+    "id": "mainList.user_name",
+    "defaultMessage": "用户"
+  },
+  {
+    "id": "realName.realName_leave_user_leave",
+    "defaultMessage": "所在国家"
+  }
+]

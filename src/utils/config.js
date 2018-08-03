@@ -31,8 +31,8 @@ export default {
     mail: '邮箱验证',
   },
   language: {
-    en_GB: 'English',
-    zh_CN: '简体中文',
+    "en-GB": 'English',
+    "zh-CN": '简体中文',
   },
   payments: {
     alipay: '支付宝',

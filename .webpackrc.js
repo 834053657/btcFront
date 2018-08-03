@@ -10,7 +10,11 @@ export default {
   },
   env: {
     development: {
-      extraBabelPlugins: ['dva-hmr'],
+      extraBabelPlugins: ['dva-hmr', [
+        'react-intl', {
+          messagesDir: './src/i18n-messages',
+        },
+      ]],
       define: {
         __KG_API_ENV__: process.env.KG_API_ENV,
         __KG_DATATIME__: new Date().toLocaleString(),
