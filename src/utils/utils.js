@@ -252,8 +252,7 @@ export function getDefaultLocal() {
 
 export function playAudio() {
   try {
-    const audio = document.createElement('audio');
-    audio.src = require('../../public/audio/msg.mp3');
+    const audio = new Audio(require('../../public/audio/msg.mp3'));
     audio.play();
   } catch (e) { e }
 }

@@ -147,6 +147,18 @@ const messageTemplates = {
     description: '<%= sender.nickname %>给你发来新消息',
     to: '/trade/step/<%= message.ref_id %>',
   },
+  160: {
+    noticeType: 'trade',
+    group: '订单<%= message.ref_no %>有新消息',
+    title: '订单<%= message.ref_no %>有新消息',
+    description: '买家对订单<%= message.ref_no %>发起申诉',
+  },
+  161: {
+    noticeType: 'trade',
+    group: '订单<%= message.ref_no %>有新消息',
+    title: '订单<%= message.ref_no %>有新消息',
+    description: '卖家对订单<%= message.ref_no %>发起申诉',
+  }
 };
 
 const Types = chain(messageTemplates)

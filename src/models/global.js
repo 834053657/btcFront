@@ -45,7 +45,6 @@ export default {
         app_id: __INTERCOM_APP_ID__,
         ...userInfo
       })
-      console.log('update intercom')
     },
     unmountIntercomWidget() {
       window.Intercom("shutdown")
