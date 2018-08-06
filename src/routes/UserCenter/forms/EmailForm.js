@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Input, Button, Modal, Row, Col, Steps, Divider } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
 import classNames from 'classnames';
 import styles from './EmailForm.less';
 
@@ -74,7 +75,7 @@ class EmailForm extends Component {
     return (
       <div className={classNames(className, styles.login)}>
         <Form onSubmit={this.handleSubmit}>
-          <FormItem {...formItemLayout} label="邮箱">
+          <FormItem {...formItemLayout} label={<FM id='emailForm.user_email_title' defaultMessage='邮箱' />}>
             <Row gutter={8}>
               <Col span={16}>
                 {getFieldDecorator('email', {
@@ -82,14 +83,14 @@ class EmailForm extends Component {
                   rules: [
                     {
                       required: true,
-                      message: '请输入邮箱！',
+                      message: <FM id='emailForm.user_email_input' defaultMessage='请输入邮箱！' />,
                     },
                     {
                       type: 'email',
-                      message: '邮箱地址格式错误！',
+                      message: <FM id='emailForm.user_email_error' defaultMessage='邮箱地址格式错误！' />,
                     },
                   ],
-                })(<Input size="large" disabled={disabled} placeholder="邮箱" />)}
+                })(<Input size="large" disabled={disabled} placeholder={(PROMPT('emailForm.user_email_holder')||'邮箱')} />)}
               </Col>
               <Col span={8}>
                 <Button
@@ -98,27 +99,27 @@ class EmailForm extends Component {
                   size="large"
                   onClick={this.handleSendCaptcha}
                 >
-                  {count ? `${count} s` : '获取验证码'}
+                  {count ? `${count} s` : <FM id='emailForm.get_code' defaultMessage='获取验证码' />}
                 </Button>
               </Col>
             </Row>
           </FormItem>
-          <FormItem {...formItemLayout} label="验证码">
+          <FormItem {...formItemLayout} label={<FM id='emailForm.code_title' defaultMessage='验证码' />}>
             {getFieldDecorator('captcha', {
               rules: [
                 {
                   required: true,
-                  message: '请输入验证码！',
+                  message: <FM id='emailForm.code_input' defaultMessage='请输入验证码！' />,
                 },
               ],
-            })(<Input size="large" placeholder="验证码" />)}
+            })(<Input size="large" placeholder={(PROMPT('emailForm.code_holder')||'验证码')} />)}
           </FormItem>
           <FormItem className={styles.buttonBox}>
             <Button key="back" onClick={this.handleCancel}>
-              取消
+              <FM id='emailForm.btn_cancel' defaultMessage='取消' />
             </Button>
             <Button loading={submitting} className={styles.submit} type="primary" htmlType="submit">
-              下一步
+              <FM id='emailForm.btn_next_step' defaultMessage='下一步' />
             </Button>
           </FormItem>
         </Form>

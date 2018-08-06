@@ -1,0 +1,22 @@
+[
+  {
+    "id": "Layout.BTC_site",
+    "defaultMessage": "比特币地址"
+  },
+  {
+    "id": "Layout.my_wallet",
+    "defaultMessage": "我的钱包"
+  },
+  {
+    "id": "Layout.all_money",
+    "defaultMessage": "总资产折合："
+  },
+  {
+    "id": "Layout.can_not_use",
+    "defaultMessage": "冻结："
+  },
+  {
+    "id": "Layout.my_btc_site",
+    "defaultMessage": "我的比特币地址:"
+  }
+]

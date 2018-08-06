@@ -1,0 +1,206 @@
+[
+  {
+    "id": "userCenterPage.user_real_name",
+    "defaultMessage": "实名认证"
+  },
+  {
+    "id": "tradeStep.video_approve",
+    "defaultMessage": "视频认证"
+  },
+  {
+    "id": "userCenterPage.passWorld_low_title",
+    "defaultMessage": "低"
+  },
+  {
+    "id": "userCenterPage.passWorld_low",
+    "defaultMessage": "低"
+  },
+  {
+    "id": "userCenterPage.passWorld_middle",
+    "defaultMessage": "中"
+  },
+  {
+    "id": "userCenterPage.passWorld_high",
+    "defaultMessage": "高"
+  },
+  {
+    "id": "userCenterPage.user_photo_upload",
+    "defaultMessage": "上传头像"
+  },
+  {
+    "id": "userCenterPage.good_ratio",
+    "defaultMessage": "好评率"
+  },
+  {
+    "id": "userCenterPage.trust_count",
+    "defaultMessage": "信任数"
+  },
+  {
+    "id": "userCenterPage.user_trust",
+    "defaultMessage": "被{num}人信任"
+  },
+  {
+    "id": "userCenterPage.block_count",
+    "defaultMessage": "屏蔽数"
+  },
+  {
+    "id": "userCenterPage.user_un_look",
+    "defaultMessage": "被{num}人屏蔽"
+  },
+  {
+    "id": "userCenterPage.trade_volume",
+    "defaultMessage": "已完成交易量"
+  },
+  {
+    "id": "userCenterPage.last_login_at",
+    "defaultMessage": "最后上线时间"
+  },
+  {
+    "id": "userCenterPage.account_create_at",
+    "defaultMessage": "本帐号于"
+  },
+  {
+    "id": "userCenterPage.account_sign_in",
+    "defaultMessage": "注册"
+  },
+  {
+    "id": "userCenterPage.account_first_deal",
+    "defaultMessage": "首次交易于 {time}"
+  },
+  {
+    "id": "userCenterPage.account_safe",
+    "defaultMessage": "账号与安全"
+  },
+  {
+    "id": "userCenterPage.account_safe_lave",
+    "defaultMessage": "安全等级:"
+  },
+  {
+    "id": "userCenterPage.user_country",
+    "defaultMessage": "国家"
+  },
+  {
+    "id": "userCenterPage.user_country_choose",
+    "defaultMessage": "已选择"
+  },
+  {
+    "id": "userCenterPage.user_country_unChoose",
+    "defaultMessage": "未选择"
+  },
+  {
+    "id": "userCenterPage.user_country_btn_choose",
+    "defaultMessage": "选择"
+  },
+  {
+    "id": "userCenterPage.user_Email",
+    "defaultMessage": "邮箱"
+  },
+  {
+    "id": "userCenterPage.user_Email_bind",
+    "defaultMessage": "已绑定"
+  },
+  {
+    "id": "userCenterPage.user_Email_unBind",
+    "defaultMessage": "未绑定"
+  },
+  {
+    "id": "userCenterPage.user_Email_change",
+    "defaultMessage": "修改"
+  },
+  {
+    "id": "userCenterPage.user_Email_toBind_btn",
+    "defaultMessage": "绑定"
+  },
+  {
+    "id": "userCenterPage.mobile_num",
+    "defaultMessage": "手机"
+  },
+  {
+    "id": "userCenterPage.mobile_binding",
+    "defaultMessage": "已绑定"
+  },
+  {
+    "id": "userCenterPage.mobile_unBind",
+    "defaultMessage": "未绑定"
+  },
+  {
+    "id": "userCenterPage.mobile_change_",
+    "defaultMessage": "修改"
+  },
+  {
+    "id": "userCenterPage.mobile_toBind_",
+    "defaultMessage": "绑定"
+  },
+  {
+    "id": "userCenterPage.chrome_code",
+    "defaultMessage": "谷歌验证码"
+  },
+  {
+    "id": "userCenterPage.chrome_binding",
+    "defaultMessage": "已绑定"
+  },
+  {
+    "id": "userCenterPage.chrome_unBind",
+    "defaultMessage": "未绑定"
+  },
+  {
+    "id": "userCenterPage.chrome_unUse",
+    "defaultMessage": "停用"
+  },
+  {
+    "id": "userCenterPage.chrome_set",
+    "defaultMessage": "设置"
+  },
+  {
+    "id": "userCenterPage.lock_passWord",
+    "defaultMessage": "登录密码"
+  },
+  {
+    "id": "userCenterPage.lock_passWord_change",
+    "defaultMessage": "修改"
+  },
+  {
+    "id": "userCenterPage.user_personal_approve",
+    "defaultMessage": "身份认证"
+  },
+  {
+    "id": "userCenterPage.user_personal_unApprove",
+    "defaultMessage": "未认证"
+  },
+  {
+    "id": "userCenterPage.user_personal_approve_lave",
+    "defaultMessage": "认证等级:"
+  },
+  {
+    "id": "userCenterPage.user_personal_approve_affirm",
+    "defaultMessage": "请如实填写您的身份信息，一经认证不可修改"
+  },
+  {
+    "id": "userCenterPage.user_payment",
+    "defaultMessage": "支付方式"
+  },
+  {
+    "id": "userCenterPage.user_real_name_account",
+    "defaultMessage": "请务必使用您本人的实名账号"
+  },
+  {
+    "id": "userCenterPage.payments_setting",
+    "defaultMessage": "设置"
+  },
+  {
+    "id": "userCenterPage.user_sure_delete",
+    "defaultMessage": "确定要删除吗?"
+  },
+  {
+    "id": "userCenterPage.user_sure_delete_btn",
+    "defaultMessage": "删除"
+  },
+  {
+    "id": "userCenterPage.user_add_new",
+    "defaultMessage": "添加新的支付方式"
+  },
+  {
+    "id": "userCenterPage.user_safe_verify",
+    "defaultMessage": "安全验证"
+  }
+]

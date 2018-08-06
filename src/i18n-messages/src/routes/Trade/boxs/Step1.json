@@ -1,0 +1,94 @@
+[
+  {
+    "id": "step1.connect_setMessage",
+    "defaultMessage": "暂未设置详细的交易信息，请联系对方。"
+  },
+  {
+    "id": "step1.not_message",
+    "defaultMessage": "暂未设置详细的交易信息。"
+  },
+  {
+    "id": "step1.payment_method_bank",
+    "defaultMessage": "支付方式"
+  },
+  {
+    "id": "step1.user_name_bank",
+    "defaultMessage": "姓名"
+  },
+  {
+    "id": "step1.card_bank",
+    "defaultMessage": "卡号"
+  },
+  {
+    "id": "step1.open_main_bank",
+    "defaultMessage": "开户行"
+  },
+  {
+    "id": "step1.open_bank",
+    "defaultMessage": "开户支行"
+  },
+  {
+    "id": "step1.payment_method_we",
+    "defaultMessage": "支付方式"
+  },
+  {
+    "id": "step1.name_we",
+    "defaultMessage": "姓名"
+  },
+  {
+    "id": "step1.pay_msg_we",
+    "defaultMessage": "汇款信息"
+  },
+  {
+    "id": "step1.pay_other",
+    "defaultMessage": "支付方式"
+  },
+  {
+    "id": "step1.payment_method_",
+    "defaultMessage": "支付方式"
+  },
+  {
+    "id": "step1.user_name_",
+    "defaultMessage": "姓名"
+  },
+  {
+    "id": "step1.account_",
+    "defaultMessage": "账户"
+  },
+  {
+    "id": "step1.code_img_",
+    "defaultMessage": "收款码"
+  },
+  {
+    "id": "step1.img_code",
+    "defaultMessage": "收款码"
+  },
+  {
+    "id": "step1.btc_buy",
+    "defaultMessage": "买"
+  },
+  {
+    "id": "step1.btc_sell",
+    "defaultMessage": "卖"
+  },
+  {
+    "id": "step1.trading_price_now",
+    "defaultMessage": "汇率"
+  },
+  {
+    "id": "step1.pay_time",
+    "defaultMessage": "付款倒计时"
+  },
+  {
+    "id": "step1.pay_method",
+    "defaultMessage": "付款方式"
+  },
+  {
+    "id": "step1.user_msg",
+    "defaultMessage": "用户 {name} 的交易条款"
+  },
+  {
+    "id": "step1.report_msg",
+    "defaultMessage": "举报这则交易信息"
+  }
+]

@@ -1,4 +1,5 @@
 import { Steps, Button } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Link } from 'dva/router';
@@ -21,7 +22,7 @@ export default class Authentication extends Component {
     step: 0,
     status: 1,
     reason: null,
-    stepTitleList: ['C1实名认证', 'C2实名认证', 'C3视频认证'],
+    stepTitleList: [(PROMPT('C1_real_name')),(PROMPT('C2_real_name')),(PROMPT('C3_real_name'))],
   };
 
   render() {
@@ -43,7 +44,7 @@ export default class Authentication extends Component {
         {this.props.hideGotoButton === false && (
           <Link to="/authentication">
             <Button className={styles.btnBlock} size="large" type="primary">
-              立即认证
+              <FM id='authStep.approve_now' defaultMessage='立即认证' />
             </Button>
           </Link>
         )}

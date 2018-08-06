@@ -1,0 +1,134 @@
+[
+  {
+    "id": "userDetails.buy_title",
+    "defaultMessage": "购买"
+  },
+  {
+    "id": "userDetails.sell_title",
+    "defaultMessage": "出售"
+  },
+  {
+    "id": "userDetails.report_user",
+    "defaultMessage": "举报"
+  },
+  {
+    "id": "userDetails.cancel_trust",
+    "defaultMessage": "取消信任"
+  },
+  {
+    "id": "userDetails.to_trust",
+    "defaultMessage": "信任"
+  },
+  {
+    "id": "userDetails.please",
+    "defaultMessage": "请"
+  },
+  {
+    "id": "userDetails.login_in",
+    "defaultMessage": "登录"
+  },
+  {
+    "id": "userDetails.or",
+    "defaultMessage": "或"
+  },
+  {
+    "id": "userDetails.sign_in",
+    "defaultMessage": "注册"
+  },
+  {
+    "id": "userDetails.set_user_trust",
+    "defaultMessage": "将 {name} 设置为值得信任。30秒注册~"
+  },
+  {
+    "id": "userDetails.country",
+    "defaultMessage": "国家"
+  },
+  {
+    "id": "userDetails.trade_volume",
+    "defaultMessage": "交易量"
+  },
+  {
+    "id": "userDetails.trade_times",
+    "defaultMessage": "已确认的交易次数"
+  },
+  {
+    "id": "userDetails.good_ratio",
+    "defaultMessage": "好评率"
+  },
+  {
+    "id": "userDetails.first_trade_at",
+    "defaultMessage": "第一次购买"
+  },
+  {
+    "id": "userDetails.created_at",
+    "defaultMessage": "账户创建时间"
+  },
+  {
+    "id": "userDetails.last_login_at",
+    "defaultMessage": "最后一次上线"
+  },
+  {
+    "id": "userDetails.language_",
+    "defaultMessage": "语言"
+  },
+  {
+    "id": "userDetails.trust_is",
+    "defaultMessage": "信任"
+  },
+  {
+    "id": "userDetails.yes_",
+    "defaultMessage": "是"
+  },
+  {
+    "id": "userDetails.no_",
+    "defaultMessage": "否"
+  },
+  {
+    "id": "userDetails.payment_methods",
+    "defaultMessage": "付款方式"
+  },
+  {
+    "id": "userDetails.trading_price",
+    "defaultMessage": "价格"
+  },
+  {
+    "id": "userDetails.condition_",
+    "defaultMessage": "限额"
+  },
+  {
+    "id": "userDetails.operator",
+    "defaultMessage": "操作"
+  },
+  {
+    "id": "userDetails.show_all",
+    "defaultMessage": "显示所有用户评论"
+  },
+  {
+    "id": "userDetails.show_some",
+    "defaultMessage": "显示部分用户评论"
+  },
+  {
+    "id": "userDetails.page_user_detail",
+    "defaultMessage": "用户详情页"
+  },
+  {
+    "id": "userDetails.user_msg",
+    "defaultMessage": "用户信息"
+  },
+  {
+    "id": "userDetails.user_other_ad",
+    "defaultMessage": "用户的其它交易广告"
+  },
+  {
+    "id": "userDetails.show_all_ad",
+    "defaultMessage": "显示所有用户网上购买比特币的广告"
+  },
+  {
+    "id": "userDetails.to_comment",
+    "defaultMessage": "评论"
+  },
+  {
+    "id": "userDetails.to_report",
+    "defaultMessage": "举报"
+  }
+]

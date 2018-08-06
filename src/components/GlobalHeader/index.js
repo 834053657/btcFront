@@ -125,7 +125,7 @@ export default class GlobalHeader extends PureComponent {
         <div className={styles.right}>
           <Dropdown overlay={language}>
             <b className={styles.action}>
-              {local === 'zh-CN' ? CONFIG.language['zh-CN'] : CONFIG.language['en-GB']}
+              {local === 'zh_CN' ? CONFIG.language['zh_CN'] : CONFIG.language['en_GB']}
             </b>
           </Dropdown>
           {currentUser.token && currentUser.user ? (
@@ -152,22 +152,22 @@ export default class GlobalHeader extends PureComponent {
                 <NoticeIcon.Tab
                   type="trade"
                   list={noticeData['trade']}
-                  title={<FM id='indexHeader.deal_msg_' defaultMessage='交易信息' />}
-                  emptyText={<FM id='indexHeader.personal_check_allMsg' defaultMessage='你已查看所有通知' />}
+                  title={(PROMPT('indexHeader.deal_msg_')||'交易信息')}
+                  emptyText={(PROMPT('indexHeader.personal_check_allMsg')||'你已查看所有通知')}
                   emptyImage="https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg"
                 />
                 <NoticeIcon.Tab
                   type="system"
                   list={noticeData['system']}
-                  title={<FM id='indexHeader.sys_notice' defaultMessage='系统公告' />}
-                  emptyText={<FM id='indexHeader.personal_read_all_msg' defaultMessage='您已读完所有消息' />}
+                  title={(PROMPT('indexHeader.sys_notice')||'系统公告')}
+                  emptyText={(PROMPT('indexHeader.personal_read_all_msg')||'您已读完所有消息')}
                   emptyImage="https://gw.alipayobjects.com/zos/rmsportal/sAuJeJzSKbUmHfBQRzmZ.svg"
                 />
               </NoticeIcon>
               <OrderIcon
                 className={styles.action}
-                title={<FM id='indexHeader.personal_order_doing' defaultMessage='进行中订单' />}
-                emptyText={<FM id='indexHeader.order_none' defaultMessage='目前无正在进行中的订单' />}
+                title={(PROMPT('indexHeader.personal_order_doing')||'进行中订单')}
+                emptyText={(PROMPT('indexHeader.order_none')||'目前无正在进行中的订单')}
                 emptyImage="https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg"
                 list={orders}
                 popupAlign={{ offset: [20, -16] }}

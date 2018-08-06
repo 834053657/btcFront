@@ -1,0 +1,62 @@
+[
+  {
+    "id": "myOrderList.order_no",
+    "defaultMessage": "交易单号"
+  },
+  {
+    "id": "myOrderList.created_at",
+    "defaultMessage": "创建时间"
+  },
+  {
+    "id": "myOrderList.order_type",
+    "defaultMessage": "交易类型"
+  },
+  {
+    "id": "myOrderList.order_first",
+    "defaultMessage": "(挂单)"
+  },
+  {
+    "id": "myOrderList.trader",
+    "defaultMessage": "交易对象"
+  },
+  {
+    "id": "myOrderList.status",
+    "defaultMessage": "交易状态"
+  },
+  {
+    "id": "myOrderList.currency",
+    "defaultMessage": "法币"
+  },
+  {
+    "id": "myOrderList.amount",
+    "defaultMessage": "交易金额(BTC)"
+  },
+  {
+    "id": "myOrderList.fees",
+    "defaultMessage": "交易费(BTC)"
+  },
+  {
+    "id": "myOrderList.trading_count",
+    "defaultMessage": "总BTC"
+  },
+  {
+    "id": "myOrderList.trading_price",
+    "defaultMessage": "汇率"
+  },
+  {
+    "id": "myOrderList._opt_",
+    "defaultMessage": "操作"
+  },
+  {
+    "id": "myOrderList.my_order_",
+    "defaultMessage": "我的订单"
+  },
+  {
+    "id": "myOrderList.go_back",
+    "defaultMessage": "返回"
+  },
+  {
+    "id": "myOrderList.all",
+    "defaultMessage": "全部{num}"
+  }
+]

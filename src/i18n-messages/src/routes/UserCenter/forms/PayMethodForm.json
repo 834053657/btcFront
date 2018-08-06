@@ -1,0 +1,138 @@
+[
+  {
+    "id": "payMethodForm.user_name_we",
+    "defaultMessage": "姓名"
+  },
+  {
+    "id": "payMethodForm.user_name_msg_we",
+    "defaultMessage": "请输入姓名！"
+  },
+  {
+    "id": "payMethodForm.user_account_we",
+    "defaultMessage": "账号"
+  },
+  {
+    "id": "payMethodForm.user_account_input_we",
+    "defaultMessage": "请输入账号！"
+  },
+  {
+    "id": "payMethodForm.user_ercodeUrl_we",
+    "defaultMessage": "收款码"
+  },
+  {
+    "id": "payMethodForm.user_ercodeUrl_we_input",
+    "defaultMessage": "请上传微信收款码！"
+  },
+  {
+    "id": "payMethodForm.user_name_ali",
+    "defaultMessage": "姓名"
+  },
+  {
+    "id": "payMethodForm.user_name_msg_ali",
+    "defaultMessage": "请输入姓名！"
+  },
+  {
+    "id": "payMethodForm.account_ali",
+    "defaultMessage": "账号"
+  },
+  {
+    "id": "payMethodForm.account_input_msg",
+    "defaultMessage": "请输入账号！"
+  },
+  {
+    "id": "payMethodForm.account_ercodeUrl",
+    "defaultMessage": "收款码"
+  },
+  {
+    "id": "payMethodForm.account_ercodeUrl_upload",
+    "defaultMessage": "请上传支付宝收款码！"
+  },
+  {
+    "id": "payMethodForm.user_name_bank",
+    "defaultMessage": "姓名"
+  },
+  {
+    "id": "payMethodForm.user_name_input_msg_bank",
+    "defaultMessage": "请输入姓名！"
+  },
+  {
+    "id": "payMethodForm.open_bank",
+    "defaultMessage": "开户行"
+  },
+  {
+    "id": "payMethodForm.msg_bank_input",
+    "defaultMessage": "请输入开户行！"
+  },
+  {
+    "id": "payMethodForm.bank_card",
+    "defaultMessage": "银行卡号"
+  },
+  {
+    "id": "payMethodForm.card_bank_num_msg",
+    "defaultMessage": "请输入银行卡号！"
+  },
+  {
+    "id": "payMethodForm.input_limit_bank",
+    "defaultMessage": "请输入4~30位的数字"
+  },
+  {
+    "id": "payMethodForm.user_name_west",
+    "defaultMessage": "姓名"
+  },
+  {
+    "id": "payMethodForm.user_name_msg_west",
+    "defaultMessage": "请输入姓名！"
+  },
+  {
+    "id": "payMethodForm.mag_pay_west",
+    "defaultMessage": "汇款信息"
+  },
+  {
+    "id": "payMethodForm.mag_pay_west_input",
+    "defaultMessage": "请输入西联汇款信息！"
+  },
+  {
+    "id": "payMethodForm.user_name_paytm",
+    "defaultMessage": "姓名"
+  },
+  {
+    "id": "payMethodForm.user_name_paytm_msg",
+    "defaultMessage": "请输入姓名！"
+  },
+  {
+    "id": "payMethodForm.user_account",
+    "defaultMessage": "账号"
+  },
+  {
+    "id": "payMethodForm.user_account_input_msg",
+    "defaultMessage": "请输入账号！"
+  },
+  {
+    "id": "payMethodForm.user_accpunt_img",
+    "defaultMessage": "收款码"
+  },
+  {
+    "id": "payMethodForm.user_paytm_img",
+    "defaultMessage": "请上传paytm收款码！"
+  },
+  {
+    "id": "payMethodForm.pay_method_way_",
+    "defaultMessage": "支付方式"
+  },
+  {
+    "id": "payMethodForm.pay_method_way_choose",
+    "defaultMessage": "请选择支付方式"
+  },
+  {
+    "id": "payMethodForm.btn_cancel",
+    "defaultMessage": "取消"
+  },
+  {
+    "id": "payMethodForm.btn_refresh",
+    "defaultMessage": "更新"
+  },
+  {
+    "id": "payMethodForm.btn_confirm",
+    "defaultMessage": "确定"
+  }
+]

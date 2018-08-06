@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import moment from 'moment';
 import { Table, Tabs, Button, Icon, Card, Modal, Badge, Tooltip } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
 // import numeral from 'numeral';
 import { map } from 'lodash';
 // import DescriptionList from 'components/DescriptionList';
@@ -40,14 +41,14 @@ export default class TransferList extends Component {
 
   columns = [
     {
-      title: '日期',
+      title: <FM id='transferList.date_time' defaultMessage='日期' />,
       dataIndex: 'created_at',
       render: (v, row) => {
         return <span>{v ? moment(v * 1000).format('YYYY-MM-DD HH:mm:ss') : '-'}</span>;
       },
     },
     {
-      title: '交易金额(BTC)',
+      title: <FM id='transferList.amount_num_btc' defaultMessage='交易金额(BTC)' />,
       dataIndex: 'amount',
       render: (v, row) => {
         return (
@@ -58,14 +59,14 @@ export default class TransferList extends Component {
       },
     },
     {
-      title: '手续费(BTC)',
+      title: <FM id='transferList.fee_btc' defaultMessage='手续费(BTC)' />,
       dataIndex: 'fee',
       render: (v, row) => {
         return <span>{`${formatBTC(v)}`}</span>;
       },
     },
     {
-      title: '状态',
+      title: <FM id='transferList.status_user' defaultMessage='状态' />,
       dataIndex: 'status',
       render: (val, row) => {
         return (
@@ -74,21 +75,21 @@ export default class TransferList extends Component {
       },
     },
     {
-      title: '确认次数',
+      title: <FM id='transferList.confirm_count' defaultMessage='确认次数' />,
       dataIndex: 'confirm_count',
       render: (v, row) => {
         return <span>{v}</span>;
       },
     },
     {
-      title: '地址',
+      title: <FM id='transferList.address' defaultMessage='地址' />,
       dataIndex: 'address',
       render: (v, row) => {
         return <span>{v}</span>;
       },
     },
     {
-      title: '说明',
+      title: <FM id='transferList.remark' defaultMessage='说明' />,
       dataIndex: 'remark',
       render: (v, row) => {
         return <span>{v}</span>;
@@ -184,7 +185,7 @@ export default class TransferList extends Component {
     return (
       <Card bordered={false} className={styles.message_list}>
         <Tabs activeKey={status} onChange={this.handleTabsChange}>
-          <TabPane tab="全部" key="" />
+          <TabPane tab={<FM id='transferList.all' defaultMessage='全部' />} key="" />
           {map(CONFIG.transaction_status, (text, value) => <TabPane tab={text} key={value} />)}
         </Tabs>
         <Table

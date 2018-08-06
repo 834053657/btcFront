@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Popover, Icon, Tabs, Badge, Spin } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
 import classNames from 'classnames';
 import { size, flatMap } from 'lodash'
 import List from './NoticeList';
@@ -16,8 +17,8 @@ export default class NoticeIcon extends PureComponent {
     onClear: () => {},
     loading: false,
     locale: {
-      emptyText: '暂无数据',
-      clear: '清空',
+      emptyText: (PROMPT('noticeIcon.no_msg')||'暂无数据'),
+      clear: (PROMPT('noticeIcon.clear_msg')||'清空'),
     },
     emptyImage: 'https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg',
     popupVisible: false,
@@ -56,14 +57,14 @@ export default class NoticeIcon extends PureComponent {
           className={styles.clear}
           onClick={() => this.props.onClear(child.props.title)}
         >
-          <a>清空{child.props.title}</a>
+          <a><FM id='noticeIcon.Clear_msg' defaultMessage='清空' />{child.props.title}</a>
         </div>,
-        <div 
-          key="view_more" 
+        <div
+          key="view_more"
           className={styles.view_more}
           onClick={() => this.props.onViewMore(child.props.type)}
         >
-          <a>查看更多</a>
+          <a><FM id='noticeIcon.check_more' defaultMessage='查看更多' /></a>
         </div>,
       ];
       return (

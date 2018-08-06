@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Input, Button, Modal, Alert, Select, Row, Col } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
 import classNames from 'classnames';
 import { map } from 'lodash';
 import styles from './SecureValidationForm.less';
@@ -87,7 +88,7 @@ class SecureValidationForm extends Component {
     return (
       <div className={classNames(className, styles.login)}>
         <Form onSubmit={this.handleSubmit} hideRequiredMark>
-          <FormItem label="验证方式" {...formItemLayout}>
+          <FormItem label={<FM id='secureValidationForm.way' defaultMessage='验证方式' />} {...formItemLayout}>
             <Row gutter={24}>
               <Col span={16}>
                 {getFieldDecorator('type', {
@@ -109,29 +110,29 @@ class SecureValidationForm extends Component {
                   size="large"
                   onClick={this.handleSendCaptcha}
                 >
-                  {count ? `${count} s` : '获取验证码'}
+                  {count ? `${count} s` : <FM id='secureValidationForm.get_code' defaultMessage='获取验证码' />}
                 </Button>
               </Col>
             </Row>
           </FormItem>
 
-          <FormItem label="验证码" {...formItemLayout}>
+          <FormItem label={<FM id='secureValidationForm.code_' defaultMessage='验证码' />} {...formItemLayout}>
             {getFieldDecorator('code', {
               rules: [
                 {
                   required: true,
-                  message: '请输入验证码！',
+                  message: <FM id='secureValidationForm.code_input' defaultMessage='请输入验证码！' />,
                 },
               ],
-            })(<Input size="large" placeholder="验证码" />)}
+            })(<Input size="large" placeholder={(PROMPT('secureValidationForm.code_holder')||'验证码')} />)}
           </FormItem>
 
           <FormItem className={styles.buttonBox}>
             <Button key="back" onClick={this.handleCancel}>
-              取消
+              <FM id='secureValidationForm.btn_cnacel' defaultMessage='取消' />
             </Button>
             <Button loading={submitting} className={styles.submit} type="primary" htmlType="submit">
-              确定
+              <FM id='secureValidationForm.btn_sure' defaultMessage='确定' />
             </Button>
           </FormItem>
         </Form>

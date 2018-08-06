@@ -1,0 +1,34 @@
+[
+  {
+    "id": "emailForm.user_email_title",
+    "defaultMessage": "邮箱"
+  },
+  {
+    "id": "emailForm.user_email_input",
+    "defaultMessage": "请输入邮箱！"
+  },
+  {
+    "id": "emailForm.user_email_error",
+    "defaultMessage": "邮箱地址格式错误！"
+  },
+  {
+    "id": "emailForm.get_code",
+    "defaultMessage": "获取验证码"
+  },
+  {
+    "id": "emailForm.code_title",
+    "defaultMessage": "验证码"
+  },
+  {
+    "id": "emailForm.code_input",
+    "defaultMessage": "请输入验证码！"
+  },
+  {
+    "id": "emailForm.btn_cancel",
+    "defaultMessage": "取消"
+  },
+  {
+    "id": "emailForm.btn_next_step",
+    "defaultMessage": "下一步"
+  }
+]

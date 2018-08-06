@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
 import { delay } from 'lodash';
+import { FormattedMessage as FM } from 'react-intl';
 import { Link, routerRedux } from 'dva/router';
 import moment from 'moment';
 import {
@@ -106,7 +107,7 @@ export default class List extends Component {
 
   columns = [
     {
-      title: '广告编号',
+      title: <FM id='myAdList.ad_no' defaultMessage='广告编号' />,
       dataIndex: 'ad_no',
       width: '15%',
       className: styles.ad_no,
@@ -119,13 +120,13 @@ export default class List extends Component {
       },
     },
     {
-      title: '交易类型',
+      title: <FM id='myAdList.ad_type' defaultMessage='交易类型' />,
       dataIndex: 'ad_type',
       width: '15%',
       render: (val, row) => CONFIG.ad_type[val],
     },
     {
-      title: '出售单价',
+      title: <FM id='myAdList.trading_price' defaultMessage='出售单价' />,
       dataIndex: 'trading_price',
       width: '15%',
       render(val, row) {
@@ -137,7 +138,7 @@ export default class List extends Component {
       },
     },
     {
-      title: '状态',
+      title: <FM id='myAdList.status' defaultMessage='状态' />,
       dataIndex: 'status',
       width: '15%',
       render(val, row) {
@@ -156,7 +157,7 @@ export default class List extends Component {
       },
     },
     {
-      title: '操作',
+      title: <FM id='myAdList.operator' defaultMessage='操作' />,
       width: '25%',
       render: (_, r) => {
         return (
@@ -166,7 +167,7 @@ export default class List extends Component {
               <span>
                 {/*<Divider type="vertical" />*/}
                 <a onClick={() => this.updateAd(r, 2)} className="text-red">
-                  暂停
+                  <FM id='myAdList.stop' defaultMessage='暂停' />
                 </a>
               </span>
             )}
@@ -174,26 +175,26 @@ export default class List extends Component {
               <span>
                 {/*<Divider type="vertical" />*/}
                 <a onClick={() => this.recoverAd(r, 1)} className="text-green">
-                  恢复
+                  <FM id='myAdList.recover' defaultMessage='恢复' />
                 </a>
               </span>
             )}
             {[1, 2].indexOf(r.status) > -1 && (
               <span>
                 <Divider type="vertical" />
-                <Link to={`/ad/edit/${r.id}`}>编辑</Link>
+                <Link to={`/ad/edit/${r.id}`}><FM id='myAdList.adit' defaultMessage='编辑' /></Link>
               </span>
             )}
             {[ 2, 4].indexOf(r.status) > -1 && (
               <span>
                 <Divider type="vertical" />
                 <Popconfirm
-                  title="您确认要删除此广告?"
+                  title={<FM id='myAdList.tip_toCancel' defaultMessage='您确认要删除此广告?' />}
                   onConfirm={() => this.DeleteAd(r, 5)}
-                  okText="确认"
-                  cancelText="取消"
+                  okText={<FM id='myAdList.ok_text' defaultMessage='确认' />}
+                  cancelText={<FM id='myAdList.cancel_text' defaultMessage='取消' />}
                 >
-                  <a className="text-red">删除</a>
+                  <a className="text-red"><FM id='myAdList.cancel_btn' defaultMessage='删除' /></a>
                 </Popconfirm>
               </span>
             )}
@@ -235,14 +236,14 @@ export default class List extends Component {
     const content = (
       <Row gutter={24}>
         <Col span={12} className={styles.title}>
-          我的广告
+          <FM id='myAdList.my_ad' defaultMessage='我的广告' />
         </Col>
         <Col span={12} className={styles.more}>
           <a
             className={styles.itunes_btn}
             onClick={() => this.props.dispatch(routerRedux.goBack())}
           >
-            返回
+            <FM id='myAdList.goBack' defaultMessage='返回' />
           </a>
         </Col>
       </Row>

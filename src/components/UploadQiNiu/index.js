@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Upload, Icon, message, Spin } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
 import { delay, map } from 'lodash';
 import { getAuthority } from '../../utils/authority';
 import styles from './index.less';
@@ -52,14 +53,14 @@ export default class UploadQiNiu extends Component {
       this.setState({ uploading: false });
     } else if (info.file.status === 'error') {
       this.setState({ uploading: false });
-      message.error('上传错误，可能请求已过期，请刷新页面重试');
+      message.error(PROMPT('QiNioUpload.upload_error')||'上传错误，可能请求已过期，请刷新页面重试');
     }
   };
 
   beforeUpload = file => {
     const isLtMB = file.size / 1024 / 1024 < this.props.sizeLimitMB;
     if (!isLtMB) {
-      message.error(`文件必须小于${this.props.sizeLimitMB}M!`);
+      message.error(PROMPT('QiNioUpload.upload_size_limit')||'文件必须小于{size}M!', {size:this.props.sizeLimitMB});
     }
     return isLtMB;
   };
@@ -73,7 +74,8 @@ export default class UploadQiNiu extends Component {
         <p className="ant-upload-drag-icon">
           <Icon type={this.state.uploading ? 'loading' : 'inbox'} />
         </p>
-        <p className="ant-upload-text">单击或拖动文件到此区域进行上传</p>
+        <p className="ant-upload-text"><FM id='QiNioUpload.file_to_upload' defaultMessage='单击或拖动文件到此区域进行上传' />
+        </p>
       </div>
     );
 

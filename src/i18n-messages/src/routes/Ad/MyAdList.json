@@ -1,0 +1,58 @@
+[
+  {
+    "id": "myAdList.ad_no",
+    "defaultMessage": "广告编号"
+  },
+  {
+    "id": "myAdList.ad_type",
+    "defaultMessage": "交易类型"
+  },
+  {
+    "id": "myAdList.trading_price",
+    "defaultMessage": "出售单价"
+  },
+  {
+    "id": "myAdList.status",
+    "defaultMessage": "状态"
+  },
+  {
+    "id": "myAdList.operator",
+    "defaultMessage": "操作"
+  },
+  {
+    "id": "myAdList.stop",
+    "defaultMessage": "暂停"
+  },
+  {
+    "id": "myAdList.recover",
+    "defaultMessage": "恢复"
+  },
+  {
+    "id": "myAdList.adit",
+    "defaultMessage": "编辑"
+  },
+  {
+    "id": "myAdList.tip_toCancel",
+    "defaultMessage": "您确认要删除此广告?"
+  },
+  {
+    "id": "myAdList.ok_text",
+    "defaultMessage": "确认"
+  },
+  {
+    "id": "myAdList.cancel_text",
+    "defaultMessage": "取消"
+  },
+  {
+    "id": "myAdList.cancel_btn",
+    "defaultMessage": "删除"
+  },
+  {
+    "id": "myAdList.my_ad",
+    "defaultMessage": "我的广告"
+  },
+  {
+    "id": "myAdList.goBack",
+    "defaultMessage": "返回"
+  }
+]

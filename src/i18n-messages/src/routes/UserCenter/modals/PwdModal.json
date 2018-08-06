@@ -1,0 +1,18 @@
+[
+  {
+    "id": "pwdModal.G2_verify",
+    "defaultMessage": "谷歌验证"
+  },
+  {
+    "id": "pwdModal.safe_verify",
+    "defaultMessage": "安全验证"
+  },
+  {
+    "id": "pwdModal.change_passWord",
+    "defaultMessage": "修改密码"
+  },
+  {
+    "id": "pwdModal.change_finish",
+    "defaultMessage": "完成"
+  }
+]

@@ -2,6 +2,7 @@ import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import { map, findIndex } from 'lodash';
 import { Button, Card, Row, Col, Modal, Spin, Input, Steps, Icon } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
 import { routerRedux } from 'dva/router';
 import ConfirmModal from '../../components/ConfirmModal';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
@@ -91,25 +92,25 @@ export default class TradeStep extends PureComponent {
       steps: [
         {
           key: 'wait_pay',
-          text: '待支付',
+          text: <FM id='tradeStep.wait_pay' defaultMessage='待支付' />,
         },
         {
           key: 'wait_release',
-          text: '待释放',
+          text: <FM id='tradeStep.wait_pay_release' defaultMessage='待释放' />,
         },
         {
           key: 'done',
-          text: '完成订单',
+          text: <FM id='tradeStep.wait_pay_finish_order' defaultMessage='完成订单' />,
         },
       ],
       renderButtons: () => {
         return this.checkIsBuyer()
           ? [
             <Button key="ok" type="primary" onClick={this.handlePay}>
-                确认支付
+              <FM id='tradeStep.btn_affirm_pay' defaultMessage='确认支付' />
             </Button>,
             <Button key="cancel" style={{ marginLeft: 25 }} onClick={this.handleShowCancelModal}>
-                取消订单
+              <FM id='tradeStep.cancel_order' defaultMessage='取消订单' />
             </Button>,
             ]
           : null;
@@ -119,15 +120,15 @@ export default class TradeStep extends PureComponent {
       steps: [
         {
           key: 'wait_pay',
-          text: '已支付',
+          text: <FM id='tradeStep.already_pay' defaultMessage='已支付' />,
         },
         {
           key: 'wait_release',
-          text: '待释放',
+          text: <FM id='tradeStep.wait_release_release' defaultMessage='待释放' />,
         },
         {
           key: 'done',
-          text: '完成订单',
+          text: <FM id='tradeStep.wait_release_pay' defaultMessage='完成订单' />,
         },
       ],
       renderButtons: () => {
@@ -141,13 +142,13 @@ export default class TradeStep extends PureComponent {
               style={{ marginRight: 25 }}
               onClick={this.handleRelease}
             >
-              确认释放
+              <FM id='tradeStep.btn_affirm_release' defaultMessage='确认释放' />
             </Button>
           );
         }
         buttons.push(
           <Button key="cancel" onClick={this.handleShowAppealModal}>
-            申述
+            <FM id='tradeStep.btn_user_state' defaultMessage='申述' />
           </Button>
         );
 
@@ -158,15 +159,15 @@ export default class TradeStep extends PureComponent {
       steps: [
         {
           key: 'wait_pay',
-          text: '已支付',
+          text: <FM id='tradeStep.done_already_pay' defaultMessage='已支付' />,
         },
         {
           key: 'wait_release',
-          text: '已释放',
+          text: <FM id='tradeStep.done_already_release' defaultMessage='已释放' />,
         },
         {
           key: 'done',
-          text: '完成订单',
+          text: <FM id='tradeStep.done_finish_order' defaultMessage='完成订单' />,
         },
       ],
       // renderButtons: () => {
@@ -181,16 +182,16 @@ export default class TradeStep extends PureComponent {
       steps: [
         {
           key: 'wait_pay',
-          text: '待支付',
+          text: <FM id='tradeStep.cancel_wait_pay' defaultMessage='待支付' />,
         },
         {
           key: 'cancel',
-          text: '订单取消',
+          text: <FM id='tradeStep.cancel_cancel_order' defaultMessage='订单取消' />,
           status: 'error',
         },
         {
           key: 'done',
-          text: '完成订单',
+          text: <FM id='tradeStep.cancel_finish_order' defaultMessage='完成订单' />,
         },
       ],
     },
@@ -198,15 +199,15 @@ export default class TradeStep extends PureComponent {
       steps: [
         {
           key: 'wait_pay',
-          text: '已支付',
+          text: <FM id='tradeStep.appeal_already_pay' defaultMessage='已支付' />,
         },
         {
           key: 'appeal',
-          text: '申述中',
+          text: <FM id='tradeStep.appeal_state' defaultMessage='申述中' />,
         },
         {
           key: 'done',
-          text: '完成订单',
+          text: <FM id='tradeStep.appeal_finish_order' defaultMessage='完成订单' />,
         },
       ],
       renderButtons: () => {
@@ -215,13 +216,13 @@ export default class TradeStep extends PureComponent {
         if (this.checkIsBuyer()) {
           buttons = (
             <Button key="cancel" onClick={this.handleShowCancelModal}>
-              取消订单
+              <FM id='tradeStep.btn_cancel_order' defaultMessage='取消订单' />
             </Button>
           );
         } else {
           buttons = (
             <Button key="ok" type="primary" onClick={this.handleRelease}>
-              确认释放
+              <FM id='tradeStep.btn_affirm_release' defaultMessage='确认释放' />
             </Button>
           );
         }
@@ -233,8 +234,8 @@ export default class TradeStep extends PureComponent {
   // 确认支付
   handlePay = () => {
     Modal.confirm({
-      title: '确认支付?',
-      content: '请确定已经转款，再点击确认支付！',
+      title: (PROMPT('tradeStep.pay_affirm_title')||'确认支付?'),
+      content:(PROMPT('tradeStep.pay_affirm_content')||'请确定已经转款，再点击确认支付！'),
       onOk: () => {
         const { dispatch, match: { params = {} } } = this.props;
         dispatch({
@@ -249,8 +250,8 @@ export default class TradeStep extends PureComponent {
   // 确认释放
   handleRelease = () => {
     Modal.confirm({
-      title: '确认释放?',
-      content: '请确保已经收款，再点击确认释放！',
+      title: <FM id='tradeStep.release_affirm_title' defaultMessage='确认释放?' />,
+      content: <FM id='tradeStep.release_affirm_content' defaultMessage='请确保已经收款，再点击确认释放！' />,
       onOk: () => {
         const { dispatch, match: { params = {} } } = this.props;
         dispatch({
@@ -357,7 +358,7 @@ export default class TradeStep extends PureComponent {
     const order_status = CONFIG.orderEngStatus[order.status];
     const currentObj = order_status ? this.orderSteps[order_status] : {};
     const current = findIndex(currentObj.steps, item => item.key === order_status);
-    const breadcrumbList = [{ title: '首页', href: '/' }, { title: '订单号: ' + params.id }];
+    const breadcrumbList = [{ title: <FM id='tradeStep.main_page' defaultMessage='首页' />, href: '/' }, { title: <FM id='tradeStep.order_num' defaultMessage='订单号: ' /> + params.id }];
 
     return (
       <PageHeaderLayout
@@ -365,7 +366,7 @@ export default class TradeStep extends PureComponent {
         breadcrumbList={breadcrumbList}
         tabActiveKey={params.id}
         extraContent={
-          <Button onClick={() => this.props.dispatch(routerRedux.goBack())}>返回</Button>
+          <Button onClick={() => this.props.dispatch(routerRedux.goBack())}><FM id='tradeStep.goBack' defaultMessage='返回' /></Button>
         }
       >
         <Spin spinning={loading}>
@@ -394,19 +395,19 @@ export default class TradeStep extends PureComponent {
 
         <ConfirmModal
           visible={this.state.cancelModal}
-          title="取消订单"
+          title={<FM id='tradeStep.cancel_form_pay' defaultMessage='取消订单' />}
           onSubmit={this.handleSubmitCancel}
           onCancel={this.handleHideCancelModal}
         />
         <ConfirmModal
           visible={this.state.appealModal}
-          title="我要申述"
+          title={<FM id='tradeStep.my_state' defaultMessage='我要申述' />}
           onSubmit={this.handleSubmitAppeal}
           onCancel={this.handleHideAppealModal}
         />
         <ConfirmModal
           visible={this.state.reportAdModal}
-          title="举报"
+          title={<FM id='tradeStep.report_order' defaultMessage='举报' />}
           onSubmit={this.handleSubmitReport}
           onCancel={this.handleHideReportModal}
         />

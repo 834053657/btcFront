@@ -1,0 +1,42 @@
+[
+  {
+    "id": "mobileForm.country_label",
+    "defaultMessage": "国家"
+  },
+  {
+    "id": "mobileForm.country_choose",
+    "defaultMessage": "请选择国家！"
+  },
+  {
+    "id": "mobileForm.phone_num_label_",
+    "defaultMessage": "手机号码"
+  },
+  {
+    "id": "mobileForm.num_phone_input",
+    "defaultMessage": "请输入手机号码！"
+  },
+  {
+    "id": "mobileForm.error_phone_num",
+    "defaultMessage": "请输入正确的手机号码"
+  },
+  {
+    "id": "mobileForm.btn_get_code",
+    "defaultMessage": "获取验证码"
+  },
+  {
+    "id": "mobileForm.label_code_",
+    "defaultMessage": "验证码"
+  },
+  {
+    "id": "mobileForm.code_input",
+    "defaultMessage": "请输入验证码！"
+  },
+  {
+    "id": "mobileForm.cancel_btn_",
+    "defaultMessage": "取消"
+  },
+  {
+    "id": "mobileForm.next_step_btn_",
+    "defaultMessage": "下一步"
+  }
+]

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Steps, Divider } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
 import { delay } from 'lodash';
 import G2Validation from 'components/G2Validation';
 import MobileForm from '../forms/MobileForm';
@@ -11,7 +12,7 @@ const { Step } = Steps;
 export default class MobileModal extends Component {
   static defaultProps = {
     className: '',
-    title: '手机绑定',
+    title: (PROMPT('mobileModal.phone_bind')||'手机绑定'),
     onCancel: () => {},
   };
   static propTypes = {
@@ -108,14 +109,14 @@ export default class MobileModal extends Component {
     const { current } = this.state;
     let steps = [
       {
-        title: '谷歌验证',
+        title: (PROMPT('mobileModal.google_code_title')||'谷歌验证'),
         hide: !user.g2fa_on,
         component: (
           <G2Validation modal={false} onCancel={onCancel} onSubmit={this.handleSubmitG2} />
         ),
       },
       {
-        title: '验证旧手机',
+        title: (PROMPT('mobileModal.old_phone_verify')||'验证旧手机'),
         hide: !user.telephone,
         component: (
           <MobileForm
@@ -129,7 +130,7 @@ export default class MobileModal extends Component {
         ),
       },
       {
-        title: '绑定新手机',
+        title: (PROMPT('mobileModal.new_phone_bind')||'绑定新手机'),
         component: (
           <MobileForm
             key="2"
@@ -140,7 +141,7 @@ export default class MobileModal extends Component {
         ),
       },
       {
-        title: '完成',
+        title: (PROMPT('mobileModal.bind_finish')||'完成'),
       },
     ];
 

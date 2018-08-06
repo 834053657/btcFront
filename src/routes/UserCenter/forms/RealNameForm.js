@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import PropTypes from 'prop-types';
 import { Form, Input, Button, Upload, Icon, message } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
 import styles from './PasswordForm.less';
 
 const FormItem = Form.Item;
@@ -69,14 +70,14 @@ export default class RealNameForm extends Component {
       this.setState({ [loadingKey]: false });
     } else if (info.file.status === 'error') {
       this.setState({ [loadingKey]: false });
-      message.error('上传错误，可能请求已过期，请刷新页面重试');
+      message.error(PROMPT('realNameForm.upload_error')||'上传错误，可能请求已过期，请刷新页面重试');
     }
   };
 
   beforeUpload = file => {
     const isLt2M = file.size / 1024 / 1024 < 5;
     if (!isLt2M) {
-      message.error('头像必须小于5M!');
+      message.error(PROMPT('realNameForm.photo_limit')||'头像必须小于5M!');
     }
     return isLt2M;
   };
@@ -84,7 +85,7 @@ export default class RealNameForm extends Component {
   renderDragger = type => {
     const loadingKey = type === 'back_image' ? 'uploadLoadingB' : 'uploadLoadingF';
     const { upload = {} } = this.props.currentUser || {};
-    const title = type === 'back_image' ? '身份证反面' : '身份证正面';
+    const title = type === 'back_image' ? <FM id='realNameForm.card_back' defaultMessage='身份证反面' /> : <FM id='realNameForm.card_front' defaultMessage='身份证正面' />;
     const fileList = this.props.form.getFieldValue(type);
     let imageUrl = null;
     if (Array.isArray(fileList) && fileList[0] && fileList[0].status === 'done') {
@@ -97,7 +98,7 @@ export default class RealNameForm extends Component {
         <p className="ant-upload-drag-icon">
           <Icon type={this.state[loadingKey] ? 'loading' : 'inbox'} />
         </p>
-        <p className="ant-upload-text">单击或拖动文件到此区域进行上传</p>
+        <p className="ant-upload-text"><FM id='realNameForm.upload_tip' defaultMessage='单击或拖动文件到此区域进行上传' /></p>
         <p className="ant-upload-hint">{title}</p>
       </div>
     );
@@ -146,29 +147,29 @@ export default class RealNameForm extends Component {
     return (
       <div className={styles.main}>
         <Form onSubmit={this.handleSubmit}>
-          <FormItem {...formItemLayout} label="真实姓名">
+          <FormItem {...formItemLayout} label={<FM id='realNameForm.real_name' defaultMessage='真实姓名' />}>
             {getFieldDecorator('name', {
               initialValue: initialValues.name,
               rules: [
                 {
                   required: true,
-                  message: '请输入真实姓名！',
+                  message: <FM id='realNameForm.real_name_msg' defaultMessage='请输入真实姓名！' />,
                 },
               ],
-            })(<Input size="large" maxLength={20} placeholder="真实姓名" />)}
+            })(<Input size="large" maxLength={20} placeholder={(PROMPT('realNameForm.real_name_input')||'真实姓名')} />)}
           </FormItem>
-          <FormItem {...formItemLayout} label="身份证号">
+          <FormItem {...formItemLayout} label={<FM id='realNameForm.card_num' defaultMessage='身份证号' />}>
             {getFieldDecorator('cardno', {
               initialValue: initialValues.cardno,
               rules: [
                 {
                   required: true,
-                  message: '请输入身份证号！',
+                  message: <FM id='realNameForm.card_num_msg' defaultMessage='请输入身份证号！' />,
                 },
               ],
-            })(<Input size="large" maxLength={30} placeholder="身份证号" />)}
+            })(<Input size="large" maxLength={30} placeholder={(PROMPT('realNameForm.card_num_input')||'身份证号')} />)}
           </FormItem>
-          <h3>上传证件</h3>
+          <h3><FM id='realNameForm.card_upload_title' defaultMessage='上传证件' /></h3>
 
           <FormItem>
             {getFieldDecorator('front_image', {
@@ -180,7 +181,7 @@ export default class RealNameForm extends Component {
               rules: [
                 {
                   required: true,
-                  message: '请上传身份证正面！',
+                  message: <FM id='realNameForm.upload_card_front' defaultMessage='请上传身份证正面！' />,
                 },
               ],
             })(this.renderDragger('front_image'))}
@@ -195,7 +196,7 @@ export default class RealNameForm extends Component {
               rules: [
                 {
                   required: true,
-                  message: '请上传身份证反面！',
+                  message: <FM id='realNameForm.upload_card_back' defaultMessage='请上传身份证反面！' />,
                 },
               ],
             })(this.renderDragger('back_image'))}
@@ -203,10 +204,10 @@ export default class RealNameForm extends Component {
 
           <FormItem className={styles.buttonBox}>
             <Button key="back" onClick={this.handleCancel}>
-              取消
+              <FM id='realNameForm.btn_cancel' defaultMessage='取消' />
             </Button>
             <Button loading={submitting} className={styles.submit} type="primary" htmlType="submit">
-              确定
+              <FM id='realNameForm.btn_confirm' defaultMessage='确定' />
             </Button>
           </FormItem>
         </Form>
