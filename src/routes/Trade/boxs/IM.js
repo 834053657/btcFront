@@ -38,7 +38,7 @@ export default class TradeIM extends PureComponent {
     super(props)
     this.cache = new CellMeasurerCache({
       fixedWidth: true,
-      minHeight: 50,
+      defaultHeight: 50,
     })
   }
 
@@ -160,7 +160,7 @@ export default class TradeIM extends PureComponent {
     const uid = get(this.props, 'currentUser.user.id') || {};
     const historyList = get(this.props, 'im.historyList') || [];
     const item = historyList[index] || {};
-    const { message = {}, msg_type, created_at, sender = {} } = item;
+    const { message = {}, msg_type, created_at_millisec, sender = {} } = item;
     const detail = getMessage(item, 'im')
     const content = detail ? detail.content : ''
     return (
@@ -200,7 +200,7 @@ export default class TradeIM extends PureComponent {
                       dangerouslySetInnerHTML={{ __html: content }}
                     />
                     <div className={styles.sendtime}>
-                      {created_at ? moment(created_at).format('YYYY-MM-DD HH:mm:ss') : '-'}
+                      {created_at_millisec ? moment(created_at_millisec).format('YYYY-MM-DD HH:mm:ss') : '-'}
                     </div>
                   </div>
                 }
