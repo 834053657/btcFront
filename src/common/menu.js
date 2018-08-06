@@ -1,12 +1,13 @@
+import { FormattedMessage as FM } from 'react-intl';
 import { isUrl } from '../utils/utils';
 
 let menuData = [
   {
-    name: '交易大厅',
+    name: (PROMPT('Menu.deal_hall')||'交易大厅'),
     path: 'trade/index',
   },
   {
-    name: '发布广告',
+    name: (PROMPT('Menu.ad_publish')||'发布广告'),
     path: 'publish_ad',
   },
 ];

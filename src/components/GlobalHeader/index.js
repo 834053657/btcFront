@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Menu, Icon, Spin, Tag, Dropdown, Avatar, Divider, Tooltip } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
+
 import moment from 'moment';
 import { filter, orderBy, omit, mapValues, map, groupBy } from 'lodash';
 import Debounce from 'lodash-decorators/debounce';
@@ -83,17 +85,17 @@ export default class GlobalHeader extends PureComponent {
     const menu = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
         <Menu.Item key="userCenter">
-          <Icon type="user" />个人中心
+          <Icon type="user" /><FM id='indexHeader.personal_center_down' defaultMessage='个人中心' />
         </Menu.Item>
         <Menu.Item key="ad">
-          <Icon type="code-o" />我的广告
+          <Icon type="code-o" /><FM id='indexHeader.personal_ad' defaultMessage='我的广告' />
         </Menu.Item>
         <Menu.Item key="order">
-          <Icon type="file-text" />我的订单
+          <Icon type="file-text" /><FM id='indexHeader.personal_order' defaultMessage='我的订单' />
         </Menu.Item>
         <Menu.Divider />
         <Menu.Item key="logout">
-          <Icon type="logout" />退出登录
+          <Icon type="logout" /><FM id='indexHeader.personal_login_out' defaultMessage='退出登录' />
         </Menu.Item>
       </Menu>
     );
@@ -150,22 +152,22 @@ export default class GlobalHeader extends PureComponent {
                 <NoticeIcon.Tab
                   type="trade"
                   list={noticeData['trade']}
-                  title="交易信息"
-                  emptyText="你已查看所有通知"
+                  title={<FM id='indexHeader.deal_msg_' defaultMessage='交易信息' />}
+                  emptyText={<FM id='indexHeader.personal_check_allMsg' defaultMessage='你已查看所有通知' />}
                   emptyImage="https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg"
                 />
                 <NoticeIcon.Tab
                   type="system"
                   list={noticeData['system']}
-                  title="系统公告"
-                  emptyText="您已读完所有消息"
+                  title={<FM id='indexHeader.sys_notice' defaultMessage='系统公告' />}
+                  emptyText={<FM id='indexHeader.personal_read_all_msg' defaultMessage='您已读完所有消息' />}
                   emptyImage="https://gw.alipayobjects.com/zos/rmsportal/sAuJeJzSKbUmHfBQRzmZ.svg"
                 />
               </NoticeIcon>
               <OrderIcon
                 className={styles.action}
-                title="进行中订单"
-                emptyText="目前无正在进行中的订单"
+                title={<FM id='indexHeader.personal_order_doing' defaultMessage='进行中订单' />}
+                emptyText={<FM id='indexHeader.order_none' defaultMessage='目前无正在进行中的订单' />}
                 emptyImage="https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg"
                 list={orders}
                 popupAlign={{ offset: [20, -16] }}
@@ -183,10 +185,10 @@ export default class GlobalHeader extends PureComponent {
           ) : (
             <span>
               <Link className={styles.action} to="/user/login">
-                登录
+                <FM id='indexHeader.personal_login' defaultMessage='登录' />
               </Link>
               <Link className={styles.action} to="/user/register">
-                注册
+                <FM id='indexHeader.personal_sign_in' defaultMessage='注册' />
               </Link>
             </span>
           )}
