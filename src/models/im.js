@@ -89,7 +89,7 @@ export default {
       const newItems = map(items, d => { 
         return { 
           ...d, 
-          created_at: d.created_at * 1000,
+          created_at_millisec: d.created_at_millisec,
         }
       })
       let cacheDataList = state.cacheDataList
@@ -101,7 +101,7 @@ export default {
       cacheDataList[order_id].historyList = newItems
       return {
         ...state,
-        historyList: orderBy(newItems, ['created_at'], ['asc']),
+        historyList: orderBy(newItems, ['created_at_millisec'], ['asc']),
         cacheDataList
       }
     },
@@ -135,10 +135,10 @@ export default {
         message: {
           content: payload.content,
         },
-        created_at: Date.now(),
+        created_at_millisec: Date.now(),
         sender: mapValues(payload.sender, (val, key) => isEmpty(val) && includes(['avatar', 'nickname'], key) ? '数据有误' : val)
       }
-      const historyList = orderBy([newMsg, ...state.historyList], ['created_at'], 'asc')
+      const historyList = orderBy([newMsg, ...state.historyList], ['created_at_millisec'], 'asc')
       return {
         ...state,
         historyList
@@ -152,13 +152,12 @@ export default {
       }
       let newHistoryList = state.historyList
       let index = -1
-      newMsg.created_at && (newMsg.created_at *= 1000)
       if (~(index = findIndex(state.historyList, { temp_msg_id }))) {
         newHistoryList[index] = newMsg
       } else {
         newHistoryList = [newMsg, ...state.historyList]
       }
-      newHistoryList = orderBy(newHistoryList, ['created_at'], ['asc'])
+      newHistoryList = orderBy(newHistoryList, ['created_at_millisec'], ['asc'])
       return {
         ...state,
         historyList: newHistoryList
