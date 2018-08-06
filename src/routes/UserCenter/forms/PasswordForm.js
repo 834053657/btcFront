@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import PropTypes from 'prop-types';
 import { Form, Input, Button, Popover, Progress } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
 import styles from './PasswordForm.less';
 
 const FormItem = Form.Item;
@@ -64,7 +65,7 @@ export default class PasswordForm extends Component {
   checkConfirm = (rule, value, callback) => {
     const { form } = this.props;
     if (value && value !== form.getFieldValue('password')) {
-      callback('两次输入的密码不匹配!');
+      callback(<FM id='passWordForm.error' defaultMessage='两次输入的密码不匹配!' />);
     } else {
       callback();
     }
@@ -74,7 +75,7 @@ export default class PasswordForm extends Component {
     const regex = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/;
     if (!value) {
       this.setState({
-        help: '请输入密码！',
+        help: <FM id='passWordForm.input_pwd' defaultMessage='请输入密码！' />,
         visible: !!value,
       });
       callback('error');
@@ -135,24 +136,24 @@ export default class PasswordForm extends Component {
     return (
       <div className={styles.main}>
         <Form onSubmit={this.handleSubmit}>
-          <FormItem {...formItemLayout} label="旧密码">
+          <FormItem {...formItemLayout} label={<FM id='passWordForm.old_pwd' defaultMessage='旧密码' />}>
             {getFieldDecorator('old_password', {
               rules: [
                 {
                   required: true,
-                  message: '请输入旧密码！',
+                  message: <FM id='passWordForm.old_pwd_again' defaultMessage='请输入旧密码！' />,
                 },
               ],
-            })(<Input size="large" type="password" placeholder="旧密码" />)}
+            })(<Input size="large" type="password" placeholder={(PROMPT('passWordForm.old_pwd_holder')||'旧密码')} />)}
           </FormItem>
-          <FormItem {...formItemLayout} label="新密码" help={this.state.help}>
+          <FormItem {...formItemLayout} label={<FM id='passWordForm.new_pwd' defaultMessage='新密码' />} help={this.state.help}>
             <Popover
               content={
                 <div style={{ padding: '4px 0' }}>
                   {passwordStatusMap[this.getPasswordStatus()]}
                   {this.renderPasswordProgress()}
                   <div style={{ marginTop: 10 }}>
-                    请输入6 ~ 16 个字母，数字组合字符。请不要使用容易被猜到的密码。
+                    <FM id='passWordForm.tip_new_pwd' defaultMessage='请输入6 ~ 16 个字母，数字组合字符。请不要使用容易被猜到的密码。' />
                   </div>
                 </div>
               }
@@ -164,11 +165,11 @@ export default class PasswordForm extends Component {
                 rules: [
                   {
                     required: true,
-                    message: '请输入新密码！',
+                    message: <FM id='passWordForm.new_pwd_again' defaultMessage='请输入新密码！' />,
                   },
                   {
                     min: 6,
-                    message: '请输入6 ~ 16 位字母，数字组合。！',
+                    message: <FM id='passWordForm.pwd_limit' defaultMessage='请输入6 ~ 16 位字母，数字组合。！' />,
                   },
                   {
                     validator: this.checkPassword,
@@ -179,31 +180,31 @@ export default class PasswordForm extends Component {
                   size="large"
                   type="password"
                   maxLength={16}
-                  placeholder="6~16位字母数字组合,并区分大小写"
+                  placeholder={(PROMPT('pwd_limit_holder')||'6~16位字母数字组合,并区分大小写')}
                 />
               )}
             </Popover>
           </FormItem>
-          <FormItem {...formItemLayout} label="确认密码">
+          <FormItem {...formItemLayout} label={<FM id='passWordForm.confirm_pwd' defaultMessage='确认密码' />}>
             {getFieldDecorator('confirm', {
               rules: [
                 {
                   required: true,
-                  message: '请确认密码！',
+                  message: <FM id='passWordForm.confirm_pwd_again' defaultMessage='请确认密码！' />,
                 },
                 {
                   validator: this.checkConfirm,
                 },
               ],
-            })(<Input size="large" type="password" placeholder="确认密码" />)}
+            })(<Input size="large" type="password" placeholder={(PROMPT('passWordForm.confirm_pwd_holder')||'确认密码')} />)}
           </FormItem>
 
           <FormItem className={styles.buttonBox}>
             <Button key="back" onClick={this.handleCancel}>
-              取消
+              <FM id='passWordForm.btn_cancel' defaultMessage='取消' />
             </Button>
             <Button loading={submitting} className={styles.submit} type="primary" htmlType="submit">
-              下一步
+              <FM id='passWordForm.btn_next_step' defaultMessage='下一步' />
             </Button>
           </FormItem>
         </Form>

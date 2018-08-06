@@ -1,0 +1,14 @@
+[
+  {
+    "id": "index.cancel",
+    "defaultMessage": "取消"
+  },
+  {
+    "id": "index.submit",
+    "defaultMessage": "确定"
+  },
+  {
+    "id": "index.input_reason",
+    "defaultMessage": "请填写原因"
+  }
+]

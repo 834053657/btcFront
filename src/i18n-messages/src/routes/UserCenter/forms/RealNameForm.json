@@ -1,0 +1,50 @@
+[
+  {
+    "id": "realNameForm.card_back",
+    "defaultMessage": "身份证反面"
+  },
+  {
+    "id": "realNameForm.card_front",
+    "defaultMessage": "身份证正面"
+  },
+  {
+    "id": "realNameForm.upload_tip",
+    "defaultMessage": "单击或拖动文件到此区域进行上传"
+  },
+  {
+    "id": "realNameForm.real_name",
+    "defaultMessage": "真实姓名"
+  },
+  {
+    "id": "realNameForm.real_name_msg",
+    "defaultMessage": "请输入真实姓名！"
+  },
+  {
+    "id": "realNameForm.card_num",
+    "defaultMessage": "身份证号"
+  },
+  {
+    "id": "realNameForm.card_num_msg",
+    "defaultMessage": "请输入身份证号！"
+  },
+  {
+    "id": "realNameForm.card_upload_title",
+    "defaultMessage": "上传证件"
+  },
+  {
+    "id": "realNameForm.upload_card_front",
+    "defaultMessage": "请上传身份证正面！"
+  },
+  {
+    "id": "realNameForm.upload_card_back",
+    "defaultMessage": "请上传身份证反面！"
+  },
+  {
+    "id": "realNameForm.btn_cancel",
+    "defaultMessage": "取消"
+  },
+  {
+    "id": "realNameForm.btn_confirm",
+    "defaultMessage": "确定"
+  }
+]

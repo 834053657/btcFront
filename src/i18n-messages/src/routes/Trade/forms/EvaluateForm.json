@@ -1,0 +1,18 @@
+[
+  {
+    "id": "evaluateForm.choose_evaluate",
+    "defaultMessage": "请选择评价"
+  },
+  {
+    "id": "evaluateForm.choose_evaluate_input",
+    "defaultMessage": "请输入评价"
+  },
+  {
+    "id": "evaluateForm.btn_evaluate",
+    "defaultMessage": "评价"
+  },
+  {
+    "id": "evaluateForm.refresh_evaluate",
+    "defaultMessage": "更新评价"
+  }
+]

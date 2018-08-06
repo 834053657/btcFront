@@ -1,0 +1,74 @@
+[
+  {
+    "id": "reChargeForm.back_pack_in",
+    "defaultMessage": "在{count_}个区块内打包，费率为{fee}比特币/byte"
+  },
+  {
+    "id": "reChargeForm.max_msg",
+    "defaultMessage": "您最多可以发送"
+  },
+  {
+    "id": "reChargeForm.get_site",
+    "defaultMessage": "接收地址"
+  },
+  {
+    "id": "reChargeForm.input_address_msg",
+    "defaultMessage": "请输入接收比特币的地址！"
+  },
+  {
+    "id": "reChargeForm.transfer_num",
+    "defaultMessage": "转出数量"
+  },
+  {
+    "id": "reChargeForm.transfer_num_input",
+    "defaultMessage": "请输入转出数量！"
+  },
+  {
+    "id": "reChargeForm.transfer_fee",
+    "defaultMessage": "费率"
+  },
+  {
+    "id": "reChargeForm.transfer_fee_choose",
+    "defaultMessage": "请选择费率！"
+  },
+  {
+    "id": "reChargeForm.transfer_fee_real",
+    "defaultMessage": "实际手续费"
+  },
+  {
+    "id": "reChargeForm.transfer_fee_get",
+    "defaultMessage": "获取手续费"
+  },
+  {
+    "id": "reChargeForm.transfer_fee_btn_submit",
+    "defaultMessage": "提交"
+  },
+  {
+    "id": "reChargeForm.transfer_fee_help",
+    "defaultMessage": "帮助"
+  },
+  {
+    "id": "reChargeForm.warning_1",
+    "defaultMessage": "注意事项"
+  },
+  {
+    "id": "reChargeForm.waring_1_",
+    "defaultMessage": "BTC 钱包只能向 BTC 地址发送资产，如果向非 BTC 地址发送资产将不可找回。"
+  },
+  {
+    "id": "reChargeForm.warning_2",
+    "defaultMessage": "交易需多长时间？"
+  },
+  {
+    "id": "reChargeForm.warning_2_",
+    "defaultMessage": "发送比特币交易通常需要 30 至 60 分钟，有时比特币网络比较慢，可能需要几个小时。"
+  },
+  {
+    "id": "reChargeForm.warning_3",
+    "defaultMessage": "退款和支出"
+  },
+  {
+    "id": "reChargeForm.warning_3_",
+    "defaultMessage": "从utomarket的钱包发送资金时，会在您的余额中预留和扣除比特币网络转账费。与其他utomarket用户的钱包进行交易免费。"
+  }
+]

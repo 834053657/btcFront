@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
 import { map, delay } from 'lodash';
+import { FormattedMessage as FM } from 'react-intl';
 import { Link, routerRedux } from 'dva/router';
 import numeral from 'numeral';
 import moment from 'moment';
@@ -46,12 +47,12 @@ export default class List extends Component {
 
   columns = [
     {
-      title: '交易单号',
+      title: <FM id='myOrderList.order_no' defaultMessage='交易单号' />,
       dataIndex: 'order_no',
       render: (v, row) => <Link to={`/trade/step/${row.id}`}>{v}</Link>,
     },
     {
-      title: '创建时间',
+      title: <FM id='myOrderList.created_at' defaultMessage='创建时间' />,
       dataIndex: 'created_at',
       render: val => (
         <span>{val ? moment(new Date(val * 1000)).format('YYYY-MM-DD HH:mm:ss') : '-'}</span>
@@ -63,17 +64,17 @@ export default class List extends Component {
     //   render: (val, row) => (val && CONFIG.goods_type[val] ? CONFIG.goods_type[val] : '-'),
     // },
     {
-      title: '交易类型',
+      title: <FM id='myOrderList.order_type' defaultMessage='交易类型' />,
       dataIndex: 'order_type',
       render: (val, row) => (
         <span>
           {val && CONFIG.order_type[val] ? CONFIG.order_type[val] : '-'}{' '}
-          {row.passive ? '(挂单)' : null}
+          {row.passive ? <FM id='myOrderList.order_first' defaultMessage='(挂单)' /> : null}
         </span>
       ),
     },
     {
-      title: '交易对象',
+      title: <FM id='myOrderList.trader' defaultMessage='交易对象' />,
       dataIndex: 'trader',
       render: (val, row) => (
         <Link to={`/personage/${row.trader.id}`}>
@@ -82,39 +83,38 @@ export default class List extends Component {
       ),
     },
     {
-      title: '交易状态',
+      title: <FM id='myOrderList.status' defaultMessage='交易状态' />,
       dataIndex: 'status',
       render: (val, row) => (
         <span>{val && CONFIG.order_status[val] ? CONFIG.order_status[val] : '-'}</span>
       ),
     },
     {
-      title: '法币',
+      title: <FM id='myOrderList.currency' defaultMessage='法币' />,
       dataIndex: 'currency',
     },
     {
-      title: '交易金额(BTC)',
+      title: <FM id='myOrderList.amount' defaultMessage='交易金额(BTC)' />,
       dataIndex: 'amount',
       render: (v, row) => {
         return <span>{row.trading_count ? formatBTC(row.trading_count) : '-'}</span>;
       },
     },
     {
-      title: '交易费(BTC)',
+      title: <FM id='myOrderList.fees' defaultMessage='交易费(BTC)' />,
       dataIndex: 'fees',
       render: v => <span dangerouslySetInnerHTML={{ __html: `${formatBTC(v)}` }} />,
     },
     {
-      title: '总BTC',
+      title: <FM id='myOrderList.trading_count' defaultMessage='总BTC' />,
       dataIndex: 'trading_count',
       render: (v, row) => {
         const total = row.trading_count + row.fees;
-        console.log(row.trading_count, row.fees);
         return <span>{formatBTC(total)}</span>;
       },
     },
     {
-      title: '汇率',
+      title: <FM id='myOrderList.trading_price' defaultMessage='汇率' />,
       dataIndex: 'trading_price',
       render: (v, row) => {
         return (
@@ -125,7 +125,7 @@ export default class List extends Component {
       },
     },
     {
-      title: '操作',
+      title: <FM id='myOrderList._opt_' defaultMessage='操作' />,
       dataIndex: '_opt_',
       render: (_, row) => <Link to={`/trade/step/${row.id}`}>查看</Link>,
     },
@@ -178,14 +178,14 @@ export default class List extends Component {
     const content = (
       <Row gutter={24}>
         <Col span={12} className={styles.title}>
-          我的订单
+          <FM id='myOrderList.my_order_' defaultMessage='我的订单' />
         </Col>
         <Col span={12} className={styles.more}>
           <a
             className={styles.itunes_btn}
             onClick={() => this.props.dispatch(routerRedux.goBack())}
           >
-            返回
+            <FM id='myOrderList.go_back' defaultMessage='返回' />
           </a>
         </Col>
       </Row>
@@ -195,7 +195,13 @@ export default class List extends Component {
         <div>
           <Card bordered={false} className={styles.message_list}>
             <Tabs activeKey={type} onChange={this.handleChangeType}>
-              <TabPane tab={`全部(${statistics[0] || 0})`} key="" />
+              <TabPane
+                tab={
+                // `全部(${statistics[0] || 0})`
+                  <FM id='myOrderList.all' defaultMessage='全部{num}' values={{num:statistics[0] || 0}}/>
+                }
+                key=""
+              />
               {map(CONFIG.order_status, (text, value) => (
                 <TabPane tab={`${text}(${statistics[value] || 0})`} key={value} />
               ))}

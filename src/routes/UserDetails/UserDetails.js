@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
 import { Icon, Table, Button, Avatar, Radio, List, Badge } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
 import { map, filter, get } from 'lodash';
 import { Link } from 'dva/router';
 import DescriptionList from 'components/DescriptionList';
@@ -14,8 +15,8 @@ const { Description } = DescriptionList;
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 const typeMap = {
-  '1': '购买',
-  '2': '出售',
+  '1': <FM id='userDetails.buy_title' defaultMessage='购买' />,
+  '2': <FM id='userDetails.sell_title' defaultMessage='出售' />,
 };
 
 @connect(({ userDetails, loading, user }) => ({
@@ -51,10 +52,6 @@ export default class UserDetails extends Component {
     return !!(user && token);
   };
 
-  handleUserName = () => {
-    const { userMessage } = this.props;
-    return <a>{userMessage.nickname}</a>;
-  };
 
   handleToTrust = type => {
     const { params: { uid } } = this.props.match || {};
@@ -100,7 +97,7 @@ export default class UserDetails extends Component {
           {
             this.checkLogined() && uid !== +id ? (
               <a className={styles.report} onClick={this.handleShowReport}>
-                <Icon type="flag" />举报
+                <Icon type="flag" /><FM id='userDetails.report_user' defaultMessage='举报' />
               </a>
             ): null
           }
@@ -114,7 +111,7 @@ export default class UserDetails extends Component {
                 onClick={this.handleToTrust.bind(this, 2)}
                 loading={this.props.loading_trust}
               >
-                <Icon type="heart-o" style={{ color: '#ccc', marginRight: '5px' }} />取消信任
+                <Icon type="heart-o" style={{ color: '#ccc', marginRight: '5px' }} /><FM id='userDetails.cancel_trust' defaultMessage='取消信任' />
               </Button>
             ) : (
               uid !== +id ? (
@@ -124,54 +121,57 @@ export default class UserDetails extends Component {
                   onClick={this.handleToTrust.bind(this, 1)}
                   loading={this.props.loading_trust}
                 >
-                  <Icon type="heart-o" style={{ color: '#EAEAEA', marginRight: '5px' }} />信任
+                  <Icon type="heart-o" style={{ color: '#EAEAEA', marginRight: '5px' }} /><FM id='userDetails.to_trust' defaultMessage='信任' />
                 </Button>
               ): null
             )
           ) : (
             <div style={{ margin: '30px' }}>
-              请 <Link to="/user/login">登录</Link> 或 <Link to="/user/register">注册</Link> ， 将{' '}
-              {this.handleUserName()} 设置为值得信任。30秒注册~
+              <FM id='userDetails.please' defaultMessage='请' />
+              <Link to="/user/login"><FM id='userDetails.login_in' defaultMessage='登录' /></Link>
+              <FM id='userDetails.or' defaultMessage='或' />
+              <Link to="/user/register"><FM id='userDetails.sign_in' defaultMessage='注册' /></Link> ，
+              <FM id='userDetails.set_user_trust' defaultMessage='将 {name} 设置为值得信任。30秒注册~' values={{name:this.props.userMessage.nickname}} />
             </div>
           )}
         </div>
         <DescriptionList style={{ margin: '15px' }}>
-          <Description term="国家" className={styles.UserStyle}>
+          <Description term={<FM id='userDetails.country' defaultMessage='国家' />} className={styles.UserStyle}>
             {userMessage.country_code && CONFIG.countrysMap[userMessage.country_code]
               ? CONFIG.countrysMap[userMessage.country_code].name
               : '-'}
             {/*{CONFIG.countrysMap[userMessage.country_code].name ? CONFIG.countrysMap[userMessage.country_code].name : '-'}*/}
             {}
           </Description>
-          <Description term="交易量" className={styles.UserStyle}>
+          <Description term={<FM id='userDetails.trade_volume' defaultMessage='交易量' />} className={styles.UserStyle}>
             {trader.trade_volume ? trader.trade_volume : '-'}
           </Description>
-          <Description term="已确认的交易次数" className={styles.UserStyle}>
+          <Description term={<FM id='userDetails.trade_times' defaultMessage='已确认的交易次数' />} className={styles.UserStyle}>
             {trader.trade_times ? trader.trade_times : '-'}
           </Description>
-          <Description term="好评率" className={styles.UserStyle}>
+          <Description term={<FM id='userDetails.good_ratio' defaultMessage='好评率' />} className={styles.UserStyle}>
             {trader.good_ratio ? trader.good_ratio : '-'}
           </Description>
-          <Description term="第一次购买" className={styles.UserStyle}>
+          <Description term={<FM id='userDetails.first_trade_at' defaultMessage='第一次购买' />} className={styles.UserStyle}>
             {trader.first_trade_at
               ? moment(trader.first_trade_at * 1000).format('YYYY-MM-DD HH:mm')
               : '-'}
           </Description>
-          <Description term="账户创建时间" className={styles.UserStyle}>
-            {userMessage.last_login_at
+          <Description term={<FM id='userDetails.created_at' defaultMessage='账户创建时间' />} className={styles.UserStyle}>
+            {userMessage.created_at
               ? moment(userMessage.created_at * 1000).format('YYYY-MM-DD HH:mm')
               : '-'}
           </Description>
-          <Description term="最后一次上线" className={styles.UserStyle}>
+          <Description term={<FM id='userDetails.last_login_at' defaultMessage='最后一次上线' />} className={styles.UserStyle}>
             {userMessage.last_login_at
               ? moment(userMessage.last_login_at * 1000).format('YYYY-MM-DD HH:mm')
               : '-'}
           </Description>
-          <Description term="语言" className={styles.UserStyle}>
+          <Description term={<FM id='userDetails.language_' defaultMessage='语言' />} className={styles.UserStyle}>
             {userMessage.country_code}
           </Description>
-          <Description term="信任" className={styles.UserStyle}>
-            <span>{userMessage.is_trust === true ? '是' : '否'}</span>
+          <Description term={<FM id='userDetails.trust_is' defaultMessage='信任' />} className={styles.UserStyle}>
+            <span>{userMessage.is_trust === true ? <FM id='userDetails.yes_' defaultMessage='是' /> : <FM id='userDetails.no_' defaultMessage='否' />}</span>
           </Description>
         </DescriptionList>
       </div>
@@ -181,7 +181,7 @@ export default class UserDetails extends Component {
   renderColumns = () => {
     let columns = [
       {
-        title: '付款方式',
+        title: <FM id='userDetails.payment_methods' defaultMessage='付款方式' />,
         dataIndex: 'payment_methods',
         render: (_, row) => {
           return (
@@ -198,7 +198,7 @@ export default class UserDetails extends Component {
         },
       },
       {
-        title: '价格',
+        title: <FM id='userDetails.trading_price' defaultMessage='价格' />,
         dataIndex: 'trading_price',
         // width: '15%',
         render: text => {
@@ -206,7 +206,7 @@ export default class UserDetails extends Component {
         },
       },
       {
-        title: '限额',
+        title: <FM id='userDetails.condition_' defaultMessage='限额' />,
         dataIndex: 'condition_',
         render: (v, row) => {
           const { max_volume = 0, min_volume = 0 } = row || {};
@@ -218,7 +218,7 @@ export default class UserDetails extends Component {
         },
       },
       {
-        title: '操作',
+        title: <FM id='userDetails.operator' defaultMessage='操作' />,
         render: row => {
           const { type } = this.state;
           const uid = get(this.props, 'currentUser.user.id');
@@ -306,7 +306,7 @@ export default class UserDetails extends Component {
           })}
         </DescriptionList>
         <a className={styles.All} onClick={this.handleShowAll}>
-          {comment_visbile === true ? '显示所有用户评论' : '显示部分用户评论'}
+          {comment_visbile === true ? <FM id='userDetails.show_all' defaultMessage='显示所有用户评论' /> : <FM id='userDetails.show_some' defaultMessage='显示部分用户评论' />}
         </a>
       </div>
     );
@@ -329,17 +329,16 @@ export default class UserDetails extends Component {
     const { pagination = {}, loading } = this.props;
     const { type } = this.state;
     const { visible } = this.state;
-    console.log(this.props);
     return (
-      <PageHeaderLayout title="用户详情页">
+      <PageHeaderLayout title={<FM id='userDetails.page_user_detail' defaultMessage='用户详情页' />}>
         <div className={styles.background}>
           <div style={{ margin: '30px 0' }}>
-            <h3>用户信息</h3>
+            <h3><FM id='userDetails.user_msg' defaultMessage='用户信息' /></h3>
           </div>
           {this.UserMessage()}
           <div>
             <div style={{ margin: '30px 0' }}>
-              <h3>用户的其它交易广告</h3>
+              <h3><FM id='userDetails.user_other_ad' defaultMessage='用户的其它交易广告' /></h3>
             </div>
             <div style={{ width: '90%', paddingLeft: '10%' }}>
               <div className={styles.type_box}>
@@ -381,13 +380,13 @@ export default class UserDetails extends Component {
               </div>
               <Link to="/trade/index">
                 {' '}
-                <div className={styles.showAllAd}>显示所有用户网上购买比特币的广告</div>
+                <div className={styles.showAllAd}><FM id='userDetails.show_all_ad' defaultMessage='显示所有用户网上购买比特币的广告' /></div>
               </Link>
             </div>
           </div>
           <div>
             <div className={styles.comment}>
-              <h3>评论</h3>
+              <h3><FM id='userDetails.to_comment' defaultMessage='评论' /></h3>
             </div>
           </div>
           <div>{this.UserComment()}</div>
@@ -395,7 +394,7 @@ export default class UserDetails extends Component {
 
         <ConfirmModal
           visible={this.state.visible}
-          title="举报"
+          title={<FM id='userDetails.to_report' defaultMessage='举报' />}
           onSubmit={this.handleSubmitReport}
           onCancel={this.handleHideReport}
         />

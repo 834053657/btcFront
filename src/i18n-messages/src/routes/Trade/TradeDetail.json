@@ -6,5 +6,93 @@
   {
     "id": "tradeDetail.ad_detail",
     "defaultMessage": "广告详情"
+  },
+  {
+    "id": "tradeDetail.buy_sell_title",
+    "defaultMessage": "{buyOrSell}比特币"
+  },
+  {
+    "id": "tradeDetail.trading_price_",
+    "defaultMessage": "交易价格"
+  },
+  {
+    "id": "tradeDetail.deal_price_limit",
+    "defaultMessage": "交易限额"
+  },
+  {
+    "id": "tradeDetail.user_good_ratio",
+    "defaultMessage": "交易笔数 / 好评率"
+  },
+  {
+    "id": "tradeDetail.user_payment_limit",
+    "defaultMessage": "付款期限"
+  },
+  {
+    "id": "tradeDetail.payment_minute",
+    "defaultMessage": "分钟"
+  },
+  {
+    "id": "tradeDetail.user_payment_methods",
+    "defaultMessage": "付款方式"
+  },
+  {
+    "id": "tradeDetail.payment_methods_get",
+    "defaultMessage": "收款方式"
+  },
+  {
+    "id": "tradeDetail.payment_methods_choose",
+    "defaultMessage": "请选择收款方式"
+  },
+  {
+    "id": "tradeDetail.payment_methods_other",
+    "defaultMessage": "其他"
+  },
+  {
+    "id": "tradeDetail.user_buyOrSell_title",
+    "defaultMessage": "我要{buyOrSell}"
+  },
+  {
+    "id": "tradeDetail.trading_volume_please",
+    "defaultMessage": "请输入"
+  },
+  {
+    "id": "tradeDetail.deal_limit_price_",
+    "defaultMessage": "交易限额为{min} ~ {max}"
+  },
+  {
+    "id": "tradeDetail.trading_count_please",
+    "defaultMessage": "请输入"
+  },
+  {
+    "id": "tradeDetail.trading_count_max",
+    "defaultMessage": "最大可交易数量为{max}"
+  },
+  {
+    "id": "tradeDetail.trading_notes_title",
+    "defaultMessage": "交易备注"
+  },
+  {
+    "id": "tradeDetail.btn_cancel",
+    "defaultMessage": "取消"
+  },
+  {
+    "id": "tradeDetail.btn_submit",
+    "defaultMessage": "提交"
+  },
+  {
+    "id": "tradeDetail.use_name",
+    "defaultMessage": "用户{name}的交易条款"
+  },
+  {
+    "id": "tradeDetail.report_order",
+    "defaultMessage": "举报这则交易信息"
+  },
+  {
+    "id": "tradeDetail.report",
+    "defaultMessage": "举报"
+  },
+  {
+    "id": "tradeDetail.add_pay_method",
+    "defaultMessage": "添加支付方式"
   }
 ]

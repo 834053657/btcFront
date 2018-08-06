@@ -132,6 +132,7 @@ export default class TradeDetail extends PureComponent {
 
   render() {
     const { submitting, detail = {}, currentUser } = this.props;
+    console.log(detail.max_count,typeof(detail.max_count) ,'detail.max_count')
     const { getFieldDecorator } = this.props.form;
     const { payments = {} } = currentUser || {};
     const { owner = {}, ad_type } = detail || {};
@@ -143,7 +144,7 @@ export default class TradeDetail extends PureComponent {
     return (
       <PageHeaderLayout
         className="ant-layout-content"
-        title={ad_type ? `${CONFIG.trade_ad_type[ad_type]}比特币` : null}
+        title={ad_type ? <FM id='tradeDetail.buy_sell_title' defaultMessage='{buyOrSell}比特币' values={{buyOrSell:CONFIG.trade_ad_type[ad_type]}} /> : null}
         breadcrumbList={breadcrumbList}
       >
         <div className={styles.page}>
@@ -167,21 +168,21 @@ export default class TradeDetail extends PureComponent {
                   }
                 />
                 <DescriptionList style={{ marginTop: 15 }} size="large" col="2">
-                  <Description term="交易价格">
+                  <Description term={<FM id='tradeDetail.trading_price_' defaultMessage='交易价格' />}>
                     {detail.trading_price} {detail.currency} / BTC
                   </Description>
-                  <Description term="交易限额">
+                  <Description term={<FM id='tradeDetail.deal_price_limit' defaultMessage='交易限额' />}>
                     {' '}
                     {detail.max_count} BTC ({detail.min_volume} {detail.currency} ~{' '}
                     {detail.max_volume} {detail.currency})
                   </Description>
-                  <Description term="交易笔数 / 好评率">
+                  <Description term={<FM id='tradeDetail.user_good_ratio' defaultMessage='交易笔数 / 好评率' />}>
                     {' '}
                     {owner.trade_times} / {owner.good_ratio}%
                   </Description>
-                  <Description term="付款期限">{detail.payment_limit} 分钟</Description>
+                  <Description term={<FM id='tradeDetail.user_payment_limit' defaultMessage='付款期限' />}>{detail.payment_limit} <FM id='tradeDetail.payment_minute' defaultMessage='分钟' /></Description>
                   {ad_type === 2 && (
-                    <Description term="付款方式">
+                    <Description term={<FM id='tradeDetail.user_payment_methods' defaultMessage='付款方式' />}>
                       {map(detail.payment_methods, item => (
                         <Icon className={styles.pay_method} key={item} type={getPayIcon(item)} />
                       ))}
@@ -192,7 +193,7 @@ export default class TradeDetail extends PureComponent {
                   {ad_type === 1 ? ( // 买入的广告类型 才需要用户添加收款方式
                     <div>
                       {
-                        <FormItem {...formItemLayout} label="收款方式">
+                        <FormItem {...formItemLayout} label={<FM id='tradeDetail.payment_methods_get' defaultMessage='收款方式' />}>
                           {//   payments.length <= 0 ? (
                           //   <a onClick={this.showAddPaymentsModal}>请先添加收款方式</a>
                           // ) : (
@@ -200,7 +201,7 @@ export default class TradeDetail extends PureComponent {
                             rules: [
                               {
                                 required: true,
-                                message: '请选择收款方式',
+                                message: <FM id='tradeDetail.payment_methods_choose' defaultMessage='请选择收款方式' />,
                               },
                             ],
                           })(
@@ -212,25 +213,25 @@ export default class TradeDetail extends PureComponent {
                                   </Checkbox>
                                 );
                               })}
-                              <Checkbox value="">其他</Checkbox>
+                              <Checkbox value=""><FM id='tradeDetail.payment_methods_other' defaultMessage='其他' /></Checkbox>
                             </Checkbox.Group>
                           )}
                         </FormItem>
                       }
                     </div>
                   ) : null}
-                  <FormItem label={`我要${CONFIG.order_type[ad_type]}`} {...formItemLayout}>
+                  <FormItem label={<FM id='tradeDetail.user_buyOrSell_title' defaultMessage='我要{buyOrSell}' values={{buyOrSell:CONFIG.order_type[ad_type]}} />} {...formItemLayout}>
                     <Col span={11}>
                       <FormItem>
                         {getFieldDecorator('trading_volume', {
                           onChange: this.handleChangeVolume,
                           rules: [
-                            { required: true, message: '请输入' },
+                            { required: true, message: <FM id='tradeDetail.trading_volume_please' defaultMessage='请输入' /> },
                             {
                               type: 'number',
                               min: detail.min_volume,
                               max: detail.max_volume,
-                              message: `交易限额为${detail.min_volume} ~ ${detail.max_volume}`,
+                              message: <FM id='tradeDetail.deal_limit_price_' defaultMessage='交易限额为{min} ~ {max}' values={{min:detail.min_volume,max:detail.max_volume}} />,
                             },
                           ],
                         })(
@@ -253,18 +254,18 @@ export default class TradeDetail extends PureComponent {
                         {getFieldDecorator('trading_count', {
                           onChange: this.handleChangeCount,
                           rules: [
-                            { required: true, message: '请输入' },
+                            { required: true, message: <FM id='tradeDetail.trading_count_please' defaultMessage='请输入' /> },
                             {
                               type: 'number',
                               max: detail.max_count,
-                              message: `最大可交易数量为${detail.max_count}`,
+                              message: <FM id='tradeDetail.trading_count_max' defaultMessage='最大可交易数量为{max}' values={{max:detail.max_count}} />,
                             },
                           ],
                         })(<InputNumber precision={4} size="large" addonAfter="BTC" />)}
                       </FormItem>
                     </Col>
                   </FormItem>
-                  <FormItem label="交易备注" {...formItemLayout}>
+                  <FormItem label={<FM id='tradeDetail.trading_notes_title' defaultMessage='交易备注' />} {...formItemLayout}>
                     {getFieldDecorator('trading_notes', {
                       rules: [],
                     })(<TextArea rows={6} />)}
@@ -272,7 +273,7 @@ export default class TradeDetail extends PureComponent {
 
                   <FormItem className={styles.buttonBox}>
                     <Button key="back" onClick={() => this.props.dispatch(routerRedux.goBack())}>
-                      取消
+                      <FM id='tradeDetail.btn_cancel' defaultMessage='取消' />
                     </Button>
                     <Button
                       loading={submitting}
@@ -280,7 +281,7 @@ export default class TradeDetail extends PureComponent {
                       type="primary"
                       htmlType="submit"
                     >
-                      提交
+                      <FM id='tradeDetail.btn_submit' defaultMessage='提交' />
                     </Button>
                   </FormItem>
                 </Form>
@@ -289,10 +290,10 @@ export default class TradeDetail extends PureComponent {
             <Col span={10} className={styles.right}>
               <Card
                 className={styles.term_box}
-                title={`用户${owner.nickname}的交易条款`}
+                title={<FM id='tradeDetail.use_name' defaultMessage='用户{name}的交易条款' values={{name:owner.nickname}}/>}
                 actions={[
                   <a className={styles.report} onClick={this.showReportModal}>
-                    <Icon type="flag" /> 举报这则交易信息
+                    <Icon type="flag" /> <FM id='tradeDetail.report_order' defaultMessage='举报这则交易信息' />
                   </a>,
                 ]}
               >
@@ -304,7 +305,7 @@ export default class TradeDetail extends PureComponent {
 
         <ConfirmModal
           visible={this.state.reportAdModal}
-          title="举报"
+          title={<FM id='tradeDetail.report' defaultMessage='举报' />}
           onSubmit={this.handleSubmitReport}
           onCancel={this.handleHideReportModal}
         />
@@ -312,7 +313,7 @@ export default class TradeDetail extends PureComponent {
         <PayMethodModal
           {...this.props}
           payMents={ENABLE_PAY_MENTS}
-          title="添加支付方式"
+          title={<FM id='tradeDetail.add_pay_method' defaultMessage='添加支付方式' />}
           data={this.state.payMethodModalVisible}
           onCancel={this.hidePayMethodModal}
         />
