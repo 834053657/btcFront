@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
 import { Icon, Card, Col, Row, Radio } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
 import { delay, map } from 'lodash';
 import { routerRedux } from 'dva/router';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
@@ -69,14 +70,14 @@ export default class AdEdit extends Component {
     const content = (
       <Row gutter={24} className={styles.headers}>
         <Col span={12} className={styles.title}>
-          编辑广告
+          <FM id='adEdit.edit_ad' defaultMessage='编辑广告' />
         </Col>
         <Col span={12} className={styles.more}>
           <a
             className={styles.itunes_btn}
             onClick={() => this.props.dispatch(routerRedux.goBack())}
           >
-            返回
+            <FM id='adEdit.go_back' defaultMessage='返回' />
           </a>
         </Col>
       </Row>

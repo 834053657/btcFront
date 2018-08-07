@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { FormattedMessage as FM } from 'react-intl';
+
 import { connect } from 'dva';
 import { map } from 'lodash';
 import { Alert } from 'antd';
@@ -57,11 +59,15 @@ export default class AdPublish extends Component {
   render() {
     const { num } = this.props;
     return (
-      <PageHeaderLayout title="发布广告">
+      <PageHeaderLayout title={<FM id='adPublish.ad_publish_title' defaultMessage='发布广告' />}>
         <div className={styles.background}>
           <div style={{ paddingLeft: '20px', width: '640px', marginBottom: '30px' }}>
             <Alert
-              message={`您最多可以创建 ${num} 条交易广告，在您创建广告的时候，请您创建适合您需求的广告条数.`}
+              message={<FM
+                id='adPublish.alert_'
+                defaultMessage='您最多可以创建 {num_} 条交易广告，在您创建广告的时候，请您创建适合您需求的广告条数.'
+                values={{num_:num}}
+              />}
               type="info"
               showIcon
             />

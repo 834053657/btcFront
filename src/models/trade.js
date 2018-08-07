@@ -1,5 +1,6 @@
 import { routerRedux } from 'dva/router';
 import { message } from 'antd';
+import { get } from 'lodash';
 import {
   submitCreateOrder,
   getTradeList,
@@ -69,6 +70,15 @@ export default {
         });
         yield callback && callback();
       }
+    },
+    *updateOrderDetail({ payload }, { select, put }) {
+      const currOrderId = yield select(state => get(state, 'trade.orderDetail.order.id', null))
+      if (payload.id === currOrderId) {
+        yield put({
+          type: 'fetchOrderDetail',
+          payload: { id: payload.id },
+        })
+      } 
     },
     *createOrder({ payload }, { call, put }) {
       const res = yield call(submitCreateOrder, payload);
@@ -206,10 +216,8 @@ export default {
         callback(res) {
           if (res.code === 0) {
             dispatch({
-              type: 'fetchOrderDetail',
-              payload: {
-                id: res.data.id,
-              }
+              type: 'updateOrderDetail',
+              payload: res.data
             }) 
           }
         },

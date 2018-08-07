@@ -1,0 +1,26 @@
+[
+  {
+    "id": "G2Index.btn_cancel",
+    "defaultMessage": "取消"
+  },
+  {
+    "id": "G2Index.btn_confirm",
+    "defaultMessage": "确定"
+  },
+  {
+    "id": "G2Index.google_code_please",
+    "defaultMessage": "请输入谷歌验证码！"
+  },
+  {
+    "id": "G2Index.google_code_input",
+    "defaultMessage": "请输入谷歌验证码！"
+  },
+  {
+    "id": "G2Index.btn_cancel_",
+    "defaultMessage": "取消"
+  },
+  {
+    "id": "G2Index.btn_confirm_",
+    "defaultMessage": "确定"
+  }
+]

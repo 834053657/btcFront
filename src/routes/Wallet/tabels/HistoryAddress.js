@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import moment from 'moment';
 import { Table, Tabs, Button, Icon, Card, Modal, Badge, Tooltip } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
 import { map } from 'lodash';
 import DescriptionList from 'components/DescriptionList';
 import styles from './TransferList.less';
@@ -18,14 +19,14 @@ export default class TransferList extends Component {
 
   columns = [
     {
-      title: '创建日期',
+      title: <FM id='historyAddress.created_at' defaultMessage='创建日期' />,
       dataIndex: 'created_at',
       render: (v, row) => {
         return <span>{v ? moment(v * 1000).format('YYYY-MM-DD HH:mm:ss') : '-'}</span>;
       },
     },
     {
-      title: '比特币地址',
+      title: <FM id='historyAddress.address' defaultMessage='比特币地址' />,
       dataIndex: 'address',
       render: (v, row) => {
         return <span>{v}</span>;

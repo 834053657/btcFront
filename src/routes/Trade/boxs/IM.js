@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { findDOMNode } from 'react-dom';
 import { List, InfiniteLoader, AutoSizer, CellMeasurerCache, CellMeasurer } from 'react-virtualized';
 import moment from 'moment';
-import { map, delay, defer, get } from 'lodash';
+import { isEqual, map, delay, defer, get, findIndex, forEach } from 'lodash';
 import throttle from 'lodash-decorators/throttle';
 import bind from 'lodash-decorators/bind';
 import antd from 'antd';
@@ -38,7 +38,7 @@ export default class TradeIM extends PureComponent {
     super(props)
     this.cache = new CellMeasurerCache({
       fixedWidth: true,
-      minHeight: 50,
+      defaultHeight: 50,
     })
   }
 
@@ -70,6 +70,16 @@ export default class TradeIM extends PureComponent {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    const currHistoryList = get(this.props, 'im.historyList', [])
+    const prevHistoryList = get(prevProps, 'im.historyList', []) 
+    forEach(currHistoryList, (history, index) => {
+      if (!isEqual(history, prevHistoryList[findIndex(prevHistoryList, history)])) {
+        this.cache.clear(index)
+      }
+    })
+  }
+
   componentWillUnmount() {
     const { orderId, dispatch } = this.props;
     dispatch({
@@ -91,9 +101,7 @@ export default class TradeIM extends PureComponent {
 
   msgClick = e => {
     if (e.target.nodeName === 'IMG') {
-      this.setState({
-        maxImg: e.target.src,
-      });
+      this.setState({maxImg: e.target.src, });
     }
   };
 
@@ -160,7 +168,7 @@ export default class TradeIM extends PureComponent {
     const uid = get(this.props, 'currentUser.user.id') || {};
     const historyList = get(this.props, 'im.historyList') || [];
     const item = historyList[index] || {};
-    const { message = {}, msg_type, created_at, sender = {} } = item;
+    const { message = {}, msg_type, created_at_millisec, sender = {} } = item;
     const detail = getMessage(item, 'im')
     const content = detail ? detail.content : ''
     return (
@@ -200,7 +208,7 @@ export default class TradeIM extends PureComponent {
                       dangerouslySetInnerHTML={{ __html: content }}
                     />
                     <div className={styles.sendtime}>
-                      {created_at ? moment(created_at).format('YYYY-MM-DD HH:mm:ss') : '-'}
+                      {created_at_millisec ? moment(created_at_millisec).format('YYYY-MM-DD HH:mm:ss') : '-'}
                     </div>
                   </div>
                 }

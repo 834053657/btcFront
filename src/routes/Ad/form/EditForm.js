@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Select, Button, Form, Input, Radio, Checkbox, Row, Col, Card, Tooltip, Icon } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
+
 import { map, floor, omit } from 'lodash';
 import { Link } from 'dva/router';
 import InputNumber from 'components/InputNumber';
@@ -35,8 +37,8 @@ const formItemLayout1 = {
 };
 
 const typeMap = {
-  '1': '在线买入',
-  '2': '在线卖出',
+  '1': <FM id='editForm.buy_inline' defaultMessage='在线买入' />,
+  '2': <FM id='editForm.sell_inline' defaultMessage='在线卖出' />,
 };
 
 const CheckboxGroup = Checkbox.Group;
@@ -74,7 +76,7 @@ export default class EditForm extends Component {
   checkMinPrice = (ruler, value, callback) => {
     const { form } = this.props;
     if (value > form.getFieldValue('max_volume')) {
-      callback('不能大于最大可交易额');
+      callback(<FM id='editForm.max_limit_num' defaultMessage='不能大于最大可交易额' />);
     } else {
       callback();
     }
@@ -84,7 +86,7 @@ export default class EditForm extends Component {
     const { form } = this.props;
 
     if (value < form.getFieldValue('min_volume')) {
-      callback('不能小于最小可交易额');
+      callback(<FM id='editForm.min_limit_num' defaultMessage='不能小于最小可交易额' />);
     } else {
       callback();
     }
@@ -204,7 +206,7 @@ export default class EditForm extends Component {
               rules: [
                 {
                   required: true,
-                  message: '请选择',
+                  message: <FM id='editForm.ad_type_choose' defaultMessage='请选择' />,
                 },
               ],
             })(
@@ -224,34 +226,35 @@ export default class EditForm extends Component {
           </div>
         </FormItem>
 
-        <Card style={{ margin: 15, width: 810 }} title="广告规则">
+        <Card style={{ margin: 15, width: 810 }} title={<FM id='editForm.ad_rules' defaultMessage='广告规则' />}>
           <li>
-            要想显示您的交易广告，您的【utomarket】钱包中需要有比特币。使用在线付款的交易广告至少需要
-            0.05 BTC。
+            <FM id='tradeDetail.main_page' defaultMessage='要想显示您的交易广告，您的【utomarket】钱包中需要有比特币。使用在线付款的交易广告至少需要0.05 BTC。' />
           </li>
-          <li>特定付款方式要求您验证身份，然后您的交易广告才会显示。</li>
-          <li>每笔完成的交易均会消耗广告主 1% 的总交易金额。查看我们费用页面上的所有费用。</li>
-          <li>发起交易后，价格就会确定，除非定价中有明显的错误。</li>
-          <li>您不能代表其他人（由经纪人处理）购买或出售比特币。</li>
-          <li>您仅可以使用以自己名字注册的付款帐户（非第三方付款！）。</li>
-          <li>您必须在交易广告或交易聊天中提供您的付款详细信息。</li>
-          <li>所有交流必须在utomarket.com 上进行。</li>
+          <li><FM id='editForm.ad_rule_1' defaultMessage='特定付款方式要求您验证身份，然后您的交易广告才会显示。' /></li>
+          <li><FM id='editForm.ad_rule_2' defaultMessage='每笔完成的交易均会消耗广告主 1% 的总交易金额。查看我们费用页面上的所有费用。' /></li>
+          <li><FM id='editForm.ad_rule_3' defaultMessage='发起交易后，价格就会确定，除非定价中有明显的错误。' /></li>
+          <li><FM id='editForm.ad_rule_4' defaultMessage='您不能代表其他人（由经纪人处理）购买或出售比特币。' /></li>
+          <li><FM id='editForm.ad_rule_5' defaultMessage='您仅可以使用以自己名字注册的付款帐户（非第三方付款！）。' /></li>
+          <li><FM id='editForm.ad_rule_6' defaultMessage='您必须在交易广告或交易聊天中提供您的付款详细信息。' /></li>
+          <li><FM id='editForm.ad_rule_7' defaultMessage='所有交流必须在utomarket.com 上进行。' /></li>
           <li>
-            标记为高风险的付款方式具有很大的欺诈风险。在使用高风险付款方式时，请务必小心且始终要求您的交易对方验证身份。
+
+            <FM id='editForm.ad_rule_8' defaultMessage='标记为高风险的付款方式具有很大的欺诈风险。在使用高风险付款方式时，请务必小心且始终要求您的交易对方验证身份。' />
           </li>
         </Card>
 
-        <FormItem {...formItemLayout} label="所在地">
+        <FormItem {...formItemLayout} label={<FM id='editForm.user_local' defaultMessage='所在地' />}>
           {getFieldDecorator('country_code', {
             initialValue: initialValues.country_code,
             rules: [
               {
                 required: true,
-                message: '请选择所在地',
+                message: <FM id='editForm.user_local_choose' defaultMessage='请选择所在地' />,
               },
             ],
           })(
-            <Select style={{ width: 185 }} placeholder="请选择所在地">
+            <Select style={{ width: 185 }} placeholder={(PROMPT('editForm.user_local_choose_please'))}>
+              {/*请选择所在地*/}
               {map(CONFIG.country, item => (
                 <Option key={item.code} value={item.code}>
                   {item.name}
@@ -266,14 +269,14 @@ export default class EditForm extends Component {
           </span>
         </FormItem>
 
-        <FormItem {...formItemLayout} label="交易币种">
+        <FormItem {...formItemLayout} label={<FM id='editForm.deal_currency' defaultMessage='交易币种' />}>
           {getFieldDecorator('currency', {
             onChange: this.handleChangeCur,
             initialValue: initialValues.currency || 'CNY',
             rules: [
               {
                 required: true,
-                message: '请选择',
+                message: <FM id='editForm.deal_currency_choose' defaultMessage='请选择' />,
               },
             ],
           })(
@@ -292,7 +295,7 @@ export default class EditForm extends Component {
           </span>
         </FormItem>
 
-        <FormItem {...formItemLayout} label="市场参考价格">
+        <FormItem {...formItemLayout} label={<FM id='editForm.market_choose_price' defaultMessage='市场参考价格' />}>
           <Col span={7} className={styles.market_price}>
             <FormItem>
               <span style={{ marginRight: '20px' }}>
@@ -304,7 +307,7 @@ export default class EditForm extends Component {
                 onClick={getPrice.bind(this, getFieldValue('currency'))}
                 loading={freshLoading}
               >
-                刷新
+                <FM id='editForm.btn_refresh' defaultMessage='刷新' />
               </Button>
             </FormItem>
           </Col>
@@ -317,7 +320,7 @@ export default class EditForm extends Component {
           </Col>
         </FormItem>
 
-        <FormItem label="交易价格" {...formItemLayout}>
+        <FormItem label={<FM id='editForm.deal_price_' defaultMessage='交易价格' />} {...formItemLayout}>
           <Col span={6}>
             {getFieldDecorator('trading_price', {
               initialValue: initialValues.trading_price,
@@ -325,7 +328,7 @@ export default class EditForm extends Component {
               rules: [
                 {
                   required: true,
-                  message: '请输入交易价格',
+                  message: <FM id='editForm.deal_price_input' defaultMessage='请输入交易价格' />,
                 },
               ],
             })(
@@ -347,7 +350,7 @@ export default class EditForm extends Component {
         </FormItem>
 
         {floatPrice ? (
-          <FormItem label="浮动比例" {...formItemLayout}>
+          <FormItem label={<FM id='editForm.float_price' defaultMessage='浮动比例' />} {...formItemLayout}>
             <Col span={7} className={styles.no_margin_floatPrice_input}>
               <FormItem>
                 {getFieldDecorator('trading_price_ratio', {
@@ -356,13 +359,13 @@ export default class EditForm extends Component {
                   rules: [
                     {
                       required: true,
-                      message: '请输入浮动比例',
+                      message: <FM id='editForm.float_price_input' defaultMessage='请输入浮动比例' />,
                     },
                     {
                       type: 'number',
                       max: 170,
                       min: 30,
-                      message: '浮动比例 30% ~ 170%',
+                      message: <FM id='editForm.float_price_limit' defaultMessage='浮动比例 30% ~ 170%' />,
                     },
                   ],
                 })(
@@ -371,7 +374,7 @@ export default class EditForm extends Component {
                     // max={170}
                     precision={2}
                     style={{ width: 185 }}
-                    placeholder="市场价比例"
+                    placeholder={(PROMPT('float_price_limit_radio')||'市场价比例')}
                     addonAfter="%"
                   />
                 )}
@@ -387,14 +390,14 @@ export default class EditForm extends Component {
           </FormItem>
         ) : null}
 
-        <FormItem {...formItemLayout} label="浮动价格">
+        <FormItem {...formItemLayout} label={<FM id='editForm.float_check_price' defaultMessage='浮动价格' />}>
           <Col span={7} className={styles.no_margin_floatPrice}>
             <FormItem>
               {getFieldDecorator('trading_price_ratio_choose', {
                 initialValue: !!initialValues.trading_price_ratio,
                 valuePropName: 'checked',
                 rules: [],
-              })(<Checkbox>使用浮动价格</Checkbox>)}
+              })(<Checkbox><FM id='editForm.float_check_price_please' defaultMessage='使用浮动价格' /></Checkbox>)}
             </FormItem>
           </Col>
           <Col span={1}>
@@ -406,7 +409,7 @@ export default class EditForm extends Component {
           </Col>
         </FormItem>
 
-        <FormItem label="广告交易数量" {...formItemLayout}>
+        <FormItem label={<FM id='editForm.ad_order_num' defaultMessage='广告交易数量' />} {...formItemLayout}>
           <Col span={7} className={styles.no_margin_num}>
             <FormItem>
               {getFieldDecorator('max_count', {
@@ -415,9 +418,9 @@ export default class EditForm extends Component {
                 rules: [
                   {
                     required: true,
-                    message: '请输入可交易数量',
+                    message: <FM id='editForm.ad_order_num_input' defaultMessage='请输入可交易数量' />,
                   },
-                  { type: 'number', min: 0.0001, message: '最少交易0.0001BTC' },
+                  { type: 'number', min: 0.0001, message: <FM id='editForm.ad_order_num_limit' defaultMessage='最少交易0.0001BTC' /> },
                 ],
               })(
                 <InputNumber
@@ -425,7 +428,7 @@ export default class EditForm extends Component {
                   min={0}
                   precision={4}
                   style={{ width: 185, position: 'absolute', marginTop: '5px' }}
-                  placeholder="广告总交易数额"
+                  placeholder={(PROMPT('editForm.ad_deal_num')||'广告总交易数额')}
                   addonAfter="BTC"
                 />
               )}
@@ -438,7 +441,7 @@ export default class EditForm extends Component {
           </span>
         </FormItem>
 
-        <FormItem label="单笔交易限额" {...formItemLayout}>
+        <FormItem label={<FM id='editForm.deal_order_limit_once' defaultMessage='单笔交易限额' />} {...formItemLayout}>
           {/*<Col span={7} className={styles.no_margin}>*/}
           {/*<FormItem>*/}
           {/*{getFieldDecorator('max_count', {*/}
@@ -470,7 +473,7 @@ export default class EditForm extends Component {
                 rules: [
                   {
                     required: true,
-                    message: '请输入',
+                    message: <FM id='editForm.deal_order_limit_once_please' defaultMessage='请输入' />,
                   },
                   {
                     validator: this.checkMinPrice,
@@ -482,7 +485,7 @@ export default class EditForm extends Component {
                   min={100}
                   precision={2}
                   style={{ width: 185, position: 'absolute', marginTop: '5px' }}
-                  placeholder="单笔最小交易额"
+                  placeholder={(PROMPT('editForm.order_min_deal')||'单笔最小交易额')}
                   addonAfter={getFieldValue('currency')}
                 />
               )}
@@ -499,7 +502,7 @@ export default class EditForm extends Component {
                 rules: [
                   {
                     required: true,
-                    message: '请输入',
+                    message: <FM id='editForm.max_volume_input_please' defaultMessage='请输入' />,
                   },
                   {
                     validator: this.checkMaxPrice,
@@ -511,7 +514,7 @@ export default class EditForm extends Component {
                   min={0}
                   precision={2}
                   style={{ width: 185, position: 'absolute', marginTop: '5px' }}
-                  placeholder="单笔最大交易额"
+                  placeholder={(PROMPT('editForm.max_volume_input_once')||'单笔最大交易额')}
                   addonAfter={getFieldValue('currency')}
                 />
               )}
@@ -524,14 +527,14 @@ export default class EditForm extends Component {
           </div>
         </FormItem>
 
-        <FormItem {...formItemLayout} label="付款期限">
+        <FormItem {...formItemLayout} label={<FM id='editForm.payment_limit_title' defaultMessage='付款期限' />}>
           <Col span={6}>
             {getFieldDecorator('payment_limit', {
               initialValue: initialValues.payment_limit,
               rules: [
                 {
                   required: true,
-                  message: '请输入',
+                  message: <FM id='editForm.payment_limit_title_please' defaultMessage='请输入' />,
                 },
               ],
             })(
@@ -541,7 +544,7 @@ export default class EditForm extends Component {
                 step={1}
                 precision={0}
                 style={{ width: 185 }}
-                placeholder="付款期限"
+                placeholder={(PROMPT('editForm.payment_limit_title_input')||'付款期限')}
                 addonAfter="分钟"
               />
             )}
@@ -567,13 +570,13 @@ export default class EditForm extends Component {
             {/*</span>*/}
             {/*</FormItem>*/}
             {/*) : (*/}
-            <FormItem {...formItemLayout} label="收款方式">
+            <FormItem {...formItemLayout} label={<FM id='editForm.payment_methods_title' defaultMessage='收款方式' />}>
               {getFieldDecorator('payment_methods', {
                 initialValue: initialValues.payment_methods,
                 rules: [
                   {
                     required: true,
-                    message: '请选择收款方式',
+                    message: <FM id='editForm.payment_methods_please' defaultMessage='请选择收款方式' />,
                   },
                 ],
               })(
@@ -585,7 +588,7 @@ export default class EditForm extends Component {
                       </Checkbox>
                     );
                   })}
-                  <Checkbox value="">其他</Checkbox>
+                  <Checkbox value=""><FM id='editForm.payment_methods_other' defaultMessage='其他' /></Checkbox>
                 </Checkbox.Group>
 
                 // <Select
@@ -617,13 +620,13 @@ export default class EditForm extends Component {
           </div>
         ) : null}
 
-        <FormItem {...formItemLayout} label="安全选项">
+        <FormItem {...formItemLayout} label={<FM id='editForm.trusted_user_title' defaultMessage='安全选项' />}>
           <div className={styles.trust_person}>
             <FormItem>
               <div>
                 {getFieldDecorator('trusted_user', {
                   initialValue: initialValues.trusted_user,
-                })(<Checkbox onChange={this.handleChangeTrust}>仅限受信任的交易者</Checkbox>)}
+                })(<Checkbox onChange={this.handleChangeTrust}><FM id='editForm.trusted_user_limit' defaultMessage='仅限受信任的交易者' /></Checkbox>)}
                 <span style={{ marginLeft: '10px' }}>
                   <Tooltip title={CONFIG.tooltip[13]}>
                     <Icon className="bt-icon-question" type="question-circle" title="" />
@@ -636,14 +639,14 @@ export default class EditForm extends Component {
                 ''
               ) : (
                 <div>
-                  <span className="bt-trade-level-auth">交易者的认证等级</span>
+                  <span className="bt-trade-level-auth"><FM id='editForm.user_auth_level_title' defaultMessage='交易者的认证等级' /></span>
                   <span style={{ marginLeft: 20 }}>
                     {getFieldDecorator('user_auth_level', {
                       initialValue: initialValues.user_auth_level || 0,
                       rules: [
                         {
                           required: true,
-                          message: '请选择',
+                          message: <FM id='editForm.user_auth_level_choose' defaultMessage='请选择' />,
                         },
                       ],
                     })(
@@ -653,7 +656,7 @@ export default class EditForm extends Component {
                             {text}
                           </Radio>
                         ))}
-                        <Radio value={0}>不限</Radio>
+                        <Radio value={0}><FM id='editForm.user_auth_level_unLimit' defaultMessage='不限' /></Radio>
                       </RadioGroup>
                     )}
                   </span>
@@ -663,7 +666,7 @@ export default class EditForm extends Component {
           </div>
         </FormItem>
 
-        <FormItem {...formItemLayout} label="交易条款">
+        <FormItem {...formItemLayout} label={<FM id='editForm.deal_rules_title' defaultMessage='交易条款' />}>
           {getFieldDecorator('trading_term', {
             initialValue: initialValues.trading_term,
             rules: [
@@ -673,10 +676,10 @@ export default class EditForm extends Component {
               // },
               {
                 max: 200,
-                message: '最多输入200个字符',
+                message: <FM id='editForm.input_limit_max' defaultMessage='最多输入200个字符' />,
               },
             ],
-          })(<TextArea placeholder="交易条款(最多200个字符)" rows={4} style={{ width: 390 }} />)}
+          })(<TextArea placeholder={(PROMPT('editForm.input_limit_max_word')||'交易条款(最多200个字符)')} rows={4} style={{ width: 390 }} />)}
           <span style={{ marginLeft: '10px' }}>
             <Tooltip title={CONFIG.tooltip[8]}>
               <Icon className="bt-icon-question" type="question-circle" title="" />
@@ -684,7 +687,7 @@ export default class EditForm extends Component {
           </span>
         </FormItem>
 
-        <FormItem {...formItemLayout} label="自动回复">
+        <FormItem {...formItemLayout} label={<FM id='editForm.auto_replies_title' defaultMessage='自动回复' />}>
           {getFieldDecorator('auto_replies', {
             initialValue:
               initialValues.auto_replies,
@@ -695,7 +698,7 @@ export default class EditForm extends Component {
               // },
               {
                 max: 200,
-                message: '最多输入200个字符',
+                message: <FM id='editForm.auto_replies_max_input' defaultMessage='最多输入200个字符' />,
               },
             ],
           })(
@@ -709,7 +712,7 @@ export default class EditForm extends Component {
         </FormItem>
         {getFieldValue('ad_type') === 2 && (
           <div>
-            <FormItem {...formItemLayout} label="最小成交数">
+            <FormItem {...formItemLayout} label={<FM id='editForm.min_trade_count_title' defaultMessage='最小成交数' />}>
               <Col span={6}>
                 {getFieldDecorator('min_trade_count', {
                   initialValue: initialValues.min_trade_count,
@@ -717,7 +720,7 @@ export default class EditForm extends Component {
                   <InputNumber
                     min={0}
                     step={0.0001}
-                    placeholder="最小成交数"
+                    placeholder={(PROMPT('editForm.min_trade_count_num')||'最小成交数')}
                     style={{ width: 185 }}
                   />
                 )}
@@ -729,7 +732,7 @@ export default class EditForm extends Component {
               </span>
             </FormItem>
 
-            <FormItem {...formItemLayout} label="最低评价得分">
+            <FormItem {...formItemLayout} label={<FM id='editForm.min_rating_score_title' defaultMessage='最低评价得分' />}>
               <Col span={6}>
                 {getFieldDecorator('min_rating_score', {
                   initialValue: initialValues.min_rating_score,
@@ -739,7 +742,7 @@ export default class EditForm extends Component {
                     precision={2}
                     max={100}
                     style={{ width: 185, position: 'absolute', marginTop: '5px' }}
-                    placeholder="最低评价得分"
+                    placeholder={(PROMPT('editForm.min_rating_score_holder')||'最低评价得分')}
                     addonAfter="%"
                   />
                 )}
@@ -751,7 +754,7 @@ export default class EditForm extends Component {
               </span>
             </FormItem>
 
-            <FormItem {...formItemLayout} label="新卖家限额">
+            <FormItem {...formItemLayout} label={<FM id='editForm.new_buyer_limit_title' defaultMessage='新卖家限额' />}>
               <Col span={6}>
                 {getFieldDecorator('new_buyer_limit', {
                   initialValue: initialValues.new_buyer_limit,
@@ -759,7 +762,7 @@ export default class EditForm extends Component {
                   <InputNumber
                     min={0}
                     step={0.0001}
-                    placeholder="新卖家限额"
+                    placeholder={(PROMPT('editForm.new_buyer_limit')||'新卖家限额')}
                     style={{ width: 185 }}
                   />
                 )}
@@ -782,14 +785,14 @@ export default class EditForm extends Component {
           <div className={styles.btnBox}>
             {initialValues.id ? (
               <Button type="primary" htmlType="submit" loading={submitting}>
-                确认修改
+                <FM id='editForm.btn_submit_change' defaultMessage='确认修改' />
               </Button>
             ) : num && num > 0 ? (
               <Button type="primary" htmlType="submit" loading={submitting}>
-                确认发布
+                <FM id='editForm.btn_submit_publish' defaultMessage='确认发布' />
               </Button>
             ) : (
-              `您的剩余可发布广告条数为 ${num}`
+              <FM id='editForm.remain_order_num' defaultMessage='您的剩余可发布广告条数为 {num_}' values={{num_:num}} />
             )}
           </div>
         </FormItem>

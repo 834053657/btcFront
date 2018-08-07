@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Steps, Divider } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
 import { delay } from 'lodash';
 import G2Validation from 'components/G2Validation';
 import PasswordForm from '../forms/PasswordForm';
@@ -12,7 +13,7 @@ const { Step } = Steps;
 export default class EmailModal extends Component {
   static defaultProps = {
     className: '',
-    title: '修改密码',
+    title: (PROMPT('pwdModal.pwd_change')||'修改密码'),
     onCancel: () => {},
   };
   static propTypes = {
@@ -124,14 +125,14 @@ export default class EmailModal extends Component {
     const verify_data = this.getSecureValidationData(user);
     let steps = [
       {
-        title: '谷歌验证',
+        title: (PROMPT('pwdModal.G2_verify')||'谷歌验证'),
         hide: !user.g2fa_on,
         component: (
           <G2Validation modal={false} onCancel={onCancel} onSubmit={this.handleSubmitG2} />
         ),
       },
       {
-        title: '安全验证',
+        title: (PROMPT('pwdModal.safe_verify')||'安全验证'),
         hide: !user.email,
         component: (
           <SecureValidationForm
@@ -143,17 +144,15 @@ export default class EmailModal extends Component {
         ),
       },
       {
-        title: '修改密码',
+        title: (PROMPT('pwdModal.change_passWord')||'修改密码'),
         component: <PasswordForm onCancel={onCancel} onSubmit={this.handleBindSubmit} />,
       },
       {
-        title: '完成',
+        title: (PROMPT('pwdModal.change_finish')||'完成'),
       },
     ];
 
     steps = steps.filter(item => !item.hide);
-
-    console.log(this.state);
 
     return (
       <Modal

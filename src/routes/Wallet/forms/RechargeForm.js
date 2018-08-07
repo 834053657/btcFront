@@ -17,6 +17,7 @@ import {
   Spin,
 } from 'antd';
 import { map, find, filter, minBy, maxBy } from 'lodash';
+import { FormattedMessage as FM } from 'react-intl';
 import classNames from 'classnames';
 import { formatBTC } from '../../../utils/utils';
 
@@ -66,7 +67,7 @@ class RechargeForm extends Component {
           payload: values,
           callback: res => {
             if (res.code === 0) {
-              message.success('已提交转账申请，请等待平台处理');
+              message.success(PROMPT('reChargeForm.wait_')||'已提交转账申请，请等待平台处理');
               this.props.form.resetFields();
               this.props.onSubmit && this.props.onSubmit();
             } else {
@@ -82,7 +83,8 @@ class RechargeForm extends Component {
     const { blockConfirmFee = [] } = this.props;
     const feeObj = find(blockConfirmFee, item => item.count === count) || {};
     // console.log(feeObj);
-    return `在${count}个区块内打包，费率为${feeObj.fee}比特币/byte`;
+    return <FM id='reChargeForm.back_pack_in' defaultMessage='在{count_}个区块内打包，费率为{fee}比特币/byte' values={{count_:count,fee:feeObj.fee}} />
+    ;
   };
 
   handleGetFee = v => {
@@ -131,7 +133,7 @@ class RechargeForm extends Component {
             style={{ marginBottom: 15 }}
             message={
               <span>
-                您最多可以发送
+                <FM id='reChargeForm.max_msg' defaultMessage='您最多可以发送' />
                 <span
                   className="text-blue"
                   dangerouslySetInnerHTML={{
@@ -144,22 +146,22 @@ class RechargeForm extends Component {
             showIcon
           />
           <Form hideRequiredMark onSubmit={this.handleSubmit}>
-            <FormItem {...formItemLayout} label="接收地址">
+            <FormItem {...formItemLayout} label={<FM id='reChargeForm.get_site' defaultMessage='接收地址' />}>
               {getFieldDecorator('address', {
                 rules: [
                   {
                     required: true,
-                    message: '请输入接收比特币的地址！',
+                    message: <FM id='reChargeForm.input_address_msg' defaultMessage='请输入接收比特币的地址！' />,
                   },
                 ],
-              })(<Input size="large" placeholder="接收比特币的地址" />)}
+              })(<Input size="large" placeholder={PROMPT('reChargeForm.get_site_holder')||'接收比特币的地址'}/>)}
             </FormItem>
-            <FormItem {...formItemLayout} label="转出数量">
+            <FormItem {...formItemLayout} label={<FM id='reChargeForm.transfer_num' defaultMessage='转出数量' />}>
               {getFieldDecorator('amount', {
                 rules: [
                   {
                     required: true,
-                    message: '请输入转出数量！',
+                    message: <FM id='reChargeForm.transfer_num_input' defaultMessage='请输入转出数量！' />,
                   },
                 ],
               })(
@@ -171,17 +173,17 @@ class RechargeForm extends Component {
                   max={wallet.amount || 0}
                   precision={8}
                   size="large"
-                  placeholder="请输入转出比特币数"
+                  placeholder={PROMPT('reChargeForm.transfer_num_holder')||'请输入转出比特币数'}
                 />
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label="费率">
+            <FormItem {...formItemLayout} label={<FM id='reChargeForm.transfer_fee' defaultMessage='费率' />}>
               {getFieldDecorator('count', {
                 initialValue: 1,
                 rules: [
                   {
                     required: true,
-                    message: '请选择费率！',
+                    message: <FM id='reChargeForm.transfer_fee_choose' defaultMessage='请选择费率！' />,
                   },
                 ],
               })(
@@ -201,7 +203,7 @@ class RechargeForm extends Component {
                   ))}
                 </Select>*/}
 
-            <FormItem {...formItemLayout} label="实际手续费">
+            <FormItem {...formItemLayout} label={<FM id='reChargeForm.transfer_fee_real' defaultMessage='实际手续费' />}>
               <span className="text-red">{`${formatBTC(this.state.fee)} `}</span> BTC
               <Button
                 type="primary"
@@ -209,7 +211,7 @@ class RechargeForm extends Component {
                 style={{ marginLeft: 15 }}
                 onClick={this.handleGetFee}
               >
-                获取手续费
+                <FM id='reChargeForm.transfer_fee_get' defaultMessage='获取手续费' />
               </Button>
             </FormItem>
 
@@ -220,7 +222,7 @@ class RechargeForm extends Component {
                 type="primary"
                 htmlType="submit"
               >
-                提交
+                <FM id='reChargeForm.transfer_fee_btn_submit' defaultMessage='提交' />
               </Button>
             </FormItem>
           </Form>
@@ -229,23 +231,22 @@ class RechargeForm extends Component {
           <Card
             title={
               <span>
-                帮助 <Icon type="question-circle" />
+                <FM id='reChargeForm.transfer_fee_help' defaultMessage='帮助' /> <Icon type="question-circle" />
               </span>
             }
           >
             <Collapse className={styles.collapse} defaultActiveKey={['1']}>
-              <Panel header="注意事项" key="1" style={customPanelStyle}>
-                <p>BTC 钱包只能向 BTC 地址发送资产，如果向非 BTC 地址发送资产将不可找回。</p>
+              <Panel header={<FM id='reChargeForm.warning_1' defaultMessage='注意事项' />} key="1" style={customPanelStyle}>
+                <p><FM id='reChargeForm.waring_1_' defaultMessage='BTC 钱包只能向 BTC 地址发送资产，如果向非 BTC 地址发送资产将不可找回。' /></p>
               </Panel>
-              <Panel header="交易需多长时间？" key="2" style={customPanelStyle}>
+              <Panel header={<FM id='reChargeForm.warning_2' defaultMessage='交易需多长时间？' />} key="2" style={customPanelStyle}>
                 <p>
-                  发送比特币交易通常需要 30 至 60 分钟，有时比特币网络比较慢，可能需要几个小时。
+                  <FM id='reChargeForm.warning_2_' defaultMessage='发送比特币交易通常需要 30 至 60 分钟，有时比特币网络比较慢，可能需要几个小时。' />
                 </p>
               </Panel>
-              <Panel header="退款和支出" key="3" style={customPanelStyle}>
+              <Panel header={<FM id='reChargeForm.warning_3' defaultMessage='退款和支出' />} key="3" style={customPanelStyle}>
                 <p>
-                  从utomarket的钱包发送资金时，会在您的余额中预留和扣除比特币网络转账费。
-                  与其他utomarket用户的钱包进行交易免费。
+                  <FM id='reChargeForm.warning_3_' defaultMessage='从utomarket的钱包发送资金时，会在您的余额中预留和扣除比特币网络转账费。与其他utomarket用户的钱包进行交易免费。' />
                 </p>
               </Panel>
             </Collapse>

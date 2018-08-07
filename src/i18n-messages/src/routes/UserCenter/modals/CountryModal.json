@@ -1,0 +1,14 @@
+[
+  {
+    "id": "countryModal.select_country_btn_sure",
+    "defaultMessage": "确定"
+  },
+  {
+    "id": "countryModal.select_country_btn_cancel",
+    "defaultMessage": "取消"
+  },
+  {
+    "id": "countryModal.select_country_title",
+    "defaultMessage": "选择国家"
+  }
+]

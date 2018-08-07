@@ -1,0 +1,10 @@
+[
+  {
+    "id": "historyAddress.created_at",
+    "defaultMessage": "创建日期"
+  },
+  {
+    "id": "historyAddress.address",
+    "defaultMessage": "比特币地址"
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "id": "secureValidationForm.way",
+    "defaultMessage": "验证方式"
+  },
+  {
+    "id": "secureValidationForm.get_code",
+    "defaultMessage": "获取验证码"
+  },
+  {
+    "id": "secureValidationForm.code_",
+    "defaultMessage": "验证码"
+  },
+  {
+    "id": "secureValidationForm.code_input",
+    "defaultMessage": "请输入验证码！"
+  },
+  {
+    "id": "secureValidationForm.btn_cnacel",
+    "defaultMessage": "取消"
+  },
+  {
+    "id": "secureValidationForm.btn_sure",
+    "defaultMessage": "确定"
+  }
+]

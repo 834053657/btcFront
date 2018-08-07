@@ -1,0 +1,34 @@
+[
+  {
+    "id": "transferList.date_time",
+    "defaultMessage": "日期"
+  },
+  {
+    "id": "transferList.amount_num_btc",
+    "defaultMessage": "交易金额(BTC)"
+  },
+  {
+    "id": "transferList.fee_btc",
+    "defaultMessage": "手续费(BTC)"
+  },
+  {
+    "id": "transferList.status_user",
+    "defaultMessage": "状态"
+  },
+  {
+    "id": "transferList.confirm_count",
+    "defaultMessage": "确认次数"
+  },
+  {
+    "id": "transferList.address",
+    "defaultMessage": "地址"
+  },
+  {
+    "id": "transferList.remark",
+    "defaultMessage": "说明"
+  },
+  {
+    "id": "transferList.all",
+    "defaultMessage": "全部"
+  }
+]

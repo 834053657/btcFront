@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Steps, Divider } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
 import { delay } from 'lodash';
 import G2Validation from 'components/G2Validation';
 import CheckEmailForm from '../forms/EmailForm';
@@ -11,7 +12,7 @@ const { Step } = Steps;
 export default class EmailModal extends Component {
   static defaultProps = {
     className: '',
-    title: '邮箱绑定',
+    title: (PROMPT('EmailModal.user_email_bind')||'邮箱绑定'),
     onCancel: () => {},
   };
   static propTypes = {
@@ -107,14 +108,14 @@ export default class EmailModal extends Component {
     const { current } = this.state;
     let steps = [
       {
-        title: '谷歌验证',
+        title: (PROMPT('EmailModal.G2_approve')||'谷歌验证'),
         hide: !user.g2fa_on,
         component: (
           <G2Validation modal={false} onCancel={onCancel} onSubmit={this.handleSubmitG2} />
         ),
       },
       {
-        title: '验证旧邮箱',
+        title: (PROMPT('EmailModal.old_email_approve')||'验证旧邮箱'),
         hide: !user.email,
         component: (
           <CheckEmailForm
@@ -128,7 +129,7 @@ export default class EmailModal extends Component {
         ),
       },
       {
-        title: '绑定新邮箱',
+        title: (PROMPT('EmailModal.new_email_bind')||'绑定新邮箱'),
         component: (
           <CheckEmailForm
             key="2"
@@ -139,7 +140,7 @@ export default class EmailModal extends Component {
         ),
       },
       {
-        title: '完成',
+        title:  (PROMPT('EmailModal.bind_finish')||'完成'),
       },
     ];
 

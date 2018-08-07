@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Input, Button, Modal } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
+
 import classNames from 'classnames';
 import { map } from 'lodash';
 import styles from './index.less';
@@ -49,7 +51,7 @@ class ConfirmModal extends Component {
         onCancel={this.handleCancel}
         footer={[
           <Button key="back" onClick={this.handleCancel}>
-            取消
+            <FM id='index.cancel' defaultMessage='取消' />
           </Button>,
           <Button
             key="submit"
@@ -58,7 +60,7 @@ class ConfirmModal extends Component {
             htmlType="submit"
             onClick={this.handleSubmit}
           >
-            确定
+            <FM id='index.submit' defaultMessage='确定' />
           </Button>,
         ]}
       >
@@ -69,10 +71,10 @@ class ConfirmModal extends Component {
                 rules: [
                   {
                     required: true,
-                    message: '请填写原因',
+                    message: <FM id='index.input_reason' defaultMessage='请填写原因' />,
                   },
                 ],
-              })(<TextArea rows={6} placeholder="请填写原因" />)}
+              })(<TextArea rows={6} placeholder={(PROMPT('index.please_input')||'请填写原因')} />)}
             </FormItem>
           </Form>
         </div>

@@ -1,4 +1,6 @@
 import { map, chain, template, mapValues, pickBy, includes } from 'lodash';
+import { FormattedMessage as FM } from 'react-intl';
+
 
 const messageTemplates = {
   1: {
@@ -103,7 +105,7 @@ const messageTemplates = {
     group: '订单<%= message.ref_no %>有新消息',
     title: '您有一笔订单尚未标记付款完成，订单将在五分钟后超时自动取消',
     to: '/trade/step/<%= message.ref_id %>',
-  }, 
+  },
   153: {
     noticeType: 'trade',
     group: '订单<%= message.ref_no %>有新消息',
@@ -124,13 +126,13 @@ const messageTemplates = {
   },
   156: {
     noticeType: 'trade',
-    group: '订单<%= message.ref_no %>有新消息', 
+    group: '订单<%= message.ref_no %>有新消息',
     title: '您有一笔订单因超时未处理，已被系统自动取消',
     to: '/trade/step/<%= message.ref_id %>',
   },
   157: {
     noticeType: 'trade',
-    group: '订单<%= message.ref_no %>有新消息', 
+    group: '订单<%= message.ref_no %>有新消息',
     title: '您有一条新的交易评价',
     to: '/trade/step/<%= message.ref_id %>',
   },
@@ -147,11 +149,23 @@ const messageTemplates = {
     description: '<%= sender.nickname %>给你发来新消息',
     to: '/trade/step/<%= message.ref_id %>',
   },
+  160: {
+    noticeType: 'trade',
+    group: '订单<%= message.ref_no %>有新消息',
+    title: '订单<%= message.ref_no %>有新消息',
+    description: '买家对订单<%= message.ref_no %>发起申诉',
+  },
+  161: {
+    noticeType: 'trade',
+    group: '订单<%= message.ref_no %>有新消息',
+    title: '订单<%= message.ref_no %>有新消息',
+    description: '卖家对订单<%= message.ref_no %>发起申诉',
+  }
 };
 
 const Types = chain(messageTemplates)
   .map((data, key) => { return { msg_type: key, ...data } })
-  .groupBy('noticeType') 
+  .groupBy('noticeType')
   .mapValues(d => map(d, 'msg_type'))
   .value()
 

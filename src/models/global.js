@@ -37,7 +37,8 @@ export default {
       if (token && user.id) {
         userInfo = {
           email: user.email,
-          user_id: user.nickname,
+          name: user.nickname,
+          user_id: user.id,
           created_at: user.created_at,
         }
       }
@@ -45,7 +46,6 @@ export default {
         app_id: __INTERCOM_APP_ID__,
         ...userInfo
       })
-      console.log('update intercom')
     },
     unmountIntercomWidget() {
       window.Intercom("shutdown")

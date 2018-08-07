@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
 import { Row, Col, Icon, Tabs, message, Popover } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
 import { routerRedux, Link } from 'dva/router';
 import { stringify } from 'qs';
 import { findIndex } from 'lodash';
@@ -51,7 +52,7 @@ export default class Layout extends Component {
     const { activeKey } = this.state;
     const { wallet = {}, payments = [] } = this.props.currentUser || {};
     const copy = (
-      <CopyToClipboard text={wallet.btc_address} onCopy={() => message.success('复制成功')}>
+      <CopyToClipboard text={wallet.btc_address} onCopy={() => message.success(PROMPT('Layout.copy_success')||'复制成功')}>
         <a>
           <Icon style={{ fontSize: 18 }} type="copy" />
         </a>
@@ -63,7 +64,7 @@ export default class Layout extends Component {
           <img
             className={styles.qrcode}
             src={jrQrcode.getQrBase64(wallet.btc_address)}
-            alt="比特币地址"
+            alt={<FM id='Layout.BTC_site' defaultMessage='比特币地址' />}
           />
         }
         placement="bottom"
@@ -97,22 +98,25 @@ export default class Layout extends Component {
               <Icon style={{ fontSize: '65px' }} type="wallet" />
             </Col>
             <Col span={12} className={styles.more}>
-              <h1>我的钱包</h1>
+              <h1><FM id='Layout.my_wallet' defaultMessage='我的钱包' /></h1>
               <p>
-                总资产折合：<span
+                <FM id='Layout.all_money' defaultMessage='总资产折合：' />
+                <span
                   className="text-blue"
                   dangerouslySetInnerHTML={{
                     __html: `${formatBTC(wallet.amount || 0)} BTC`,
                   }}
                 />{' '}
-                | 冻结：<span
+                | <FM id='Layout.can_not_use' defaultMessage='冻结：' />
+                <span
                   className="text-blue"
                   dangerouslySetInnerHTML={{
                     __html: `${formatBTC(wallet.frozen || 0)} BTC`,
                   }}
                 />{' '}
               </p>
-              <p>我的比特币地址: {qrcode}</p>
+              <p><FM id='Layout.my_btc_site' defaultMessage='我的比特币地址: ' />
+                {qrcode}</p>
               <p>
                 <span>{wallet.btc_address}</span> {copy}
               </p>
@@ -121,15 +125,15 @@ export default class Layout extends Component {
 
           <div className={styles.content}>
             <Tabs onChange={this.handleTabsChange} type="card" activeKey={activeKey}>
-              <TabPane tab="发送比特币" key="1">
+              <TabPane tab={(PROMPT('Layout.send_btc')||'发送比特币')} key="1">
                 {activeKey === '1' && (
                   <RechargeForm {...this.props} onSubmit={this.handleTabsChange.bind(this, '2')} />
                 )}
               </TabPane>
-              <TabPane tab="交易记录" key="2">
+              <TabPane tab={(PROMPT('Layout.deal_record')||'交易记录')} key="2">
                 {activeKey === '2' && <TransferList {...this.props} />}
               </TabPane>
-              <TabPane tab="历史比特币地址" key="3">
+              <TabPane tab={(PROMPT('Layout.history_site')||'历史比特币地址')} key="3">
                 {activeKey === '3' && <HistoryAddress {...this.props} />}
               </TabPane>
             </Tabs>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Radio, Input, Form, Button } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
 import { map } from 'lodash';
 import styles from './EvaluateForm.less';
 import { getLocale } from '../../../utils/authority';
@@ -40,7 +41,7 @@ export default class EvaluateForm extends Component {
             rules: [
               {
                 required: true,
-                message: '请选择评价',
+                message: <FM id='evaluateForm.choose_evaluate' defaultMessage='请选择评价' />,
               },
             ],
           })(
@@ -64,14 +65,14 @@ export default class EvaluateForm extends Component {
             rules: [
               {
                 required: true,
-                message: '请输入评价',
+                message: <FM id='evaluateForm.choose_evaluate_input' defaultMessage='请输入评价' />,
               },
             ],
           })(<TextArea rows={4} />)}
         </FormItem>
         <div style={{ overflow: 'hidden' }}>
           <Button type="primary" htmlType="submit">
-            {!initialValues.star ? '评价' : '更新评价'}
+            {!initialValues.star ? <FM id='evaluateForm.btn_evaluate' defaultMessage='评价' /> : <FM id='evaluateForm.refresh_evaluate' defaultMessage='更新评价' />}
           </Button>
         </div>
       </Form>

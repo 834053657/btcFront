@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Steps, Form, Select, Button } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
 import { delay, map } from 'lodash';
 import G2Validation from 'components/G2Validation';
 import CheckEmailForm from '../forms/EmailForm';
@@ -10,9 +11,9 @@ const Option = Select.Option;
 const FormItem = Form.Item;
 const { Step } = Steps;
 @Form.create()
-export default class ccc extends Component {
+export default class countryModal extends Component {
   static defaultProps = {
-    title: '选择国家',
+    title: <FM id='countryModal.select_country_title' defaultMessage='选择国家' />,
     onCancel: () => {},
   };
   static propTypes = {
@@ -70,7 +71,7 @@ export default class ccc extends Component {
               <Select
                 showSearch
                 style={{ width: '80%', marginLeft: '10%' }}
-                placeholder="请选择国家"
+                placeholder={(PROMPT('countryModal.select_country')||'请选择国家')}
                 filterOption={(input, option) =>
                   option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                 }
@@ -87,9 +88,9 @@ export default class ccc extends Component {
           </FormItem>
           <FormItem>
             <Button type="primary" htmlType="submit" className={styles.confirm}>
-              确定
+              <FM id='countryModal.select_country_btn_sure' defaultMessage='确定' />
             </Button>
-            <Button onClick={this.handleOnCancel}>取消</Button>
+            <Button onClick={this.handleOnCancel}><FM id='countryModal.select_country_btn_cancel' defaultMessage='取消' /></Button>
           </FormItem>
         </Form>
       </Modal>

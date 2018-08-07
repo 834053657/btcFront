@@ -1,0 +1,218 @@
+[
+  {
+    "id": "editForm.buy_inline",
+    "defaultMessage": "在线买入"
+  },
+  {
+    "id": "editForm.sell_inline",
+    "defaultMessage": "在线卖出"
+  },
+  {
+    "id": "editForm.max_limit_num",
+    "defaultMessage": "不能大于最大可交易额"
+  },
+  {
+    "id": "editForm.min_limit_num",
+    "defaultMessage": "不能小于最小可交易额"
+  },
+  {
+    "id": "editForm.ad_type_choose",
+    "defaultMessage": "请选择"
+  },
+  {
+    "id": "editForm.ad_rules",
+    "defaultMessage": "广告规则"
+  },
+  {
+    "id": "tradeDetail.main_page",
+    "defaultMessage": "要想显示您的交易广告，您的【utomarket】钱包中需要有比特币。使用在线付款的交易广告至少需要0.05 BTC。"
+  },
+  {
+    "id": "editForm.ad_rule_1",
+    "defaultMessage": "特定付款方式要求您验证身份，然后您的交易广告才会显示。"
+  },
+  {
+    "id": "editForm.ad_rule_2",
+    "defaultMessage": "每笔完成的交易均会消耗广告主 1% 的总交易金额。查看我们费用页面上的所有费用。"
+  },
+  {
+    "id": "editForm.ad_rule_3",
+    "defaultMessage": "发起交易后，价格就会确定，除非定价中有明显的错误。"
+  },
+  {
+    "id": "editForm.ad_rule_4",
+    "defaultMessage": "您不能代表其他人（由经纪人处理）购买或出售比特币。"
+  },
+  {
+    "id": "editForm.ad_rule_5",
+    "defaultMessage": "您仅可以使用以自己名字注册的付款帐户（非第三方付款！）。"
+  },
+  {
+    "id": "editForm.ad_rule_6",
+    "defaultMessage": "您必须在交易广告或交易聊天中提供您的付款详细信息。"
+  },
+  {
+    "id": "editForm.ad_rule_7",
+    "defaultMessage": "所有交流必须在utomarket.com 上进行。"
+  },
+  {
+    "id": "editForm.ad_rule_8",
+    "defaultMessage": "标记为高风险的付款方式具有很大的欺诈风险。在使用高风险付款方式时，请务必小心且始终要求您的交易对方验证身份。"
+  },
+  {
+    "id": "editForm.user_local",
+    "defaultMessage": "所在地"
+  },
+  {
+    "id": "editForm.user_local_choose",
+    "defaultMessage": "请选择所在地"
+  },
+  {
+    "id": "editForm.deal_currency",
+    "defaultMessage": "交易币种"
+  },
+  {
+    "id": "editForm.deal_currency_choose",
+    "defaultMessage": "请选择"
+  },
+  {
+    "id": "editForm.market_choose_price",
+    "defaultMessage": "市场参考价格"
+  },
+  {
+    "id": "editForm.btn_refresh",
+    "defaultMessage": "刷新"
+  },
+  {
+    "id": "editForm.deal_price_",
+    "defaultMessage": "交易价格"
+  },
+  {
+    "id": "editForm.deal_price_input",
+    "defaultMessage": "请输入交易价格"
+  },
+  {
+    "id": "editForm.float_price",
+    "defaultMessage": "浮动比例"
+  },
+  {
+    "id": "editForm.float_price_input",
+    "defaultMessage": "请输入浮动比例"
+  },
+  {
+    "id": "editForm.float_price_limit",
+    "defaultMessage": "浮动比例 30% ~ 170%"
+  },
+  {
+    "id": "editForm.float_check_price",
+    "defaultMessage": "浮动价格"
+  },
+  {
+    "id": "editForm.float_check_price_please",
+    "defaultMessage": "使用浮动价格"
+  },
+  {
+    "id": "editForm.ad_order_num",
+    "defaultMessage": "广告交易数量"
+  },
+  {
+    "id": "editForm.ad_order_num_input",
+    "defaultMessage": "请输入可交易数量"
+  },
+  {
+    "id": "editForm.ad_order_num_limit",
+    "defaultMessage": "最少交易0.0001BTC"
+  },
+  {
+    "id": "editForm.deal_order_limit_once",
+    "defaultMessage": "单笔交易限额"
+  },
+  {
+    "id": "editForm.deal_order_limit_once_please",
+    "defaultMessage": "请输入"
+  },
+  {
+    "id": "editForm.max_volume_input_please",
+    "defaultMessage": "请输入"
+  },
+  {
+    "id": "editForm.payment_limit_title",
+    "defaultMessage": "付款期限"
+  },
+  {
+    "id": "editForm.payment_limit_title_please",
+    "defaultMessage": "请输入"
+  },
+  {
+    "id": "editForm.payment_methods_title",
+    "defaultMessage": "收款方式"
+  },
+  {
+    "id": "editForm.payment_methods_please",
+    "defaultMessage": "请选择收款方式"
+  },
+  {
+    "id": "editForm.payment_methods_other",
+    "defaultMessage": "其他"
+  },
+  {
+    "id": "editForm.trusted_user_title",
+    "defaultMessage": "安全选项"
+  },
+  {
+    "id": "editForm.trusted_user_limit",
+    "defaultMessage": "仅限受信任的交易者"
+  },
+  {
+    "id": "editForm.user_auth_level_title",
+    "defaultMessage": "交易者的认证等级"
+  },
+  {
+    "id": "editForm.user_auth_level_choose",
+    "defaultMessage": "请选择"
+  },
+  {
+    "id": "editForm.user_auth_level_unLimit",
+    "defaultMessage": "不限"
+  },
+  {
+    "id": "editForm.deal_rules_title",
+    "defaultMessage": "交易条款"
+  },
+  {
+    "id": "editForm.input_limit_max",
+    "defaultMessage": "最多输入200个字符"
+  },
+  {
+    "id": "editForm.auto_replies_title",
+    "defaultMessage": "自动回复"
+  },
+  {
+    "id": "editForm.auto_replies_max_input",
+    "defaultMessage": "最多输入200个字符"
+  },
+  {
+    "id": "editForm.min_trade_count_title",
+    "defaultMessage": "最小成交数"
+  },
+  {
+    "id": "editForm.min_rating_score_title",
+    "defaultMessage": "最低评价得分"
+  },
+  {
+    "id": "editForm.new_buyer_limit_title",
+    "defaultMessage": "新卖家限额"
+  },
+  {
+    "id": "editForm.btn_submit_change",
+    "defaultMessage": "确认修改"
+  },
+  {
+    "id": "editForm.btn_submit_publish",
+    "defaultMessage": "确认发布"
+  },
+  {
+    "id": "editForm.remain_order_num",
+    "defaultMessage": "您的剩余可发布广告条数为 {num_}"
+  }
+]

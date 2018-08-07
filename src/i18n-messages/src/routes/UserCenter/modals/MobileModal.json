@@ -1,0 +1,18 @@
+[
+  {
+    "id": "mobileModal.google_code_title",
+    "defaultMessage": "谷歌验证"
+  },
+  {
+    "id": "mobileModal.old_phone_verify",
+    "defaultMessage": "验证旧手机"
+  },
+  {
+    "id": "mobileModal.new_phone_bind",
+    "defaultMessage": "绑定新手机"
+  },
+  {
+    "id": "mobileModal.bind_finish",
+    "defaultMessage": "完成"
+  }
+]

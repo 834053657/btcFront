@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
+import { FormattedMessage as FM } from 'react-intl';
 import moment from 'moment';
 import cx from 'classnames';
 import { Link } from 'dva/router';
@@ -186,7 +187,7 @@ export default class UserCenterPage extends Component {
     return (
       <Modal
         width={500}
-        title="实名认证"
+        title={<FM id='userCenterPage.user_real_name' defaultMessage='实名认证' />}
         visible={realNameModalVisible}
         onCancel={this.hideRealNameModal}
         maskClosable={false}
@@ -208,7 +209,7 @@ export default class UserCenterPage extends Component {
     return (
       <Modal
         width={500}
-        title="视频认证"
+        title={<FM id='tradeStep.video_approve' defaultMessage='视频认证' />}
         visible={videoAuthModalVisible}
         onCancel={this.hideVideoAuthModal}
         maskClosable={false}
@@ -220,15 +221,15 @@ export default class UserCenterPage extends Component {
   };
 
   handleGetLevel = user => {
-    let level = <span className={styles.low}>低</span>;
+    let level = <span className={styles.low}><FM id='userCenterPage.passWorld_low_title' defaultMessage='低' /></span>;
     if (user.email) {
-      level = <span className={styles.low}>低</span>;
+      level = <span className={styles.low}><FM id='userCenterPage.passWorld_low' defaultMessage='低' /></span>;
     }
     if (user.email && (user.g2fa_on || user.telephone)) {
-      level = <span className={styles.middle}>中</span>;
+      level = <span className={styles.middle}><FM id='userCenterPage.passWorld_middle' defaultMessage='中' /></span>;
     }
     if (user.email && user.telephone && user.g2fa_on) {
-      level = <span className={styles.hight}>高</span>;
+      level = <span className={styles.hight}><FM id='userCenterPage.passWorld_high' defaultMessage='高' /></span>;
     }
 
     return level;
@@ -293,20 +294,20 @@ export default class UserCenterPage extends Component {
           avatar,
         },
         callback: () => {
-          message.success('修改头像成功');
+          message.success((PROMPT('userCenterPage.change_photo_true')||'修改头像成功'));
           this.setState({ uploadLoading: false });
         },
       });
     } else if (info.file.status === 'error') {
       this.setState({ uploadLoading: false });
-      message.error('上传错误，可能请求已过期，请刷新页面重试');
+      message.error((PROMPT('userCenterPage.change_photo_false')||'上传错误，可能请求已过期，请刷新页面重试'));
     }
   };
 
   beforeUpload = file => {
     const isLt2M = file.size / 1024 / 1024 < 2;
     if (!isLt2M) {
-      message.error('头像必须小于2M!');
+      message.error((PROMPT('userCenterPage.user_photo_limit')||'头像必须小于2M!'));
     }
     return isLt2M;
   };
@@ -356,33 +357,34 @@ export default class UserCenterPage extends Component {
                     data={{ token: upload.token }}
                   >
                     <Button disabled={uploadLoading}>
-                      <Icon type={uploadLoading ? 'loading' : 'upload'} /> 上传头像
+                      <Icon type={uploadLoading ? 'loading' : 'upload'} /> <FM id='userCenterPage.user_photo_upload' defaultMessage='上传头像' />
                     </Button>
                   </Upload>
                 </div>
                 <Divider />
                 <DescriptionList col={1} className={styles.detailBox}>
-                  <Description term="好评率">{trade.good_ratio || 0}%</Description>
-                  <Description term="信任数">被{user.trust_count || 0}人信任</Description>
-                  <Description term="屏蔽数">被{user.block_count || 0}人屏蔽</Description>
-                  <Description term="已完成交易量">{trade.trade_volume || 0} BTC</Description>
-                  <Description term="最后上线时间">
+                  <Description term={<FM id='userCenterPage.good_ratio' defaultMessage='好评率' />}>{trade.good_ratio || 0}%</Description>
+                  <Description term={<FM id='userCenterPage.trust_count' defaultMessage='信任数' />}><FM id='userCenterPage.user_trust' defaultMessage='被{num}人信任' values={{num:user.trust_count || 0}}/></Description>
+                  <Description term={<FM id='userCenterPage.block_count' defaultMessage='屏蔽数' />}><FM id='userCenterPage.user_un_look' defaultMessage='被{num}人屏蔽' values={{num:user.block_count || 0}}/></Description>
+                  <Description term={<FM id='userCenterPage.trade_volume' defaultMessage='已完成交易量' />}>{trade.trade_volume} BTC
+                  </Description>
+                  <Description term={<FM id='userCenterPage.last_login_at' defaultMessage='最后上线时间' />}>
                     {moment(user.last_login_at * 1000).format('YYYY-MM-DD HH:mm:ss')}
                   </Description>
                 </DescriptionList>
                 <Divider />
                 <p>
-                  本帐号于{' '}
+                  <FM id='userCenterPage.account_create_at' defaultMessage='本帐号于' />{' '}
                   <span>
                     {user.created_at
                       ? moment(user.created_at * 1000).format('YYYY-MM-DD HH:mm:ss')
                       : '-'}
                   </span>{' '}
-                  注册
+                  <FM id='userCenterPage.account_sign_in' defaultMessage='注册' />
                 </p>
                 <p>
                   {first_trade_at
-                    ? `首次交易于 ${moment(first_trade_at * 1000).format('YYYY-MM-DD HH:mm:ss')}`
+                    ? <FM id='userCenterPage.account_first_deal' defaultMessage='首次交易于 {time}' values={{time:moment(first_trade_at * 1000).format('YYYY-MM-DD HH:mm:ss')}} />
                     : null}
                 </p>
               </div>
@@ -394,9 +396,9 @@ export default class UserCenterPage extends Component {
               <div className={styles.box}>
                 <div className={styles.box_head}>
                   <div className={styles.box_head_wrapper}>
-                    <div className={styles.box_head_title}>账号与安全</div>
+                    <div className={styles.box_head_title}><FM id='userCenterPage.account_safe' defaultMessage='账号与安全' /></div>
                     <div className={styles.box_head_extra}>
-                      <span>安全等级: {this.handleGetLevel(user)}</span>
+                      <span> <FM id='userCenterPage.account_safe_lave' defaultMessage='安全等级:' />{this.handleGetLevel(user)}</span>
                     </div>
                   </div>
                 </div>
@@ -405,9 +407,9 @@ export default class UserCenterPage extends Component {
                     <div className={styles.box_item_meta}>
                       <Icon type="global" />
                       <div className={styles.box_item_meta_head}>
-                        <h4 className={styles.box_item_title}>国家</h4>
+                        <h4 className={styles.box_item_title}><FM id='userCenterPage.user_country' defaultMessage='国家' /></h4>
                         <div className={styles.box_item_descript}>
-                          {user.country_code ? '已选择' : '未选择'}
+                          {user.country_code ? <FM id='userCenterPage.user_country_choose' defaultMessage='已选择' /> : <FM id='userCenterPage.user_country_unChoose' defaultMessage='未选择' />}
                         </div>
                       </div>
                     </div>
@@ -418,7 +420,7 @@ export default class UserCenterPage extends Component {
                     </div>
                     <ul className={styles.box_item_action}>
                       <li>
-                        <a onClick={this.showCountryModal}>选择</a>
+                        <a onClick={this.showCountryModal}><FM id='userCenterPage.user_country_btn_choose' defaultMessage='选择' /></a>
                       </li>
                     </ul>
                   </div>
@@ -427,16 +429,16 @@ export default class UserCenterPage extends Component {
                     <div className={styles.box_item_meta}>
                       <Icon type="mail" />
                       <div className={styles.box_item_meta_head}>
-                        <h4 className={styles.box_item_title}>邮箱</h4>
+                        <h4 className={styles.box_item_title}><FM id='userCenterPage.user_Email' defaultMessage='邮箱' /></h4>
                         <div className={styles.box_item_descript}>
-                          {user.email ? '已绑定' : '未绑定'}
+                          {user.email ? <FM id='userCenterPage.user_Email_bind' defaultMessage='已绑定' /> : <FM id='userCenterPage.user_Email_unBind' defaultMessage='未绑定' />}
                         </div>
                       </div>
                     </div>
                     <div className={styles.box_item_content}>{user.email}</div>
                     <ul className={styles.box_item_action}>
                       <li>
-                        <a onClick={this.showEmailModal}>{user.email ? '修改' : '绑定'}</a>
+                        <a onClick={this.showEmailModal}>{user.email ? <FM id='userCenterPage.user_Email_change' defaultMessage='修改' /> : <FM id='userCenterPage.user_Email_toBind_btn' defaultMessage='绑定' />}</a>
                       </li>
                     </ul>
                   </div>
@@ -445,16 +447,16 @@ export default class UserCenterPage extends Component {
                     <div className={styles.box_item_meta}>
                       <Icon type="mobile" />
                       <div className={styles.box_item_meta_head}>
-                        <h4 className={styles.box_item_title}>手机</h4>
+                        <h4 className={styles.box_item_title}><FM id='userCenterPage.mobile_num' defaultMessage='手机' /></h4>
                         <div className={styles.box_item_descript}>
-                          {user.telephone ? '已绑定' : '未绑定'}
+                          {user.telephone ? <FM id='userCenterPage.mobile_binding' defaultMessage='已绑定' /> : <FM id='userCenterPage.mobile_unBind' defaultMessage='未绑定' />}
                         </div>
                       </div>
                     </div>
                     <div className={styles.box_item_content}>{user.telephone}</div>
                     <ul className={styles.box_item_action}>
                       <li>
-                        <a onClick={this.showMobileModal}>{user.telephone ? '修改' : '绑定'}</a>
+                        <a onClick={this.showMobileModal}>{user.telephone ? <FM id='userCenterPage.mobile_change_' defaultMessage='修改' /> : <FM id='userCenterPage.mobile_toBind_' defaultMessage='绑定' /> }</a>
                       </li>
                     </ul>
                   </div>
@@ -463,9 +465,9 @@ export default class UserCenterPage extends Component {
                     <div className={styles.box_item_meta}>
                       <Icon type="chrome" />
                       <div className={styles.box_item_meta_head}>
-                        <h4 className={styles.box_item_title}>谷歌验证码</h4>
+                        <h4 className={styles.box_item_title}><FM id='userCenterPage.chrome_code' defaultMessage='谷歌验证码' /></h4>
                         <div className={styles.box_item_descript}>
-                          {user.g2fa_on ? '已绑定' : '未绑定'}
+                          {user.g2fa_on ? <FM id='userCenterPage.chrome_binding' defaultMessage='已绑定' /> :  <FM id='userCenterPage.chrome_unBind' defaultMessage='未绑定' />}
                         </div>
                       </div>
                     </div>
@@ -473,9 +475,9 @@ export default class UserCenterPage extends Component {
                     <ul className={styles.box_item_action}>
                       <li>
                         {user.g2fa_on ? (
-                          <a onClick={this.showG2Modal}>停用</a>
+                          <a onClick={this.showG2Modal}><FM id='userCenterPage.chrome_unUse' defaultMessage='停用' /></a>
                         ) : (
-                          <Link to="/user-center/g2validate">设置</Link>
+                          <Link to="/user-center/g2validate"><FM id='userCenterPage.chrome_set' defaultMessage='设置' /></Link>
                         )}
                       </li>
                     </ul>
@@ -485,14 +487,14 @@ export default class UserCenterPage extends Component {
                     <div className={styles.box_item_meta}>
                       <Icon type="unlock" />
                       <div className={styles.box_item_meta_head}>
-                        <h4 className={styles.box_item_title}>登录密码</h4>
+                        <h4 className={styles.box_item_title}><FM id='userCenterPage.lock_passWord' defaultMessage='登录密码' /></h4>
                         <div className={styles.box_item_descript} />
                       </div>
                     </div>
                     <div className={styles.box_item_content} />
                     <ul className={styles.box_item_action}>
                       <li>
-                        <a onClick={this.showPwdeModal}>修改</a>
+                        <a onClick={this.showPwdeModal}><FM id='userCenterPage.lock_passWord_change' defaultMessage='修改' /></a>
                       </li>
                     </ul>
                   </div>
@@ -503,20 +505,20 @@ export default class UserCenterPage extends Component {
               <div className={styles.box}>
                 <div className={styles.box_head}>
                   <div className={styles.box_head_wrapper}>
-                    <div className={styles.box_head_title}>身份认证</div>
+                    <div className={styles.box_head_title}><FM id='userCenterPage.user_personal_approve' defaultMessage='身份认证' /></div>
                     <div className={styles.box_head_extra}>
                       {authentication.step === 0 && authentication.status !== 4 ? (
-                        <span>未认证</span>
+                        <span><FM id='userCenterPage.user_personal_unApprove' defaultMessage='未认证' /></span>
                       ) : (
                         <span>
-                          认证等级:{' '}
+                          <FM id='userCenterPage.user_personal_approve_lave' defaultMessage='认证等级:' />{' '}
                           {'C' + (authentication.step + (authentication.status === 4 ? 1 : 0))}
                         </span>
                       )}
                     </div>
                   </div>
                   <div className={styles.box_head_subtitle}>
-                    请如实填写您的身份信息，一经认证不可修改
+                    <FM id='userCenterPage.user_personal_approve_affirm' defaultMessage='请如实填写您的身份信息，一经认证不可修改 ' />
                   </div>
                 </div>
                 <AuthStep
@@ -531,9 +533,9 @@ export default class UserCenterPage extends Component {
               <div className={styles.box}>
                 <div className={styles.box_head}>
                   <div className={styles.box_head_wrapper}>
-                    <div className={styles.box_head_title}>支付方式</div>
+                    <div className={styles.box_head_title}><FM id='userCenterPage.user_payment' defaultMessage='支付方式' /></div>
                   </div>
-                  <div className={styles.box_head_subtitle}>请务必使用您本人的实名账号</div>
+                  <div className={styles.box_head_subtitle}><FM id='userCenterPage.user_real_name_account' defaultMessage='请务必使用您本人的实名账号' /></div>
                 </div>
                 <div className={styles.box_content}>
                   {map(payments, item => {
@@ -567,14 +569,14 @@ export default class UserCenterPage extends Component {
                         {this.getMethodContent(item)}
                         <ul className={styles.box_item_action}>
                           <li>
-                            <a onClick={this.showPayMethodModal.bind(this, item)}>设置</a>
+                            <a onClick={this.showPayMethodModal.bind(this, item)}><FM id='userCenterPage.payments_setting' defaultMessage='设置' /></a>
                           </li>
                           <li>
                             <Popconfirm
-                              title="确定要删除吗?"
+                              title={<FM id='userCenterPage.user_sure_delete' defaultMessage='确定要删除吗?' />}
                               onConfirm={this.handleDeletePayMethod.bind(this, item.id)}
                             >
-                              <a className="text-red">删除</a>
+                              <a className="text-red"><FM id='userCenterPage.user_sure_delete_btn' defaultMessage='删除' /></a>
                             </Popconfirm>
                           </li>
                         </ul>
@@ -585,7 +587,7 @@ export default class UserCenterPage extends Component {
                 {size(ENABLE_PAY_MENTS) > 0 && (
                   <div className={styles.box_footer}>
                     <a onClick={this.showPayMethodModal}>
-                      <Icon type="plus" /> 添加新的支付方式
+                      <Icon type="plus" /> <FM id='userCenterPage.user_add_new' defaultMessage='添加新的支付方式' />
                     </a>
                   </div>
                 )}
@@ -625,7 +627,7 @@ export default class UserCenterPage extends Component {
             {/*{this.renderPwdModal()}*/}
 
             <G2Validation
-              title="安全验证"
+              title={<FM id='userCenterPage.user_safe_verify' defaultMessage='安全验证' />}
               visible={g2ModalVisible}
               onCancel={this.hideG2Modal}
               onSubmit={this.handleSubmitG2}
@@ -638,8 +640,10 @@ export default class UserCenterPage extends Component {
             <PayMethodModal
               {...this.props}
               payMents={ENABLE_PAY_MENTS}
-              title={
-                payMethodModalVisible && payMethodModalVisible.id ? '修改支付方式' : '添加支付方式'
+              title={payMethodModalVisible && payMethodModalVisible.id ?
+                (PROMPT('userCenterPage.user_change_payments')||'修改支付方式')
+                :
+                (PROMPT('userCenterPage.user_add_payments')||'添加支付方式')
               }
               data={payMethodModalVisible}
               onCancel={this.hidePayMethodModal}
