@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Link } from 'dva/router';
 import { Checkbox, Alert, Icon } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
 import { stringify } from 'qs';
 import Login from 'components/Login';
 import G2Validation from 'components/G2Validation';
@@ -126,34 +127,34 @@ export default class LoginPage extends Component {
 
     return (
       <div className={styles.main}>
-        <h3>登录</h3>
+        <h3>{(PROMPT('login.login_in_title')||'登录')}</h3>
         <Login onSubmit={this.handleSubmit}>
           {login.error && this.renderMessage(login.error)}
-          <UserName name="account" placeholder="用户名/邮箱/手机号" />
-          <Password name="password" placeholder="密码" />
+          <UserName name="account" placeholder={(PROMPT('login.userName_email_mobile')||'用户名/邮箱/手机号')} />
+          <Password name="password" placeholder={(PROMPT('login.pwd_holder')||'密码')}  />
           <ImgCaptcha
             name="captcha"
-            placeholder="验证码"
+            placeholder={(PROMPT('login.pwd_code')||'验证码')}
             image={image}
             loadCaptcha={this.loadCaptcha}
           />
-          <Submit loading={submitting}>登录</Submit>
+          <Submit loading={submitting}>{(PROMPT('login.login_in_title')||'登录')}</Submit>
           <div className={styles.other}>
-            <Link to="/user/forget-password">忘记密码?</Link>
+            <Link to="/user/forget-password">{(PROMPT('login.forget_pwd')||'忘记密码')}</Link>
             <Link className={styles.register} to="/user/register">
-              注册账户
+              {(PROMPT('login.sign_in_account')||'注册账户')}
             </Link>
           </div>
         </Login>
 
         <G2Validation
-          title="安全验证"
+          title={(PROMPT('login.safe_G2')||'安全验证')}
           visible={login.g2Visible}
           onCancel={this.handleCancel}
           onSubmit={this.handleSubmitG2}
         />
         <SecureValidation
-          title="身份验证"
+          title={(PROMPT('login.personal_verify')||'身份验证')}
           visible={login.secureVisible}
           onGetCaptcha={this.handleSendCaptcha}
           onCancel={this.handleCancelSecure}

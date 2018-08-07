@@ -37,19 +37,19 @@ export default function CustomNoticeList({
                 // avatar={item.avatar ? <Avatar className={styles.avatar} src={item.avatar} /> : null}
                 title={
                   <div className={styles.title}>
-                    <span>订单编号: {item.order_no}</span>
+                    <span>{(PROMPT('noticeList.order_num')||'订单编号:')} {item.order_no}</span>
                     <div className={styles.extra}>{CONFIG.order_status[item.status]}</div>
                   </div>
                 }
                 description={
                   <div>
                     <span className={styles.description} title={item.description}>
-                      <span className={styles.des_num}>交易数额:</span>
+                      <span className={styles.des_num}>{(PROMPT('noticeList.deal_num')||'交易数额:')}</span>
                       {formatBTC(item.trading_count)}
                       <span className={styles.des_btc}>BTC</span>
                     </span>
                     <span className={styles.datetime}>
-                      {<span className={styles.news}>新消息:</span>}
+                      {<span className={styles.news}>{(PROMPT('noticeList.new_msg')||'新消息:')}</span>}
                       {item.message_count || 0}
                     </span>
                   </div>

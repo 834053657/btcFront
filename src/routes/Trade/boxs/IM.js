@@ -121,7 +121,7 @@ export default class TradeIM extends PureComponent {
   @throttle(1000)
   handlerUpload(event) {
     if (event.file.status !== 'done' || !event.file.response) {
-      return false 
+      return false
     }
     const fileType = event.file.type ? event.file.type.toLowerCase() : '';
     let content = null;
@@ -129,7 +129,7 @@ export default class TradeIM extends PureComponent {
     const { orderId, dispatch } = this.props;
     const url = upload.prefix + event.file.response.hash
     if (!url) {
-      Message.error(`上传发生错误!`);
+      Message.error(PROMPT('IM.upload_error')||'上传发生错误!');
       return false
     }
     if (~fileType.indexOf('image/')) {
@@ -229,16 +229,16 @@ export default class TradeIM extends PureComponent {
       beforeUpload: (file) => {
         const isLtMB = file.size / 1024 / 1024 < 2;
         if (!isLtMB) {
-          Message.error(`文件必须小于2M!`);
+          Message.error(PROMPT('IM.file_limit')||'文件必须小于2M!');
         }
         return isLtMB;
       }
     };
     return (
       <Spin spinning={false}>
-        <Card 
+        <Card
           bodyStyle={{ padding: 0 }}
-          className={styles.chat_card} 
+          className={styles.chat_card}
           title={this.getChatUser()}
           ref={(card) => this.card = card}
         >
@@ -265,7 +265,7 @@ export default class TradeIM extends PureComponent {
                             scrollToIndex={historyList.length - 1}
                             height={390}
                             width={width}
-                            
+
                             rowRenderer={this.renderMessage}
                             rowCount={historyList.length}
                           />
@@ -289,7 +289,7 @@ export default class TradeIM extends PureComponent {
                 value={message}
                 onChange={this.handlerChangeMsg}
                 rows={4}
-                placeholder={this.props.im.room_id ? "请按回车键发送消息" : "进入房间中..."}
+                placeholder={this.props.im.room_id ? (PROMPT('IM.enter_btn')||'请按回车键发送消息') : (PROMPT('IM.into_room')||'进入房间中...')}
                 onKeyPress={this.handleKeyPress}
               />
             </div>

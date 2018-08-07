@@ -1,0 +1,18 @@
+[
+  {
+    "id": "magList.msg_title",
+    "defaultMessage": "标题"
+  },
+  {
+    "id": "magList.publish_at",
+    "defaultMessage": "发布时间"
+  },
+  {
+    "id": "magList.msg_center",
+    "defaultMessage": "消息中心"
+  },
+  {
+    "id": "magList.msg_all",
+    "defaultMessage": "全部"
+  }
+]

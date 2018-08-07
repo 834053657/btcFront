@@ -1,0 +1,34 @@
+[
+  {
+    "id": "searchForm.user_country",
+    "defaultMessage": "所在国家"
+  },
+  {
+    "id": "magList.all_country",
+    "defaultMessage": "全部国家"
+  },
+  {
+    "id": "magList.currency_type",
+    "defaultMessage": "法币币种"
+  },
+  {
+    "id": "magList.pay_methods",
+    "defaultMessage": "支付方式"
+  },
+  {
+    "id": "magList.all_pay_way",
+    "defaultMessage": "全部支付方式"
+  },
+  {
+    "id": "magList.deal_money",
+    "defaultMessage": "交易金额"
+  },
+  {
+    "id": "magList.btn_refer",
+    "defaultMessage": "查询"
+  },
+  {
+    "id": "magList.btn_cancel",
+    "defaultMessage": "取消"
+  }
+]

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Radio, Input, Form, Button } from 'antd';
 import { map } from 'lodash';
 import styles from './EvaluateForm.less';
+import { getLocale } from '../../../utils/authority';
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -28,7 +29,9 @@ export default class EvaluateForm extends Component {
       height: '30px',
       lineHeight: '30px',
     };
-
+    const lang = getLocale() || 'zh_CN';
+    const msgText = CONFIG[`startList_${lang}`]
+    console.log(lang)
     return (
       <Form onSubmit={this.handleSubmit} layout="horizontal" className={styles.tableListForm}>
         <FormItem>
@@ -42,7 +45,7 @@ export default class EvaluateForm extends Component {
             ],
           })(
             <RadioGroup className={styles.select}>
-              {map(CONFIG.startList, (item, key) => {
+              {map(msgText, (item, key) => {
                 return (
                   <div key={key}>
                     <Radio style={radioStyle} value={+key}>

@@ -5,6 +5,7 @@ import moment from 'moment';
 import { map, isEqual } from 'lodash';
 import { stringify } from 'qs';
 import { Table, Tabs, Button, Icon, Card, Modal } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import { getQueryString, getMessageContent } from '../../utils/utils';
 import getMessage from '../../utils/getMessage';
@@ -35,7 +36,7 @@ export default class List extends Component {
       type: 'message/fetchMessageList',
       payload: {
         msg_type: getMessage.Types[this.state.type],
-        status: this.state.status, 
+        status: this.state.status,
         page_size: 10,
       }
     });
@@ -43,7 +44,7 @@ export default class List extends Component {
 
   columns = [
     {
-      title: '标题',
+      title: <FM id='magList.msg_title' defaultMessage='标题' />,
       dataIndex: 'title',
       width: '70%',
       render: (val, row) => {
@@ -57,7 +58,7 @@ export default class List extends Component {
       },
     },
     {
-      title: '发布时间',
+      title: <FM id='magList.publish_at' defaultMessage='发布时间' />,
       dataIndex: 'publish_at',
       width: '30%',
       align: 'right',
@@ -92,7 +93,7 @@ export default class List extends Component {
       const detail = getMessage(item)
       if (detail) {
         const { to = '/exception/404' } = detail
-        this.props.dispatch(routerRedux.push(to)) 
+        this.props.dispatch(routerRedux.push(to))
       }
     }
     this.readMsg(item, () => go())
@@ -103,7 +104,7 @@ export default class List extends Component {
     const detail = getMessage(item)
     if (detail) {
       const { to = '/exception/404' } = detail
-      this.props.dispatch(routerRedux.push(to)) 
+      this.props.dispatch(routerRedux.push(to))
     }
     // if (item.msg_type === 1) {
     //   this.props.dispatch(
@@ -175,7 +176,7 @@ export default class List extends Component {
   };
 
   handleChangeType = type => {
-    const { status } = getQueryString(this.props.location.search); 
+    const { status } = getQueryString(this.props.location.search);
     this.props.dispatch({
       type: 'message/fetchMessageList',
       payload: {
@@ -189,7 +190,7 @@ export default class List extends Component {
       routerRedux.replace({
         search: stringify({ type, status }),
       })
-    );  
+    );
   };
 
   handleChangeStatus = value => {
@@ -219,13 +220,13 @@ export default class List extends Component {
     const { search } = this.props.location;
     const { type = 'trade', status = '' } = getQueryString(search);
     return (
-      <PageHeaderLayout title="消息中心">
+      <PageHeaderLayout title={<FM id='magList.msg_center' defaultMessage='消息中心' />}>
         <div className={styles.message_bgc}>
           <Tabs activeKey={type} onChange={this.handleChangeType}>
             {map(CONFIG.message.types, (item, key) => <TabPane tab={item.text} key={key} />)}
           </Tabs>
           <Tabs activeKey={status} onChange={this.handleChangeStatus}>
-            <TabPane tab="全部" key="" />
+            <TabPane tab={<FM id='magList.msg_all' defaultMessage='全部' />} key="" />
             {map(CONFIG.message.status, (value, key) => (
               <TabPane tab={value} key={+key} />
             ))}

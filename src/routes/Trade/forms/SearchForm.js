@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Row, Col, Form, Input, Select, DatePicker, Button, InputNumber } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
 import { map } from 'lodash';
 import TagSelect from 'components/TagSelect';
 import styles from './SearchForm.less';
@@ -36,15 +37,15 @@ export default class SearchForm extends Component {
 
     return (
       <Form onSubmit={this.submit} layout="horizontal" className={styles.tableListForm}>
-        <FormItem label="所在国家">
+        <FormItem label={<FM id='searchForm.user_country' defaultMessage='所在国家' />}>
           {getFieldDecorator('countries', {
             initialValue: initialValues.countries,
           })(
             <Select
               // mode="multiple"
-              placeholder="选择所在国家"
+              placeholder={(PROMPT('searchForm.country_choose')||'选择所在国家')}
             >
-              <Option value="">全部国家</Option>
+              <Option value=""><FM id='magList.all_country' defaultMessage='全部国家' /></Option>
               {map(CONFIG.country, item => (
                 <Option key={item.code} value={item.code}>
                   {item.name}
@@ -53,7 +54,7 @@ export default class SearchForm extends Component {
             </Select>
           )}
         </FormItem>
-        <FormItem label="法币币种">
+        <FormItem label={<FM id='magList.currency_type' defaultMessage='法币币种' />}>
           {getFieldDecorator('currency', {
             initialValue: initialValues.currency,
           })(
@@ -66,12 +67,12 @@ export default class SearchForm extends Component {
             </Select>
           )}
         </FormItem>
-        <FormItem label="支付方式">
+        <FormItem label={<FM id='magList.pay_methods' defaultMessage='支付方式' />}>
           {getFieldDecorator('pay_methods', {
             initialValue: initialValues.pay_methods,
           })(
             <Select>
-              <Option value="">全部支付方式</Option>
+              <Option value=""><FM id='magList.all_pay_way' defaultMessage='全部支付方式' /></Option>
               {map(CONFIG.payments, (text, val) => (
                 <Option key={val} value={val}>
                   {text}
@@ -80,17 +81,17 @@ export default class SearchForm extends Component {
             </Select>
           )}
         </FormItem>
-        <FormItem label="交易金额">
+        <FormItem label={<FM id='magList.deal_money' defaultMessage='交易金额' />}>
           {getFieldDecorator('money', {
             initialValue: initialValues.money,
           })(<InputNumber step={1} style={{ width: '100%' }} />)}
         </FormItem>
         <div style={{ overflow: 'hidden' }}>
           <Button type="primary" htmlType="submit">
-            查询
+            <FM id='magList.btn_refer' defaultMessage='查询' />
           </Button>
           <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
-            取消
+            <FM id='magList.btn_cancel' defaultMessage='取消' />
           </Button>
         </div>
       </Form>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Input, Button, Modal, Alert, Select, Row, Col } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
 import classNames from 'classnames';
 import { map } from 'lodash';
 import styles from './index.less';
@@ -86,7 +87,7 @@ class SecureValidation extends Component {
         onCancel={this.handleCancel}
         footer={[
           <Button key="back" onClick={this.handleCancel}>
-            取消
+            {(PROMPT('secureValidation.btn_cancel')||'取消')}
           </Button>,
           <Button
             key="submit"
@@ -95,19 +96,19 @@ class SecureValidation extends Component {
             htmlType="submit"
             onClick={this.handleSubmit}
           >
-            确定
+            {(PROMPT('secureValidation.btn_confirm')||'确定')}
           </Button>,
         ]}
       >
         <Alert
           showIcon
           className={styles.alert}
-          message="为保障您的账户安全，请进行身份验证。"
+          message={(PROMPT('secureValidation.alert_safe')||'为保障您的账户安全，请进行身份验证。')}
           type="info"
         />
         <div className={classNames(className, styles.login)}>
           <Form onSubmit={this.handleSubmit} hideRequiredMark>
-            <FormItem label="验证方式" {...formItemLayout}>
+            <FormItem label={(PROMPT('secureValidation.verify_type')||'验证方式')} {...formItemLayout}>
               {getFieldDecorator('type', {
                 initialValue: 'mail',
               })(
@@ -121,12 +122,12 @@ class SecureValidation extends Component {
               )}
             </FormItem>
             {getFieldValue('type') === 'sms' && (
-              <FormItem {...formItemLayout} label="国家">
+              <FormItem {...formItemLayout} label={(PROMPT('secureValidation.country_')||'国家')}>
                 {getFieldDecorator('nation_code', {
                   rules: [
                     {
                       required: true,
-                      message: '请选择国家！',
+                      message: (PROMPT('secureValidation.country_choose')||'请选择国家！'),
                     },
                   ],
                 })(
@@ -142,7 +143,7 @@ class SecureValidation extends Component {
             )}
             <FormItem
               {...formItemLayout}
-              label={getFieldValue('type') === 'mail' ? '邮箱' : '手机'}
+              label={getFieldValue('type') === 'mail' ? (PROMPT('secureValidation.type_Email')||'邮箱') : (PROMPT('secureValidation.type_mobile')||'手机')}
             >
               <Row gutter={24}>
                 <Col span={14}>
@@ -151,23 +152,23 @@ class SecureValidation extends Component {
                         rules: [
                           {
                             required: true,
-                            message: '请输入邮箱！',
+                            message: (PROMPT('secureValidation.email_input')||'请输入邮箱！'),
                           },
                           {
                             type: 'email',
-                            message: '邮箱地址格式错误！',
+                            message: (PROMPT('secureValidation.error_email')||'邮箱地址格式错误！'),
                           },
                         ],
-                      })(<Input size="large" placeholder="邮箱" />)
+                      })(<Input size="large" placeholder={(PROMPT('secureValidation.email_holder')||'邮箱')} />)
                     : getFieldDecorator('phone', {
                         rules: [
                           {
                             required: true,
-                            message: '请输入手机号码！',
+                            message: (PROMPT('secureValidation.mobile_input')||'请输入手机号码！'),
                           },
                           {
                             pattern: /^[1-9]\d*$/,
-                            message: '请输入正确的手机号码',
+                            message: (PROMPT('secureValidation.mobile_input_right')||'请输入正确的手机号码'),
                           },
                         ],
                       })(
@@ -190,20 +191,20 @@ class SecureValidation extends Component {
                     size="large"
                     onClick={this.handleSendCaptcha}
                   >
-                    {count ? `${count} s` : '获取验证码'}
+                    {count ? `${count} s` : (PROMPT('secureValidation.get_code')||'获取验证码')}
                   </Button>
                 </Col>
               </Row>
             </FormItem>
-            <FormItem label="验证码" {...formItemLayout}>
+            <FormItem label={(PROMPT('secureValidation.code')||'验证码')} {...formItemLayout}>
               {getFieldDecorator('code', {
                 rules: [
                   {
                     required: true,
-                    message: '请输入验证码！',
+                    message: (PROMPT('secureValidation.code_input')||'请输入验证码！'),
                   },
                 ],
-              })(<Input size="large" placeholder="验证码" />)}
+              })(<Input size="large" placeholder={(PROMPT('secureValidation.code_holder')||'验证码')} />)}
             </FormItem>
           </Form>
         </div>

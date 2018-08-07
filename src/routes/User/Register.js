@@ -23,10 +23,10 @@ const { Option } = Select;
 const InputGroup = Input.Group;
 
 const passwordStatusMap = {
-  ok: <div className={styles.success}>强度：强</div>,
-  pass: <div className={styles.warning}>强度：中</div>,
-  poor: <div className={styles.error}>强度：太短</div>,
-  noPass: <div className={styles.error}>强度：不安全</div>,
+  ok: <div className={styles.success}>{PROMPT('register.pwd_high')||'强度：强'}</div>,
+  pass: <div className={styles.warning}>{PROMPT('register.pwd_middle')||'强度：中'}</div>,
+  poor: <div className={styles.error}>{PROMPT('register.pwd_low')||'强度：太短'}</div>,
+  noPass: <div className={styles.error}>{PROMPT('register.pwd_not_safe')||'强度：不安全'}</div>,
 };
 
 const passwordProgressMap = {
@@ -136,7 +136,7 @@ export default class Register extends Component {
   checkConfirm = (rule, value, callback) => {
     const { form } = this.props;
     if (value && value !== form.getFieldValue('password')) {
-      callback('两次输入的密码不匹配!');
+      callback(PROMPT('register.pwd_not_match')||'两次输入的密码不匹配!');
     } else {
       callback();
     }
@@ -147,7 +147,7 @@ export default class Register extends Component {
 
     if (!value) {
       this.setState({
-        help: '请输入密码！',
+        help: (PROMPT('register.pwd_input')||'请输入密码！'),
         visible: !!value,
       });
       callback('error');
@@ -240,21 +240,21 @@ export default class Register extends Component {
     const { count, agree, imageValidationVisible, infoVisible } = this.state;
     return (
       <div className={styles.main}>
-        <h3>注册</h3>
+        <h3>{(PROMPT('register.title_sign_')||'注册')}</h3>
         <Form onSubmit={this.handleSubmit}>
           <FormItem>
             {getFieldDecorator('email', {
               rules: [
                 {
                   required: true,
-                  message: '请输入邮箱地址！',
+                  message: (PROMPT('register.email_input')||'请输入邮箱地址！'),
                 },
                 {
                   type: 'email',
-                  message: '邮箱地址格式错误！',
+                  message: (PROMPT('register.email_error')||'邮箱地址格式错误！'),
                 },
               ],
-            })(<Input size="large" placeholder="邮箱" />)}
+            })(<Input size="large" placeholder={(PROMPT('register.email_')||'邮箱')} />)}
           </FormItem>
           <FormItem>
             <Row gutter={8}>
@@ -263,10 +263,10 @@ export default class Register extends Component {
                   rules: [
                     {
                       required: true,
-                      message: '请输入验证码！',
+                      message: (PROMPT('register.code_input')||'请输入验证码！'),
                     },
                   ],
-                })(<Input size="large" placeholder="验证码" />)}
+                })(<Input size="large" placeholder={(PROMPT('register.code_')||'验证码')} />)}
               </Col>
               <Col span={8}>
                 <Button
@@ -275,7 +275,7 @@ export default class Register extends Component {
                   className={styles.getCaptcha}
                   onClick={this.showImageValidationModal}
                 >
-                  {count ? `${count} s` : '获取验证码'}
+                  {count ? `${count} s` : (PROMPT('register.get_code')||'获取验证码')}
                 </Button>
               </Col>
             </Row>
@@ -285,7 +285,7 @@ export default class Register extends Component {
               rules: [
                 {
                   required: true,
-                  message: '请输入用户名！',
+                  message: (PROMPT('register.userName_input')||'请输入用户名！'),
                 },
                 // {
                 //   min: 2,
@@ -298,10 +298,10 @@ export default class Register extends Component {
                 {
                   // pattern: /^[\u4E00-\u9FA5_a-zA-Z0-9/-]{2,20}$/,
                   pattern: /^[a-zA-Z0-9_-]{2,20}$/,
-                  message: '用户名只能包含 2~20位的字母，数字，下划线，减号',
+                  message: (PROMPT('register.input_limit')||'用户名只能包含 2~20位的字母，数字，下划线，减号'),
                 },
               ],
-            })(<Input size="large" placeholder="用户名 2-20位" />)}
+            })(<Input size="large" placeholder={(PROMPT('register.userName_limit')||'用户名 2-20位')} />)}
           </FormItem>
           <FormItem help={this.state.help}>
             <Popover
@@ -310,7 +310,7 @@ export default class Register extends Component {
                   {passwordStatusMap[this.getPasswordStatus()]}
                   {this.renderPasswordProgress()}
                   <div style={{ marginTop: 10 }}>
-                    请输入6 ~ 16 个字母，数字组合字符。请不要使用容易被猜到的密码。
+                    {(PROMPT('register.pwd_limit')||'请输入6 ~ 16 个字母，数字组合字符。请不要使用容易被猜到的密码。')}
                   </div>
                 </div>
               }
@@ -325,7 +325,7 @@ export default class Register extends Component {
                   },
                   {
                     min: 6,
-                    message: '请输入6 ~ 16 位字母，数字组合。！',
+                    message: (PROMPT('register.num_letter_input')||'请输入6 ~ 16 位字母，数字组合。！'),
                   },
                 ],
               })(
@@ -333,7 +333,7 @@ export default class Register extends Component {
                   size="large"
                   type="password"
                   maxLength={16}
-                  placeholder="6~16位字母数字组合,并区分大小写"
+                  placeholder={(PROMPT('register.num_and_letter')||'6~16位字母数字组合,并区分大小写')}
                 />
               )}
             </Popover>
@@ -343,31 +343,32 @@ export default class Register extends Component {
               rules: [
                 {
                   required: true,
-                  message: '请确认密码！',
+                  message: (PROMPT('register.pwd_again')||'请确认密码！'),
                 },
                 {
                   validator: this.checkConfirm,
                 },
               ],
-            })(<Input size="large" type="password" placeholder="确认密码" />)}
+            })(<Input size="large" type="password" placeholder={(PROMPT('register.pwd_again_input')||'确认密码')} />)}
           </FormItem>
           <FormItem>
             {getFieldDecorator('invite_code', {
               rules: [
                 {
                   required: true,
-                  message: '请输入邀请码！',
+                  message: (PROMPT('register.code_input_')||'请输入邀请码！'),
+
                 },
               ],
-            })(<Input size="large" placeholder="邀请码" />)}
+            })(<Input size="large" placeholder={(PROMPT('register.code_input_holder')||'邀请码')} />)}
           </FormItem>
 
           <FormItem>
             <Checkbox checked={agree} onChange={this.changeAgree}>
-              我已阅读并同意
+              {(PROMPT('register.readAndAgree')||'我已阅读并同意')}
             </Checkbox>
-            <a onClick={this.handleShowInfo.bind(this, 'agreement')}>《服务条款》</a>{' '}
-            <a onClick={this.handleShowInfo.bind(this, 'duty')}>《免责申明》</a>
+            <a onClick={this.handleShowInfo.bind(this, 'agreement')}>《{(PROMPT('register.serve_rule')||'服务条款')}》</a>{' '}
+            <a onClick={this.handleShowInfo.bind(this, 'duty')}>《{(PROMPT('register.liability_exemption')||'免责申明')}》</a>
           </FormItem>
 
           <FormItem>
@@ -379,15 +380,15 @@ export default class Register extends Component {
               type="primary"
               htmlType="submit"
             >
-              注册
+              {(PROMPT('register.sign_in')||'注册')}
             </Button>
             <Link className={styles.login} to="/user/login">
-              使用已有账户登录
+              {(PROMPT('register.sign_in_use_own')||'使用已有账户登录')}
             </Link>
           </FormItem>
         </Form>
         <ImageValidation
-          title="安全验证"
+          title={(PROMPT('register.safe_')||'安全验证')}
           onCancel={() => {
             this.setState({ imageValidationVisible: false });
           }}

@@ -267,7 +267,7 @@ export default {
     '1': '买入',
     '2': '出售',
   },
-  startList: {
+  startList_zh_CN: {
     1: {
       title: '可信任的',
       subTitle: '增加他的信誉并将他标记为值得信赖的用户',
@@ -289,6 +289,28 @@ export default {
       subTitle: '阻止交易伙伴与您进行交易，不要给他任何评价。',
     },
   },
+  startList_en_GB: {
+    1: {
+      title: 'trust',
+      subTitle: 'Increase his credibility and label him as a trustworthy user',
+    },
+    2: {
+      title: 'good',
+      subTitle: 'Praise your trading partner, which will increase his credibility.',
+    },
+    3: {
+      title: 'middle',
+      subTitle: 'Praise your trading partner, which will increase his credibility',
+    },
+    4: {
+      title: 'negative comment',
+      subTitle: 'This will reduce his reputation',
+    },
+    5: {
+      title: 'Shielded user',
+      subTitle: 'Stop trading partners from trading with you. Do not give him any comment.',
+    },
+  },
   order_type_desc: {
     '1': '买',
     '2': '卖',
@@ -298,9 +320,13 @@ export default {
     '2': "驾照",
     '3': "护照",
   },
-  auto_replies_msg: {
+  auto_replies_msg_zh_CN: {
     1: '[自动回复]您好，下单后请及时留下您的收款方式，请核对您的账号资料是否正确，留错信息自行承担损失！',
     2: '[自动回复]您好，转账后请及时标记付款，我会尽快处理您的订单，谢谢合作！',
+  },
+  auto_replies_msg_en_GB: {
+    1: '[Auto-reply] Hello, please leave your payment method in time after placing an order, please check your account information is correct, leave the wrong information to bear the loss by yourself!',
+    2: '[Auto-reply] Hello, please mark the payment promptly after transfer. I will take care of your order as soon as possible. Thank you for your cooperation.',
   },
   message: {
     types: {

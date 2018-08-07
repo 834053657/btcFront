@@ -1,0 +1,102 @@
+[
+  {
+    "id": "tradeStep.wait_pay",
+    "defaultMessage": "待支付"
+  },
+  {
+    "id": "tradeStep.wait_pay_release",
+    "defaultMessage": "待释放"
+  },
+  {
+    "id": "tradeStep.wait_pay_finish_order",
+    "defaultMessage": "完成订单"
+  },
+  {
+    "id": "tradeStep.btn_affirm_pay",
+    "defaultMessage": "确认支付"
+  },
+  {
+    "id": "tradeStep.cancel_order",
+    "defaultMessage": "取消订单"
+  },
+  {
+    "id": "tradeStep.already_pay",
+    "defaultMessage": "已支付"
+  },
+  {
+    "id": "tradeStep.wait_release_release",
+    "defaultMessage": "待释放"
+  },
+  {
+    "id": "tradeStep.wait_release_pay",
+    "defaultMessage": "完成订单"
+  },
+  {
+    "id": "tradeStep.btn_affirm_release",
+    "defaultMessage": "确认释放"
+  },
+  {
+    "id": "tradeStep.btn_user_state",
+    "defaultMessage": "申述"
+  },
+  {
+    "id": "tradeStep.done_already_pay",
+    "defaultMessage": "已支付"
+  },
+  {
+    "id": "tradeStep.done_already_release",
+    "defaultMessage": "已释放"
+  },
+  {
+    "id": "tradeStep.done_finish_order",
+    "defaultMessage": "完成订单"
+  },
+  {
+    "id": "tradeStep.cancel_wait_pay",
+    "defaultMessage": "待支付"
+  },
+  {
+    "id": "tradeStep.cancel_cancel_order",
+    "defaultMessage": "订单取消"
+  },
+  {
+    "id": "tradeStep.cancel_finish_order",
+    "defaultMessage": "完成订单"
+  },
+  {
+    "id": "tradeStep.appeal_already_pay",
+    "defaultMessage": "已支付"
+  },
+  {
+    "id": "tradeStep.appeal_state",
+    "defaultMessage": "申述中"
+  },
+  {
+    "id": "tradeStep.appeal_finish_order",
+    "defaultMessage": "完成订单"
+  },
+  {
+    "id": "tradeStep.btn_cancel_order",
+    "defaultMessage": "取消订单"
+  },
+  {
+    "id": "tradeStep.main_page",
+    "defaultMessage": "首页"
+  },
+  {
+    "id": "tradeStep.goBack",
+    "defaultMessage": "返回"
+  },
+  {
+    "id": "tradeStep.cancel_form_pay",
+    "defaultMessage": "取消订单"
+  },
+  {
+    "id": "tradeStep.my_state",
+    "defaultMessage": "我要申述"
+  },
+  {
+    "id": "tradeStep.report_order",
+    "defaultMessage": "举报"
+  }
+]

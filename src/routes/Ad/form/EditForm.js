@@ -4,6 +4,7 @@ import { map, floor, omit } from 'lodash';
 import { Link } from 'dva/router';
 import InputNumber from 'components/InputNumber';
 import styles from './EditForm.less';
+import { getLocale } from '../../../utils/authority';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -191,6 +192,9 @@ export default class EditForm extends Component {
     //
     // )
     const floatPrice = !!getFieldValue('trading_price_ratio_choose');
+
+    const lang = getLocale() || 'zh_CN';
+    const autoRespond = CONFIG[`auto_replies_msg_${lang}`]
     return (
       <Form className={styles.form} hideRequiredMark onSubmit={this.handleSubmit}>
         <FormItem>
@@ -695,7 +699,7 @@ export default class EditForm extends Component {
               },
             ],
           })(
-            <TextArea placeholder={CONFIG.auto_replies_msg[getFieldValue('ad_type')]} rows={4} style={{ width: 390 }} />
+            <TextArea placeholder={autoRespond[getFieldValue('ad_type')]} rows={4} style={{ width: 390 }} />
           )}
           <span style={{ marginLeft: '10px' }}>
             <Tooltip title={CONFIG.tooltip[15]}>
