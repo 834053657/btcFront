@@ -9,7 +9,7 @@ import {
   updateAd,
   deleteMyAd,
   queryMyRemain,
-  recoverAd,
+  submitResumeAd,
 } from '../services/api';
 
 export default {
@@ -73,7 +73,7 @@ export default {
     },
     // recoverAd  恢复操作
     *recoverAd({ payload, callback }, { call }) {
-      const response = yield call(recoverAd, payload);
+      const response = yield call(submitResumeAd, payload);
       if (response.code === 0) {
         message.success('操作成功');
       } else {

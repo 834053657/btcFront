@@ -1,8 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Button, Card, Row, Col, Badge, Form, Input, Avatar, Icon, Select, Checkbox } from 'antd';
+import { Button, Card, Row, Col, Badge, Form, Input, Avatar, Icon, Checkbox } from 'antd';
 import { FormattedMessage as FM } from 'react-intl';
-
 import { map, isNumber, floor, omit } from 'lodash';
 import DescriptionList from 'components/DescriptionList';
 import { routerRedux } from 'dva/router';
@@ -14,7 +13,6 @@ import styles from './TradeDetail.less';
 import { getPayIcon } from '../../utils/utils';
 
 const { Description } = DescriptionList;
-const Option = Select.Option;
 const { Meta } = Card;
 const FormItem = Form.Item;
 const { TextArea } = Input;
@@ -220,7 +218,7 @@ export default class TradeDetail extends PureComponent {
                       }
                     </div>
                   ) : null}
-                  <FormItem label={<FM id='tradeDetail.user_buyOrSell_title' defaultMessage='我要{buyOrSell}' values={{buyOrSell:CONFIG.order_type[ad_type]}} />} {...formItemLayout}>
+                  <FormItem label={<FM id='tradeDetail.user_buyOrSell_title' defaultMessage='我要{buyOrSell}' values={{buyOrSell:CONFIG.trade_ad_type[ad_type]}} />} {...formItemLayout}>
                     <Col span={11}>
                       <FormItem>
                         {getFieldDecorator('trading_volume', {

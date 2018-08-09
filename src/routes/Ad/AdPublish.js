@@ -59,7 +59,7 @@ export default class AdPublish extends Component {
   render() {
     const { num } = this.props;
     return (
-      <PageHeaderLayout title={<FM id='adPublish.ad_publish_title' defaultMessage='发布广告' />}>
+      <PageHeaderLayout title={<FM id='adPublish.ad_publish_title' defaultMessage='发布广告' />} breadcrumbVisible={false}>
         <div className={styles.background}>
           <div style={{ paddingLeft: '20px', width: '640px', marginBottom: '30px' }}>
             <Alert
