@@ -328,6 +328,8 @@ export default class EditForm extends Component {
               rules: [
                 {
                   required: true,
+                  type: 'number',
+                  min: 0.0001,
                   message: <FM id='editForm.deal_price_input' defaultMessage='请输入交易价格' />,
                 },
               ],

@@ -459,7 +459,7 @@ export async function queryMyRemain(params) {
 }
 
 export async function getFile({ type, local }) {
-  console.log(type, local)
+  // console.log(type, local)
   return request(`../../public/article/${type}_${local}.html?r=${Math.random()}`, {
     Accept: 'text/html',
     'Content-Type': 'text/html;  charset=utf-8',
@@ -472,8 +472,8 @@ export async function submitEvaluate(params) {
     body: params,
   });
 }
-//恢复广告recoverAd
-export async function recoverAd(params) {
+//恢复广告 submitRecoverAd
+export async function submitResumeAd(params) {
   return request('btc/ad/resume', {
     method: 'POST',
     body: params,

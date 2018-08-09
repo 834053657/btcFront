@@ -3,14 +3,9 @@ import { connect } from 'dva';
 import { delay } from 'lodash';
 import { FormattedMessage as FM } from 'react-intl';
 import { Link, routerRedux } from 'dva/router';
-import moment from 'moment';
 import {
   Table,
-  Tabs,
-  Button,
-  Icon,
   Card,
-  Modal,
   Row,
   Col,
   Divider,
@@ -20,26 +15,15 @@ import {
   Popconfirm,
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import { getMessageContent } from '../../utils/utils';
 import styles from './List.less';
-//import message from "../../models/message";
 
-const statusMap = ['warning', 'processing', 'error', 'default'];
+const statusMap = ['warning', 'processing', 'error', 'default', 'error'];
 
 @connect(({ ad, loading }) => ({
   data: ad.myAdData,
   loading: loading.models.ad,
 }))
 export default class List extends Component {
-  constructor(props) {
-    super();
-
-    this.state = {
-      selectedRows: [],
-    };
-  }
-
-  componentWillMount() {}
 
   componentDidMount() {
     const { dispatch } = this.props;
@@ -76,8 +60,6 @@ export default class List extends Component {
     });
   };
   viewAd = (r, action) => {
-    message.warning('跳转页面开发中');
-    return null;
     // todo
     // if (r.goods_type !== 1) {
     //   //?id=${r.id}&ad_type=${r.ad_type}&action=${action}`
@@ -165,29 +147,28 @@ export default class List extends Component {
             {/*<a onClick={() => this.viewAd(r, '_OPEN')}>查看</a>*/}
             {r.status === 1 && (
               <span>
-                {/*<Divider type="vertical" />*/}
                 <a onClick={() => this.updateAd(r, 2)} className="text-red">
                   <FM id='myAdList.stop' defaultMessage='暂停' />
                 </a>
+                <Divider type="vertical" />
               </span>
             )}
             {r.status === 2 && (
               <span>
-                {/*<Divider type="vertical" />*/}
                 <a onClick={() => this.recoverAd(r, 1)} className="text-green">
                   <FM id='myAdList.recover' defaultMessage='恢复' />
                 </a>
+                <Divider type="vertical" />
               </span>
             )}
             {[1, 2].indexOf(r.status) > -1 && (
               <span>
-                <Divider type="vertical" />
                 <Link to={`/ad/edit/${r.id}`}><FM id='myAdList.adit' defaultMessage='编辑' /></Link>
+                <Divider type="vertical" />
               </span>
             )}
             {[ 2, 4].indexOf(r.status) > -1 && (
               <span>
-                <Divider type="vertical" />
                 <Popconfirm
                   title={<FM id='myAdList.tip_toCancel' defaultMessage='您确认要删除此广告?' />}
                   onConfirm={() => this.DeleteAd(r, 5)}
@@ -204,21 +185,14 @@ export default class List extends Component {
     },
   ];
   handleTableChange = (pagination, filtersArg, sorter) => {
-    const { dispatch, getValue } = this.props;
+    const { dispatch } = this.props;
     const { formValues } = this.state;
-
-    const filters = Object.keys(filtersArg).reduce((obj, key) => {
-      const newObj = { ...obj };
-      newObj[key] = getValue(filtersArg[key]);
-      return newObj;
-    }, {});
-
     const params = {
       page: pagination.current,
       page_size: pagination.pageSize,
       ...formValues,
-      // ...filters,
     };
+
     if (sorter.field) {
       params.sorter = `${sorter.field}_${sorter.order}`;
     }
@@ -231,7 +205,6 @@ export default class List extends Component {
 
   render() {
     const { data: { list, pagination }, loading } = this.props;
-    const { selectedRows } = this.state;
 
     const content = (
       <Row gutter={24}>
