@@ -1,8 +1,7 @@
 import { map, chain, template, mapValues, pickBy, includes } from 'lodash';
-import { FormattedMessage as FM } from 'react-intl';
+import { getLocale } from './authority';
 
-
-const messageTemplates = {
+const messageTemplates_zh_CN = {
   1: {
     noticeType: 'trade',
     group: '广告<%- message.ad_no %>有新消息',
@@ -149,19 +148,23 @@ const messageTemplates = {
     description: '<%= sender.nickname %>给你发来新消息',
     to: '/trade/step/<%= message.ref_id %>',
   },
-  160: {
-    noticeType: 'trade',
-    group: '订单<%= message.ref_no %>有新消息',
-    title: '订单<%= message.ref_no %>有新消息',
-    description: '买家对订单<%= message.ref_no %>发起申诉',
-  },
-  161: {
-    noticeType: 'trade',
-    group: '订单<%= message.ref_no %>有新消息',
-    title: '订单<%= message.ref_no %>有新消息',
-    description: '卖家对订单<%= message.ref_no %>发起申诉',
-  }
 };
+
+const lang = getLocale() || 'zh_CN';
+console.log(lang,'lang')
+
+
+// if (lang === 'zh_CN' ){
+// //    messageTemplates = messageTemplates_zh_CN;
+// // }else{
+// //    messageTemplates = messageTemplates_zh_CN;
+// // }
+let messageTemplates = {};
+lang === 'zh_CN'?  (messageTemplates = messageTemplates_zh_CN) : (messageTemplates = messageTemplates_zh_CN)
+
+// const messageTemplates = messageTemplates_zh_CN;
+
+console.log(messageTemplates)
 
 const Types = chain(messageTemplates)
   .map((data, key) => { return { msg_type: key, ...data } })

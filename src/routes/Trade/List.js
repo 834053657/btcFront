@@ -89,12 +89,12 @@ export default class List extends Component {
         },
       },
       {
-        title: <FM id='mainList.user_country' defaultMessage='所在国家'/>,
+        title: <FM id='mainList.user_country' defaultMessage='所在国家' />,
         dataIndex: 'country_code',
         render: v => <span>{v && CONFIG.countrysMap[v] ? CONFIG.countrysMap[v].name : '-'}</span>,
       },
       {
-        title: <FM id='mainList.user_orderEvaluate' defaultMessage='交易笔数/好评率'/>,
+        title: <FM id='mainList.user_orderEvaluate' defaultMessage='交易笔数/好评率' />,
         dataIndex: 'volume_like',
         render: (v, row) => {
           const { trade_times, good_ratio } = row.owner || {};
@@ -103,7 +103,7 @@ export default class List extends Component {
         },
       },
       {
-        title: <FM id='mainList.user_payment_methods' defaultMessage='支付方式'/>,
+        title: <FM id='mainList.user_payment_methods' defaultMessage='支付方式' />,
         dataIndex: 'payment_methods',
         render: (v, row) => {
           return (

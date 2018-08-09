@@ -198,7 +198,7 @@ export default class List extends Component {
               <TabPane
                 tab={
                 // `全部(${statistics[0] || 0})`
-                  <FM id='myOrderList.all' defaultMessage='全部{num}' values={{num:statistics[0] || 0}}/>
+                  <FM id='myOrderList.all' defaultMessage='全部{num}' values={{num:statistics[0] || 0}} />
                 }
                 key=""
               />

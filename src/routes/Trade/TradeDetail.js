@@ -290,7 +290,7 @@ export default class TradeDetail extends PureComponent {
             <Col span={10} className={styles.right}>
               <Card
                 className={styles.term_box}
-                title={<FM id='tradeDetail.use_name' defaultMessage='用户{name}的交易条款' values={{name:owner.nickname}}/>}
+                title={<FM id='tradeDetail.use_name' defaultMessage='用户{name}的交易条款' values={{name:owner.nickname}} />}
                 actions={[
                   <a className={styles.report} onClick={this.showReportModal}>
                     <Icon type="flag" /> <FM id='tradeDetail.report_order' defaultMessage='举报这则交易信息' />

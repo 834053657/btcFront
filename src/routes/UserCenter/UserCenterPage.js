@@ -364,8 +364,8 @@ export default class UserCenterPage extends Component {
                 <Divider />
                 <DescriptionList col={1} className={styles.detailBox}>
                   <Description term={<FM id='userCenterPage.good_ratio' defaultMessage='好评率' />}>{trade.good_ratio || 0}%</Description>
-                  <Description term={<FM id='userCenterPage.trust_count' defaultMessage='信任数' />}><FM id='userCenterPage.user_trust' defaultMessage='被{num}人信任' values={{num:user.trust_count || 0}}/></Description>
-                  <Description term={<FM id='userCenterPage.block_count' defaultMessage='屏蔽数' />}><FM id='userCenterPage.user_un_look' defaultMessage='被{num}人屏蔽' values={{num:user.block_count || 0}}/></Description>
+                  <Description term={<FM id='userCenterPage.trust_count' defaultMessage='信任数' />}><FM id='userCenterPage.user_trust' defaultMessage='被{num}人信任' values={{num:user.trust_count || 0}} /></Description>
+                  <Description term={<FM id='userCenterPage.block_count' defaultMessage='屏蔽数' />}><FM id='userCenterPage.user_un_look' defaultMessage='被{num}人屏蔽' values={{num:user.block_count || 0}} /></Description>
                   <Description term={<FM id='userCenterPage.trade_volume' defaultMessage='已完成交易量' />}>{trade.trade_volume} BTC
                   </Description>
                   <Description term={<FM id='userCenterPage.last_login_at' defaultMessage='最后上线时间' />}>

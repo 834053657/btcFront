@@ -154,7 +154,7 @@ class RechargeForm extends Component {
                     message: <FM id='reChargeForm.input_address_msg' defaultMessage='请输入接收比特币的地址！' />,
                   },
                 ],
-              })(<Input size="large" placeholder={PROMPT('reChargeForm.get_site_holder')||'接收比特币的地址'}/>)}
+              })(<Input size="large" placeholder={PROMPT('reChargeForm.get_site_holder')||'接收比特币的地址'} />)}
             </FormItem>
             <FormItem {...formItemLayout} label={<FM id='reChargeForm.transfer_num' defaultMessage='转出数量' />}>
               {getFieldDecorator('amount', {
