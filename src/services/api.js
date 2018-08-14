@@ -474,7 +474,7 @@ export async function submitEvaluate(params) {
 }
 //恢复广告 submitRecoverAd
 export async function submitResumeAd(params) {
-  return request('btc/ad/resume', {
+  return request('/btc/ad/resume', {
     method: 'POST',
     body: params,
   });
