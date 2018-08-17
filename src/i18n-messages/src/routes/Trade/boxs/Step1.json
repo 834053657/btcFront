@@ -1,5 +1,13 @@
 [
   {
+    "id": "step1.btc_buy",
+    "defaultMessage": "买"
+  },
+  {
+    "id": "step1.btc_sell",
+    "defaultMessage": "卖"
+  },
+  {
     "id": "step1.connect_setMessage",
     "defaultMessage": "暂未设置详细的交易信息，请联系对方。"
   },

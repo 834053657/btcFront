@@ -2,5 +2,113 @@
   {
     "id": "register.pwd_high",
     "defaultMessage": "强度：强"
+  },
+  {
+    "id": "register.pwd_middle",
+    "defaultMessage": "强度：中"
+  },
+  {
+    "id": "register.pwd_low",
+    "defaultMessage": "强度：太短"
+  },
+  {
+    "id": "register.pwd_not_safe",
+    "defaultMessage": "强度：不安全"
+  },
+  {
+    "id": "register.title_sign_",
+    "defaultMessage": "注册"
+  },
+  {
+    "id": "register.pwd_not_match",
+    "defaultMessage": "两次输入的密码不匹配!"
+  },
+  {
+    "id": "register.pwd_input",
+    "defaultMessage": "请输入密码！"
+  },
+  {
+    "id": "register.email_input",
+    "defaultMessage": "请输入邮箱地址！"
+  },
+  {
+    "id": "register.email_error",
+    "defaultMessage": "邮箱地址格式错误！"
+  },
+  {
+    "id": "register.email",
+    "defaultMessage": "邮箱"
+  },
+  {
+    "id": "register.code_input",
+    "defaultMessage": "请输入验证码！"
+  },
+  {
+    "id": "register.code",
+    "defaultMessage": "验证码"
+  },
+  {
+    "id": "register.get_code",
+    "defaultMessage": "获取验证码"
+  },
+  {
+    "id": "register.userName_input",
+    "defaultMessage": "请输入用户名！"
+  },
+  {
+    "id": "register.input_limit",
+    "defaultMessage": "用户名只能包含 2~20位的字母，数字，下划线，减号"
+  },
+  {
+    "id": "register.userName_limit",
+    "defaultMessage": "用户名 2-20位"
+  },
+  {
+    "id": "register.pwd_limit",
+    "defaultMessage": "请输入6 ~ 16 个字母，数字组合字符。请不要使用容易被猜到的密码。"
+  },
+  {
+    "id": "register.num_letter_input",
+    "defaultMessage": "请输入6 ~ 16 位字母，数字组合。！"
+  },
+  {
+    "id": "register.num_and_letter",
+    "defaultMessage": "6~16位字母数字组合,并区分大小写"
+  },
+  {
+    "id": "register.pwd_again",
+    "defaultMessage": "请确认密码！"
+  },
+  {
+    "id": "register.pwd_again_input",
+    "defaultMessage": "确认密码"
+  },
+  {
+    "id": "register.code_input_holder",
+    "defaultMessage": "邀请码"
+  },
+  {
+    "id": "register.serve_rule",
+    "defaultMessage": "服务条款"
+  },
+  {
+    "id": "register.readAndAgree",
+    "defaultMessage": "我已阅读并同意"
+  },
+  {
+    "id": "register.liability_exemption",
+    "defaultMessage": "免责申明"
+  },
+  {
+    "id": "register.sign_in",
+    "defaultMessage": "注册"
+  },
+  {
+    "id": "register.sign_in_use_own",
+    "defaultMessage": "使用已有账户登录"
+  },
+  {
+    "id": "register.safe",
+    "defaultMessage": "安全验证"
   }
 ]

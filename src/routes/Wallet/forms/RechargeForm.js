@@ -17,7 +17,8 @@ import {
   Spin,
 } from 'antd';
 import { map, find, filter, minBy, maxBy } from 'lodash';
-import { FormattedMessage as FM } from 'react-intl';
+import {FormattedMessage as FM ,defineMessages} from 'react-intl';
+import {injectIntl } from 'components/_utils/decorator';
 import classNames from 'classnames';
 import { formatBTC } from '../../../utils/utils';
 
@@ -34,7 +35,21 @@ const formItemLayout = {
     sm: { span: 18 },
   },
 };
-
+const msg = defineMessages({
+  wait: {
+    id: 'reChargeForm.wait',
+    defaultMessage: '已提交转账申请，请等待平台处理',
+  },
+  get_site_holder: {
+    id: 'reChargeForm.get_site_holder',
+    defaultMessage: '接收比特币的地址',
+  },
+  transfer_num_holder: {
+    id: 'reChargeForm.transfer_num_holder',
+    defaultMessage: '请输入转出比特币数',
+  },
+});
+@injectIntl()
 class RechargeForm extends Component {
   static defaultProps = {
     className: '',
@@ -67,7 +82,7 @@ class RechargeForm extends Component {
           payload: values,
           callback: res => {
             if (res.code === 0) {
-              message.success(PROMPT('reChargeForm.wait_')||'已提交转账申请，请等待平台处理');
+              message.success(this.props.intl.formatMessage(msg.wait));
               this.props.form.resetFields();
               this.props.onSubmit && this.props.onSubmit();
             } else {
@@ -154,7 +169,7 @@ class RechargeForm extends Component {
                     message: <FM id='reChargeForm.input_address_msg' defaultMessage='请输入接收比特币的地址！' />,
                   },
                 ],
-              })(<Input size="large" placeholder={PROMPT('reChargeForm.get_site_holder')||'接收比特币的地址'} />)}
+              })(<Input size="large" placeholder={this.props.intl.formatMessage(msg.get_site_holder)} />)}
             </FormItem>
             <FormItem {...formItemLayout} label={<FM id='reChargeForm.transfer_num' defaultMessage='转出数量' />}>
               {getFieldDecorator('amount', {
@@ -173,7 +188,7 @@ class RechargeForm extends Component {
                   max={wallet.amount || 0}
                   precision={8}
                   size="large"
-                  placeholder={PROMPT('reChargeForm.transfer_num_holder')||'请输入转出比特币数'}
+                  placeholder={this.props.intl.formatMessage(msg.account)}
                 />
               )}
             </FormItem>

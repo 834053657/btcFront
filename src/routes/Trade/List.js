@@ -4,8 +4,8 @@ import { Link, routerRedux } from 'dva/router';
 import moment from 'moment';
 import { Table, Alert, Button, Icon, Radio, Avatar, Badge, Tag, Popover } from 'antd';
 import { map, forEachRight, filter, get } from 'lodash';
-import { FormattedMessage as FM } from 'react-intl';
-
+import { defineMessages, FormattedMessage as FM } from 'react-intl';
+import { injectIntl } from 'components/_utils/decorator';
 import { stringify } from 'qs';
 import BlankLayout from '../../layouts/BlankLayout';
 import SearchForm from './forms/SearchForm';
@@ -15,7 +15,14 @@ import { getQueryString, getPayIcon } from '../../utils/utils';
 
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
-
+// const msg = defineMessages({
+//   login_in_title:{
+//     id:"login.login_in_title",
+//     defaultMessage:"登录"
+//   }
+// })
+//
+// @injectIntl
 @connect(({ trade, global, loading, user }) => ({
   currentUser: user.currentUser,
   ...trade.tradeList,

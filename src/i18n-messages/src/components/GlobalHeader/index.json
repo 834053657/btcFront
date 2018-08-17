@@ -1,5 +1,29 @@
 [
   {
+    "id": "indexHeader.deal_msg",
+    "defaultMessage": "交易信息"
+  },
+  {
+    "id": "indexHeader.personal_check_allMsg",
+    "defaultMessage": "你已查看所有通知"
+  },
+  {
+    "id": "indexHeader.sys_notice",
+    "defaultMessage": "系统公告"
+  },
+  {
+    "id": "indexHeader.personal_read_all_msg",
+    "defaultMessage": "您已读完所有消息"
+  },
+  {
+    "id": "indexHeader.personal_order_doing",
+    "defaultMessage": "进行中订单"
+  },
+  {
+    "id": "indexHeader.order_none",
+    "defaultMessage": "目前无正在进行中的订单"
+  },
+  {
     "id": "indexHeader.personal_center_down",
     "defaultMessage": "个人中心"
   },

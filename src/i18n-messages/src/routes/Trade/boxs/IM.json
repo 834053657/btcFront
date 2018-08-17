@@ -1,0 +1,18 @@
+[
+  {
+    "id": "IM.upload_error",
+    "defaultMessage": "上传发生错误!"
+  },
+  {
+    "id": "IM.file_limit",
+    "defaultMessage": "文件必须小于2M!"
+  },
+  {
+    "id": "IM.enter_btn",
+    "defaultMessage": "请按回车键发送消息!"
+  },
+  {
+    "id": "IM.into_room",
+    "defaultMessage": "进入房间中..."
+  }
+]

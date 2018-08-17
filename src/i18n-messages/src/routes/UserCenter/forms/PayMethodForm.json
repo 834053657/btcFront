@@ -1,5 +1,25 @@
 [
   {
+    "id": "payMethodForm.user_name_holder",
+    "defaultMessage": "姓名"
+  },
+  {
+    "id": "payMethodForm.user_account_holder",
+    "defaultMessage": "账号"
+  },
+  {
+    "id": "payMethodForm.open_bank_holder",
+    "defaultMessage": "开户行"
+  },
+  {
+    "id": "payMethodForm.bank_card_num",
+    "defaultMessage": "银行卡号"
+  },
+  {
+    "id": "payMethodForm.pay_method_way_choose_holder",
+    "defaultMessage": "请选择支付方式"
+  },
+  {
     "id": "payMethodForm.user_name_we",
     "defaultMessage": "姓名"
   },

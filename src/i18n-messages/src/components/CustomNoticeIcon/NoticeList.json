@@ -1,0 +1,14 @@
+[
+  {
+    "id": "noticeList.order_num",
+    "defaultMessage": "订单编号:"
+  },
+  {
+    "id": "noticeList.deal_num",
+    "defaultMessage": "交易数额:"
+  },
+  {
+    "id": "noticeList.new_msg",
+    "defaultMessage": "新消息:"
+  }
+]

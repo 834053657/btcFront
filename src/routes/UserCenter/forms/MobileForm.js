@@ -1,13 +1,20 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Input, Button, Select, Row, Col } from 'antd';
-import { FormattedMessage as FM } from 'react-intl';
+import {FormattedMessage as FM ,defineMessages} from 'react-intl';
+import {injectIntl } from 'components/_utils/decorator';
 import classNames from 'classnames';
 import styles from './MobileForm.less';
 
 const FormItem = Form.Item;
 const { Option } = Select;
-
+const msg = defineMessages({
+  code_input_holder: {
+    id: 'mobileForm.code_input_holder',
+    defaultMessage: '验证码',
+  },
+});
+@injectIntl()
 class MobileForm extends Component {
   static defaultProps = {
     className: '',
@@ -154,7 +161,7 @@ class MobileForm extends Component {
                   message: <FM id='mobileForm.code_input' defaultMessage='请输入验证码！' />,
                 },
               ],
-            })(<Input size="large" placeholder={(PROMPT('mobileForm.code_input_holder')||'验证码')} />)}
+            })(<Input size="large" placeholder={this.props.intl.formatMessage(msg.code_input_holder)} />)}
           </FormItem>
           <FormItem className={styles.buttonBox}>
             <Button key="back" onClick={this.handleCancel}>

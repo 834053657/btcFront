@@ -2,5 +2,21 @@
   {
     "id": "EmailModal.user_email_bind",
     "defaultMessage": "邮箱绑定"
+  },
+  {
+    "id": "EmailModal.G2_approve",
+    "defaultMessage": "谷歌验证"
+  },
+  {
+    "id": "EmailModal.old_email_approve",
+    "defaultMessage": "验证旧邮箱"
+  },
+  {
+    "id": "EmailModal.new_email_bind",
+    "defaultMessage": "绑定新邮箱"
+  },
+  {
+    "id": "EmailModal.bind_finish",
+    "defaultMessage": "完成"
   }
 ]

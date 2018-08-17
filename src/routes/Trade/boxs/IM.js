@@ -3,6 +3,8 @@ import { findDOMNode } from 'react-dom';
 import { List, InfiniteLoader, AutoSizer, CellMeasurerCache, CellMeasurer } from 'react-virtualized';
 import moment from 'moment';
 import { isEqual, map, delay, defer, get, findIndex, forEach } from 'lodash';
+import {FormattedMessage as FM ,defineMessages} from 'react-intl';
+import {injectIntl } from 'components/_utils/decorator';
 import throttle from 'lodash-decorators/throttle';
 import bind from 'lodash-decorators/bind';
 import antd from 'antd';
@@ -28,6 +30,25 @@ const { TextArea } = Input;
 
 const ListItem = AList;
 const ItemMate = ListItem.Meta;
+const msg = defineMessages({
+  upload_error: {
+    id: 'IM.upload_error',
+    defaultMessage: '上传发生错误!',
+  },
+  file_limit: {
+    id: 'IM.file_limit',
+    defaultMessage: '文件必须小于2M!',
+  },
+  enter_btn: {
+    id: 'IM.enter_btn',
+    defaultMessage: '请按回车键发送消息!',
+  },
+  into_room: {
+    id: 'IM.into_room',
+    defaultMessage: '进入房间中...',
+  },
+});
+@injectIntl()
 
 export default class TradeIM extends PureComponent {
   state = {
@@ -72,7 +93,7 @@ export default class TradeIM extends PureComponent {
 
   componentDidUpdate(prevProps) {
     const currHistoryList = get(this.props, 'im.historyList', [])
-    const prevHistoryList = get(prevProps, 'im.historyList', []) 
+    const prevHistoryList = get(prevProps, 'im.historyList', [])
     forEach(currHistoryList, (history, index) => {
       if (!isEqual(history, prevHistoryList[findIndex(prevHistoryList, history)])) {
         this.cache.clear(index)
@@ -137,7 +158,7 @@ export default class TradeIM extends PureComponent {
     const { orderId, dispatch } = this.props;
     const url = upload.prefix + event.file.response.hash
     if (!url) {
-      Message.error(PROMPT('IM.upload_error')||'上传发生错误!');
+      Message.error(this.props.intl.formatMessage(msg.upload_error));
       return false
     }
     if (~fileType.indexOf('image/')) {
@@ -237,7 +258,7 @@ export default class TradeIM extends PureComponent {
       beforeUpload: (file) => {
         const isLtMB = file.size / 1024 / 1024 < 2;
         if (!isLtMB) {
-          Message.error(PROMPT('IM.file_limit')||'文件必须小于2M!');
+          Message.error(this.props.intl.formatMessage(msg.file_limit));
         }
         return isLtMB;
       }
@@ -297,7 +318,7 @@ export default class TradeIM extends PureComponent {
                 value={message}
                 onChange={this.handlerChangeMsg}
                 rows={4}
-                placeholder={this.props.im.room_id ? (PROMPT('IM.enter_btn')||'请按回车键发送消息') : (PROMPT('IM.into_room')||'进入房间中...')}
+                placeholder={this.props.im.room_id ? (this.props.intl.formatMessage(msg.enter_btn)) : this.props.intl.formatMessage(msg.into_room)}
                 onKeyPress={this.handleKeyPress}
               />
             </div>

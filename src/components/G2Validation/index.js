@@ -1,12 +1,19 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Input, Button, Modal } from 'antd';
-import { FormattedMessage as FM } from 'react-intl';
+import {FormattedMessage as FM ,defineMessages} from 'react-intl';
+import {injectIntl } from 'components/_utils/decorator';
 import classNames from 'classnames';
 import styles from './index.less';
 
 const FormItem = Form.Item;
-
+const msg = defineMessages({
+  google_code_holder: {
+    id: 'G2Index.google_code_holder',
+    defaultMessage: '谷歌验证码',
+  },
+});
+@injectIntl()
 class G2Validation extends Component {
   static defaultProps = {
     className: '',
@@ -69,7 +76,7 @@ class G2Validation extends Component {
                       message: <FM id='G2Index.google_code_please' defaultMessage='请输入谷歌验证码！' />,
                     },
                   ],
-                })(<Input size="large" placeholder={(PROMPT('G2Index.google_code_holder')||'谷歌验证码')} />)}
+                })(<Input size="large" placeholder={this.props.intl.formatMessage(msg.google_code_holder)} />)}
               </FormItem>
             </Form>
           </div>
@@ -87,7 +94,7 @@ class G2Validation extends Component {
                     message: <FM id='G2Index.google_code_input' defaultMessage='请输入谷歌验证码！' />,
                   },
                 ],
-              })(<Input size="large" placeholder={(PROMPT('G2Index.google_code_holder')||'谷歌验证码')} />)}
+              })(<Input size="large" placeholder={this.props.intl.formatMessage(msg.google_code_holder)} />)}
             </FormItem>
 
             <FormItem className={styles.buttonBox}>

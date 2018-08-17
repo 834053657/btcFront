@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react';
 import { map, size } from 'lodash';
 import { Button, Card, Row, Col, Badge, Radio, Input, Steps, Icon } from 'antd';
-import { FormattedMessage as FM } from 'react-intl';
+import {FormattedMessage as FM ,defineMessages} from 'react-intl';
+import {injectIntl } from 'components/_utils/decorator';
 import DescriptionList from 'components/DescriptionList';
 import CountDown from 'components/CountDown';
 import { getPayIcon } from '../../../utils/utils';
@@ -10,7 +11,17 @@ import styles from './Step1.less';
 
 const { Description } = DescriptionList;
 const { Meta } = Card;
-
+const msg = defineMessages({
+  btc_buy: {
+    id: 'step1.btc_buy',
+    defaultMessage: '买',
+  },
+  btc_sell: {
+    id: 'step1.btc_sell',
+    defaultMessage: '卖',
+  },
+});
+@injectIntl()
 export default class Step1 extends PureComponent {
   state = {
     payType: 0,
@@ -138,7 +149,7 @@ export default class Step1 extends PureComponent {
           <Meta
             title={`${trading_volume} ${currency} ${
               // CONFIG.order_type_desc[order_type]
-              this.checkIsBuyer() ? (PROMPT('step1.btc_buy')||'买') : (PROMPT('step1.btc_sell')||'卖')
+              this.checkIsBuyer() ? this.props.intl.formatMessage(msg.btc_buy) : this.props.intl.formatMessage(msg.btc_sell)
             } ${trading_count} BTC`}
             // description="中国"
           />

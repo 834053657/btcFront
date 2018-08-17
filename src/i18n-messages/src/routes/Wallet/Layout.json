@@ -1,5 +1,21 @@
 [
   {
+    "id": "Layout.copy_success",
+    "defaultMessage": "复制成功"
+  },
+  {
+    "id": "Layout.send_btc",
+    "defaultMessage": "发送比特币"
+  },
+  {
+    "id": "Layout.deal_record",
+    "defaultMessage": "交易记录"
+  },
+  {
+    "id": "Layout.history_site",
+    "defaultMessage": "历史比特币地址"
+  },
+  {
     "id": "Layout.BTC_site",
     "defaultMessage": "比特币地址"
   },

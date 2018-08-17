@@ -1,5 +1,13 @@
 [
   {
+    "id": "emailForm.user_email_holder",
+    "defaultMessage": "邮箱"
+  },
+  {
+    "id": "emailForm.code_holder",
+    "defaultMessage": "邮箱"
+  },
+  {
     "id": "emailForm.user_email_title",
     "defaultMessage": "邮箱"
   },

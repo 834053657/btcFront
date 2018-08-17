@@ -1,5 +1,9 @@
 [
   {
+    "id": "searchForm.country_choose",
+    "defaultMessage": "选择所在国家"
+  },
+  {
     "id": "searchForm.user_country",
     "defaultMessage": "所在国家"
   },

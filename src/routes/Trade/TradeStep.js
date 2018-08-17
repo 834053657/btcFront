@@ -2,7 +2,8 @@ import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import { map, findIndex } from 'lodash';
 import { Button, Card, Row, Col, Modal, Spin, Input, Steps, Icon } from 'antd';
-import { FormattedMessage as FM } from 'react-intl';
+import {FormattedMessage as FM ,defineMessages} from 'react-intl';
+import {injectIntl } from 'components/_utils/decorator';
 import { routerRedux } from 'dva/router';
 import ConfirmModal from '../../components/ConfirmModal';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
@@ -51,7 +52,29 @@ const { Step } = Steps;
 --------- 取消订单
 }
  */
-
+const msg = defineMessages({
+  pay_affirm_title: {
+    id: 'tradeStep.pay_affirm_title',
+    defaultMessage: '确认支付?',
+  },
+  pay_affirm_content: {
+    id: 'tradeStep.pay_affirm_content',
+    defaultMessage: '请确定已经转款，再点击确认支付！',
+  },
+  release_affirm_title: {
+    id: 'tradeStep.release_affirm_title',
+    defaultMessage: '确认释放?',
+  },
+  release_affirm_content: {
+    id: 'tradeStep.release_affirm_content',
+    defaultMessage: '请确保已经收款，再点击确认释放！',
+  },
+  order_num: {
+    id: 'tradeStep.order_num',
+    defaultMessage: '订单号: ',
+  },
+});
+@injectIntl()
 @connect(({ trade, im, user, loading }) => ({
   orderDetail: trade.orderDetail,
   tradeIm: trade.tradeIm,
@@ -234,8 +257,8 @@ export default class TradeStep extends PureComponent {
   // 确认支付
   handlePay = () => {
     Modal.confirm({
-      title: (PROMPT('tradeStep.pay_affirm_title')||'确认支付?'),
-      content:(PROMPT('tradeStep.pay_affirm_content')||'请确定已经转款，再点击确认支付！'),
+      title: this.props.intl.formatMessage(msg.pay_affirm_title),
+      content:this.props.intl.formatMessage(msg.pay_affirm_content),
       onOk: () => {
         const { dispatch, match: { params = {} } } = this.props;
         dispatch({
@@ -250,8 +273,8 @@ export default class TradeStep extends PureComponent {
   // 确认释放
   handleRelease = () => {
     Modal.confirm({
-      title: (PROMPT('tradeStep.release_affirm_title')||'确认释放?'),
-      content: (PROMPT('tradeStep.release_affirm_content')||'请确保已经收款，再点击确认释放！'),
+      title: this.props.intl.formatMessage(msg.release_affirm_title),
+      content: this.props.intl.formatMessage(msg.release_affirm_content),
       onOk: () => {
         const { dispatch, match: { params = {} } } = this.props;
         dispatch({
@@ -358,7 +381,7 @@ export default class TradeStep extends PureComponent {
     const order_status = CONFIG.orderEngStatus[order.status];
     const currentObj = order_status ? this.orderSteps[order_status] : {};
     const current = findIndex(currentObj.steps, item => item.key === order_status);
-    const breadcrumbList = [{ title: <FM id='tradeStep.main_page' defaultMessage='首页' />, href: '/' }, { title: (PROMPT('tradeStep.order_num')||'订单号: ') + params.id }];
+    const breadcrumbList = [{ title: <FM id='tradeStep.main_page' defaultMessage='首页' />, href: '/' }, { title: this.props.intl.formatMessage(msg.order_num) + params.id }];
 
     return (
       <PageHeaderLayout

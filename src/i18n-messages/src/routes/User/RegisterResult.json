@@ -1,0 +1,10 @@
+[
+  {
+    "id": "RegisterResult.title_success",
+    "defaultMessage": "你的账户：{accounts} 注册成功"
+  },
+  {
+    "id": "RegisterResult.Go_back",
+    "defaultMessage": "返回首页"
+  }
+]

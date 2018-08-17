@@ -1,14 +1,33 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Steps, Divider } from 'antd';
-import { FormattedMessage as FM } from 'react-intl';
+import {FormattedMessage as FM ,defineMessages} from 'react-intl';
+import {injectIntl } from 'components/_utils/decorator';
 import { delay } from 'lodash';
 import G2Validation from 'components/G2Validation';
 import MobileForm from '../forms/MobileForm';
 import styles from './EmailModal.less';
 
 const { Step } = Steps;
-
+const msg = defineMessages({
+  google_code_title: {
+    id: 'mobileModal.google_code_title',
+    defaultMessage: '谷歌验证',
+  },
+  old_phone_verify: {
+    id: 'mobileModal.old_phone_verify',
+    defaultMessage: '验证旧手机',
+  },
+  new_phone_bind: {
+    id: 'mobileModal.new_phone_bind',
+    defaultMessage: '绑定新手机',
+  },
+  bind_finish: {
+    id: 'mobileModal.bind_finish',
+    defaultMessage: '完成',
+  },
+});
+@injectIntl()
 export default class MobileModal extends Component {
   static defaultProps = {
     className: '',
@@ -109,14 +128,14 @@ export default class MobileModal extends Component {
     const { current } = this.state;
     let steps = [
       {
-        title: (PROMPT('mobileModal.google_code_title')||'谷歌验证'),
+        title:this.props.intl.formatMessage(msg.google_code_title),
         hide: !user.g2fa_on,
         component: (
           <G2Validation modal={false} onCancel={onCancel} onSubmit={this.handleSubmitG2} />
         ),
       },
       {
-        title: (PROMPT('mobileModal.old_phone_verify')||'验证旧手机'),
+        title: this.props.intl.formatMessage(msg.old_phone_verify),
         hide: !user.telephone,
         component: (
           <MobileForm
@@ -130,7 +149,7 @@ export default class MobileModal extends Component {
         ),
       },
       {
-        title: (PROMPT('mobileModal.new_phone_bind')||'绑定新手机'),
+        title: this.props.intl.formatMessage(msg.new_phone_bind),
         component: (
           <MobileForm
             key="2"
@@ -141,7 +160,7 @@ export default class MobileModal extends Component {
         ),
       },
       {
-        title: (PROMPT('mobileModal.bind_finish')||'完成'),
+        title: this.props.intl.formatMessage(msg.bind_finish),
       },
     ];
 

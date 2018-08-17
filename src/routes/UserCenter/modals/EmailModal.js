@@ -1,22 +1,45 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Steps, Divider } from 'antd';
-import { FormattedMessage as FM } from 'react-intl';
+import {FormattedMessage as FM ,defineMessages} from 'react-intl';
+import {injectIntl } from 'components/_utils/decorator';
 import { delay } from 'lodash';
 import G2Validation from 'components/G2Validation';
 import CheckEmailForm from '../forms/EmailForm';
 import styles from './EmailModal.less';
 
 const { Step } = Steps;
-
+const msg = defineMessages({
+  user_email_bind: {
+    id: 'EmailModal.user_email_bind',
+    defaultMessage: '邮箱绑定',
+  },
+  G2_approve: {
+    id: 'EmailModal.G2_approve',
+    defaultMessage: '谷歌验证',
+  },
+  old_email_approve: {
+    id: 'EmailModal.old_email_approve',
+    defaultMessage: '验证旧邮箱',
+  },
+  new_email_bind: {
+    id: 'EmailModal.new_email_bind',
+    defaultMessage: '绑定新邮箱',
+  },
+  bind_finish: {
+    id: 'EmailModal.bind_finish',
+    defaultMessage: '完成',
+  },
+});
+@injectIntl()
 export default class EmailModal extends Component {
   static defaultProps = {
     className: '',
-    title: (PROMPT('EmailModal.user_email_bind')||'邮箱绑定'),
+    // title: this.props.intl.formatMessage(msg.user_email_bind),
     onCancel: () => {},
   };
   static propTypes = {
-    title: PropTypes.string,
+    // title: PropTypes.string,
     className: PropTypes.string,
     onCancel: PropTypes.func,
   };
@@ -108,14 +131,14 @@ export default class EmailModal extends Component {
     const { current } = this.state;
     let steps = [
       {
-        title: (PROMPT('EmailModal.G2_approve')||'谷歌验证'),
+        title: this.props.intl.formatMessage(msg.G2_approve),
         hide: !user.g2fa_on,
         component: (
           <G2Validation modal={false} onCancel={onCancel} onSubmit={this.handleSubmitG2} />
         ),
       },
       {
-        title: (PROMPT('EmailModal.old_email_approve')||'验证旧邮箱'),
+        title: this.props.intl.formatMessage(msg.old_email_approve),
         hide: !user.email,
         component: (
           <CheckEmailForm
@@ -129,7 +152,7 @@ export default class EmailModal extends Component {
         ),
       },
       {
-        title: (PROMPT('EmailModal.new_email_bind')||'绑定新邮箱'),
+        title: this.props.intl.formatMessage(msg.new_email_bind),
         component: (
           <CheckEmailForm
             key="2"
@@ -140,7 +163,7 @@ export default class EmailModal extends Component {
         ),
       },
       {
-        title:  (PROMPT('EmailModal.bind_finish')||'完成'),
+        title:  this.props.intl.formatMessage(msg.bind_finish),
       },
     ];
 

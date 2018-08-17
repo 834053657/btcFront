@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Row, Col, Form, Input, Select, DatePicker, Button, InputNumber } from 'antd';
-import { FormattedMessage as FM } from 'react-intl';
+import {FormattedMessage as FM ,defineMessages} from 'react-intl';
+import {injectIntl } from 'components/_utils/decorator';
 import { map } from 'lodash';
 import TagSelect from 'components/TagSelect';
 import styles from './SearchForm.less';
@@ -8,7 +9,13 @@ import styles from './SearchForm.less';
 const FormItem = Form.Item;
 const { Option } = Select;
 const { RangePicker } = DatePicker;
-
+const msg = defineMessages({
+  country_choose: {
+    id: 'searchForm.country_choose',
+    defaultMessage: '选择所在国家',
+  }
+});
+@injectIntl()
 @Form.create()
 export default class SearchForm extends Component {
   // constructor(props) {
@@ -43,7 +50,7 @@ export default class SearchForm extends Component {
           })(
             <Select
               // mode="multiple"
-              placeholder={(PROMPT('searchForm.country_choose')||'选择所在国家')}
+              placeholder={this.props.intl.formatMessage(msg.country_choose)}
             >
               <Option value=""><FM id='magList.all_country' defaultMessage='全部国家' /></Option>
               {map(CONFIG.country, item => (
