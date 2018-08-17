@@ -2,12 +2,31 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import PropTypes from 'prop-types';
 import { Form, Input, Button, Upload, Icon, message } from 'antd';
-import { FormattedMessage as FM } from 'react-intl';
+import {FormattedMessage as FM ,defineMessages} from 'react-intl';
+import {injectIntl } from 'components/_utils/decorator';
 import styles from './PasswordForm.less';
 
 const FormItem = Form.Item;
 const Dragger = Upload.Dragger;
-
+const msg = defineMessages({
+  upload_error: {
+    id: 'realNameForm.upload_error',
+    defaultMessage: '上传错误，可能请求已过期，请刷新页面重试',
+  },
+  real_name_input: {
+    id: 'realNameForm.real_name_input',
+    defaultMessage: '真实姓名',
+  },
+  card_num_input: {
+    id: 'realNameForm.card_num_input',
+    defaultMessage: '身份证号',
+  },
+  photo_limit: {
+    id: 'realNameForm.photo_limit',
+    defaultMessage: '头像必须小于5M!',
+  },
+});
+@injectIntl()
 @connect(({ user, loading }) => ({
   currentUser: user.currentUser,
   submitting: loading.effects['register/submit'],
@@ -70,14 +89,14 @@ export default class RealNameForm extends Component {
       this.setState({ [loadingKey]: false });
     } else if (info.file.status === 'error') {
       this.setState({ [loadingKey]: false });
-      message.error(PROMPT('realNameForm.upload_error')||'上传错误，可能请求已过期，请刷新页面重试');
+      message.error(this.props.intl.formatMessage(msg.upload_error));
     }
   };
 
   beforeUpload = file => {
     const isLt2M = file.size / 1024 / 1024 < 5;
     if (!isLt2M) {
-      message.error(PROMPT('realNameForm.photo_limit')||'头像必须小于5M!');
+      message.error(this.props.intl.formatMessage(msg.photo_limit));
     }
     return isLt2M;
   };
@@ -156,7 +175,7 @@ export default class RealNameForm extends Component {
                   message: <FM id='realNameForm.real_name_msg' defaultMessage='请输入真实姓名！' />,
                 },
               ],
-            })(<Input size="large" maxLength={20} placeholder={(PROMPT('realNameForm.real_name_input')||'真实姓名')} />)}
+            })(<Input size="large" maxLength={20} placeholder={this.props.intl.formatMessage(msg.real_name_input)} />)}
           </FormItem>
           <FormItem {...formItemLayout} label={<FM id='realNameForm.card_num' defaultMessage='身份证号' />}>
             {getFieldDecorator('cardno', {
@@ -167,7 +186,7 @@ export default class RealNameForm extends Component {
                   message: <FM id='realNameForm.card_num_msg' defaultMessage='请输入身份证号！' />,
                 },
               ],
-            })(<Input size="large" maxLength={30} placeholder={(PROMPT('realNameForm.card_num_input')||'身份证号')} />)}
+            })(<Input size="large" maxLength={30} placeholder={this.props.intl.formatMessage(msg.card_num_input)} />)}
           </FormItem>
           <h3><FM id='realNameForm.card_upload_title' defaultMessage='上传证件' /></h3>
 

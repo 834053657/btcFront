@@ -1,5 +1,25 @@
 [
   {
+    "id": "tradeStep.pay_affirm_title",
+    "defaultMessage": "确认支付?"
+  },
+  {
+    "id": "tradeStep.pay_affirm_content",
+    "defaultMessage": "请确定已经转款，再点击确认支付！"
+  },
+  {
+    "id": "tradeStep.release_affirm_title",
+    "defaultMessage": "确认释放?"
+  },
+  {
+    "id": "tradeStep.release_affirm_content",
+    "defaultMessage": "请确保已经收款，再点击确认释放！"
+  },
+  {
+    "id": "tradeStep.order_num",
+    "defaultMessage": "订单号:"
+  },
+  {
     "id": "tradeStep.wait_pay",
     "defaultMessage": "待支付"
   },

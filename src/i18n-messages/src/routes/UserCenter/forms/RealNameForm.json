@@ -1,5 +1,21 @@
 [
   {
+    "id": "realNameForm.upload_error",
+    "defaultMessage": "上传错误，可能请求已过期，请刷新页面重试"
+  },
+  {
+    "id": "realNameForm.real_name_input",
+    "defaultMessage": "真实姓名"
+  },
+  {
+    "id": "realNameForm.card_num_input",
+    "defaultMessage": "身份证号"
+  },
+  {
+    "id": "realNameForm.photo_limit",
+    "defaultMessage": "头像必须小于5M!"
+  },
+  {
     "id": "realNameForm.card_back",
     "defaultMessage": "身份证反面"
   },

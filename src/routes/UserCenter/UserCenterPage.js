@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
-import { FormattedMessage as FM } from 'react-intl';
+import {FormattedMessage as FM ,defineMessages} from 'react-intl';
+import {injectIntl } from 'components/_utils/decorator';
 import moment from 'moment';
 import cx from 'classnames';
 import { Link } from 'dva/router';
@@ -32,6 +33,30 @@ import CountryModal from './modals/CountryModal';
 import styles from './UserCenterPage.less';
 
 const { Description } = DescriptionList;
+const msg = defineMessages({
+  change_photo_true: {
+    id: 'userCenterPage.change_photo_true',
+    defaultMessage: '修改头像成功',
+  },
+
+  change_photo_false: {
+    id: 'userCenterPage.change_photo_false',
+    defaultMessage: '上传错误，可能请求已过期，请刷新页面重试',
+  },
+  user_photo_limit: {
+    id: 'userCenterPage.user_photo_limit',
+    defaultMessage: '头像必须小于2M!',
+  },
+  user_change_payments: {
+    id: 'userCenterPage.user_change_payments',
+    defaultMessage: '修改支付方式',
+  },
+  user_add_payments: {
+    id: 'userCenterPage.user_add_payments',
+    defaultMessage: '添加支付方式',
+  },
+});
+@injectIntl()
 
 @connect(({ authentication, global, user, loading }) => ({
   authentication,
@@ -294,20 +319,20 @@ export default class UserCenterPage extends Component {
           avatar,
         },
         callback: () => {
-          message.success((PROMPT('userCenterPage.change_photo_true')||'修改头像成功'));
+          message.success(this.props.intl.formatMessage(msg.change_photo_true));
           this.setState({ uploadLoading: false });
         },
       });
     } else if (info.file.status === 'error') {
       this.setState({ uploadLoading: false });
-      message.error((PROMPT('userCenterPage.change_photo_false')||'上传错误，可能请求已过期，请刷新页面重试'));
+      message.error(this.props.intl.formatMessage(msg.change_photo_false));
     }
   };
 
   beforeUpload = file => {
     const isLt2M = file.size / 1024 / 1024 < 2;
     if (!isLt2M) {
-      message.error((PROMPT('userCenterPage.user_photo_limit')||'头像必须小于2M!'));
+      message.error(this.props.intl.formatMessage(msg.user_photo_limit));
     }
     return isLt2M;
   };
@@ -641,9 +666,9 @@ export default class UserCenterPage extends Component {
               {...this.props}
               payMents={ENABLE_PAY_MENTS}
               title={payMethodModalVisible && payMethodModalVisible.id ?
-                (PROMPT('userCenterPage.user_change_payments')||'修改支付方式')
+                (this.props.intl.formatMessage(msg.user_change_payments))
                 :
-                (PROMPT('userCenterPage.user_add_payments')||'添加支付方式')
+                (this.props.intl.formatMessage(msg.user_add_payments))
               }
               data={payMethodModalVisible}
               onCancel={this.hidePayMethodModal}

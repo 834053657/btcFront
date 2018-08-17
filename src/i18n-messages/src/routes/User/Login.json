@@ -1,6 +1,34 @@
 [
   {
-    "id": "login.login_in",
+    "id": "login.login_in_title",
     "defaultMessage": "登录"
+  },
+  {
+    "id": "login.userName_email_mobile",
+    "defaultMessage": "用户名/邮箱/手机号"
+  },
+  {
+    "id": "login.pwd_holder",
+    "defaultMessage": "密码"
+  },
+  {
+    "id": "login.forget_pwd",
+    "defaultMessage": "忘记密码"
+  },
+  {
+    "id": "login.pwd_code",
+    "defaultMessage": "验证码"
+  },
+  {
+    "id": "login.sign_in_account",
+    "defaultMessage": "注册账户"
+  },
+  {
+    "id": "login.safe_G2",
+    "defaultMessage": "安全验证"
+  },
+  {
+    "id": "login.personal_verify",
+    "defaultMessage": "身份验证"
   }
 ]

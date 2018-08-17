@@ -1,5 +1,17 @@
 [
   {
+    "id": "reChargeForm.wait",
+    "defaultMessage": "已提交转账申请，请等待平台处理"
+  },
+  {
+    "id": "reChargeForm.get_site_holder",
+    "defaultMessage": "接收比特币的地址"
+  },
+  {
+    "id": "reChargeForm.transfer_num_holder",
+    "defaultMessage": "请输入转出比特币数"
+  },
+  {
     "id": "reChargeForm.back_pack_in",
     "defaultMessage": "在{count_}个区块内打包，费率为{fee}比特币/byte"
   },

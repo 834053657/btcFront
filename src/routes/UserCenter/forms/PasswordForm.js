@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import PropTypes from 'prop-types';
 import { Form, Input, Button, Popover, Progress } from 'antd';
-import { FormattedMessage as FM } from 'react-intl';
+import {FormattedMessage as FM ,defineMessages} from 'react-intl';
+import {injectIntl } from 'components/_utils/decorator';
 import styles from './PasswordForm.less';
 
 const FormItem = Form.Item;
@@ -20,6 +21,22 @@ const passwordProgressMap = {
   poor: 'exception',
   noPass: 'exception',
 };
+const msg = defineMessages({
+  old_pwd_holder: {
+    id: 'passWordForm.old_pwd_holder',
+    defaultMessage: '旧密码',
+  },
+  pwd_limit_holder: {
+    id: 'pwd_limit_holder',
+    defaultMessage: '6~16位字母数字组合,并区分大小写',
+  },
+  confirm_pwd_holder: {
+    id: 'passWordForm.confirm_pwd_holder',
+    defaultMessage: '确认密码',
+  },
+  
+});
+@injectIntl()
 
 @connect(({ user, loading }) => ({
   result: user.changePassword.result,
@@ -144,7 +161,7 @@ export default class PasswordForm extends Component {
                   message: <FM id='passWordForm.old_pwd_again' defaultMessage='请输入旧密码！' />,
                 },
               ],
-            })(<Input size="large" type="password" placeholder={(PROMPT('passWordForm.old_pwd_holder')||'旧密码')} />)}
+            })(<Input size="large" type="password" placeholder={this.props.intl.formatMessage(msg.old_pwd_holder)} />)}
           </FormItem>
           <FormItem {...formItemLayout} label={<FM id='passWordForm.new_pwd' defaultMessage='新密码' />} help={this.state.help}>
             <Popover
@@ -180,7 +197,7 @@ export default class PasswordForm extends Component {
                   size="large"
                   type="password"
                   maxLength={16}
-                  placeholder={(PROMPT('pwd_limit_holder')||'6~16位字母数字组合,并区分大小写')}
+                  placeholder={this.props.intl.formatMessage(msg.pwd_limit_holder)}
                 />
               )}
             </Popover>
@@ -196,7 +213,7 @@ export default class PasswordForm extends Component {
                   validator: this.checkConfirm,
                 },
               ],
-            })(<Input size="large" type="password" placeholder={(PROMPT('passWordForm.confirm_pwd_holder')||'确认密码')} />)}
+            })(<Input size="large" type="password" placeholder={this.props.intl.formatMessage(msg.confirm_pwd_holder)} />)}
           </FormItem>
 
           <FormItem className={styles.buttonBox}>

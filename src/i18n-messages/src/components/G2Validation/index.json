@@ -1,5 +1,9 @@
 [
   {
+    "id": "G2Index.google_code_holder",
+    "defaultMessage": "谷歌验证码"
+  },
+  {
     "id": "G2Index.btn_cancel",
     "defaultMessage": "取消"
   },

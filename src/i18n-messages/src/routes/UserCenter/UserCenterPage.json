@@ -1,5 +1,25 @@
 [
   {
+    "id": "userCenterPage.change_photo_true",
+    "defaultMessage": "修改头像成功"
+  },
+  {
+    "id": "userCenterPage.change_photo_false",
+    "defaultMessage": "上传错误，可能请求已过期，请刷新页面重试"
+  },
+  {
+    "id": "userCenterPage.user_photo_limit",
+    "defaultMessage": "头像必须小于2M!"
+  },
+  {
+    "id": "userCenterPage.user_change_payments",
+    "defaultMessage": "修改支付方式"
+  },
+  {
+    "id": "userCenterPage.user_add_payments",
+    "defaultMessage": "添加支付方式"
+  },
+  {
     "id": "userCenterPage.user_real_name",
     "defaultMessage": "实名认证"
   },

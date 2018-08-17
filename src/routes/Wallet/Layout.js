@@ -1,7 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
 import { Row, Col, Icon, Tabs, message, Popover } from 'antd';
-import { FormattedMessage as FM } from 'react-intl';
+import {FormattedMessage as FM ,defineMessages} from 'react-intl';
+import {injectIntl } from 'components/_utils/decorator';
 import { routerRedux, Link } from 'dva/router';
 import { stringify } from 'qs';
 import { findIndex } from 'lodash';
@@ -15,7 +16,25 @@ import HistoryAddress from './tabels/HistoryAddress';
 const jrQrcode = require('jr-qrcode');
 
 const { TabPane } = Tabs;
-
+const msg = defineMessages({
+  copy_success: {
+    id: 'Layout.copy_success',
+    defaultMessage: '复制成功',
+  },
+  send_btc: {
+    id: 'Layout.send_btc',
+    defaultMessage: '发送比特币',
+  },
+  deal_record: {
+    id: 'Layout.deal_record',
+    defaultMessage: '交易记录',
+  },
+  history_site: {
+    id: 'Layout.history_site',
+    defaultMessage: '历史比特币地址',
+  },
+});
+@injectIntl()
 @connect(({ wallet, user, loading }) => ({
   ...wallet,
   currentUser: user.currentUser,
@@ -52,7 +71,7 @@ export default class Layout extends Component {
     const { activeKey } = this.state;
     const { wallet = {}, payments = [] } = this.props.currentUser || {};
     const copy = (
-      <CopyToClipboard text={wallet.btc_address} onCopy={() => message.success(PROMPT('Layout.copy_success')||'复制成功')}>
+      <CopyToClipboard text={wallet.btc_address} onCopy={() => message.success(this.props.intl.formatMessage(msg.copy_success))}>
         <a>
           <Icon style={{ fontSize: 18 }} type="copy" />
         </a>
@@ -125,15 +144,15 @@ export default class Layout extends Component {
 
           <div className={styles.content}>
             <Tabs onChange={this.handleTabsChange} type="card" activeKey={activeKey}>
-              <TabPane tab={(PROMPT('Layout.send_btc')||'发送比特币')} key="1">
+              <TabPane tab={this.props.intl.formatMessage(msg.send_btc)} key="1">
                 {activeKey === '1' && (
                   <RechargeForm {...this.props} onSubmit={this.handleTabsChange.bind(this, '2')} />
                 )}
               </TabPane>
-              <TabPane tab={(PROMPT('Layout.deal_record')||'交易记录')} key="2">
+              <TabPane tab={this.props.intl.formatMessage(msg.deal_record)} key="2">
                 {activeKey === '2' && <TransferList {...this.props} />}
               </TabPane>
-              <TabPane tab={(PROMPT('Layout.history_site')||'历史比特币地址')} key="3">
+              <TabPane tab={this.props.intl.formatMessage(msg.history_site)} key="3">
                 {activeKey === '3' && <HistoryAddress {...this.props} />}
               </TabPane>
             </Tabs>

@@ -8,6 +8,46 @@
     "defaultMessage": "在线卖出"
   },
   {
+    "id": "editForm.user_local_choose_please",
+    "defaultMessage": "请选择所在地"
+  },
+  {
+    "id": "editForm.float_price_limit_radio",
+    "defaultMessage": "市场价比例"
+  },
+  {
+    "id": "editForm.ad_deal_num",
+    "defaultMessage": "广告总交易数额"
+  },
+  {
+    "id": "editForm.order_min_deal",
+    "defaultMessage": "单笔最小交易额"
+  },
+  {
+    "id": "editForm.max_volume_input_once",
+    "defaultMessage": "单笔最大交易额"
+  },
+  {
+    "id": "editForm.payment_limit_title_input",
+    "defaultMessage": "付款期限"
+  },
+  {
+    "id": "editForm.input_limit_max_word",
+    "defaultMessage": "交易条款(最多200个字符)"
+  },
+  {
+    "id": "editForm.min_trade_count_num",
+    "defaultMessage": "最小成交数"
+  },
+  {
+    "id": "editForm.min_rating_score_holder",
+    "defaultMessage": "最低评价得分"
+  },
+  {
+    "id": "editForm.new_buyer_limit",
+    "defaultMessage": "新卖家限额"
+  },
+  {
     "id": "editForm.max_limit_num",
     "defaultMessage": "不能大于最大可交易额"
   },

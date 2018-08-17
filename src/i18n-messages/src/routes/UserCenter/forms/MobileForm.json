@@ -1,5 +1,9 @@
 [
   {
+    "id": "mobileForm.code_input_holder",
+    "defaultMessage": "验证码"
+  },
+  {
     "id": "mobileForm.country_label",
     "defaultMessage": "国家"
   },

@@ -2,16 +2,54 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Link } from 'dva/router';
 import { Checkbox, Alert, Icon } from 'antd';
-import { FormattedMessage as FM } from 'react-intl';
+import { FormattedMessage as FM,defineMessages } from 'react-intl';
+import { injectIntl } from 'components/_utils/decorator';
 import { stringify } from 'qs';
 import Login from 'components/Login';
 import G2Validation from 'components/G2Validation';
 import SecureValidation from 'components/SecureValidation';
+
 import { getCaptcha } from '../../services/api';
 import styles from './Login.less';
 
 const { Tab, UserName, Password, Mobile, Captcha, ImgCaptcha, Submit } = Login;
 
+const msg = defineMessages({
+  login_in_title:{
+    id:"login.login_in_title",
+    defaultMessage:"登录"
+  },
+  userName_email_mobile:{
+    id:"login.userName_email_mobile",
+    defaultMessage:"用户名/邮箱/手机号"
+  },
+    pwd_holder:{
+    id:"login.pwd_holder",
+    defaultMessage:"密码"
+  },
+  forget_pwd:{
+    id:"login.forget_pwd",
+    defaultMessage:"忘记密码"
+  },
+  pwd_code:{
+    id:"login.pwd_code",
+    defaultMessage:"验证码"
+  },
+  sign_in_account:{
+    id:"login.sign_in_account",
+    defaultMessage:"注册账户"
+  },
+  safe_G2:{
+    id:"login.safe_G2",
+    defaultMessage:"安全验证"
+  },
+  personal_verify:{
+    id:"login.personal_verify",
+    defaultMessage:"身份验证"
+  },
+})
+
+@injectIntl()
 @connect(({ login, loading }) => ({
   login,
   submitting: loading.effects['login/login'],
@@ -127,34 +165,34 @@ export default class LoginPage extends Component {
 
     return (
       <div className={styles.main}>
-        <h3>{(PROMPT('login.login_in_title')||'登录')}</h3>
+        <h3>{this.props.intl.formatMessage(msg.login_in_title)}</h3>
         <Login onSubmit={this.handleSubmit}>
           {login.error && this.renderMessage(login.error)}
-          <UserName name="account" placeholder={(PROMPT('login.userName_email_mobile')||'用户名/邮箱/手机号')} />
-          <Password name="password" placeholder={(PROMPT('login.pwd_holder')||'密码')}  />
+          <UserName name="account" placeholder={this.props.intl.formatMessage(msg.userName_email_mobile)} />
+          <Password name="password" placeholder={this.props.intl.formatMessage(msg.pwd_holder)}  />
           <ImgCaptcha
             name="captcha"
-            placeholder={(PROMPT('login.pwd_code')||'验证码')}
+            placeholder={this.props.intl.formatMessage(msg.pwd_code)}
             image={image}
             loadCaptcha={this.loadCaptcha}
           />
-          <Submit loading={submitting}>{(PROMPT('login.login_in_title')||'登录')}</Submit>
+          <Submit loading={submitting}>{this.props.intl.formatMessage(msg.login_in_title)}</Submit>
           <div className={styles.other}>
-            <Link to="/user/forget-password">{(PROMPT('login.forget_pwd')||'忘记密码')}</Link>
+            <Link to="/user/forget-password">{this.props.intl.formatMessage(msg.forget_pwd)}</Link>
             <Link className={styles.register} to="/user/register">
-              {(PROMPT('login.sign_in_account')||'注册账户')}
+              {this.props.intl.formatMessage(msg.sign_in_account)}
             </Link>
           </div>
         </Login>
 
         <G2Validation
-          title={(PROMPT('login.safe_G2')||'安全验证')}
+          title={this.props.intl.formatMessage(msg.safe_G2)}
           visible={login.g2Visible}
           onCancel={this.handleCancel}
           onSubmit={this.handleSubmitG2}
         />
         <SecureValidation
-          title={(PROMPT('login.personal_verify')||'身份验证')}
+          title={this.props.intl.formatMessage(msg.personal_verify)}
           visible={login.secureVisible}
           onGetCaptcha={this.handleSendCaptcha}
           onCancel={this.handleCancelSecure}

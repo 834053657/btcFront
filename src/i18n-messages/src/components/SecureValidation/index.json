@@ -1,6 +1,70 @@
 [
   {
+    "id": "secureValidation.btn_cancel",
+    "defaultMessage": "取消"
+  },
+  {
+    "id": "secureValidation.btn_confirm",
+    "defaultMessage": "确定"
+  },
+  {
+    "id": "secureValidation.alert_safe",
+    "defaultMessage": "为保障您的账户安全，请进行身份验证。"
+  },
+  {
+    "id": "secureValidation.verify_type",
+    "defaultMessage": "验证方式"
+  },
+  {
+    "id": "secureValidation.country",
+    "defaultMessage": "国家"
+  },
+  {
     "id": "secureValidation.country_choose",
     "defaultMessage": "请选择国家！"
+  },
+  {
+    "id": "secureValidation.type_Email",
+    "defaultMessage": "邮箱"
+  },
+  {
+    "id": "secureValidation.type_mobile",
+    "defaultMessage": "手机"
+  },
+  {
+    "id": "secureValidation.email_input",
+    "defaultMessage": "请输入邮箱！"
+  },
+  {
+    "id": "secureValidation.error_email",
+    "defaultMessage": "邮箱地址格式错误！"
+  },
+  {
+    "id": "secureValidation.email_holder",
+    "defaultMessage": "邮箱"
+  },
+  {
+    "id": "secureValidation.mobile_input",
+    "defaultMessage": "请输入手机号码！"
+  },
+  {
+    "id": "secureValidation.mobile_input_right",
+    "defaultMessage": "请输入正确的手机号码"
+  },
+  {
+    "id": "secureValidation.get_code",
+    "defaultMessage": "获取验证码"
+  },
+  {
+    "id": "secureValidation.code",
+    "defaultMessage": "验证码"
+  },
+  {
+    "id": "secureValidation.code_input",
+    "defaultMessage": "请输入验证码！"
+  },
+  {
+    "id": "secureValidation.code_holder",
+    "defaultMessage": "验证码"
   }
 ]

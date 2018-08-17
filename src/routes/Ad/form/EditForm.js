@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Select, Button, Form, Input, Radio, Checkbox, Row, Col, Card, Tooltip, Icon } from 'antd';
-import { FormattedMessage as FM } from 'react-intl';
-
+import {FormattedMessage as FM ,defineMessages} from 'react-intl';
+import {injectIntl } from 'components/_utils/decorator';
 import { map, floor, omit } from 'lodash';
 import { Link } from 'dva/router';
 import InputNumber from 'components/InputNumber';
@@ -42,7 +42,49 @@ const typeMap = {
 };
 
 const CheckboxGroup = Checkbox.Group;
-
+const msg = defineMessages({
+  user_local_choose_please: {
+    id: 'editForm.user_local_choose_please',
+    defaultMessage: '请选择所在地',
+  },
+  float_price_limit_radio: {
+    id: 'editForm.float_price_limit_radio',
+    defaultMessage: '市场价比例',
+  },
+  ad_deal_num: {
+    id: 'editForm.ad_deal_num',
+    defaultMessage: '广告总交易数额',
+  },
+  order_min_deal: {
+    id: 'editForm.order_min_deal',
+    defaultMessage: '单笔最小交易额',
+  },
+  max_volume_input_once: {
+    id: 'editForm.max_volume_input_once',
+    defaultMessage: '单笔最大交易额',
+  },
+  payment_limit_title_input: {
+    id: 'editForm.payment_limit_title_input',
+    defaultMessage: '付款期限',
+  },
+  input_limit_max_word: {
+    id: 'editForm.input_limit_max_word',
+    defaultMessage: '交易条款(最多200个字符)',
+  },
+  min_trade_count_num: {
+    id: 'editForm.min_trade_count_num',
+    defaultMessage: '最小成交数',
+  },
+  min_rating_score_holder: {
+    id: 'editForm.min_rating_score_holder',
+    defaultMessage: '最低评价得分',
+  },
+  new_buyer_limit: {
+    id: 'editForm.new_buyer_limit',
+    defaultMessage: '新卖家限额',
+  },
+});
+@injectIntl()
 @Form.create()
 export default class EditForm extends Component {
   constructor(props) {
@@ -253,7 +295,7 @@ export default class EditForm extends Component {
               },
             ],
           })(
-            <Select style={{ width: 185 }} placeholder={(PROMPT('editForm.user_local_choose_please'))}>
+            <Select style={{ width: 185 }} placeholder={this.props.intl.formatMessage(msg.user_local_choose_please)}>
               {/*请选择所在地*/}
               {map(CONFIG.country, item => (
                 <Option key={item.code} value={item.code}>
@@ -376,7 +418,7 @@ export default class EditForm extends Component {
                     // max={170}
                     precision={2}
                     style={{ width: 185 }}
-                    placeholder={(PROMPT('float_price_limit_radio')||'市场价比例')}
+                    placeholder={this.props.intl.formatMessage(msg.float_price_limit_radio)}
                     addonAfter="%"
                   />
                 )}
@@ -430,7 +472,7 @@ export default class EditForm extends Component {
                   min={0}
                   precision={4}
                   style={{ width: 185, position: 'absolute', marginTop: '5px' }}
-                  placeholder={(PROMPT('editForm.ad_deal_num')||'广告总交易数额')}
+                  placeholder={this.props.intl.formatMessage(msg.ad_deal_num)}
                   addonAfter="BTC"
                 />
               )}
@@ -487,7 +529,7 @@ export default class EditForm extends Component {
                   min={100}
                   precision={2}
                   style={{ width: 185, position: 'absolute', marginTop: '5px' }}
-                  placeholder={(PROMPT('editForm.order_min_deal')||'单笔最小交易额')}
+                  placeholder={this.props.intl.formatMessage(msg.order_min_deal)}
                   addonAfter={getFieldValue('currency')}
                 />
               )}
@@ -516,7 +558,7 @@ export default class EditForm extends Component {
                   min={0}
                   precision={2}
                   style={{ width: 185, position: 'absolute', marginTop: '5px' }}
-                  placeholder={(PROMPT('editForm.max_volume_input_once')||'单笔最大交易额')}
+                  placeholder={this.props.intl.formatMessage(msg.max_volume_input_once)}
                   addonAfter={getFieldValue('currency')}
                 />
               )}
@@ -546,7 +588,7 @@ export default class EditForm extends Component {
                 step={1}
                 precision={0}
                 style={{ width: 185 }}
-                placeholder={(PROMPT('editForm.payment_limit_title_input')||'付款期限')}
+                placeholder={this.props.intl.formatMessage(msg.payment_limit_title_input)}
                 addonAfter="分钟"
               />
             )}
@@ -681,7 +723,7 @@ export default class EditForm extends Component {
                 message: <FM id='editForm.input_limit_max' defaultMessage='最多输入200个字符' />,
               },
             ],
-          })(<TextArea placeholder={(PROMPT('editForm.input_limit_max_word')||'交易条款(最多200个字符)')} rows={4} style={{ width: 390 }} />)}
+          })(<TextArea placeholder={this.props.intl.formatMessage(msg.input_limit_max_word)} rows={4} style={{ width: 390 }} />)}
           <span style={{ marginLeft: '10px' }}>
             <Tooltip title={CONFIG.tooltip[8]}>
               <Icon className="bt-icon-question" type="question-circle" title="" />
@@ -722,7 +764,7 @@ export default class EditForm extends Component {
                   <InputNumber
                     min={0}
                     step={0.0001}
-                    placeholder={(PROMPT('editForm.min_trade_count_num')||'最小成交数')}
+                    placeholder={this.props.intl.formatMessage(msg.min_trade_count_num)}
                     style={{ width: 185 }}
                   />
                 )}
@@ -744,7 +786,7 @@ export default class EditForm extends Component {
                     precision={2}
                     max={100}
                     style={{ width: 185, position: 'absolute', marginTop: '5px' }}
-                    placeholder={(PROMPT('editForm.min_rating_score_holder')||'最低评价得分')}
+                    placeholder={this.props.intl.formatMessage(msg.min_rating_score_holder)}
                     addonAfter="%"
                   />
                 )}
@@ -764,7 +806,7 @@ export default class EditForm extends Component {
                   <InputNumber
                     min={0}
                     step={0.0001}
-                    placeholder={(PROMPT('editForm.new_buyer_limit')||'新卖家限额')}
+                    placeholder={this.props.intl.formatMessage(msg.new_buyer_limit)}
                     style={{ width: 185 }}
                   />
                 )}

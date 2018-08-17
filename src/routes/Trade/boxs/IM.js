@@ -6,6 +6,8 @@ import { isEqual, get, findIndex, find, forEach } from 'lodash';
 import PropTypes from 'prop-types'
 import { connect } from 'dva';
 import debounce from 'lodash-decorators/debounce';
+import {FormattedMessage as FM ,defineMessages} from 'react-intl';
+import { injectIntl } from 'components/_utils/decorator';
 import throttle from 'lodash-decorators/throttle';
 import bind from 'lodash-decorators/bind';
 import antd from 'antd';
@@ -26,6 +28,25 @@ const {
 } = antd;
 const { TextArea } = Input;
 
+const msg = defineMessages({
+  upload_error: {
+    id: 'IM.upload_error',
+    defaultMessage: '上传发生错误!',
+  },
+  file_limit: {
+    id: 'IM.file_limit',
+    defaultMessage: '文件必须小于2M!',
+  },
+  enter_btn: {
+    id: 'IM.enter_btn',
+    defaultMessage: '请按回车键发送消息!',
+  },
+  into_room: {
+    id: 'IM.into_room',
+    defaultMessage: '进入房间中...',
+  },
+});
+@injectIntl()
 @connect(({ im, user, loading }) => ({
   im,
   loading: loading.effects['im/syncHistory'], 
@@ -182,7 +203,7 @@ export default class IM extends PureComponent {
     const { orderId, dispatch } = this.props;
     const url = upload.prefix + event.file.response.hash
     if (!url) {
-      Message.error(PROMPT('IM.upload_error')||'上传发生错误!');
+      Message.error(this.props.intl.formatMessage(msg.upload_error));
       return false
     }
     if (~fileType.indexOf('image/')) {
@@ -301,7 +322,7 @@ export default class IM extends PureComponent {
       beforeUpload: (file) => {
         const isLtMB = file.size / 1024 / 1024 < 2;
         if (!isLtMB) {
-          Message.error(PROMPT('IM.file_limit')||'文件必须小于2M!');
+          Message.error(this.props.intl.formatMessage(msg.file_limit));
         }
         return isLtMB;
       }
@@ -360,7 +381,7 @@ export default class IM extends PureComponent {
                 value={message}
                 onChange={this.handleChangeMsg}
                 rows={4}
-                placeholder={this.props.im.room_id ? (PROMPT('IM.enter_btn')||'请按回车键发送消息') : (PROMPT('IM.into_room')||'进入房间中...')}
+                placeholder={this.props.im.room_id ? (this.props.intl.formatMessage(msg.enter_btn)) : this.props.intl.formatMessage(msg.into_room)}
                 onKeyPress={this.handleKeyPress}
               />
             </div>

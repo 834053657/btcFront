@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Menu, Icon, Spin, Tag, Dropdown, Avatar, Divider, Tooltip } from 'antd';
-import { FormattedMessage as FM } from 'react-intl';
-
+import {FormattedMessage as FM ,defineMessages} from 'react-intl';
+import {injectIntl } from 'components/_utils/decorator';
 import moment from 'moment';
 import { filter, orderBy, omit, mapValues, map, groupBy } from 'lodash';
 import Debounce from 'lodash-decorators/debounce';
@@ -16,6 +16,33 @@ import styles from './index.less';
 
 const { SubMenu } = Menu;
 const MenuItemGroup = Menu.ItemGroup;
+const msgs = defineMessages({
+  deal_msg: {
+    id: 'indexHeader.deal_msg',
+    defaultMessage: '交易信息',
+  },
+  personal_check_allMsg: {
+    id: 'indexHeader.personal_check_allMsg',
+    defaultMessage: '你已查看所有通知',
+  },
+  sys_notice: {
+    id: 'indexHeader.sys_notice',
+    defaultMessage: '系统公告',
+  },
+  personal_read_all_msg: {
+    id: 'indexHeader.personal_read_all_msg',
+    defaultMessage: '您已读完所有消息',
+  },
+  personal_order_doing: {
+    id: 'indexHeader.personal_order_doing',
+    defaultMessage: '进行中订单',
+  },
+  order_none: {
+    id: 'indexHeader.order_none',
+    defaultMessage: '目前无正在进行中的订单',
+  },
+});
+@injectIntl()
 
 export default class GlobalHeader extends PureComponent {
   componentWillUnmount() {
@@ -152,22 +179,22 @@ export default class GlobalHeader extends PureComponent {
                 <NoticeIcon.Tab
                   type="trade"
                   list={noticeData['trade']}
-                  title={(PROMPT('indexHeader.deal_msg_')||'交易信息')}
-                  emptyText={(PROMPT('indexHeader.personal_check_allMsg')||'你已查看所有通知')}
+                  title={this.props.intl.formatMessage(msgs.deal_msg)}
+                  emptyText={this.props.intl.formatMessage(msgs.personal_check_allMsg)}
                   emptyImage="https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg"
                 />
                 <NoticeIcon.Tab
                   type="system"
                   list={noticeData['system']}
-                  title={(PROMPT('indexHeader.sys_notice')||'系统公告')}
-                  emptyText={(PROMPT('indexHeader.personal_read_all_msg')||'您已读完所有消息')}
+                  title={this.props.intl.formatMessage(msgs.sys_notice)}
+                  emptyText={this.props.intl.formatMessage(msgs.personal_read_all_msg)}
                   emptyImage="https://gw.alipayobjects.com/zos/rmsportal/sAuJeJzSKbUmHfBQRzmZ.svg"
                 />
               </NoticeIcon>
               <OrderIcon
                 className={styles.action}
-                title={(PROMPT('indexHeader.personal_order_doing')||'进行中订单')}
-                emptyText={(PROMPT('indexHeader.order_none')||'目前无正在进行中的订单')}
+                title={this.props.intl.formatMessage(msgs.personal_order_doing)}
+                emptyText={this.props.intl.formatMessage(msgs.order_none)}
                 emptyImage="https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg"
                 list={orders}
                 popupAlign={{ offset: [20, -16] }}
