@@ -95,6 +95,12 @@ export default {
           payload: {},
         });
         yield put({
+          type: 'global/clearNotices',
+        })
+        yield put({
+          type: 'im/clear', 
+        })
+        yield put({
           type: 'SOCKET/CLOSE',
         });
         yield put(routerRedux.push('/user/login'));

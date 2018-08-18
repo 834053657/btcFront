@@ -105,14 +105,6 @@ export default {
         payload: count,
       });
     },
-    *clearNotices({ payload, callback }, { call, put }) {
-      const res = yield call(readMessage, payload);
-      yield put({
-        type: 'setReadMessage',
-        payload: res,
-      });
-      if (callback) callback();
-    },
     *readNotices({ payload, callback }, { call, put }) {
       const res = yield call(readMessage, payload);
       yield put({
@@ -196,6 +188,14 @@ export default {
         }
       } else {
         return state
+      }
+    },
+    clearNotices (state, { payload }) {
+      return {
+        ...state,
+        notices: [],
+        oldNotices: [],
+        noticesCount: null,
       }
     },
     saveOrders(state, { payload }) {

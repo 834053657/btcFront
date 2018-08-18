@@ -251,6 +251,11 @@ export default {
       yield put({
         type: 'CLEAR_CACHE_LIST'
       })
+    },
+    *clear(_, { put }) {
+      yield put({
+        type: 'CLEAR_CACHE_LIST'
+      })
     }
   },
 
