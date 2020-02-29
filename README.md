@@ -11,8 +11,9 @@
 
 ## 安装步骤
 
+
 ```bash
-$ git clone 仓库地址
+$ git clone 仓库地址 
 $ cd btc-new-frontend
 $ npm install
 $ npm start         # visit http://localhost:8000 mock数据
